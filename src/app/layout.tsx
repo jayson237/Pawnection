@@ -16,7 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={`${inter.className} min-h-screen w-screen overflow-x-hidden`}
+      >
+        <main className="h-[1px] min-h-[calc(100vh-88px)] w-full "></main>
+        {children}
+      </body>
     </html>
   );
 }

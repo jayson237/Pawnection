@@ -2,12 +2,16 @@ import { Icons } from "@/components/icons"
 import { cn } from "@/lib/utils"
 import * as React from "react"
 import { useState } from "react"
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form"
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  register?: UseFormRegister<FieldValues>
+  errors: FieldErrors
+}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, register, errors, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false)
     const inputType = type === "password" && showPassword ? "text" : type
 
@@ -17,9 +21,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <div className="relative">
             <input
               type={inputType}
+              {...register}
               className={cn(
                 "flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
                 className,
+                errors[props.id as string] && "focus:ring-rose-500"
               )}
               ref={ref}
               {...props}

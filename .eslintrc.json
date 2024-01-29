@@ -39,6 +39,7 @@
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "double"],
     "semi": ["error", "never"],
-    "no-tabs": ["error", { "allowIndentationTabs": false }]
+    "no-tabs": ["error", { "allowIndentationTabs": false }],
+    "no-var": "off"
   }
 }

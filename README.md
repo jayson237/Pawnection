@@ -12,9 +12,23 @@ pnpm install
 bun install
 ```
 
+Create a `.env` file in the root directory (same location as the `package.json` file) to include the environment variables needed for the server to work properly.
+
+```shell
+DATABASE_URL=mongodb+srv://pawnection:jY2tnTi80cw7M0tL@cluster01.nakrytt.mongodb.net/paw
+NEXTAUTH_URL=http://localhost:3000/
+NEXTAUTH_SECRET="NEXTAUTH_SECRET"
+
+GITHUB_ID=1da411400413bae3d5f7
+GITHUB_SECRET=0d724f9306f675f451187a4a79ba78f34f497fff
+
+GOOGLE_CLIENT_ID=573346259632-md9qdrfc8rb8u62nai5gcbai9qt2cmnf.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+```
+
 then, run the development server:
 
-```bash
+```shell
 npm run dev
 # or
 yarn dev
@@ -38,9 +52,3 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

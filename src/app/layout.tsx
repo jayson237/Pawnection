@@ -1,6 +1,7 @@
+import NavBar from "@/components/NavBar"
 import { Toaster } from "@/components/ui/Toaster"
+import AuthContext from "@/context/AuthContext"
 import type { Metadata } from "next"
-import { SessionProvider } from "next-auth/react"
 import { Inter } from "next/font/google"
 
 import "./globals.css"
@@ -19,16 +20,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <SessionProvider>
-        <body
-          className={`${inter.className} min-h-screen w-screen overflow-x-hidden`}
-        >
+      <body
+        className={`${inter.className} min-h-screen w-screen overflow-x-hidden`}
+      >
+        <AuthContext>
+          <NavBar />
           <main className="h-[1px] min-h-[calc(100vh-88px)] w-full ">
             {children}
           </main>
-          <Toaster />
-        </body>
-      </SessionProvider>
+        </AuthContext>
+        <Toaster />
+      </body>
     </html>
   )
 }

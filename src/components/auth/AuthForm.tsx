@@ -1,17 +1,17 @@
 "use client"
 
-import { useToast } from "@/hooks/useToast"
+import { useToast } from "@/context/useToast"
 import axios from "axios"
 import { signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 
-import { Icons } from "../icons"
+import { Icons } from "../Icons"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
-import AuthSocialButton from "./AuthSocialButton"
+import LoadingDots from "../ui/LoadingDots"
 
 type Variant = "LOGIN" | "REGISTER"
 
@@ -64,9 +64,8 @@ const AuthForm = () => {
           if (callback?.error) {
             return toast({
               variant: "destructive",
-              title: "Invalid credentials",
-              description:
-                "Ensure your login details are correct and try again",
+              title: "Something went wrong",
+              description: "Please try again",
             })
           }
 
@@ -77,7 +76,7 @@ const AuthForm = () => {
         .catch(() =>
           toast({
             variant: "destructive",
-            title: "Something went wrong!",
+            title: "An error occured",
             description: "Please try again",
           }),
         )
@@ -109,7 +108,6 @@ const AuthForm = () => {
 
   const socialAction = (action: string) => {
     setIsLoading(true)
-
     signIn(action, { redirect: false })
       .then((callback) => {
         if (callback?.error) {
@@ -128,85 +126,116 @@ const AuthForm = () => {
   }
 
   return (
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div
-        className="
+    <>
+      <h2
+        className="mt-2 text-center text-3xl font-bold tracking-tight text-gray-900
+          "
+      >
+        {variant === "REGISTER"
+          ? "Register an account"
+          : "Sign in to your account"}
+      </h2>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div
+          className="
         bg-white
-          px-4
           py-8
           shadow
-          sm:rounded-lg
-          sm:px-10
+          rounded-lg
+          px-8
         "
-      >
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          {variant === "REGISTER" && (
-            <>
-              <Label />
+        >
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            {variant === "REGISTER" && (
+              <div className="space-y-1">
+                <Label htmlFor="text">Name</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  disabled={isLoading}
+                  {...register("name", { required: true })}
+                  errors={errors}
+                  required
+                />
+              </div>
+            )}
+            <div className="space-y-1">
+              <Label htmlFor="email">Email</Label>
               <Input
+                id="email"
+                type="email"
                 disabled={isLoading}
-                register={register}
+                {...register("email", { required: true })}
                 errors={errors}
-                required
-                id="name"
               />
-            </>
-          )}
-          <Input
-            disabled={isLoading}
-            register={register}
-            errors={errors}
-            required
-            id="email"
-            type="email"
-          />
-          <Input
-            disabled={isLoading}
-            register={register}
-            errors={errors}
-            required
-            id="password"
-            type="password"
-          />
-          <div>
-            <Button disabled={isLoading} type="submit">
-              {variant === "LOGIN" ? "Sign in" : "Register"}
-            </Button>
-          </div>
-        </form>
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                disabled={isLoading}
+                {...register("password", { required: true })}
+                errors={errors}
+              />
+            </div>
 
-        <div className="mt-6">
-          <div className="relative">
-            <div
-              className="
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <LoadingDots color="#FAFAFA" />
+                </>
+              ) : variant === "LOGIN" ? (
+                "Sign in"
+              ) : (
+                "Register"
+              )}
+            </Button>
+          </form>
+
+          <div className="mt-6">
+            <div className="relative">
+              <div
+                className="
                 absolute 
                 inset-0 
                 flex 
                 items-center
               "
-            >
-              <div className="w-full border-t border-gray-300" />
+              >
+                <div className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-2 text-gray-500">
+                  Or continue with
+                </span>
+              </div>
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-gray-500">
-                Or continue with
-              </span>
-            </div>
-          </div>
 
-          <div className="mt-6 flex gap-2">
-            <AuthSocialButton
-              icon={Icons.apple}
-              onClick={() => socialAction("apple")}
-            />
-            <AuthSocialButton
-              icon={Icons.google}
-              onClick={() => socialAction("google")}
-            />
+            <div className="mt-6 flex gap-2">
+              <Button
+                className="inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
+                onClick={(e) => {
+                  e.preventDefault()
+                  socialAction("github")
+                }}
+              >
+                <Icons.github className="h-6 w-6" />
+              </Button>
+              <Button
+                className="inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
+                onClick={(e) => {
+                  e.preventDefault()
+                  socialAction("google")
+                }}
+              >
+                <Icons.google className="h-6 w-6" />
+              </Button>
+            </div>
           </div>
-        </div>
-        <div
-          className="
+          <div
+            className="
             flex 
             gap-2 
             justify-center 
@@ -215,18 +244,19 @@ const AuthForm = () => {
             px-2 
             text-gray-500
           "
-        >
-          <div>
-            {variant === "LOGIN"
-              ? "New to Messenger?"
-              : "Already have an account?"}
-          </div>
-          <div onClick={toggleVariant} className="underline cursor-pointer">
-            {variant === "LOGIN" ? "Create an account" : "Login"}
+          >
+            <div>
+              {variant === "LOGIN"
+                ? "New to Pawnection?"
+                : "Already have an account?"}
+            </div>
+            <div onClick={toggleVariant} className="underline cursor-pointer">
+              {variant === "LOGIN" ? "Create an account" : "Login"}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

@@ -1,4 +1,4 @@
-## Getting Started
+## Getting Started (Please always make a separate branch if you are building something or updating something)
 
 Make sure you install the dependencies when you clone the project for the first time. Use whichever command below corresponding to your favourite package manager:
 

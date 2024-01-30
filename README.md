@@ -1,10 +1,13 @@
-## Pawnection
+# Pawnection
 
-(Please always make a separate branch if you are building or updating something)
+Please read these points before getting started:
 
-### WARNING: When updating (invoking and retrieveing) something related to the schema or database does not work with NUS Wifi (Firewall against MongoDB)
+1. Please always make a separate branch if you are building or updating something
+2. When updating (invoking and retrieveing) something related to the schema or database does not work with NUS Wifi (Firewall against MongoDB)
 
 ## Getting Started
+
+Clone the project to your designated folder with git clone
 
 Make sure you install the dependencies when you clone the project for the first time. Use whichever command below corresponding to your favourite package manager:
 

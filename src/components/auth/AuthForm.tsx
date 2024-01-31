@@ -1,6 +1,6 @@
 "use client"
 
-import { useToast } from "@/context/useToast"
+import { useToast } from "@/hooks/useToast"
 import axios from "axios"
 import { signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"

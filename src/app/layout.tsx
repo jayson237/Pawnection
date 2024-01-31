@@ -11,6 +11,9 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Pawnection",
   description: "Your paw's social media network",
+  icons: {
+    icon: "/icon.png",
+  },
 }
 
 export default function RootLayout({

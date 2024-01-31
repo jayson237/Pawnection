@@ -20,15 +20,14 @@ function NavBar() {
   const session = useSession()
 
   return (
-    <div className="sticky top-0 z-[100] flex w-full place-content-between bg-white px-12 py-4 drop-shadow md:px-24">
+    <div className="sticky top-0 z-[100] flex w-full place-content-between bg-white px-12 py-4 drop-shadow md:px-24 items-center">
       <Image
-        src=""
+        src="/pawnection.svg"
         alt="Pawnection"
+        width={0}
+        height={0}
         priority={true}
-        width="0"
-        height="0"
-        style={{ width: "auto", height: "40px" }}
-        className="cursor-pointer"
+        className="cursor-pointer h-[30px] w-[187.5px]"
         onClick={() => {
           router.push("/")
         }}

@@ -53,11 +53,12 @@ const AuthForm = () => {
 
     if (variant === "REGISTER") {
       axios
-        .post("/api/register", data)
+        .post("/api/user/register", data)
         .then(() =>
           signIn("credentials", {
             ...data,
             redirect: false,
+            callbackUrl: "/auth/type",
           }),
         )
         .then((callback) => {
@@ -70,7 +71,7 @@ const AuthForm = () => {
           }
 
           if (callback?.ok) {
-            router.push("/")
+            router.push("/auth/type")
           }
         })
         .catch(() =>
@@ -108,7 +109,7 @@ const AuthForm = () => {
 
   const socialAction = (action: string) => {
     setIsLoading(true)
-    signIn(action, { redirect: false })
+    signIn(action, { redirect: false, callbackUrl: "/auth/type" })
       .then((callback) => {
         if (callback?.error) {
           return toast({
@@ -119,144 +120,141 @@ const AuthForm = () => {
         }
 
         if (callback?.ok) {
-          router.push("/")
+          router.push("/auth/type")
         }
       })
       .finally(() => setIsLoading(false))
   }
 
   return (
-    <>
-      <h2
-        className="mt-2 text-center text-3xl font-bold tracking-tight text-gray-900
-          "
-      >
-        {variant === "REGISTER"
-          ? "Register an account"
-          : "Sign in to your account"}
-      </h2>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div
-          className="
+    <div className="px-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div
+        className="
         bg-white
-          py-8
+          py-3
           shadow
           rounded-lg
-          px-8
+          px-6
         "
+      >
+        <p
+          className="mb-3 text-center text-lg font-bold tracking-tight text-gray-900
+          "
         >
-          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            {variant === "REGISTER" && (
-              <div className="space-y-1">
-                <Label htmlFor="text">Name</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  disabled={isLoading}
-                  {...register("name", { required: true })}
-                  errors={errors}
-                  required
-                />
-              </div>
+          {variant !== "REGISTER"
+            ? "Sign in to your account"
+            : "Create an account  "}
+        </p>
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          {variant === "REGISTER" && (
+            <div className="space-y-1">
+              <Label htmlFor="text">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                disabled={isLoading}
+                {...register("name", { required: true })}
+                errors={errors}
+                required
+              />
+            </div>
+          )}
+          <div className="space-y-1">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              disabled={isLoading}
+              {...register("email", { required: true })}
+              errors={errors}
+            />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              disabled={isLoading}
+              {...register("password", { required: true })}
+              errors={errors}
+            />
+          </div>
+
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <LoadingDots color="#FAFAFA" />
+              </>
+            ) : variant === "LOGIN" ? (
+              "Sign in"
+            ) : (
+              "Register"
             )}
-            <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                disabled={isLoading}
-                {...register("email", { required: true })}
-                errors={errors}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                disabled={isLoading}
-                {...register("password", { required: true })}
-                errors={errors}
-              />
-            </div>
+          </Button>
+        </form>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <LoadingDots color="#FAFAFA" />
-                </>
-              ) : variant === "LOGIN" ? (
-                "Sign in"
-              ) : (
-                "Register"
-              )}
-            </Button>
-          </form>
-
-          <div className="mt-6">
-            <div className="relative">
-              <div
-                className="
+        <div className="mt-4">
+          <div className="relative">
+            <div
+              className="
                 absolute 
                 inset-0 
                 flex 
                 items-center
               "
-              >
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="bg-white px-2 text-gray-500">
-                  Or continue with
-                </span>
-              </div>
+            >
+              <div className="w-full border-t border-gray-300" />
             </div>
-
-            <div className="mt-6 flex gap-2">
-              <Button
-                className="inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                onClick={(e) => {
-                  e.preventDefault()
-                  socialAction("github")
-                }}
-              >
-                <Icons.github className="h-6 w-6" />
-              </Button>
-              <Button
-                className="inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                onClick={(e) => {
-                  e.preventDefault()
-                  socialAction("google")
-                }}
-              >
-                <Icons.google className="h-6 w-6" />
-              </Button>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-white px-2 text-gray-500">
+                Or continue with
+              </span>
             </div>
           </div>
-          <div
-            className="
+
+          <div className="mt-4 flex gap-2">
+            <Button
+              className="inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
+              onClick={(e) => {
+                e.preventDefault()
+                socialAction("github")
+              }}
+            >
+              <Icons.github className="h-6 w-6" />
+            </Button>
+            <Button
+              className="inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
+              onClick={(e) => {
+                e.preventDefault()
+                socialAction("google")
+              }}
+            >
+              <Icons.google className="h-6 w-6" />
+            </Button>
+          </div>
+        </div>
+        <div
+          className="
             flex 
             gap-2 
             justify-center 
             text-sm 
-            mt-6 
+            mt-4 
             px-2 
             text-gray-500
           "
-          >
-            <div>
-              {variant === "LOGIN"
-                ? "New to Pawnection?"
-                : "Already have an account?"}
-            </div>
-            <div onClick={toggleVariant} className="underline cursor-pointer">
-              {variant === "LOGIN" ? "Create an account" : "Login"}
-            </div>
+        >
+          <div>
+            {variant === "LOGIN"
+              ? "New to Pawnection?"
+              : "Already have an account?"}
+          </div>
+          <div onClick={toggleVariant} className="underline cursor-pointer">
+            {variant === "LOGIN" ? "Create an account" : "Login"}
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

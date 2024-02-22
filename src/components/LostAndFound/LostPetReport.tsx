@@ -4,7 +4,7 @@ import { Button } from "../ui/Button"
 import { useState, FormEvent } from "react"
 import { ToastContainer, toast } from 'react-toastify';
 import CreateMissingPetReport
- from "@/app/api/create/missingPetReport"
+ from "@/app/api/create/route"
 const LostPetReport = () => {
 
     const [name, setName] = useState("")
@@ -24,7 +24,7 @@ const LostPetReport = () => {
             console.log("2")
             
             const formData = new FormData(event.currentTarget)
-            const response = await fetch('/api/create/missingPetReport', {
+            const response = await fetch('/api/create', {
               method: 'POST',
               body: formData,
             })
@@ -50,23 +50,23 @@ const LostPetReport = () => {
 
             <form onSubmit={onSubmit}> 
                 <div className = "flex mt-10 ml-20">
-                    <Textarea className = "mr-8 ml-20 w-1/4" placeholder="Name" required={true} onInput ={(e) => setName(e.currentTarget.value) } />
-                    <Textarea className = "mr-8 ml-20 w-1/4" placeholder="Sex" required={true} onInput = {(e) => setSex(e.currentTarget.value)} />
+                    <Textarea name = "petName" className = "mr-8 ml-20 w-1/4" placeholder="Name" required={true} onInput ={(e) => setName(e.currentTarget.value) } />
+                    <Textarea name = "petSex" className = "mr-8 ml-20 w-1/4" placeholder="Sex" required={true} onInput = {(e) => setSex(e.currentTarget.value)} />
                 </div>
 
                 <div className = "flex mt-10 ml-20">
-                    <Textarea className = "mr-8 ml-20 w-1/4" placeholder="Message from Owner" required={true} onInput = {(e) => setMessage(e.currentTarget.value)} />
-                    <Textarea className = "mr-8 ml-20 w-1/4" placeholder="Description" required={true} onInput = {(e) => setDescription(e.currentTarget.value)}/>
+                    <Textarea name = "reportMessage" className = "mr-8 ml-20 w-1/4" placeholder="Message from Owner" required={true} onInput = {(e) => setMessage(e.currentTarget.value)} />
+                    <Textarea name = "reportDescription" className = "mr-8 ml-20 w-1/4" placeholder="Description" required={true} onInput = {(e) => setDescription(e.currentTarget.value)}/>
                 </div>
 
                 <div className = "flex mt-10 ml-20">
-                    <Textarea className = "mr-8 ml-20 w-1/4" placeholder="Area Last Seen" required={true} onInput = {(e) => setLastSeenArea(e.currentTarget.value)}/> 
-                    <Textarea className = "mr-8 ml-20 w-1/4" placeholder="Date Last Seen" required={true} onInput = {(e) => setLastSeenDate(e.currentTarget.value)}/>
+                    <Textarea name = "lastSeenArea" className = "mr-8 ml-20 w-1/4" placeholder="Area Last Seen" required={true} onInput = {(e) => setLastSeenArea(e.currentTarget.value)}/> 
+                    <Textarea name = "lastSeenDate" className = "mr-8 ml-20 w-1/4" placeholder="Date Last Seen" required={true} onInput = {(e) => setLastSeenDate(e.currentTarget.value)}/>
                 </div>
                 
                 <div className = "flex mt-10 ml-20">
-                    <Textarea className = "mr-8 ml-20 w-1/4" placeholder="Contact Details" required={true} onInput = {(e) => setContactDetails(e.currentTarget.value)}/>
-                    <Textarea className = "mr-8 ml-20 w-1/4" placeholder="Image of missing pet" required={true} onInput = {(e) => setImage(e.currentTarget.value)}/>
+                    <Textarea name = "contactDetails" className = "mr-8 ml-20 w-1/4" placeholder="Contact Details" required={true} onInput = {(e) => setContactDetails(e.currentTarget.value)}/>
+                    <Textarea name = "image" className = "mr-8 ml-20 w-1/4" placeholder="Image of missing pet" required={true} onInput = {(e) => setImage(e.currentTarget.value)}/>
                 </div>
                 
                 <div className = "flex  ml-20 justify-center"> 

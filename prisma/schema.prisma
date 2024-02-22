@@ -37,4 +37,22 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  lostPetReports  LostPetReport[]
+}
+
+model LostPetReport {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  petName           String?
+  petSex            String?
+  reportMessage     String?
+  reportDescription String?
+  lastSeenArea      String?
+  lastSeenDate      String?
+  contactDetails    String?
+  image             String?
+
+  accountId         String @db.ObjectId
+  account Account @relation(fields: [accountId], references: [id])
+
+ 
 }

@@ -124,7 +124,7 @@ const LostAndFound = () => {
       </div>
       
     </main>
-  );
+  )
 }
 
 export default LostAndFound

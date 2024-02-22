@@ -13,7 +13,7 @@ const LostAndFound = () => {
   return (
     <main className="flex min-h-screen flex-col items-center divide-gray-100 w-full h-full">
 
-      <main className="flex flex-col pb-4 w-full h-1/4 px-4 items-center mt-20">
+      <div className="flex flex-col pb-4 w-full h-1/4 px-4 items-center mt-10">
 
         <h2 className="text-3xl font-semibold tracking-tight mb-4 flex">Lost & Found Pets</h2>
 
@@ -77,22 +77,51 @@ const LostAndFound = () => {
         </div>
 
         <div className = "flex mt-4">
-        <Button variant="outline" className="mr-8 w-100 bg-black text-white">Report A Missing Pet</Button>
+        <Button variant="outline" className="mr-8 w-60 mb-5 bg-black text-white">Report A Missing Pet</Button>
+        <Button className="mr-8 w-60 mb-5 bg-black text-white"> Found A Pet</Button>
         </div>
 
-      </main>
+      </div>
 
-      <main className="flex border-t-2 border-black my-5 flex-col items-center pb-4 w-full h-full px-4">
+      <div className="flex border-t-2 border-black flex-col pb-4 w-full h-full px-4 items-center">
 
-        <h2 className="text-3xl font-semibold tracking-tight mt-8 mb-4">Lost Animals</h2>
+        <h2 className="text-3xl font-semibold tracking-tight mb-4 flex">Lost Pets</h2>
 
-      </main>
+        <div className="flex mt-2 mb-2 ">
+          <Button className = "mr-20 w-40" >
+               Test 
+          </Button>     
 
-      <main className="flex border-t-2 border-black my-4 flex-col items-center border-b-5 pb-4 w-full h-full">
+          <Button className = "mr-20 w-40">
+               Test 
+          </Button>     
 
-        <h2 className="text-3xl font-semibold tracking-tight mt-8 mb-4">Found Animals</h2>
+          <Button className = "mr-20 w-40" >
+               Test 
+          </Button>     
 
-      </main>
+        </div>
+      </div>
+
+
+      <div className="flex border-t-2 border-black my-4 flex-col items-center border-b-5 pb-4 w-full h-full">
+
+        <h2 className="text-3xl font-semibold tracking-tight mt-8 mb-4">Found Pets</h2>
+        <div className="flex mt-2 mb-2 ">
+          <Button className = "mr-20 w-40" >
+               Test 
+          </Button>     
+
+          <Button className = "mr-20 w-40">
+               Test 
+          </Button>     
+
+          <Button className = "mr-20 w-40" >
+               Test 
+          </Button>     
+
+        </div>
+      </div>
       
     </main>
   );

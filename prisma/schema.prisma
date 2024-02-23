@@ -18,7 +18,8 @@ model User {
   updatedAt      DateTime  @updatedAt
   type           UserType?
 
-  accounts Account[]
+  accounts      Account[]
+  adoptablePets AdoptablePet[]
 }
 
 enum UserType {
@@ -43,4 +44,20 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+model AdoptablePet {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  type        String
+  breed       String
+  age         Int
+  gender      String
+  description String
+  imageUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  adoptionCentre   User   @relation(fields: [adoptionCentreId], references: [id])
+  adoptionCentreId String @db.ObjectId
 }

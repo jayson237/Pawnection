@@ -8,17 +8,17 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
-  email          String    @unique
+  email          String          @unique
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   type           UserType?
-  accounts      Account[]
-  adoptablePets AdoptablePet[]
+  accounts       Account[]
+  adoptablePets  AdoptablePet[]
   lostPetReports LostPetReport[]
 }
 
@@ -42,6 +42,8 @@ model Account {
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
 
 model LostPetReport {

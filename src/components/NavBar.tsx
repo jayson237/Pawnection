@@ -36,13 +36,13 @@ function NavBar() {
         <NavigationMenuList className="hidden sm:flex">
           {session.status === "authenticated" && (
             <>
-              {/* <NavigationMenuItem>
-                <Link href="/profile">
+              <NavigationMenuItem>
+                <Link href="/adopt">
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    My Profile
+                    Adopt
                   </NavigationMenuLink>
                 </Link>
-              </NavigationMenuItem> */}
+              </NavigationMenuItem>
             </>
           )}
 

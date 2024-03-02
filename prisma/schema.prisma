@@ -10,15 +10,21 @@ datasource db {
 model User {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
-  email          String?   @unique
+  email          String    @unique
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-
-  accounts       Account[]
+  type           UserType?
+  accounts      Account[]
+  adoptablePets AdoptablePet[]
   lostPetReports LostPetReport[]
+}
+
+enum UserType {
+  PetLover
+  PetAdoptionCentre
 }
 
 model Account {
@@ -51,4 +57,20 @@ model LostPetReport {
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
+}
+
+model AdoptablePet {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  type        String
+  breed       String
+  age         Int
+  gender      String
+  description String
+  imageUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  adoptionCentre   User   @relation(fields: [adoptionCentreId], references: [id])
+  adoptionCentreId String @db.ObjectId
 }

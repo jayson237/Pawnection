@@ -28,7 +28,7 @@ export default function RootLayout({
       >
         <AuthContext>
           <NavBar />
-          <main className="h-[1px] min-h-[calc(100vh-88px)] w-full ">
+          <main className="h-[1px] min-h-[calc(100vh-78px)] w-full ">
             {children}
           </main>
         </AuthContext>

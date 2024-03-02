@@ -13,15 +13,35 @@ const LostPetReport = () => {
   const [lastSeenArea, setLastSeenArea] = useState("")
   const [lastSeenDate, setLastSeenDate] = useState("")
   const [contactDetails, setContactDetails] = useState("")
-  const [petImage, setPetImage] = useState(null)
+  const [petImage, setPetImage] = useState<File | null>(null)
+  // const [petImageStr, setPetImageStr] = useState(null)
   //   const [image, setImage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsLoading(true)
-
+    const sign = await fetch("/api/cloudinary/cdn-sign?type=post"); 
+    const data = await sign.json();
+    const url =
+      "https://api.cloudinary.com/v1_1/" + data.cloudname + "/auto/upload";  
     try {
+      const formData = new FormData()
+
+      formData.append("file", petImage);
+      formData.append("api_key", data.apikey);
+      formData.append("timestamp", data.timestamp.toString());2
+      formData.append("signature", data.signature);
+      formData.append("eager", data.eager);
+      formData.append("folder", data.folder);
+
+      const cdnResponse = await fetch(url, {
+        method: "POST",
+        body: formData,
+        cache: "no-store",
+      });
+      const result = await cdnResponse.json();
+
       const response = await fetch("/api/create", {
         method: "POST",
         body: JSON.stringify({
@@ -32,6 +52,7 @@ const LostPetReport = () => {
           lastSeenArea: lastSeenArea,
           lastSeenDate: lastSeenDate,
           contactDetails: contactDetails,
+          petImage: result.secure_url
         }),
       })
 
@@ -115,11 +136,7 @@ const LostPetReport = () => {
             onChange={(e) => setContactDetails(e.currentTarget.value)}
           />
           
-        <div className="mr-8 ml-20 w-1/4">
-          <input type="file" accept="image/*" required={true} onChange={(e) => setPetImage(e.target.files ? e.target.files[0] : null)} />
-          <button className = "mt-5" type="submit"> Upload Image</button>
-        </div>
-
+          <input className="mr-8 ml-20 w-1/4" type="file" accept="image/*" required={true} onChange={(e) => setPetImage(e.target.files ? e.target.files[0] : null)} />
         </div>
 
         <div className="flex  ml-20 justify-center">

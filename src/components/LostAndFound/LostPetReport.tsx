@@ -21,53 +21,52 @@ const LostPetReport = () => {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsLoading(true)
-    const sign = await fetch("/api/cloudinary/cdn-sign?type=post"); 
-    const data = await sign.json();
-    const url =
-      "https://api.cloudinary.com/v1_1/" + data.cloudname + "/auto/upload";  
+    const sign = await fetch("/api/cloudinary/cdn-sign?type=post")
+    const data = await sign.json()
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${data.cloudname}/auto/upload`
     try {
       const formData = new FormData()
+      if (petImage) {
+        formData.append("file", petImage)
+        formData.append("api_key", data.apikey)
+        formData.append("timestamp", data.timestamp.toString())
+        formData.append("signature", data.signature)
+        formData.append("eager", data.eager)
+        formData.append("folder", data.folder)
 
-      formData.append("file", petImage);
-      formData.append("api_key", data.apikey);
-      formData.append("timestamp", data.timestamp.toString());2
-      formData.append("signature", data.signature);
-      formData.append("eager", data.eager);
-      formData.append("folder", data.folder);
+        const cdnResponse = await fetch(cloudinaryUrl, {
+          method: "POST",
+          body: formData,
+          cache: "no-store",
+        })
+        const resultImage = await cdnResponse.json()
 
-      const cdnResponse = await fetch(url, {
-        method: "POST",
-        body: formData,
-        cache: "no-store",
-      });
-      const result = await cdnResponse.json();
+        const response = await fetch("/api/lostAndFound/createLostPetReport", {
+          method: "POST",
+          body: JSON.stringify({
+            name: name,
+            sex: sex,
+            message: message,
+            description: description,
+            lastSeenArea: lastSeenArea,
+            lastSeenDate: lastSeenDate,
+            contactDetails: contactDetails,
+            petImage: resultImage.secure_url,
+          }),
+        })
 
-      const response = await fetch("/api/create", {
-        method: "POST",
-        body: JSON.stringify({
-          name: name,
-          sex: sex,
-          message: message,
-          description: description,
-          lastSeenArea: lastSeenArea,
-          lastSeenDate: lastSeenDate,
-          contactDetails: contactDetails,
-          petImage: result.secure_url
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error(
-          "Failed to create Missing Pet Report. Please try again.",
-        )
-      } else {
-        setIsLoading(false)
+        if (!response.ok) {
+          throw new Error(
+            "Failed to create Missing Pet Report. Please try again.",
+          )
+        } else {
+          setIsLoading(false)
+        }
       }
     } catch (error) {
       console.error(error)
     }
   }
-
 
   return (
     <main className="flex max-h-screen flex-col  divide-gray-100 w-full h-full ml-20">
@@ -135,8 +134,16 @@ const LostPetReport = () => {
             required={true}
             onChange={(e) => setContactDetails(e.currentTarget.value)}
           />
-          
-          <input className="mr-8 ml-20 w-1/4" type="file" accept="image/*" required={true} onChange={(e) => setPetImage(e.target.files ? e.target.files[0] : null)} />
+
+          <input
+            className="mr-8 ml-20 w-1/4"
+            type="file"
+            accept="image/*"
+            required={true}
+            onChange={(e) =>
+              setPetImage(e.target.files ? e.target.files[0] : null)
+            }
+          />
         </div>
 
         <div className="flex  ml-20 justify-center">
@@ -146,7 +153,6 @@ const LostPetReport = () => {
         </div>
       </form>
     </main>
-    
   )
 }
 

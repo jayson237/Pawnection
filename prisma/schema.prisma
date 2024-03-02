@@ -8,16 +8,23 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
-  email          String?   @unique
+  email          String          @unique
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  type           UserType?
+  accounts       Account[]
+  adoptablePets  AdoptablePet[]
+  lostPetReports LostPetReport[]
+}
 
-  accounts Account[]
+enum UserType {
+  PetLover
+  PetAdoptionCentre
 }
 
 model Account {
@@ -37,4 +44,35 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+model LostPetReport {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  petName           String?
+  petSex            String?
+  reportMessage     String?
+  reportDescription String?
+  lastSeenArea      String?
+  lastSeenDate      String?
+  contactDetails    String?
+  image             String?
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model AdoptablePet {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  type        String
+  breed       String
+  age         Int
+  gender      String
+  description String
+  imageUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  adoptionCentre   User   @relation(fields: [adoptionCentreId], references: [id])
+  adoptionCentreId String @db.ObjectId
 }

@@ -13,12 +13,14 @@ const LostPetReport = () => {
   const [lastSeenArea, setLastSeenArea] = useState("")
   const [lastSeenDate, setLastSeenDate] = useState("")
   const [contactDetails, setContactDetails] = useState("")
+  const [petImage, setPetImage] = useState(null)
   //   const [image, setImage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsLoading(true)
+
     try {
       const response = await fetch("/api/create", {
         method: "POST",
@@ -44,6 +46,7 @@ const LostPetReport = () => {
       console.error(error)
     }
   }
+
 
   return (
     <main className="flex max-h-screen flex-col  divide-gray-100 w-full h-full ml-20">
@@ -111,13 +114,12 @@ const LostPetReport = () => {
             required={true}
             onChange={(e) => setContactDetails(e.currentTarget.value)}
           />
-          {/* <Textarea
-            name="image"
-            className="mr-8 ml-20 w-1/4"
-            placeholder="Image of missing pet"
-            required={true}
-            onChange={(e) => setImage(e.currentTarget.value)}
-          /> */}
+          
+        <div className="mr-8 ml-20 w-1/4">
+          <input type="file" accept="image/*" required={true} onChange={(e) => setPetImage(e.target.files ? e.target.files[0] : null)} />
+          <button className = "mt-5" type="submit"> Upload Image</button>
+        </div>
+
         </div>
 
         <div className="flex  ml-20 justify-center">
@@ -127,6 +129,7 @@ const LostPetReport = () => {
         </div>
       </form>
     </main>
+    
   )
 }
 

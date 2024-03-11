@@ -44,19 +44,19 @@ function NavBar() {
                   Lost & Found
                 </Link>
                 <Link
-                  href="/lost-and-found"
+                  href="/adopt"
                   className="text-primary text-sm font-medium"
                 >
                   Adopt
                 </Link>
                 <Link
-                  href="/lost-and-found"
+                  href="/commounity"
                   className="text-primary text-sm font-medium"
                 >
                   Community
                 </Link>
                 <Link
-                  href="/lost-and-found"
+                  href="/recommendations"
                   className="text-primary text-sm font-medium"
                 >
                   Recommendations

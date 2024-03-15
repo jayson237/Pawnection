@@ -20,6 +20,7 @@ model User {
   accounts       Account[]
   adoptablePets  AdoptablePet[]
   lostPetReports LostPetReport[]
+  foundPetReports FoundPetReport[]
 }
 
 enum UserType {
@@ -48,15 +49,31 @@ model Account {
 
 model LostPetReport {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  animalType        String?
   petName           String?
   petSex            String?
   reportMessage     String?
   reportDescription String?
   lastSeenArea      String?
-  lastSeenDate      String?
+  lastSeenDate      DateTime?
   contactDetails    String?
   image             String?
 
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model FoundPetReport {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  animalType        String?
+  petName           String?
+  petSex            String?
+  reportMessage     String?
+  reportDescription String?
+  foundArea         String?
+  foundDate         DateTime?
+  contactDetails    String?
+  image             String?
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
 }

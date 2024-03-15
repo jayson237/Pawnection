@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   try {
     const data = await request.json()
 
-    const missingReport = await prisma.lostPetReport.create({
+    const missingReport = await prisma.foundPetReport.create({
       data: {
         user: {
           connect: {
@@ -20,8 +20,8 @@ export async function POST(request: Request) {
         petSex: data.sex,
         reportMessage: data.message,
         reportDescription: data.description,
-        lastSeenArea: data.lastSeenArea,
-        lastSeenDate: data.lastSeenDate,
+        foundArea: data.foundArea,
+        foundDate: data.foundDate,
         contactDetails: data.contactDetails,
       },
     })

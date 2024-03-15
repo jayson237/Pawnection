@@ -30,12 +30,12 @@ export function Toaster() {
         )
       })}
       <ToastViewport style={{
-  position: 'fixed',
+  position: "fixed",
   top: 0,
   right: 0,
   zIndex: 1050,
-  maxHeight: '70%',
-  overflow: 'auto',
+  maxHeight: "70%",
+  overflow: "auto",
 }} />
     </ToastProvider>
   )

@@ -16,6 +16,11 @@ const config = {
       screens: {
         "2xl": "1400px",
       },
+      extend: {
+        colors: {
+          "pink-500": "#F9E0DE",
+        },
+      },
     },
     extend: {
       colors: {

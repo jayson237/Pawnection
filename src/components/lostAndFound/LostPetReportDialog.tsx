@@ -1,8 +1,8 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState } from "react"
 
 // Assuming Button and Textarea are your custom components
-import { Button } from "../ui/Button";
-import { Textarea } from "../ui/TextArea";
+import { Button } from "../ui/Button"
+import { Textarea } from "../ui/TextArea"
 import {   Dialog,
     DialogPortal,
     DialogOverlay,
@@ -12,8 +12,8 @@ import {   Dialog,
     DialogHeader,
     DialogFooter,
     DialogTitle,
-    DialogDescription, } from "../ui/Dialog";
-import { Calendar } from "../ui/Calendar";
+    DialogDescription, } from "../ui/Dialog"
+import { Calendar } from "../ui/Calendar"
 import {   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
@@ -28,7 +28,9 @@ import {   DropdownMenu,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-  DropdownMenuRadioGroup, } from "../ui/DropdownMenu";
+  DropdownMenuRadioGroup, } from "../ui/DropdownMenu"
+
+import { useToast } from "@/hooks/useToast"
 
 interface LostPetReportDialogProps {
     isOpen: boolean;
@@ -36,16 +38,17 @@ interface LostPetReportDialogProps {
   }
 
 const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
-  const [animalType, setAnimalType] = useState("");  
-  const [name, setName] = useState("");
-  const [sex, setSex] = useState("");
-  const [message, setMessage] = useState("");
-  const [description, setDescription] = useState("");
-  const [lastSeenArea, setLastSeenArea] = useState("");
-  const [lastSeenDate, setLastSeenDate] = useState<Date | undefined>();
-  const [contactDetails, setContactDetails] = useState("");
-  const [petImage, setPetImage] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [animalType, setAnimalType] = useState("")  
+  const [name, setName] = useState("")
+  const [sex, setSex] = useState("")
+  const [message, setMessage] = useState("")
+  const [description, setDescription] = useState("")
+  const [lastSeenArea, setLastSeenArea] = useState("")
+  const [lastSeenDate, setLastSeenDate] = useState<Date | undefined>()
+  const [contactDetails, setContactDetails] = useState("")
+  const [petImage, setPetImage] = useState<File | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -88,8 +91,11 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
           throw new Error(
             "Failed to create Missing Pet Report. Please try again.",
           )
-        } else {
+        } else {          
           setIsLoading(false)
+          toast({
+            description: "Missing Pet Report has been successfully created.",
+          })                
         }
       }
     } catch (error) {
@@ -97,13 +103,13 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
     }
   }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <Dialog open={isOpen} onOpenChange={isOpen => isOpen ? null : onClose()}>
       <DialogPortal>
         <DialogOverlay className="DialogOverlay" />
-        <DialogContent className="DialogContent" style={{ overflowY: 'auto' }}>
+        <DialogContent className="DialogContent" style={{ overflowY: "auto" }}>
           <DialogTitle className="DialogTitle">Report Missing Pet</DialogTitle>
 
 
@@ -113,10 +119,10 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
         <DropdownMenu>
             <DropdownMenuTrigger className="border-2 border-black rounded-md">Animal Type: {animalType}</DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuItem onSelect={() => setAnimalType('Dog')}>Dog</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType('Cat')}>Cat</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType('Bird')}>Bird</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType('Others')}>Others</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setAnimalType("Dog")}>Dog</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setAnimalType("Cat")}>Cat</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setAnimalType("Bird")}>Bird</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setAnimalType("Others")}>Others</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
 
@@ -203,10 +209,11 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
           </div>
         </form>
 
+
         </DialogContent>
       </DialogPortal>
     </Dialog>
-  );
-};
+  )
+}
 
-export default LostPetReportDialog;
+export default LostPetReportDialog

@@ -1,8 +1,8 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState } from "react"
 
 // Assuming Button and Textarea are your custom components
-import { Button } from "../ui/Button";
-import { Textarea } from "../ui/TextArea";
+import { Button } from "../ui/Button"
+import { Textarea } from "../ui/TextArea"
 import {   Dialog,
     DialogPortal,
     DialogOverlay,
@@ -12,7 +12,7 @@ import {   Dialog,
     DialogHeader,
     DialogFooter,
     DialogTitle,
-    DialogDescription, } from "../ui/Dialog";
+    DialogDescription, } from "../ui/Dialog"
 
 import { Calendar } from "../ui/Calendar"
 import {   DropdownMenu,
@@ -29,7 +29,9 @@ import {   DropdownMenu,
     DropdownMenuSub,
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
-    DropdownMenuRadioGroup, } from "../ui/DropdownMenu";
+    DropdownMenuRadioGroup, } from "../ui/DropdownMenu"
+
+import { useToast } from "@/hooks/useToast"
 
 interface FoundPetReportDialogProps {
     isOpen: boolean;
@@ -37,17 +39,18 @@ interface FoundPetReportDialogProps {
   }
 
 const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) => {
-  const [animalType, setAnimalType] = useState("");  
-  const [name, setName] = useState("");
-  const [sex, setSex] = useState("");
-  const [message, setMessage] = useState("");
-  const [description, setDescription] = useState("");
-  const [foundArea, setFoundArea] = useState("");
-  const [foundDate, setFoundDate] = useState<Date | undefined>();
-  const [contactDetails, setContactDetails] = useState("");
-  const [petImage, setPetImage] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [validationErrors, setValidationErrors] = useState({});
+  const [animalType, setAnimalType] = useState("")  
+  const [name, setName] = useState("")
+  const [sex, setSex] = useState("")
+  const [message, setMessage] = useState("")
+  const [description, setDescription] = useState("")
+  const [foundArea, setFoundArea] = useState("")
+  const [foundDate, setFoundDate] = useState<Date | undefined>()
+  const [contactDetails, setContactDetails] = useState("")
+  const [petImage, setPetImage] = useState<File | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [validationErrors, setValidationErrors] = useState({})
+  const { toast } = useToast()
 
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -93,6 +96,9 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
           )
         } else {
           setIsLoading(false)
+          toast({
+            description: "Found Pet Report has been successfully created.",
+          })                 
         }
       }
     } catch (error) {
@@ -102,13 +108,13 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
 
 
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <Dialog open={isOpen} onOpenChange={isOpen => isOpen ? null : onClose()}>
       <DialogPortal>
         <DialogOverlay className="DialogOverlay" />
-        <DialogContent className="DialogContent" style={{ overflowY: 'auto' }}>
+        <DialogContent className="DialogContent" style={{ overflowY: "auto" }}>
           <DialogTitle className="DialogTitle">Report Found Pet</DialogTitle>
 
 
@@ -117,11 +123,11 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
         <div className="mb-5">
         <DropdownMenu>
             <DropdownMenuTrigger className="border-2 border-black rounded-md">Animal Type: {animalType}</DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem onSelect={() => setAnimalType('Dog')}>Dog</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType('Cat')}>Cat</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType('Bird')}>Bird</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType('Others')}>Others</DropdownMenuItem>
+            <DropdownMenuContent >
+                <DropdownMenuItem onSelect={() => setAnimalType("Dog")}>Dog</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setAnimalType("Cat")}>Cat</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setAnimalType("Bird")}>Bird</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setAnimalType("Others")}>Others</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
 
@@ -212,7 +218,7 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
         </DialogContent>
       </DialogPortal>
     </Dialog>
-  );
-};
+  )
+}
 
-export default FoundPetReportDialog;
+export default FoundPetReportDialog

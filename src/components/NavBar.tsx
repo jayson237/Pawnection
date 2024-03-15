@@ -38,7 +38,7 @@ function NavBar() {
             <>
               <div className="flex gap-10 items-center">
                 <Link
-                  href="/lost-and-found"
+                  href="/lostAndFound"
                   className="text-primary text-sm font-medium"
                 >
                   Lost & Found

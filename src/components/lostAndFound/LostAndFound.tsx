@@ -8,6 +8,8 @@ import { Dialog } from "../ui/Dialog"
 
 import LostPetReportDialog from "./LostPetReportDialog"
 
+import FoundPetReportDialog from "./FoundPetReportDialog"
+
 const LostAndFound = () => {
   const [allSelected, setAllSeleceted] = useState(false)
   const [dogsSelected, setDogsSeleceted] = useState(false)
@@ -15,6 +17,7 @@ const LostAndFound = () => {
   const [birdsSelected, setBirdsSeleceted] = useState(false)
   const [othersSelected, setOthersSeleceted] = useState(false)
   const [isLostPetReportDialogOpen, setIsLostPetReportDialogOpen] = useState(false)
+  const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] = useState(false)
 
   const handleOpenLostPetReportDialog = () => {
     setIsLostPetReportDialogOpen(true)
@@ -23,6 +26,14 @@ const LostAndFound = () => {
   const handleCloseLostPetReportDialog = () => {
     setIsLostPetReportDialogOpen(false)
   }
+
+  const handleOpenFoundLostPetReportDialog = () => {
+    setIsFoundPetReportDialogOpen(true)
+  }
+
+  const handleCloseFoundLostPetReportDialog = () => {
+    setIsFoundPetReportDialogOpen(false)
+  }  
 
   return (
     <main className="flex min-h-screen flex-col items-center divide-gray-100 w-full h-full">
@@ -90,19 +101,31 @@ const LostAndFound = () => {
           </Button>     
         </div>
 
+        {/* <Button variant="outline" className="mr-8 w-60 mb-5 bg-black text-white" onClick={() => setIsLostPetReportDialogOpen(true)}>
+            Report A Missing Pet
+        </Button>
+
+      <LostPetReportDialog isOpen={isLostPetReportDialogOpen} 
+            onClose={() => setIsLostPetReportDialogOpen(false)} /> */}
+    
+        <div className = "flex mt-4">
         <Button variant="outline" className="mr-8 w-60 mb-5 bg-black text-white" onClick={() => setIsLostPetReportDialogOpen(true)}>
             Report A Missing Pet
         </Button>
 
       <LostPetReportDialog isOpen={isLostPetReportDialogOpen} 
-            onClose={() => setIsLostPetReportDialogOpen(false)} />
-    
-        {/* <div className = "flex mt-4">
-        <Button variant="outline" className="mr-8 w-60 mb-5 bg-black text-white" onClick={handleOpenLostPetReportDialog}>Report A Missing Pet</Button>
-        <Button className="mr-8 w-60 mb-5 bg-black text-white"> Found A Pet</Button>
+            onClose={() => setIsLostPetReportDialogOpen(false)} />       
+             {/* <Button className="mr-8 w-60 mb-5 bg-black text-white"> Found A Pet</Button> */}
+
+        <Button variant="outline" className="mr-8 w-60 mb-5 bg-black text-white" onClick={() => setIsFoundPetReportDialogOpen(true)}>
+            Report A Found Pet
+        </Button>
+
+      <FoundPetReportDialog isOpen={isFoundPetReportDialogOpen} 
+            onClose={() => setIsFoundPetReportDialogOpen(false)} />       
         </div>
 
-        <Dialog open={isLostPetReportDialogOpen}>
+        {/* <Dialog open={isLostPetReportDialogOpen}>
         <div>Dialog Content</div>
         <Button onClick={handleCloseLostPetReportDialog}>Close</Button>
       </Dialog> */}

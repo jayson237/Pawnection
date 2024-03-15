@@ -197,9 +197,9 @@ const AuthForm = () => {
           <div className="relative">
             <div
               className="
-                absolute 
-                inset-0 
-                flex 
+                absolute
+                inset-0
+                flex
                 items-center
               "
             >
@@ -235,12 +235,12 @@ const AuthForm = () => {
         </div>
         <div
           className="
-            flex 
-            gap-2 
-            justify-center 
-            text-sm 
-            mt-4 
-            px-2 
+            flex
+            gap-2
+            justify-center
+            text-sm
+            mt-4
+            px-2
             text-gray-500
           "
         >

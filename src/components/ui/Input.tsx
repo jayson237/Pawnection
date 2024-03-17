@@ -26,10 +26,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 					<input
 						type={inputType}
 						className={cn(
-							"flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+							"flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-white",
 							className,
 							errors?.[props.id as string] &&
-								"focus-visible:invalid:ring-red-400 invalid:border-red-400 focus-visible:invalid:ring-offset-0",
+								"focus-visible:invalid:ring-red-400 invalid:border-red-400 focus-visible:ring-offset-2 border-red-400 focus-visible:ring-red-400 ring-red-400 ring-offset-2 ring-red-400",
 						)}
 						ref={ref}
 						{...props}
@@ -48,6 +48,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 						</button>
 					)}
 				</div>
+
+				{/* {errors?.[props.id as string] && (
+					<div className="absolute text-red-400 text-xs -bottom-6">
+						{errors?.[props.id as string]?.message as string}
+					</div>
+				)} */}
 			</div>
 		);
 	},

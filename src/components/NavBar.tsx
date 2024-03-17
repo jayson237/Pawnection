@@ -20,7 +20,7 @@ function NavBar() {
   const session = useSession()
 
   return (
-    <div className="sticky top-0 z-[100] flex w-full place-content-between bg-white px-12 py-4 drop-shadow md:px-24 items-center">
+    <div className="sticky top-0 z-[100] flex w-full place-content-between px-12 py-4 drop-shadow md:px-24 items-center border-b bg-[#FFF8F5]">
       <Image
         src="/pawnection.svg"
         alt="Pawnection"
@@ -36,6 +36,32 @@ function NavBar() {
         <NavigationMenuList className="hidden sm:flex">
           {session.status === "authenticated" && (
             <>
+              <div className="flex gap-10 items-center">
+                <Link
+                  href="/lost-and-found"
+                  className="text-primary text-sm font-medium"
+                >
+                  Lost & Found
+                </Link>
+                <Link
+                  href="/adopt"
+                  className="text-primary text-sm font-medium"
+                >
+                  Adopt
+                </Link>
+                <Link
+                  href="/commounity"
+                  className="text-primary text-sm font-medium"
+                >
+                  Community
+                </Link>
+                <Link
+                  href="/recommendations"
+                  className="text-primary text-sm font-medium"
+                >
+                  Recommendations
+                </Link>
+              </div>
               <NavigationMenuItem>
                 <Link href="/adopt">
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>

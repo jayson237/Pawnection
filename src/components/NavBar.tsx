@@ -62,13 +62,6 @@ function NavBar() {
                   Recommendations
                 </Link>
               </div>
-              <NavigationMenuItem>
-                <Link href="/adopt">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Adopt
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
             </>
           )}
 

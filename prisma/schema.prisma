@@ -11,7 +11,7 @@ model User {
   id             String          @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
   email          String          @unique
-  username       String          @unique 
+  username       String          @unique
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
@@ -19,8 +19,11 @@ model User {
   updatedAt      DateTime        @updatedAt
   type           UserType?
   accounts       Account[]
+  posts          Post[]
+  likes          Like[]
   adoptablePets  AdoptablePet[]
   lostPetReports LostPetReport[]
+  Comment        Comment[]
 }
 
 enum UserType {
@@ -45,6 +48,37 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+model Post {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  content   String
+  imageUrl  String?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String    @db.ObjectId
+  likes     Like[]
+  comments  Comment[]
+}
+
+model Like {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String   @db.ObjectId
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String   @db.ObjectId
 }
 
 model LostPetReport {

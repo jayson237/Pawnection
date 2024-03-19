@@ -1,4 +1,5 @@
 import AuthForm from "@/components/auth/AuthForm"
+import { Suspense } from "react"
 
 import HeaderTitle from "../../../components/HeaderTitle"
 
@@ -12,8 +13,9 @@ export default async function Auth() {
           </HeaderTitle>
         </div>
       </div>
-
-      <AuthForm />
+      <Suspense>
+        <AuthForm />
+      </Suspense>
     </div>
   )
 }

@@ -4,7 +4,6 @@ import { redirect } from "next/navigation"
 
 export default async function AuthUsername() {
   const currUser = await getCurrentUser()
-  console.log("currUser", currUser)
   if (!currUser) redirect("/auth")
   if (currUser.username) redirect("/")
 

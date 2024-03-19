@@ -5,6 +5,7 @@ import axios, { type AxiosError } from "axios"
 import { signIn, useSession } from "next-auth/react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form"
 
@@ -21,6 +22,7 @@ const AuthForm = () => {
   const { toast } = useToast()
   const session = useSession()
   const router = useRouter()
+  const params = useSearchParams()
   const [variant, setVariant] = useState<Variant>("LOGIN")
   const [isLoading, setIsLoading] = useState(false)
 
@@ -29,6 +31,15 @@ const AuthForm = () => {
       router.push("/")
     }
   }, [session?.status, router])
+
+  useEffect(() => {
+    if (params?.get("error") === "OAuthAccountNotLinked") {
+      toast({
+        variant: "destructive",
+        title: "Your email has been registered with a different signin method",
+      })
+    }
+  }, [params])
 
   const toggleVariant = useCallback(() => {
     if (variant === "LOGIN") {
@@ -52,17 +63,6 @@ const AuthForm = () => {
     },
   })
 
-  // handle password match
-  if (watch("password") !== watch("password2")) {
-    errors.password2 = {
-      type: "validate",
-      message: "Passwords do not match",
-    }
-  }
-  if (watch("password") === watch("password2")) {
-    errors.password2 = undefined
-  }
-
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true)
 
@@ -80,7 +80,6 @@ const AuthForm = () => {
         .then(() =>
           signIn("credentials", {
             ...data,
-            redirect: false,
             callbackUrl: "/auth/type",
           }),
         )
@@ -162,7 +161,7 @@ const AuthForm = () => {
         {variant === "REGISTER" ? (
           <HeaderTitle className="max-w-full">Sign Up</HeaderTitle>
         ) : (
-          <HeaderTitle className="max-w-full">Login</HeaderTitle>
+          <HeaderTitle className="max-w-full">Sign in</HeaderTitle>
         )}
 
         <form className="space-y-6 pt-6" onSubmit={handleSubmit(onSubmit)}>
@@ -174,10 +173,11 @@ const AuthForm = () => {
                   id="username"
                   type="text"
                   disabled={isLoading}
-                  {...register("username", { required: true })}
+                  {...register("username", {
+                    required: variant === "REGISTER",
+                  })}
                   errors={errors}
                   placeholder="Enter your username"
-                  required
                 />
               </div>
             </>
@@ -211,32 +211,45 @@ const AuthForm = () => {
                 id="password2"
                 type="password"
                 disabled={isLoading}
-                {...register("password2", { required: true })}
+                {...register("password2", { required: variant === "REGISTER" })}
                 errors={errors}
                 placeholder="Re-enter your password"
               />
             </div>
           )}
-
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={
-              isLoading ||
-              !isValid ||
-              Object.values(errors).filter((e) => e !== undefined).length > 0
-            }
-          >
-            {isLoading ? (
-              <>
-                <LoadingDots color="#FAFAFA" />
-              </>
-            ) : variant === "LOGIN" ? (
-              "Sign in"
-            ) : (
-              "Register"
-            )}
-          </Button>
+          {variant === "REGISTER" ? (
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={
+                isLoading ||
+                !isValid ||
+                Object.values(errors).filter((e) => e !== undefined).length > 0
+              }
+            >
+              {isLoading ? (
+                <>
+                  <LoadingDots color="#FAFAFA" />
+                </>
+              ) : (
+                "Register"
+              )}
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading || !isValid}
+            >
+              {isLoading ? (
+                <>
+                  <LoadingDots color="#FAFAFA" />
+                </>
+              ) : (
+                "Sign in"
+              )}
+            </Button>
+          )}
         </form>
 
         <div className="mt-4">
@@ -295,11 +308,7 @@ const AuthForm = () => {
               ? "New to Pawnection?"
               : "Already have an account?"}
           </div>
-          <div
-            onClick={toggleVariant}
-            className="underline cursor-pointer"
-            // onKeyDown={toggleVariant}
-          >
+          <div onClick={toggleVariant} className="underline cursor-pointer">
             {variant === "LOGIN" ? "Create an account" : "Login"}
           </div>
         </div>

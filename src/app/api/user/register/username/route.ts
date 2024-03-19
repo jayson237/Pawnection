@@ -5,31 +5,31 @@ import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
   const currentUser = await getCurrentUser()
-  const { type }: { type: number } = await req.json()
-  if (type > 2 || type <= 0)
+  const { username }: { username: string } = await req.json()
+
+  if (!username)
     return NextResponse.json(
       {
-        message: "Invalid choice",
+        message: "No username provided",
       },
       {
         status: 400,
       },
     )
-  const userType = type == 1 ? UserType.PetLover : UserType.PetAdoptionCentre
 
   const set = await prisma.user.update({
     where: {
       email: currentUser?.email,
     },
     data: {
-      type: userType,
+      username: username,
     },
   })
 
   if (!set)
     return NextResponse.json(
       {
-        message: "Unable to set user type",
+        message: "Unable to set username",
       },
       {
         status: 400,
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     )
   return NextResponse.json(
     {
-      message: "Successfuly set user type!",
+      message: "You are all set!",
     },
     {
       status: 200,

@@ -37,7 +37,10 @@ export async function POST(request: Request) {
       },
     })
 
-    return NextResponse.json(user)
+    return NextResponse.json(
+      { msg: "User successfuly created!" },
+      { status: 200 },
+    )
   } catch (error: unknown) {
     console.log("Registration error", error)
 
@@ -45,7 +48,18 @@ export async function POST(request: Request) {
       if (error.code === "P2002" && error.meta?.target === "User_email_key") {
         return NextResponse.json(
           {
-            msg: "Email has been registered",
+            msg: "Email has been registered, please try another one",
+          },
+          { status: 400 },
+        )
+      }
+      if (
+        error.code === "P2002" &&
+        error.meta?.target === "User_username_key"
+      ) {
+        return NextResponse.json(
+          {
+            msg: "Username has been taken, please try another one",
           },
           { status: 400 },
         )
@@ -54,7 +68,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
-        msg: "Internal Error",
+        msg: "Internal Error, please try again",
       },
       { status: 500 },
     )

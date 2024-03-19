@@ -49,7 +49,7 @@ function NavBar() {
                 Adopt
               </Link>
               <Link
-                href="/commounity"
+                href="/community"
                 className="text-primary text-sm font-medium hover:bg-accent px-4 py-2 rounded-md ease-in-out duration-200"
               >
                 Community

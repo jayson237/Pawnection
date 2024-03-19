@@ -1,6 +1,8 @@
+import getCurrentUser from "@/actions/getCurrentUser"
 import Image from "next/image"
+import { redirect } from "next/navigation"
 
-import HeaderTitle from "../../../components/shared/header-title"
+import HeaderTitle from "../../../components/HeaderTitle"
 import { Button } from "../../../components/ui/Button"
 
 enum PetGender {
@@ -67,6 +69,8 @@ function HowtoCard({
 }
 
 export default async function Adopt() {
+  const currentUser = await getCurrentUser()
+  if (currentUser?.type) redirect("/auth/type")
   return (
     <div className="w-full max-w-[1240px] mx-auto md:px-0 px-4">
       <div className="py-[60px]">

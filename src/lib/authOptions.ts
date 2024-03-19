@@ -12,10 +12,12 @@ export const authOptions: AuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
+      checks: ["none"],
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      checks: ["none"],
     }),
     CredentialsProvider({
       name: "credentials",
@@ -55,4 +57,7 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/auth",
+  },
 }

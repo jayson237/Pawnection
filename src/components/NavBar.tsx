@@ -36,30 +36,38 @@ function NavBar() {
         <NavigationMenuList className="hidden sm:flex gap-x-0.5">
           {session.status === "authenticated" && (
             <>
-              <Link
-                href="/lost-and-found"
-                className="text-primary text-sm font-medium hover:bg-accent px-4 py-2 rounded-md ease-in-out duration-200"
-              >
-                Lost & Found
-              </Link>
-              <Link
-                href="/adopt"
-                className="text-primary text-sm font-medium hover:bg-accent px-4 py-2 rounded-md ease-in-out duration-200"
-              >
-                Adopt
-              </Link>
-              <Link
-                href="/community"
-                className="text-primary text-sm font-medium hover:bg-accent px-4 py-2 rounded-md ease-in-out duration-200"
-              >
-                Community
-              </Link>
-              <Link
-                href="/recommendations"
-                className="text-primary text-sm font-medium hover:bg-accent px-4 py-2 rounded-md ease-in-out duration-200"
-              >
-                Recommendations
-              </Link>
+              <div className="flex gap-10 items-center">
+                <Link
+                  href="/profile"
+                  className="text-primary text-sm font-medium hover:bg-accent px-4 py-2 rounded-md ease-in-out duration-200"
+                >
+                  Profile
+                </Link>
+                <Link
+                  href="/lost-and-found"
+                  className="text-primary text-sm font-medium hover:bg-accent px-4 py-2 rounded-md ease-in-out duration-200"
+                >
+                  Lost & Found
+                </Link>
+                <Link
+                  href="/adopt"
+                  className="text-primary text-sm font-medium hover:bg-accent px-4 py-2 rounded-md ease-in-out duration-200"
+                >
+                  Adopt
+                </Link>
+                <Link
+                  href="/community"
+                  className="text-primary text-sm font-medium hover:bg-accent px-4 py-2 rounded-md ease-in-out duration-200"
+                >
+                  Community
+                </Link>
+                <Link
+                  href="/recommendations"
+                  className="text-primary text-sm font-medium hover:bg-accent px-4 py-2 rounded-md ease-in-out duration-200"
+                >
+                  Recommendations
+                </Link>
+              </div>
             </>
           )}
 

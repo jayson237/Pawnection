@@ -15,7 +15,6 @@ export async function PUT(request: Request) {
         username: data.username,
         email: data.email,
         phone: data.phone,
-        address: data.address,
         image: data.image,
       },
     })

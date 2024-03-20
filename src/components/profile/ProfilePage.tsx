@@ -1,21 +1,23 @@
 "use client"
 
-import { User } from "@prisma/client"
+import { useToast } from "@/hooks/useToast"
+import { SafeUser } from "@/types"
+import Image from "next/image"
 import { useState } from "react"
-import toast, { Toaster } from "react-hot-toast"
 
 import { Button } from "../ui/Button"
+import { Label } from "../ui/Label"
 
 interface ProfilePageProps {
-  currentUser: User
+  currentUser?: SafeUser | null
 }
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
+  const { toast } = useToast()
   const [name, setName] = useState(currentUser?.name || "")
   const [username, setUsername] = useState(currentUser?.username || "")
   const [email, setEmail] = useState(currentUser?.email || "")
   const [phone, setPhone] = useState(currentUser?.phone || "")
-  const [address, setAddress] = useState(currentUser?.address || "")
   const [image, setImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<File | null>(null)
   const [imageUrl, setImageUrl] = useState(currentUser?.image || "")
@@ -51,20 +53,28 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
           username,
           email,
           phone,
-          address,
           image: resultImage.url,
         }),
       })
 
       if (!updateResponse.ok) {
-        toast.error("Failed to update user.")
-        throw new Error("Failed to update user. Please try again.")
+        toast({
+          variant: "destructive",
+          title: "Profile update failed",
+          description: "Please try again",
+        })
       } else {
-        toast.success("Profile updated successfully")
+        toast({ title: "Profile updated successfully" })
       }
 
       const result = await updateResponse.json()
-    } catch (error) {}
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Profile update failed",
+        description: "Please try again",
+      })
+    }
   }
 
   const changePicture = () => {
@@ -125,10 +135,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
             <form className="mt-8 space-y-5" onSubmit={submitHandler}>
               <div className="grid max-w-2xl mx-auto mt-8">
                 <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
-                  <img
+                  <Image
                     className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
                     src={
-                      currentUser.image ? currentUser.image : "../../icon.png"
+                      currentUser?.image ? currentUser.image : "../../icon.png"
                     }
                     alt="Bordered avatar"
                   />
@@ -162,12 +172,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
                 <div className="items-center mt-8 sm:mt-14 text-[#202142]">
                   <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
                     <div className="w-full">
-                      <label
+                      <Label
                         htmlFor="first_name"
                         className="block mb-2 text-sm font-medium text-indigo-900 dark:text-white"
                       >
                         Your name
-                      </label>
+                      </Label>
                       <input
                         type="text"
                         id="name"
@@ -182,12 +192,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
 
                   <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
                     <div className="w-full">
-                      <label
+                      <Label
                         htmlFor="username"
                         className="block mb-2 text-sm font-medium text-indigo-900 dark:text-white"
                       >
                         Your username
-                      </label>
+                      </Label>
                       <input
                         type="text"
                         id="username"
@@ -201,12 +211,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
                   </div>
 
                   <div className="mb-2 sm:mb-6">
-                    <label
+                    <Label
                       htmlFor="email"
                       className="block mb-2 text-sm font-medium text-indigo-900 dark:text-white"
                     >
                       Your email
-                    </label>
+                    </Label>
                     <input
                       type="email"
                       id="email"
@@ -219,12 +229,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
                   </div>
 
                   <div className="mb-2 sm:mb-6">
-                    <label
+                    <Label
                       htmlFor="phone"
                       className="block mb-2 text-sm font-medium text-indigo-900 dark:text-white"
                     >
                       Your phone
-                    </label>
+                    </Label>
                     <input
                       type="text"
                       id="phone"
@@ -236,29 +246,13 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
                     />
                   </div>
 
-                  <div className="mb-6">
-                    <label
-                      htmlFor="address"
-                      className="block mb-2 text-sm font-medium text-indigo-900 dark:text-white"
-                    >
-                      Your address
-                    </label>
-                    <input
-                      id="address"
-                      className="block p-2.5 w-full text-sm text-indigo-900 bg-indigo-50 rounded-lg border border-indigo-300 focus:ring-indigo-500 focus:border-indigo-500 "
-                      placeholder="your address"
-                      defaultValue={currentUser?.address || ""}
-                      onChange={(e) => setAddress(e.target.value)}
-                    ></input>
-                  </div>
-
                   <div className="flex justify-end">
-                    <button
+                    <Button
                       type="submit"
                       className="text-white bg-indigo-700  hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
                     >
                       Save Changes
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -266,7 +260,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
           </div>
         </div>
       </main>
-      <Toaster position="top-center" />
     </div>
   )
 }

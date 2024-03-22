@@ -1,3 +1,3 @@
 export default async function Community() {
-  return <div>Community</div>
+	return <div>Community</div>;
 }

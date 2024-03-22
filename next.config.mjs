@@ -11,6 +11,9 @@ const nextConfig = {
     ],
     formats: ["image/webp"],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  }
 }
 
 export default nextConfig

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "npx @biomejs/biome format ./src --write"
+    "format": "eslint . --fix --ext .js,.ts,.jsx,.tsx,.cjs,.d.ts"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",

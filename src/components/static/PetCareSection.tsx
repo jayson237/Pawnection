@@ -17,14 +17,14 @@ const PetCareTips = () => {
       title: "Dog Training",
       description:
         "Can be counter-effective if done wrongly. Don't hit your pets if you can't catch them on spot!",
-      icon: "/dog_training.svg", // Replace with your icon path
+      icon: "/dog_training.svg",
     },
     {
       id: "pet-health",
       title: "Pet Health",
       description:
         "Remember to get your pets vax-ed cyclically. 70% of pet mortality is because of illness!",
-      icon: "pet_health.svg", // Replace with your icon path
+      icon: "pet_health.svg",
     },
   ]
 

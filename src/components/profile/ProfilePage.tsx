@@ -3,6 +3,7 @@
 import { useToast } from "@/hooks/useToast"
 import { SafeUser } from "@/types"
 import Image from "next/image"
+import Link from "next/link"
 import { useState } from "react"
 
 import { Button } from "../ui/Button"
@@ -106,27 +107,27 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
         <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Settings</h2>
 
-          <a
+          <Link
             href="#"
             className="flex items-center px-3 py-2.5 font-bold bg-white  text-indigo-900 border rounded-full"
           >
-            Pubic Profile
-          </a>
-          <a
+            Public Profile
+          </Link>
+          <Link
             href="#"
             className="flex items-center px-3 py-2.5 font-semibold  hover:text-indigo-900 hover:border hover:rounded-full"
           >
             My Media
-          </a>
-          <a
+          </Link>
+          <Link
             href="#"
             className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full  "
           >
             My Lost Pets
-          </a>
+          </Link>
         </div>
       </aside>
-      <main className="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
+      <div className="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
         <div className="p-2 md:p-4">
           <div className="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
             <h2 className="pl-6 text-2xl font-bold sm:text-xl">
@@ -138,8 +139,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
                   <Image
                     className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
                     src={
-                      currentUser?.image ? currentUser.image : "../../icon.png"
+                      currentUser?.image ? currentUser.image : "/../../icon.png"
                     }
+                    width={160}
+                    height={160}
                     alt="Bordered avatar"
                   />
                   <div className="flex flex-col space-y-5 sm:ml-8">
@@ -259,7 +262,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ currentUser }) => {
             </form>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   )
 }

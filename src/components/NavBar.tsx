@@ -9,14 +9,13 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 import { Button } from "./ui/Button"
-
 import {
-	NavigationMenu,
-	NavigationMenuItem,
-	NavigationMenuLink,
-	NavigationMenuList,
-	navigationMenuTriggerStyle,
-} from "./ui/NavMenu";
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "./ui/NavMenu"
 
 function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
   const router = useRouter()
@@ -94,4 +93,4 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
   )
 }
 
-export default NavBar;
+export default NavBar

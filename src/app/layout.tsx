@@ -6,22 +6,23 @@ import AuthContext from "@/context/AuthContext"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
-import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"] })
+import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Pawnection",
-  description: "Your paw's social media network",
-  icons: {
-    icon: "/icon.png",
-  },
-}
+	title: "Pawnection",
+	description: "Your paw's social media network",
+	icons: {
+		icon: "/icon.png",
+	},
+};
 
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+	children: React.ReactNode;
 }>) {
   const currentUser = await getCurrentUser()
   return (
@@ -36,9 +37,8 @@ export default async function RootLayout({
             <Footer />
           </main>
         </AuthContext>
-
-        <Toaster />
-      </body>
-    </html>
-  )
+				<Toaster />
+			</body>
+		</html>
+	);
 }

@@ -8,22 +8,23 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(auto()) @map("_id") @db.ObjectId
-  name           String?
-  email          String          @unique
-  username       String?         @unique
-  emailVerified  DateTime?
-  image          String?
-  hashedPassword String?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  type           UserType?
-  accounts       Account[]
-  posts          Post[]
-  likes          Like[]
-  adoptablePets  AdoptablePet[]
-  lostPetReports LostPetReport[]
-  Comment        Comment[]
+  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  name               String?
+  email              String          @unique
+  username           String?         @unique
+  emailVerified      DateTime?
+  image              String?
+  hashedPassword     String?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  type               UserType?
+  accounts           Account[]
+  posts              Post[]
+  likes              Like[]
+  comments           Comment[]
+  adoptablePets      AdoptablePet[]
+  lostPetReports     LostPetReport[]
+  petSittingListings PetSitting[]
 }
 
 enum UserType {
@@ -79,6 +80,21 @@ model Comment {
   userId    String   @db.ObjectId
   post      Post     @relation(fields: [postId], references: [id])
   postId    String   @db.ObjectId
+}
+
+model PetSitting {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  petName      String
+  petType      String
+  petBreed     String
+  location     String
+  compensation String
+  description  String
+  petAge       Int
+  petSex       String
+  image        String?
+  userId       String  @db.ObjectId
+  user         User    @relation(fields: [userId], references: [id])
 }
 
 model LostPetReport {

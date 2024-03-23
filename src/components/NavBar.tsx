@@ -68,6 +68,7 @@ function NavBar() {
                     Adopt
                   </NavigationMenuLink>
                 </Link>
+
               </NavigationMenuItem>
             </>
           )}

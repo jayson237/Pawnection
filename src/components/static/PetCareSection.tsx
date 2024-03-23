@@ -1,4 +1,3 @@
-"use client"
 
 import Image from "next/image"
 import React from "react"
@@ -28,6 +27,8 @@ const PetCareTips = () => {
     },
   ]
 
+  // @ts-ignore
+  // @ts-ignore
   return (
     <div
       className="bg-pink-100 rounded-lg"
@@ -45,6 +46,8 @@ const PetCareTips = () => {
               <Image
                 src={tip.icon}
                 alt={`${tip.title} icon`}
+                width={60}
+                height={60}
                 className="mb-4"
                 style={{ width: "60px", height: "60px" }}
               />

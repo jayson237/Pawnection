@@ -1,3 +1,4 @@
+"use client"
 
 import Image from "next/image"
 import React from "react"
@@ -9,7 +10,7 @@ const PetCareTips = () => {
       title: "Bonding",
       description:
         "You can build a good relationship with your pets by rewarding them and walking them regularly!",
-      icon: "/bonding.svg", // Replace with your icon path
+      icon: "/bonding.svg",
     },
     {
       id: "dog-training",
@@ -27,8 +28,6 @@ const PetCareTips = () => {
     },
   ]
 
-  // @ts-ignore
-  // @ts-ignore
   return (
     <div
       className="bg-pink-100 rounded-lg"

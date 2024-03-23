@@ -1,3 +1,4 @@
+import getCurrentUser from "@/actions/getCurrentUser"
 import NavBar from "@/components/NavBar"
 import Footer from "@/components/ui/Footer"
 import { Toaster } from "@/components/ui/Toaster"
@@ -17,18 +18,19 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const currentUser = await getCurrentUser()
   return (
     <html lang="en">
       <body
         className={`${inter.className} min-h-screen w-screen overflow-x-hidden`}
       >
         <AuthContext>
-          <NavBar />
+          <NavBar currentUser={currentUser} />
           <main className="h-[1px] min-h-[calc(100vh-78px)] w-full ">
             {children}
             <Footer />

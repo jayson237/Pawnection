@@ -1,10 +1,11 @@
 "use client"
 
+import Image from "next/image"
 import React, { useState } from "react"
 
-type TabType = "posts" | "about" // Define a union type for tab
+type TabType = "posts" | "about"
 
-const PublicProfile = () => {
+const Profile = () => {
   const [activeTab, setActiveTab] = useState("posts")
 
   const profile = {
@@ -22,8 +23,10 @@ const PublicProfile = () => {
   return (
     <div className="max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="flex items-center justify-center w-full h-56 bg-gray-50">
-        <img
+        <Image
           src={profile.profilePic}
+          width={160}
+          height={160}
           alt="Profile Pic"
           className="h-24 w-24 rounded-full border-4 border-white shadow-lg"
         />
@@ -54,8 +57,7 @@ const PublicProfile = () => {
       <div className="px-6 py-4">
         {activeTab === "posts" && (
           <div className="text-gray-700">
-            {/* Render user's posts here */}
-            <p>User's posts go here</p>
+            <p>User`&apos;`s posts go here</p>
           </div>
         )}
         {activeTab === "about" && (
@@ -68,4 +70,4 @@ const PublicProfile = () => {
   )
 }
 
-export default PublicProfile
+export default Profile

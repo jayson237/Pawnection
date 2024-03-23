@@ -1,14 +1,13 @@
 import getCurrentUser from "@/actions/getCurrentUser"
-import PublicProfile from "@/components/profile/PublicProfile"
+import Profile from "@/components/profile/Profile"
 
-export default async function Profile({
+export default async function UserProfile({
   params,
 }: {
   params: { username: string }
 }) {
   const username = params.username
-  console.log(username)
   const currentUser = await getCurrentUser()
 
-  return <PublicProfile />
+  return <Profile />
 }

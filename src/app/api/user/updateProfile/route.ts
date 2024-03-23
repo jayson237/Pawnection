@@ -13,7 +13,6 @@ export async function PUT(request: Request) {
       data: {
         name: data.name,
         username: data.username,
-        email: data.email,
         phone: data.phone,
         image: data.image,
       },

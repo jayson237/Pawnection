@@ -1,14 +1,20 @@
-import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/Button"
+import { NavigationMenu, NavigationMenuList } from "@/components/ui/NavMenu"
 import { signOut, useSession } from "next-auth/react"
 import Image from "next/image"
-import { NavigationMenu, NavigationMenuList } from "@/components/ui/NavMenu"
-import { Button } from "@/components/ui/Button"
+import { useRouter } from "next/navigation"
 
 function Footer() {
-
-
   return (
-    <footer className="text-black flex items-center justify-center" style={{ paddingTop: "60px", paddingBottom: "60px", paddingLeft: "324.5px", paddingRight: "324.5px" }}>
+    <footer
+      className="text-black flex items-center justify-center"
+      style={{
+        paddingTop: "60px",
+        paddingBottom: "60px",
+        paddingLeft: "324.5px",
+        paddingRight: "324.5px",
+      }}
+    >
       <div className="flex items-center max-w-l mx-auto">
         <p className="max-w-sm break-words">
           © 2023 Pawnection. All rights reserved.

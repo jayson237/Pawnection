@@ -1,5 +1,5 @@
-import LostPetReport from "@/components/lostAndFound/LostPetReport"
+import LostPetReport from "@/components/lostAndFound/LostPetReport";
 
 export default async function lostPetReport() {
-  return <LostPetReport />
+	return <LostPetReport />;
 }

@@ -64,6 +64,14 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 >
                   Recommendations
                 </Link>
+                {currentUser?.type === "PetAdoptionCentre" && (
+                  <Link
+                    href="/adoption-center"
+                    className="text-primary text-sm font-medium hover:bg-accent rounded-md ease-in-out duration-200 py-2 px-4"
+                  >
+                    Adoption Center
+                  </Link>
+                )}
 
                 <Button className="px-4 py-2 border" variant="ghost">
                   <Link href={!currentUser ? "/auth" : `/profile/${username}`}>

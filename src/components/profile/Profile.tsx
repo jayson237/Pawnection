@@ -42,13 +42,21 @@ const Profile = () => {
         <div className="flex">
           <button
             onClick={() => handleTabChange("posts")}
-            className={`py-2 px-4 w-1/2 text-center ${activeTab === "posts" ? "bg-gray-200 text-gray-700" : "text-gray-500"}`}
+            className={`py-2 px-4 w-1/2 text-center ${
+              activeTab === "posts"
+                ? "bg-gray-200 text-gray-700"
+                : "text-gray-500"
+            }`}
           >
             Posts
           </button>
           <button
             onClick={() => handleTabChange("about")}
-            className={`py-2 px-4 w-1/2 text-center ${activeTab === "about" ? "bg-gray-200 text-gray-700" : "text-gray-500"}`}
+            className={`py-2 px-4 w-1/2 text-center ${
+              activeTab === "about"
+                ? "bg-gray-200 text-gray-700"
+                : "text-gray-500"
+            }`}
           >
             About
           </button>

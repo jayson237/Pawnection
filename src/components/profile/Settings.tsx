@@ -68,18 +68,18 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
   async function changePicture(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
-    setIsImageLoading(true)
     event.preventDefault()
     const input = document.createElement("input")
     input.type = "file"
     input.accept = "image/*"
 
     input.onchange = async (event) => {
+      setIsImageLoading(true)
       const file = (event.target as HTMLInputElement)?.files?.[0]
       if (file) {
         setIsFormChanged(true)
 
-        const sign = await fetch("/api/cloudinary/cdn-sign?type=post")
+        const sign = await fetch("/api/cloudinary/cdn-sign?type=avatar")
         const data = await sign.json()
         const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${data.cloudname}/auto/upload`
 
@@ -108,8 +108,6 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
             image: resultImage.secure_url,
           }),
         })
-
-        console.log("this is the updated image " + resultImage.secure_url)
 
         if (response.ok) {
           const data = await response.json()
@@ -182,8 +180,6 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
             <Image
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
               loader={imageLoader}
-              // unoptimized
-              // src={currentUser?.image ? currentUser.image : "/../../icon.png"}
               src={image}
               width={160}
               height={160}
@@ -192,6 +188,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
             <div className="flex flex-col space-y-5 sm:ml-8">
               <Button
                 type="button"
+                className="w-28"
                 onClick={(
                   event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
                 ) => changePicture(event)}
@@ -282,7 +279,9 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
 
             <Button
               type="submit"
-              className={`w-full transition-opacity duration-500 ${isFormValid && isFormChanged ? "opacity-100" : "opacity-50"}`}
+              className={`w-full transition-opacity duration-500 ${
+                isFormValid && isFormChanged ? "opacity-100" : "opacity-50"
+              }`}
               disabled={!isFormValid || !isFormChanged}
             >
               {isLoading ? (

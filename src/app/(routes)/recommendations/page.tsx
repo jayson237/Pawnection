@@ -20,24 +20,7 @@ export default async function Home() {
   return (
     <div className="h-full w-full flex flex-col place-content-center place-items-center bg-gray-100">
 
-      <section className="flex flex-col items-center justify-center section-1">
-        <h1 className="text-6xl font-bold text-center">
-          Welcome to Pawnection
-        </h1>
-        <p className="text-2xl text-center">
-          Join our pet-loving community
-        </p>
-        <div className="flex gap-4 mt-8">
-          <Button
-            className="bg-primary text-white px-8 py-4 rounded-md"
-            style={{background: "linear-gradient(180deg, #C3E48F 0%, #8EC637 100%)"}}
-          > Login </Button>
-          <Button
-            className="bg-primary text-white px-8 py-4 rounded-md"
-            style={{background: "linear-gradient(180deg, #FFA992 0%, #FF7852 100%)"}}
-          > Sign Up </Button>
-        </div>
-      </section>
+      
 
 
       <section className="flex flex-col items-center justify-center section-2 mt-12" style={{background: "linear-gradient(180deg, #FFBBA9 0%, #FF6236 100%)"}}>
@@ -62,7 +45,7 @@ export default async function Home() {
         </div>
 
       </section>
-      {/*<PetFriendlyHangouts/>*/}
+      <PetFriendlyHangouts/>
       <PetCareTips/>
       <PetStoreMap/>
     </div>

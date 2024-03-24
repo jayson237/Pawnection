@@ -1,22 +1,22 @@
 "use client"
+
 import Image from "next/image"
 import React, { useState } from "react"
 
 interface Tip {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
+  id: string
+  title: string
+  description: string
+  icon: string
 }
 
-const PetCareTips: React.FC = () => {
+const PetCareTips = () => {
   const [expandedTipId, setExpandedTipId] = useState<string | null>(null)
 
   const handleTipClick = (id: string) => {
     setExpandedTipId(id)
   }
 
-  // Tips data array
   const tips = [
     {
       id: "bonding",
@@ -41,11 +41,13 @@ const PetCareTips: React.FC = () => {
     },
   ]
 
-  const expandedTip = tips.find(tip => tip.id === expandedTipId)
+  const expandedTip = tips.find((tip) => tip.id === expandedTipId)
 
   return (
     <div className="bg-pink-100 rounded-lg p-20">
-      <h2 className="text-center text-3xl font-semibold mb-10">Pet care tips</h2>
+      <h2 className="text-center text-3xl font-semibold mb-10">
+        Pet care tips
+      </h2>
       <div className="flex flex-col items-center">
         {expandedTipId == null ? (
           tips.map((tip) => (
@@ -71,7 +73,7 @@ const PetCareTips: React.FC = () => {
             onClick={() => setExpandedTipId(null)}
           >
             <Image
-              src={expandedTip?.icon}
+              src={expandedTip?.icon || ""}
               alt={`${expandedTip?.title} icon`}
               width={60}
               height={60}

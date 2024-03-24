@@ -11,10 +11,7 @@ export async function PUT(request: Request) {
         id: currentUser?.id,
       },
       data: {
-        name: data.name,
-        username: data.username,
-        phone: data.phone,
-        // image: data.image,
+        image: data.image,
       },
     })
 

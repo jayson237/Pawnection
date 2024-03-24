@@ -3,6 +3,7 @@
 import Image from "next/image"
 import React, { useState } from "react"
 
+import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 
 interface Tip {
@@ -46,45 +47,63 @@ const PetCareTips = () => {
   const expandedTip = tips.find((tip) => tip.id === expandedTipId)
 
   return (
-    <div className="bg-pink-100 rounded-lg p-20">
-      <h2 className="text-center text-3xl font-semibold mb-10">
-        Pet care tips
-      </h2>
-      <div className="flex flex-col items-center">
-        {expandedTipId == null ? (
-          tips.map((tip) => (
-            <Button
-              key={tip.id}
-              className="bg-white p-4 rounded-xl shadow-lg mb-4 w-fit"
-              onClick={() => handleTipClick(tip.id)}
-            >
-              <Image
-                src={tip.icon}
-                alt={`${tip.title} icon`}
-                width={60}
-                height={60}
-                className="mb-4"
-              />
-              <h3 className="text-lg font-semibold">{tip.title}</h3>
-            </Button>
-          ))
-        ) : (
-          <div
-            key={expandedTip?.id}
-            className="bg-white p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out"
-            onClick={() => setExpandedTipId(null)}
-          >
+    <div className="mx-auto w-full max-w-[1480px] md:px-0 px-4">
+      <div className="py-[60px] bg-submain rounded-[50px]">
+        <HeaderTitle className="max-w-full">Pet care tips</HeaderTitle>
+
+        <div className="mt-6 flex gap-10 justify-center flex-row">
+          <div className="flex flex-col items-center rounded-[50px] px-10 pt-8 pb-5 max-w-[290px] bg-white">
             <Image
-              src={expandedTip?.icon || ""}
-              alt={`${expandedTip?.title} icon`}
-              width={60}
-              height={60}
-              className="mb-4"
+              src="/static/images/bonding.svg"
+              alt="bonding"
+              width={144}
+              height={144}
+              className=""
             />
-            <h3 className="text-lg font-semibold mb-2">{expandedTip?.title}</h3>
-            <p className="text-sm text-center">{expandedTip?.description}</p>
+
+            <div className="space-y-6 text-center">
+              <h3 className="text-2xl font-semibold">Bonding</h3>
+              <p>
+                You can build a good relationship with your pets by rewarding
+                them and walking them regularly!
+              </p>
+            </div>
           </div>
-        )}
+          <div className="flex flex-col items-center rounded-[50px] px-10 pt-8 pb-5 max-w-[290px] bg-white">
+            <Image
+              src="/static/images/dog-training.svg"
+              alt="dog-training"
+              width={144}
+              height={144}
+              className=""
+            />
+
+            <div className="space-y-6 text-center">
+              <h3 className="text-2xl font-semibold">Dog Training</h3>
+              <p>
+                Can be counter-effective if done wrongly. Don’t hit your pets if
+                you don’t catch them on spot!
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col items-center rounded-[50px] px-10 pt-8 pb-5 max-w-[290px] bg-white">
+            <Image
+              src="/static/images/pet-health.svg"
+              alt="pet-health"
+              width={144}
+              height={144}
+              className=""
+            />
+
+            <div className="space-y-6 text-center">
+              <h3 className="text-2xl font-semibold">Pet Health</h3>
+              <p>
+                Remember to get your pets vax-ed cyclically. 70% of pet
+                mortality is because of illness!
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -40,7 +40,7 @@
     "semi": ["error", "never"],
     "no-tabs": ["error", { "allowIndentationTabs": false }],
     "no-var": "off",
-    "react-hooks/rules-of-hooks": "off", // Disables checking the rules of Hooks
-    "react-hooks/exhaustive-deps": "off" // Disables checking the exhaustive dependencies
+    "react-hooks/rules-of-hooks": "off",
+    "react-hooks/exhaustive-deps": "off"
   }
 }

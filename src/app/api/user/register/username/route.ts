@@ -1,6 +1,5 @@
 import getCurrentUser from "@/actions/getCurrentUser"
 import prisma from "@/lib/prismadb"
-import { UserType } from "@prisma/client"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {

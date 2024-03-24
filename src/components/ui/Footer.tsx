@@ -1,9 +1,3 @@
-import { Button } from "@/components/ui/Button"
-import { NavigationMenu, NavigationMenuList } from "@/components/ui/NavMenu"
-import { signOut, useSession } from "next-auth/react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-
 function Footer() {
   return (
     <footer

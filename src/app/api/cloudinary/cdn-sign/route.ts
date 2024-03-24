@@ -11,8 +11,6 @@ const signUploadForm = (type: string) => {
     type === "post"
       ? process.env.CLOUDINARY_POST_FOLDER
       : process.env.CLOUDINARY_AVATAR_FOLDER
-
-  console.log(type)
   const signature = cloudinary.v2.utils.api_sign_request(
     {
       timestamp,

@@ -8,6 +8,13 @@ import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/Select"
 import { ToggleGroup, ToggleGroupItem } from "../ui/ToggleGroup"
 
 function AdoptionPost() {
@@ -35,7 +42,7 @@ function AdoptionPost() {
   }
 
   return (
-    <div className="w-full max-w-[1240px] mx-auto md:px-0 px-4">
+    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
         <div className="grid grid-cols-2">
           <Image
@@ -62,10 +69,11 @@ function AdoptionPost() {
                   placeholder="Enter pet's name"
                 />
               </div>
-              <div className="space-y-1">
-                <Label htmlFor="type">Pet Type</Label>
-                <div className="flex flex-1 gap-2 w-full">
-                  <ToggleGroup
+              <div className="flex gap-4">
+                <div className="space-y-1">
+                  <Label htmlFor="type">Pet Type</Label>
+                  {/* <div className="flex flex-1 gap-2 w-full"> */}
+                  {/* <ToggleGroup
                     onValueChange={(value: string) => {
                       setValue("type", value)
                     }}
@@ -95,7 +103,48 @@ function AdoptionPost() {
                     {...register("gender", { required: true })}
                     errors={errors}
                     placeholder="Enter pet's gender"
-                  />
+                  /> */}
+                  {/* </div> */}
+                  <Select
+                    onValueChange={(val) => {
+                      setValue("type", val)
+                    }}
+                    defaultValue={watch("type")}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select Pet Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="udin">Udin</SelectItem>
+                      <SelectItem value="ucok">Ucok</SelectItem>
+                      <SelectItem value="bambang">Bambang</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="gender">Pet Gender</Label>
+                  {/* <Input
+                  id="gender"
+                  type="text"
+                  disabled={isLoading}
+                  {...register("gender", { required: true })}
+                  errors={errors}
+                  placeholder="Enter pet's gender"
+                /> */}
+                  <Select
+                    onValueChange={(val) => {
+                      setValue("gender", val)
+                    }}
+                    defaultValue={watch("gender")}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select Pet Gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               <div className="space-y-1">

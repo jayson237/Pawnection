@@ -14,6 +14,5 @@ export default async function Community() {
           <PostList />
         </div>
       </div>
-    </div>
   )
 }

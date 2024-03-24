@@ -26,6 +26,8 @@ model User {
   adoptablePets      AdoptablePet[]
   lostPetReports     LostPetReport[]
   petSittingListings PetSitting[]
+  followerUsers      UserRelation[]  @relation("FollowerRelation")
+  followingUsers     UserRelation[]  @relation("FollowingRelation")
 }
 
 enum UserType {
@@ -62,6 +64,16 @@ model Post {
   userId    String    @db.ObjectId
   likes     Like[]
   comments  Comment[]
+}
+
+model UserRelation {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  followerId  String @db.ObjectId
+  follower    User   @relation(name: "FollowerRelation", fields: [followerId], references: [id])
+  followingId String @db.ObjectId
+  following   User   @relation(name: "FollowingRelation", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
 }
 
 model Like {

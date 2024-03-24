@@ -13,13 +13,18 @@ export default async function UserProfile({
   const username = params.username
   const currentUser = await getCurrentUser()
   const user = await getOneUser(username)
-  console.log(user)
 
   const isProfileOwner = currentUser?.username === username
 
   if (!user) {
     return notFound()
   } else {
-    return <Profile user={user} />
+    return (
+      <Profile
+        user={user}
+        isProfileOwner={isProfileOwner}
+        currentUser={currentUser}
+      />
+    )
   }
 }

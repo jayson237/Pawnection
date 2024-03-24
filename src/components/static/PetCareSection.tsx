@@ -3,6 +3,8 @@
 import Image from "next/image"
 import React, { useState } from "react"
 
+import { Button } from "../ui/Button"
+
 interface Tip {
   id: string
   title: string
@@ -51,9 +53,9 @@ const PetCareTips = () => {
       <div className="flex flex-col items-center">
         {expandedTipId == null ? (
           tips.map((tip) => (
-            <button
+            <Button
               key={tip.id}
-              className="bg-white p-4 rounded-xl shadow-lg mb-4 w-1/3"
+              className="bg-white p-4 rounded-xl shadow-lg mb-4 w-fit"
               onClick={() => handleTipClick(tip.id)}
             >
               <Image
@@ -64,7 +66,7 @@ const PetCareTips = () => {
                 className="mb-4"
               />
               <h3 className="text-lg font-semibold">{tip.title}</h3>
-            </button>
+            </Button>
           ))
         ) : (
           <div

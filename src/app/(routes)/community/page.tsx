@@ -6,7 +6,7 @@ export default async function Community() {
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
   return (
-    <div className="w-full max-w-[1240px] mx-auto md:px-0 px-4">
+    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <PostList />
     </div>
   )

@@ -20,11 +20,13 @@ export default async function getCurrentUser() {
       return null
     }
 
+    const { hashedPassword, ...rest } = currentUser
+
     return {
-      ...currentUser,
-      emailVerified: currentUser.emailVerified?.toISOString(),
-      createdAt: currentUser.createdAt.toISOString(),
-      updatedAt: currentUser.updatedAt.toISOString(),
+      ...rest,
+      emailVerified: rest.emailVerified?.toISOString(),
+      createdAt: rest.createdAt.toISOString(),
+      updatedAt: rest.updatedAt.toISOString(),
     }
   } catch (error) {
     return null

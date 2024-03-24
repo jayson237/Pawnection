@@ -35,7 +35,7 @@ function AdoptionPost() {
   }
 
   return (
-    <div className="w-full max-w-[1240px] mx-auto md:px-0 px-4">
+    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
         <div className="grid grid-cols-2">
           <Image

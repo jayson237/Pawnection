@@ -14,6 +14,10 @@ const nextConfig = {
         port: "",
         pathname: "/duyqfuucs/image/upload/**",
       },
+      {
+        protocol: "https",
+        hostname: "**",
+      }, // emit all images hostname heheh, not recommend, but since in dev
     ],
     formats: ["image/webp"],
   },

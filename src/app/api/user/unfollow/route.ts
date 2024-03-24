@@ -2,41 +2,52 @@ import getCurrentUser from "@/actions/getCurrentUser"
 import prisma from "@/lib/prismadb"
 import { NextResponse } from "next/server"
 
+import { followUser, unfollowUser } from "../../../../lib/user"
+
 export async function POST(req: Request) {
   const currentUser = await getCurrentUser()
-  const { username }: { username: string } = await req.json()
 
+  if (!currentUser) {
+    return NextResponse.json(
+      {
+        message: "Unauthorized",
+      },
+      {
+        status: 401,
+      },
+    )
+  }
+  const { username }: { username: string } = await req.json()
   if (!username)
     return NextResponse.json(
       {
-        message: "No username provided",
+        message: "",
       },
       {
         status: 400,
       },
     )
 
-  const set = await prisma.user.update({
+  const findUser = await prisma.user.findUnique({
     where: {
-      email: currentUser?.email,
-    },
-    data: {
-      username: username,
+      username,
     },
   })
-
-  if (!set)
+  if (!findUser || findUser.id === currentUser.id)
     return NextResponse.json(
       {
-        message: "Unable to set username",
+        message: "",
       },
       {
         status: 400,
       },
     )
+
+  await unfollowUser(currentUser.id as string, findUser.id)
+
   return NextResponse.json(
     {
-      message: "You are all set!",
+      message: "Unfollowed",
     },
     {
       status: 200,

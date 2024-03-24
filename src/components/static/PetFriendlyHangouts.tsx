@@ -86,6 +86,8 @@ const PetFriendlyHangouts = () => {
                 <Image
                   src={hangout.image}
                   alt={hangout.title}
+                  width={60}
+                  height={60}
                   className="w-24 h-24 object-cover rounded-lg mr-4"
                 />
                 <div>
@@ -111,6 +113,8 @@ const PetFriendlyHangouts = () => {
                       <Image
                         src={hangout.avatar}
                         alt={`${hangout.contact}'s avatar`}
+                        width={60}
+                        height={60}
                         className="w-full h-full object-cover"
                       />
                     </span>

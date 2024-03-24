@@ -1,9 +1,22 @@
 "use client"
-
 import Image from "next/image"
-import React from "react"
+import React, { useState } from "react"
 
-const PetCareTips = () => {
+interface Tip {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+}
+
+const PetCareTips: React.FC = () => {
+  const [expandedTipId, setExpandedTipId] = useState<string | null>(null)
+
+  const handleTipClick = (id: string) => {
+    setExpandedTipId(id)
+  }
+
+  // Tips data array
   const tips = [
     {
       id: "bonding",
@@ -24,37 +37,50 @@ const PetCareTips = () => {
       title: "Pet Health",
       description:
         "Remember to get your pets vax-ed cyclically. 70% of pet mortality is because of illness!",
-      icon: "pet_health.svg",
+      icon: "/pet_health.svg",
     },
   ]
 
+  const expandedTip = tips.find(tip => tip.id === expandedTipId)
+
   return (
-    <div
-      className="bg-pink-100 rounded-lg"
-      style={{ width: "1340px", padding: "60px 100px" }}
-    >
-      <h2 className="text-center text-3xl font-semibold mb-4">Pet care tips</h2>
-      <div className="flex justify-around">
-        {tips.map((tip) => (
-          <div
-            key={tip.id}
-            className="bg-white p-4 rounded-xl shadow-lg"
-            style={{ maxWidth: "200px" }}
-          >
-            <div className="flex flex-col items-center">
+    <div className="bg-pink-100 rounded-lg p-20">
+      <h2 className="text-center text-3xl font-semibold mb-10">Pet care tips</h2>
+      <div className="flex flex-col items-center">
+        {expandedTipId == null ? (
+          tips.map((tip) => (
+            <button
+              key={tip.id}
+              className="bg-white p-4 rounded-xl shadow-lg mb-4 w-1/3"
+              onClick={() => handleTipClick(tip.id)}
+            >
               <Image
                 src={tip.icon}
                 alt={`${tip.title} icon`}
                 width={60}
                 height={60}
                 className="mb-4"
-                style={{ width: "60px", height: "60px" }}
               />
-              <h3 className="text-lg font-semibold mb-2">{tip.title}</h3>
-              <p className="text-sm text-center">{tip.description}</p>
-            </div>
+              <h3 className="text-lg font-semibold">{tip.title}</h3>
+            </button>
+          ))
+        ) : (
+          <div
+            key={expandedTip?.id}
+            className="bg-white p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out"
+            onClick={() => setExpandedTipId(null)}
+          >
+            <Image
+              src={expandedTip?.icon}
+              alt={`${expandedTip?.title} icon`}
+              width={60}
+              height={60}
+              className="mb-4"
+            />
+            <h3 className="text-lg font-semibold mb-2">{expandedTip?.title}</h3>
+            <p className="text-sm text-center">{expandedTip?.description}</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   )

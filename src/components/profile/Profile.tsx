@@ -1,12 +1,23 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import React, { useState } from "react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 
 import { SafeUser } from "../../types"
 import HeaderTitle from "../HeaderTitle"
+import { AlertDialogTitle, AlertDialogTrigger } from "../ui/AlertDialog"
 import { Button } from "../ui/Button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/Dialog"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
 import LoadingDots from "../ui/LoadingDots"
@@ -14,7 +25,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
 
 type TabType = "posts" | "about"
 
-const Profile = ({ user }: { user: SafeUser }) => {
+const Profile = ({
+  user,
+  isProfileOwner,
+  currentUser,
+}: {
+  user: SafeUser
+  isProfileOwner: boolean
+  currentUser: SafeUser | null
+}) => {
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
@@ -28,13 +47,207 @@ const Profile = ({ user }: { user: SafeUser }) => {
           />
 
           <div className="col-span-5">
-            <HeaderTitle className="text-left">{user.username}</HeaderTitle>
+            <div className="flex gap-8">
+              <HeaderTitle className="text-left">{user.username}</HeaderTitle>
+              {!isProfileOwner ? (
+                !user.isCurrentFollowed ? (
+                  <Button
+                    onClick={async () => {
+                      await fetch("/api/user/follow", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ username: user.username }),
+                      })
+                    }}
+                  >
+                    Follow
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={async () => {
+                      await fetch("/api/user/unfollow", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ username: user.username }),
+                      })
+                    }}
+                    variant="outline"
+                  >
+                    Unfollow
+                  </Button>
+                )
+              ) : null}
+            </div>
             <div className="mt-4 border rounded-xl px-1.5 py-1 flex space-x-2 items-center text-sm w-fit">
               <p className="text-center">Account type:</p>
               <p className="w-fit rounded-lg bg-orange-300 px-1 py-0.25 text-center">
                 {user?.type}
               </p>
             </div>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost" disabled={!currentUser}>
+                  {user.following?.length} following
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogDescription>Following</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-1">
+                  {user.following && user.following.length > 0 ? (
+                    user.following?.map((following) => (
+                      <Link
+                        href={`/profile/${following.username}`}
+                        key={following.username}
+                        className="flex items-center justify-between hover:bg-gray-200/20 p-2 rounded-lg transition-all duration-200"
+                      >
+                        <div className="flex items-center gap-4">
+                          <Image
+                            className="object-cover w-10 h-10 rounded-full"
+                            src={
+                              following.image
+                                ? following.image
+                                : "/../../icon.png"
+                            }
+                            width={40}
+                            height={40}
+                            alt="Bordered avatar"
+                          />
+                          <p>{following.username}</p>
+                        </div>
+                        {!(following.username === currentUser?.username) ? (
+                          !following.isCurrentFollowed ? (
+                            <Button
+                              variant="default"
+                              size="sm"
+                              onClick={async () => {
+                                await fetch("/api/user/follow", {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    username: following.username,
+                                  }),
+                                })
+                              }}
+                            >
+                              Follow
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={async () => {
+                                await fetch("/api/user/unfollow", {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    username: following.username,
+                                  }),
+                                })
+                              }}
+                            >
+                              Unfollow
+                            </Button>
+                          )
+                        ) : null}
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="text-center">No following</p>
+                  )}
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost" disabled={!currentUser}>
+                  {user.followers?.length} followers
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogDescription>Followers</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-1">
+                  {user.followers && user.followers.length > 0 ? (
+                    user.followers?.map((follower) => (
+                      <Link
+                        href={`/profile/${follower.username}`}
+                        key={follower.username}
+                        className="flex items-center justify-between hover:bg-gray-200/20 p-2 rounded-lg transition-all duration-200"
+                      >
+                        <div className="flex items-center gap-4">
+                          <Image
+                            className="object-cover w-10 h-10 rounded-full"
+                            src={
+                              follower.image
+                                ? follower.image
+                                : "/../../icon.png"
+                            }
+                            width={40}
+                            height={40}
+                            alt="Bordered avatar"
+                          />
+                          <p>{follower.username}</p>
+                        </div>
+                        {!(follower.username === currentUser?.username) ? (
+                          !follower.isCurrentFollowed ? (
+                            <Button
+                              variant="default"
+                              size="sm"
+                              onClick={async () => {
+                                await fetch("/api/user/follow", {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    username: follower.username,
+                                  }),
+                                })
+                              }}
+                            >
+                              Follow
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={async () => {
+                                await fetch("/api/user/unfollow", {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    username: follower.username,
+                                  }),
+                                })
+                              }}
+                            >
+                              Unfollow
+                            </Button>
+                          )
+                        ) : null}
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="text-center">No followers</p>
+                  )}
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </div>

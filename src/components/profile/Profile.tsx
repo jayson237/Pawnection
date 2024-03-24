@@ -15,8 +15,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
 type TabType = "posts" | "about"
 
 const Profile = ({ user }: { user: SafeUser }) => {
-  console.log(user)
-
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">

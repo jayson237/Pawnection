@@ -20,12 +20,12 @@ import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import { useCallback } from "react"
 import { FileRejection, useDropzone } from "react-dropzone"
-import { useForm } from "react-hook-form"
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import z from "zod"
 
 const createPostSchema = z.object({
-  description: z.string().optional(),
-  imageUrl: z.string().url({ message: "Invalid image" }),
+  description: z.string(),
+  imageUrl: z.string(),
 })
 
 const PostForm = () => {
@@ -38,7 +38,7 @@ const PostForm = () => {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isLoading },
+    formState: { errors, isLoading, isValid },
   } = useForm<z.infer<typeof createPostSchema>>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
@@ -46,6 +46,7 @@ const PostForm = () => {
       imageUrl: "",
     },
   })
+  console.log(isValid)
 
   const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
@@ -150,15 +151,15 @@ const PostForm = () => {
   console.log(watch())
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            Create post
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="w-4 h-4 mr-2" />
+          Create post
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <DialogHeader>
             <DialogTitle>New post</DialogTitle>
             <DialogDescription>
@@ -213,9 +214,9 @@ const PostForm = () => {
               )}
             </Button>
           </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </form>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

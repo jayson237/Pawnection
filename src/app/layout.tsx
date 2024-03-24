@@ -31,10 +31,8 @@ export default async function RootLayout({
       >
         <AuthContext>
           <NavBar currentUser={currentUser} />
-          <main className="h-[1px] min-h-[calc(100vh-78px)] w-full ">
-            {children}
-            <Footer />
-          </main>
+          <main className="min-h-[calc(100vh-78px)] w-full ">{children}</main>
+          <Footer />
         </AuthContext>
         <Toaster />
       </body>

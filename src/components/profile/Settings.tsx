@@ -3,7 +3,7 @@
 import { useToast } from "@/hooks/useToast"
 import { SafeUser } from "@/types"
 import Image from "next/image"
-import { useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
@@ -17,45 +17,26 @@ interface SettingsProps {
 const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const [isImageLoading, setIsImageLoading] = useState(false)
   const [name, setName] = useState(currentUser?.name || "")
   const [username, setUsername] = useState(currentUser?.username || "")
   const [phone, setPhone] = useState(currentUser?.phone || "")
-  const [image, setImage] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<File | null>(null)
-  const [imageUrl, setImageUrl] = useState(currentUser?.image || "")
+  const [image, setImage] = useState(currentUser?.image || "/../../icon.png")
+  const [isUsernameValid, setIsUsernameValid] = useState(true)
+  const [isFormValid, setIsFormValid] = useState(false)
+  const [isFormChanged, setIsFormChanged] = useState(false)
 
   async function submitHandler(event: React.FormEvent<HTMLFormElement>) {
     setIsLoading(true)
     event.preventDefault()
-    const sign = await fetch("/api/cloudinary/cdn-sign?type=post")
-    const data = await sign.json()
-    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${data.cloudname}/auto/upload`
 
     try {
-      const formData = new FormData()
-      formData.append("file", image || "")
-      formData.append("api_key", data.apikey)
-      formData.append("timestamp", data.timestamp.toString())
-      formData.append("signature", data.signature)
-      formData.append("eager", data.eager)
-      formData.append("folder", data.folder)
-
-      const cdnResponse = await fetch(cloudinaryUrl, {
-        method: "POST",
-        body: formData,
-        cache: "no-store",
-      })
-      const resultImage = await cdnResponse.json()
-      if (resultImage.secure_url) {
-        setImageUrl(resultImage.secure_url)
-      }
       const updateResponse = await fetch("/api/user/updateProfile", {
         method: "PUT",
         body: JSON.stringify({
           name,
           username,
           phone,
-          image: resultImage.url,
         }),
       })
 
@@ -67,6 +48,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
         })
       } else {
         setIsLoading(false)
+        setIsFormChanged(false)
         toast({
           title: "Successful!",
           description: "Profile updated successfully",
@@ -83,27 +65,102 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
     }
   }
 
-  const changePicture = () => {
+  async function changePicture(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) {
+    event.preventDefault()
     const input = document.createElement("input")
     input.type = "file"
     input.accept = "image/*"
-    input.onchange = (event) => {
+
+    input.onchange = async (event) => {
+      setIsImageLoading(true)
       const file = (event.target as HTMLInputElement)?.files?.[0]
-      const reader = new FileReader()
       if (file) {
-        reader.onloadend = () => {
-          setImagePreview(file)
+        setIsFormChanged(true)
+
+        const sign = await fetch("/api/cloudinary/cdn-sign?type=avatar")
+        const data = await sign.json()
+        const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${data.cloudname}/auto/upload`
+
+        const formData = new FormData()
+        formData.append("file", file)
+        formData.append("api_key", data.apikey)
+        formData.append("timestamp", data.timestamp.toString())
+        formData.append("signature", data.signature)
+        formData.append("eager", data.eager)
+        formData.append("folder", data.folder)
+
+        const cdnResponse = await fetch(cloudinaryUrl, {
+          method: "POST",
+          body: formData,
+          cache: "no-store",
+        })
+
+        const resultImage = await cdnResponse.json()
+        if (resultImage.secure_url) {
+          setImage(resultImage.secure_url)
         }
-        setImage(file)
-        reader.readAsDataURL(file)
+
+        const response = await fetch("/api/user/updateProfilePic", {
+          method: "PUT",
+          body: JSON.stringify({
+            image: resultImage.secure_url,
+          }),
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setIsImageLoading(false)
+          toast({
+            title: "Successful!",
+            description: "Profile picture updated successfully",
+          })
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Profile picture update failed",
+            description: "Please try again",
+          })
+        }
       }
     }
     input.click()
   }
 
-  const deletePicture = () => {
-    setImagePreview(null)
-    setImage(null)
+  const imageLoader = ({
+    src,
+    width,
+    quality,
+  }: {
+    src: string
+    width: number
+    quality?: number
+  }) => {
+    return `${src}?w=${width}&q=${quality || 75}`
+  }
+
+  const handleUsernameChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const value = (e.target as HTMLInputElement).value
+    setUsername(value)
+    const isUsernameValid = /^[a-zA-Z0-9]{4,}$/.test(value)
+    setIsUsernameValid(isUsernameValid)
+    setIsFormValid(true)
+    setIsFormChanged(true)
+  }
+
+  const handleNameChange = (e: FormEvent<HTMLInputElement>) => {
+    const value = (e.target as HTMLInputElement).value
+    setName(value)
+    setIsFormValid(true)
+    setIsFormChanged(true)
+  }
+
+  const handleContactChange = (e: FormEvent<HTMLInputElement>) => {
+    const value = (e.target as HTMLInputElement).value
+    setPhone(value)
+    setIsFormValid(true)
+    setIsFormChanged(true)
   }
 
   return (
@@ -122,22 +179,25 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
           <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0 mx-auto">
             <Image
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-              src={currentUser?.image ? currentUser.image : "/../../icon.png"}
+              loader={imageLoader}
+              src={image}
               width={160}
               height={160}
               alt="Bordered avatar"
             />
             <div className="flex flex-col space-y-5 sm:ml-8">
-              <Button type="button" onClick={changePicture}>
-                Change picture
-              </Button>
               <Button
                 type="button"
-                className="border"
-                variant="ghost"
-                onClick={deletePicture}
+                className="w-28"
+                onClick={(
+                  event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+                ) => changePicture(event)}
               >
-                Delete picture
+                {isImageLoading ? (
+                  <LoadingDots color="#FAFAFA" />
+                ) : (
+                  "Edit Picture"
+                )}
               </Button>
             </div>
           </div>
@@ -172,8 +232,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
                   id="name"
                   placeholder="Your name"
                   defaultValue={currentUser?.name || ""}
-                  onChange={(e) => setName(e.target.value)}
-                  required
+                  onChange={handleNameChange}
                 />
               </div>
             </div>
@@ -191,9 +250,17 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
                   id="username"
                   placeholder="Your username"
                   defaultValue={currentUser?.username || ""}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={handleUsernameChange}
+                  pattern="[a-zA-Z0-9]{4,}"
+                  maxLength={20}
                   required
                 />
+                {!isUsernameValid && (
+                  <p className="text-sm text-red-500 mt-2">
+                    Please provide a minimum of 4 characters without any special
+                    characters
+                  </p>
+                )}
               </div>
             </div>
 
@@ -206,12 +273,17 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
                 id="phone"
                 placeholder="Your contact number"
                 defaultValue={currentUser?.phone || ""}
-                onChange={(e) => setPhone(e.target.value)}
-                required
+                onChange={handleContactChange}
               />
             </div>
 
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className={`w-full transition-opacity duration-500 ${
+                isFormValid && isFormChanged ? "opacity-100" : "opacity-50"
+              }`}
+              disabled={!isFormValid || !isFormChanged}
+            >
               {isLoading ? (
                 <>
                   <LoadingDots color="#FAFAFA" />

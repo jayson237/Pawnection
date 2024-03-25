@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import { useCallback } from "react"
 import { FileRejection, useDropzone } from "react-dropzone"
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import z from "zod"
 
 const createPostSchema = z.object({

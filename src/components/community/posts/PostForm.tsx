@@ -31,6 +31,7 @@ const createPostSchema = z.object({
 const PostForm = () => {
   const { toast } = useToast()
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
 
   const {
@@ -46,7 +47,6 @@ const PostForm = () => {
       imageUrl: "",
     },
   })
-  console.log(isValid)
 
   const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
@@ -77,6 +77,7 @@ const PostForm = () => {
   })
 
   const handleUpload = async (selectedImage: File | null) => {
+    setLoading(true)
     const sign = await fetch("/api/cloudinary/cdn-sign?type=post")
     const data = await sign.json()
     const url = `https://api.cloudinary.com/v1_1/${data.cloudname}/auto/upload`
@@ -101,12 +102,14 @@ const PostForm = () => {
           toast({
             title: "Successfully uploaded image",
           })
+          setLoading(false)
         } else {
           toast({
             variant: "destructive",
             title: "Failed to upload image",
             description: "Please try again",
           })
+          setLoading(false)
         }
       } else {
         toast({
@@ -114,6 +117,7 @@ const PostForm = () => {
           title: "No picture uploaded",
           description: "Please try again",
         })
+        setLoading(false)
       }
     } catch (error) {
       toast({
@@ -121,10 +125,12 @@ const PostForm = () => {
         title: "Failed to upload image",
         description: "Please try again",
       })
+      setLoading(false)
     }
   }
 
   const onSubmit = async (data: z.infer<typeof createPostSchema>) => {
+    setLoading(true)
     const set = await fetch("/api/community/post", {
       method: "POST",
       headers: {
@@ -140,15 +146,16 @@ const PostForm = () => {
         title: "Failed to create post",
         description: msg.message,
       })
+      setLoading(false)
     } else {
       toast({
         title: "Post created successfully",
         description: "Successfully posted! Please wait...",
       })
+      setLoading(false)
       router.push("/community")
     }
   }
-  console.log(watch())
 
   return (
     <Dialog>
@@ -205,7 +212,7 @@ const PostForm = () => {
           )}
           <DialogFooter>
             <Button type="submit" disabled={isLoading || !watch("imageUrl")}>
-              {isLoading ? (
+              {loading ? (
                 <>
                   <LoadingDots color="#FAFAFA" />
                 </>

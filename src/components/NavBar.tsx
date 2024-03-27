@@ -42,7 +42,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
               <div className="flex gap-x-4 items-center ">
                 <Link
                   href="/lostAndFound"
-                  className="text-primary text-sm font-medium"
+                  className="text-primary text-sm font-medium hover:bg-accent py-2 px-4 rounded-md ease-in-out duration-200"
                 >
                   Lost & Found
                 </Link>

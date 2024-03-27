@@ -1,4 +1,4 @@
-import { EyeIcon, EyeOffIcon, LucideProps } from "lucide-react"
+import { EyeIcon, EyeOffIcon, type LucideProps } from "lucide-react"
 
 export const Icons = {
   logo: (props: LucideProps) => (

@@ -7,7 +7,7 @@ function Footer() {
       <div className="container mx-auto flex flex-row gap-[60px] justify-center text-center">
         <p className="text-lg">© 2023 Pawnection. All rights reserved.</p>
         <Link href="/terms-and-contitions" className="text-lg">
-          Terms and Conditionns
+          Terms and Conditions
         </Link>
         <Link href="/privacy-policy" className="text-lg">
           Privacy Policy

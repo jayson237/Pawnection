@@ -15,7 +15,6 @@ export async function POST(req: Request) {
         status: 400,
       },
     )
-
   const userType = type == 1 ? UserType.PetLover : UserType.PetAdoptionCentre
 
   const set = await prisma.user.update({
@@ -38,7 +37,7 @@ export async function POST(req: Request) {
     )
   return NextResponse.json(
     {
-      message: "You are all set!",
+      message: "Successfuly set user type!",
     },
     {
       status: 200,

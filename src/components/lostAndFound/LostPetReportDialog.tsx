@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react"
-
+import { SafeUser } from "@/types"
 // Assuming Button and Textarea are your custom components
 import { Button } from "../ui/Button"
 import { Textarea } from "../ui/TextArea"
@@ -34,7 +34,7 @@ import { useToast } from "@/hooks/useToast"
 
 interface LostPetReportDialogProps {
     isOpen: boolean;
-    onClose: () => void; // Assuming onClose does not take any arguments and doesn't return anything
+    onClose: () => void; 
   }
 
 const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {

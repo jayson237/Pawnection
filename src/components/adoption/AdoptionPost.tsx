@@ -7,8 +7,8 @@ import React, { useCallback, useState } from "react"
 import { FileRejection, useDropzone } from "react-dropzone"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { AdoptablePetPayloadType } from "../../app/api/adoption-center/route"
 import { toast } from "../../hooks/useToast"
+import { AdoptablePetPayloadType } from "../../types/adoption-center"
 import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/Select"
-import { ToggleGroup, ToggleGroupItem } from "../ui/ToggleGroup"
 
 function AdoptionPost() {
   const router = useRouter()
@@ -43,10 +42,8 @@ function AdoptionPost() {
       description: "",
     },
   })
-  console.log(watch())
 
   const onSubmit: SubmitHandler<AdoptablePetPayloadType> = async (data) => {
-    console.log(data)
     const set = await fetch("/api/adoption-center", {
       method: "POST",
       headers: {
@@ -289,8 +286,10 @@ function AdoptionPost() {
                 disabled={
                   isLoading ||
                   !isValid ||
+                  watch("imageUrl") === "" ||
                   Object.values(errors).filter((e) => e !== undefined).length >
-                    0
+                    0 ||
+                  watch("imageUrl") === ""
                 }
               >
                 Submit

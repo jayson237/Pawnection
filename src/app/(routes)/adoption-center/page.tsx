@@ -2,6 +2,7 @@ import Link from "next/link"
 import React from "react"
 
 import HeaderTitle from "../../../components/HeaderTitle"
+import OwnAdoptablePost from "../../../components/adoption/OwnAdoptablePost"
 import { Button, buttonVariants } from "../../../components/ui/Button"
 import { cn } from "../../../lib/utils"
 
@@ -23,8 +24,10 @@ function AdoptionCenterPage() {
       </div>
 
       <div className="py-[60px]">
-        <div className="mx-auto flex flex-col items-center">
+        <div className="mx-auto flex flex-col items-center space-y-6">
           <HeaderTitle>Your Pet Postings</HeaderTitle>
+
+          <OwnAdoptablePost />
         </div>
       </div>
     </div>

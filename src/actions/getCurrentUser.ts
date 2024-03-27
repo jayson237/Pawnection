@@ -13,13 +13,13 @@ export default async function getCurrentUser(): Promise<SafeUser | null> {
     }
 
     const currentUser = await prisma.user.findUnique({
-      where: {
-        email: session.user.email as string,
-      },
       include: {
         followerUsers: true,
-        followingUsers: true,
+        followingUsers: true
       },
+      where: {
+        email: session.user.email as string
+      }
     })
 
     if (!currentUser) {

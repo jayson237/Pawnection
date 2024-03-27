@@ -4,17 +4,10 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 
 import { SafeUser } from "../../../types"
-
-export const AdoptablePetPayloadSchema = z.object({
-  age: z.number(),
-  breed: z.string(),
-  description: z.string(),
-  gender: z.string(),
-  imageUrl: z.string().url().min(14),
-  name: z.string(),
-  type: z.string(),
-})
-export type AdoptablePetPayloadType = z.infer<typeof AdoptablePetPayloadSchema>
+import {
+  AdoptablePetPayloadSchema,
+  AdoptablePetPayloadType,
+} from "../../../types/adoption-center"
 
 async function createAdopablePet(
   payload: AdoptablePetPayloadType,
@@ -65,6 +58,31 @@ export async function POST(req: Request) {
       { message: "Post created successfully", post },
       { status: 200 },
     )
+  } catch (error) {
+    console.log(error)
+    return NextResponse.json({ message: "An error occurred" }, { status: 500 })
+  }
+}
+
+export async function GET() {
+  try {
+    const currentUser = await getCurrentUser()
+    if (!currentUser || currentUser.type === "PetLover") {
+      return NextResponse.json(
+        {
+          message: "Unauthorized",
+        },
+        { status: 401 },
+      )
+    }
+
+    const getAllOwnAdoptablePet = await prisma.adoptablePet.findMany({
+      where: {
+        adoptionCentreId: currentUser.id,
+      },
+      take: 20,
+    })
+    return NextResponse.json({ data: getAllOwnAdoptablePet }, { status: 200 })
   } catch (error) {
     console.log(error)
     return NextResponse.json({ message: "An error occurred" }, { status: 500 })

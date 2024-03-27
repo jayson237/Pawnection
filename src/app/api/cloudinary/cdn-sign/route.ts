@@ -12,7 +12,7 @@ enum FolderType {
 cdn
 const signUploadForm = (type: FolderType) => {
   const timestamp = Math.round(new Date().getTime() / 1000)
-  const eager = "e_blur:400,h_150,w_150|c_fill,h_150,w_150"
+  const eager = "c_auto"
   const folder = FolderType[type]
   const signature = cloudinary.v2.utils.api_sign_request(
     {

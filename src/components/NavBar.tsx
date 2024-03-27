@@ -122,8 +122,8 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
           <div
             className={
               isOpen
-                ? "fixed left-0 top-0 w-[65%] sm:hidden h-screen bg-[#FFECE4] p-10 ease-in duration-500"
-                : "fixed left-[-100%] top-0 p-10 ease in duration-500"
+                ? "fixed right-0 top-0 w-[65%] sm:hidden h-screen bg-[#FFECE4] p-10 ease-in duration-500"
+                : "fixed right-[-100%] top-0 p-10 ease in duration-500"
             }
           >
             <div className="flex w-full items-center justify-end">

@@ -1,6 +1,8 @@
+import getCurrentUser from "@/actions/getCurrentUser"
 import Image from "next/image"
+import { redirect } from "next/navigation"
 
-import HeaderTitle from "../../../components/shared/header-title"
+import HeaderTitle from "../../../components/HeaderTitle"
 import { Button } from "../../../components/ui/Button"
 
 enum PetGender {
@@ -32,7 +34,8 @@ function FeaturedCard({
       <div className="p-3 space-y-1">
         <h4 className="">{petName}</h4>
         <p className="text-xl">
-          {petGender}, {petAge} {parseInt(petAge) > 1 ? "years" : "year"} old
+          {petGender}, {petAge} {Number.parseInt(petAge) > 1 ? "years" : "year"}{" "}
+          old
         </p>
       </div>
     </div>
@@ -67,8 +70,10 @@ function HowtoCard({
 }
 
 export default async function Adopt() {
+  const currentUser = await getCurrentUser()
+  if (!currentUser?.type) redirect("/auth/type")
   return (
-    <div className="w-full max-w-[1240px] mx-auto md:px-0 px-4">
+    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
         <div className="mx-auto flex flex-col items-center">
           <HeaderTitle description="Browse through the profiles and find your new furry friend!">

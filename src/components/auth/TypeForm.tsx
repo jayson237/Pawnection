@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 import { Button } from "../ui/Button"
-import LoadingDots from "../ui/LoadingDots"
 
 const TypeForm = () => {
   const { toast } = useToast()
@@ -25,7 +24,7 @@ const TypeForm = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(num),
+      body: JSON.stringify({ type: num }),
     })
     const msg = await set.json()
     setIsLoading(false)
@@ -36,7 +35,7 @@ const TypeForm = () => {
         description: "Please try again",
       })
     } else {
-      router.push("/")
+      router.push("/auth/type/username")
       return toast({
         title: `${msg.message}`,
       })

@@ -2,7 +2,9 @@ import { authOptions } from "@/lib/authOptions"
 import prisma from "@/lib/prismadb"
 import { getServerSession } from "next-auth/next"
 
-export default async function getCurrentUser() {
+import { SafeUser } from "../types"
+
+export default async function getCurrentUser(): Promise<SafeUser | null> {
   try {
     const session = await getServerSession(authOptions)
 
@@ -11,20 +13,26 @@ export default async function getCurrentUser() {
     }
 
     const currentUser = await prisma.user.findUnique({
-      where: {
-        email: session.user.email as string,
+      include: {
+        followerUsers: true,
+        followingUsers: true
       },
+      where: {
+        email: session.user.email as string
+      }
     })
 
     if (!currentUser) {
       return null
     }
 
+    const { hashedPassword, ...rest } = currentUser
+
     return {
-      ...currentUser,
-      emailVerified: currentUser.emailVerified?.toISOString(),
-      createdAt: currentUser.createdAt.toISOString(),
-      updatedAt: currentUser.updatedAt.toISOString(),
+      ...rest,
+      emailVerified: rest.emailVerified?.toISOString(),
+      createdAt: rest.createdAt.toISOString(),
+      updatedAt: rest.updatedAt.toISOString(),
     }
   } catch (error) {
     return null

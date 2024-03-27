@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useState } from "react"
+import { type FormEvent, useState } from "react"
 
 import { Button } from "../ui/Button"
 import { Textarea } from "../ui/TextArea"

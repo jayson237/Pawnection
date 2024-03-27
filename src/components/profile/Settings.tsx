@@ -15,6 +15,7 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
+  console.log(currentUser)
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [isImageLoading, setIsImageLoading] = useState(false)

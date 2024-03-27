@@ -49,9 +49,9 @@ const PetCareTips = () => {
   return (
     <div className="mx-auto w-full max-w-[1480px] md:px-0 px-4">
       <div className="py-[60px] bg-submain rounded-[50px]">
-        <HeaderTitle className="max-w-full">Pet care tips</HeaderTitle>
+        <HeaderTitle className="max-w-full">Pet Care Tips</HeaderTitle>
 
-        <div className="mt-6 flex gap-10 justify-center flex-row">
+        <div className="mt-6 flex flex-col items-center md:flex-row gap-10 justify-center">
           <div className="flex flex-col items-center rounded-[50px] px-10 pt-8 pb-5 max-w-[290px] bg-white">
             <Image
               src="/static/images/bonding.svg"

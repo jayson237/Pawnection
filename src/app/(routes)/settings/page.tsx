@@ -3,6 +3,7 @@ import Settings from "@/components/profile/Settings"
 
 export default async function profile() {
   const currentUser = await getCurrentUser()
+  console.log(currentUser)
 
   return (
     <div className="flex h-full w-full place-content-center place-items-center">

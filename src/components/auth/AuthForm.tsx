@@ -149,13 +149,16 @@ const AuthForm = () => {
   }
 
   return (
-    <div className="grid grid-cols-2">
-      <Image
-        src="/static/images/dog_left.png"
-        alt="hura"
-        width={604}
-        height={400}
-      />
+    <div className="grid sm:grid-cols-2 grid-cols-1">
+      <div className="order-first sm:order-first">
+        <Image
+          src="/static/images/dog_left.png"
+          alt="hura"
+          width={604}
+          height={400}
+          layout="responsive"
+        />
+      </div>
 
       <div className="py-3 rounded-lg px-6 w-full">
         {variant === "REGISTER" ? (

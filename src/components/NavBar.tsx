@@ -88,23 +88,13 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  {currentUser?.image && (
-                    <Image
-                      src={
-                        currentUser?.image ||
-                        `${
-                          currentUser?.image?.split("/image/upload/")[0]
-                        }/image/upload/c_fill,h_160,w_160/${
-                          currentUser?.image?.split("/image/upload/")[1]
-                        }` ||
-                        "/../icon.png"
-                      }
-                      width={40}
-                      height={40}
-                      alt="Your avatar"
-                      className="rounded-full hover:opacity-80 ease-in-out duration-200 cursor-pointer"
-                    />
-                  )}
+                  <Image
+                    className="rounded-full h-10 w-10 ring-1 ring-primary ring-offset-2 hover:opacity-80 ease-in-out duration-200 cursor-pointer"
+                    src={currentUser?.image || "/../icon.png"}
+                    width={160}
+                    height={160}
+                    alt="Your avatar"
+                  />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>

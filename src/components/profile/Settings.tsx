@@ -3,7 +3,7 @@
 import { useToast } from "@/hooks/useToast"
 import { SafeUser } from "@/types"
 import Image from "next/image"
-import { FormEvent, useEffect, useState } from "react"
+import { FormEvent, useState } from "react"
 
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"

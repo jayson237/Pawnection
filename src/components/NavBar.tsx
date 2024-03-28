@@ -2,6 +2,7 @@
 
 import { SafeUser } from "@/types"
 import { User } from "lucide-react"
+import { LogOutIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { signOut } from "next-auth/react"
 import Image from "next/image"
@@ -16,6 +17,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "./ui/NavMenu"
+import { Spinner } from "./ui/Spinner"
 
 function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
   const router = useRouter()
@@ -39,60 +41,75 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
         <NavigationMenuList className="hidden sm:flex gap-x-0.5">
           {session.status === "authenticated" && (
             <>
-              <div className="flex gap-x-4 items-center ">
+              <div className="flex gap-x-2 items-center ">
                 <Link
                   href="/lost-and-found"
-                  className="text-primary text-sm font-medium hover:bg-accent py-2 px-4 rounded-md ease-in-out duration-200"
+                  className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                 >
                   Lost & Found
                 </Link>
                 <Link
                   href="/adopt"
-                  className="text-primary text-sm font-medium hover:bg-accent py-2 px-4 rounded-md ease-in-out duration-200"
+                  className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                 >
                   Adopt
                 </Link>
                 <Link
-                  href="/community"
-                  className="text-primary text-sm font-medium hover:bg-accent py-2 px-4 rounded-md ease-in-out duration-200"
+                  href="/explore"
+                  className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                 >
-                  Community
+                  Explore
                 </Link>
                 <Link
                   href="/recommendations"
-                  className="text-primary text-sm font-medium hover:bg-accent rounded-md ease-in-out duration-200 py-2 px-4"
+                  className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
                 >
                   Recommendations
                 </Link>
                 {currentUser?.type === "PetAdoptionCentre" && (
                   <Link
                     href="/adoption-center"
-                    className="text-primary text-sm font-medium hover:bg-accent rounded-md ease-in-out duration-200 py-2 px-4"
+                    className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
                   >
                     Adoption Center
                   </Link>
                 )}
 
-                <Button className="px-4 py-2 border" variant="ghost">
-                  <Link href={!currentUser ? "/auth" : `/profile/${username}`}>
-                    <User />
-                  </Link>
-                </Button>
+                <Link href={!currentUser ? "/auth" : `/profile/${username}`}>
+                  <Image
+                    src={
+                      `${
+                        currentUser?.image?.split("/image/upload/")[0]
+                      }/image/upload/c_fill,h_160,w_160/${
+                        currentUser?.image?.split("/image/upload/")[1]
+                      }` || "/../icon.png"
+                    }
+                    width={40}
+                    height={40}
+                    alt="Your avatar"
+                    className="rounded-full hover:opacity-80 ease-in-out duration-200 cursor-pointer"
+                  />
+                </Link>
               </div>
             </>
           )}
-          {session.status !== "authenticated" ? (
+          {session.status === "loading" ? (
+            <Button className="w-20 px-4">
+              <Spinner />
+            </Button>
+          ) : session.status !== "authenticated" ? (
             <Button className="w-20 px-4" onClick={() => router.push("/auth")}>
               Sign In
             </Button>
           ) : (
             <Button
-              className="w-20 px-4"
+              className="w-fit px-2"
               onClick={() => {
                 signOut({ callbackUrl: "/" })
               }}
+              title="Log out"
             >
-              Logout
+              <LogOutIcon className="w-5 h-5 stroke-[2] text-softGray" />
             </Button>
           )}
         </NavigationMenuList>

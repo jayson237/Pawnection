@@ -2,12 +2,10 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import React, { useState } from "react"
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+import React from "react"
 
 import { SafeUser } from "../../types"
 import HeaderTitle from "../HeaderTitle"
-import { AlertDialogTitle, AlertDialogTrigger } from "../ui/AlertDialog"
 import { Button } from "../ui/Button"
 import {
   Dialog,
@@ -18,9 +16,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/Dialog"
-import { Input } from "../ui/Input"
-import { Label } from "../ui/Label"
-import LoadingDots from "../ui/LoadingDots"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
 
 type TabType = "posts" | "about"
@@ -81,18 +76,20 @@ const Profile = ({
                   </Button>
                 )
               ) : null}
+              {isProfileOwner && (
+                <Button>
+                  <Link href="/settings">Edit profile</Link>
+                </Button>
+              )}
             </div>
-            <div className="mt-4 border rounded-xl px-1.5 py-1 flex space-x-2 items-center text-sm w-fit">
-              <p className="text-center">Account type:</p>
-              <p className="w-fit rounded-lg bg-orange-300 px-1 py-0.25 text-center">
-                {user?.type}
-              </p>
+            <div className="my-2 border rounded-xl px-1.5 py-1 text-sm w-fit">
+              {user?.type}
             </div>
 
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="ghost" disabled={!currentUser}>
-                  {user.following?.length} following
+                  {user.following?.length} Following
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
@@ -172,12 +169,12 @@ const Profile = ({
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="ghost" disabled={!currentUser}>
-                  {user.followers?.length} followers
+                  {user.followers?.length} Follower
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogDescription>Followers</DialogDescription>
+                  <DialogDescription>Follower</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-1">
                   {user.followers && user.followers.length > 0 ? (

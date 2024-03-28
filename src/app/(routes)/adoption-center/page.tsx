@@ -1,12 +1,18 @@
+import getCurrentUser from "@/actions/getCurrentUser"
+import { UserType } from "@prisma/client"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import React from "react"
 
 import HeaderTitle from "../../../components/HeaderTitle"
 import OwnAdoptablePost from "../../../components/adoption/OwnAdoptablePost"
-import { Button, buttonVariants } from "../../../components/ui/Button"
+import { buttonVariants } from "../../../components/ui/Button"
 import { cn } from "../../../lib/utils"
 
-function AdoptionCenterPage() {
+async function AdoptionCenterPage() {
+  const currUser = await getCurrentUser()
+  if (!currUser) redirect("/auth")
+  if (currUser.type !== UserType.PetAdoptionCentre) redirect("/adopt")
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">

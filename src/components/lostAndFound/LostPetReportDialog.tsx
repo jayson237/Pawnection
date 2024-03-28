@@ -83,6 +83,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
         const response = await fetch("/api/lostAndFound/createLostPetReport", {
           method: "POST",
           body: JSON.stringify({
+            animalType: animalType,
             name: name,
             breed: breed,
             sex: sex,
@@ -241,7 +242,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
             </div>
 
             <div className="w-[180px] mb-5">
-              
+
         <label>
               Contact Details
               <input name="Contact Details"       

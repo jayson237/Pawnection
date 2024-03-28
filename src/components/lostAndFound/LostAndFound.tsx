@@ -157,31 +157,19 @@ const LostAndFound: React.FC<LostAndFoundProps> = ( props ) => {
 
         <div className="flex mt-2 mb-2 ">
 
-          {lostPetReports.map((report: any) => (
-            <div key={report.id}>
-              <p>Pet Name: {report.petName}</p>
-              <p>Animal Type: {report.animalType}</p>
-              <p>Animal Breed: {report.animalBreed}</p>
-              <p>Image URL: {report.imageUrl} </p>
-            </div>
-          ))}
+        {lostPetReports.map((report: any) => (
+          
+          <div key={report.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "20px", marginRight:"50px",cursor: "pointer" }}
+            onClick={() => { /* your click handling logic here */ }}>
+           
+          <img src={transformImage(report.imageUrl)} alt="Pet" style={{ maxWidth: "100%", height: "auto", marginBottom: "20px" }}/>
+          <p style={{ marginBottom: "10px" }}>Pet Name: {report.petName}</p>
+          <p style={{ marginBottom: "10px" }}>Animal Type: {report.animalType}</p>
+          <p style={{ marginBottom: "10px" }}>Animal Breed: {report.animalBreed}</p>
+        </div>
+        
+        ))}
 
-          {/* <Button className = "mr-20 w-40" onClick={() => getAllLostPetReports()}/>
-          {lostPetReports ? (
-              lostPetReports.map(report => (
-                report.petName
-              ))
-            ) : (
-              <p>No reports found.</p>
-            )} */}
-{/* 
-          <Button className = "mr-20 w-40">
-               Test 
-          </Button>     
-
-          <Button className = "mr-20 w-40" >
-               Test 
-          </Button>      */}
 
         </div>
       </div>
@@ -193,18 +181,14 @@ const LostAndFound: React.FC<LostAndFoundProps> = ( props ) => {
         <div className="flex mt-2 mb-2">
         {foundPetReports.map((report: any) => (
           
-          <div key={report.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "20px", marginRight:"50px" }}>
-          <img src={transformImage(report.imageUrl)} alt="Pet" style={{ maxWidth: "100%", height: "auto", marginBottom: "20px" }}/>
+          <div key={report.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "20px", marginRight:"50px",cursor: "pointer" }}
+            onClick={() => { /* your click handling logic here */ }}>          <img src={transformImage(report.imageUrl)} alt="Pet" style={{ maxWidth: "100%", height: "auto", marginBottom: "20px" }}/>
           
           <p style={{ marginBottom: "10px" }}>Pet Name: {report.petName}</p>
           <p style={{ marginBottom: "10px" }}>Animal Type: {report.animalType}</p>
           <p style={{ marginBottom: "10px" }}>Animal Breed: {report.animalBreed}</p>
         </div>
-        
-        
-
-          
-          ))}
+        ))}
 
         </div>
       </div>

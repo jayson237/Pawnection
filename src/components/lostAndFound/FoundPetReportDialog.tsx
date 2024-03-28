@@ -86,7 +86,7 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
         const response = await fetch("/api/lostAndFound/createFoundPetReport", {
           method: "POST",
           body: JSON.stringify({
-            type: animalType,
+            animalType: animalType,
             name: name,
             breed: breed,
             sex: sex,
@@ -157,7 +157,7 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
           </SelectContent>
           </SelectTrigger>
           </Select>
-          </div> 
+        </div> 
 
         <div className="w-[180px] mb-5">
           <label>
@@ -193,48 +193,35 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
               }} onChange={(e) => setName(e.currentTarget.value)}>
               </input>
             </label>
-          {/* <div> Name</div>
-          <Textarea
-            name="petName"
-            onChange={(e) => setName(e.currentTarget.value)}
-          /> */}
           </div>
-          </div>
+          
+        </div>
 
-          {/* <div className=" mb-5">
-          <div> Gender </div>
-          <Textarea
+        <div className="mb-5">
+          <div>Gender
+          <input
+            type="radio"
+            value="Male"
             name="petSex"
-            onChange={(e) => setSex(e.currentTarget.value)}
-          />
-          </div> */}
-
-          <div className="mb-5">
-            <div>Gender
-            <input
-              type="radio"
-              value="Male"
-              name="petSex"
-              onChange={(e) => setSex(e.target.value)}
-              className="ml-5"
-            /> Male
-            <input
-              type="radio"
-              value="Female"
-              name="petSex"
-              onChange={(e) => setSex(e.target.value)}
-              className="ml-5"
-            /> Female
-            <input
-              type="radio"
-              value="Unsure"
-              name="petSex"
-              onChange={(e) => setSex(e.target.value)}
-              className="ml-5"
-            /> Unsure
-            </div>
+            onChange={(e) => setSex(e.target.value)}
+            className="ml-5"
+          /> Male
+          <input
+            type="radio"
+            value="Female"
+            name="petSex"
+            onChange={(e) => setSex(e.target.value)}
+            className="ml-5"
+          /> Female
+          <input
+            type="radio"
+            value="Unsure"
+            name="petSex"
+            onChange={(e) => setSex(e.target.value)}
+            className="ml-5"
+          /> Unsure
           </div>
-
+        </div>
 
 
           <div className=" mb-5">
@@ -269,16 +256,8 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
                 padding: '0 10px', 
               }} onChange={(e) => setFoundArea(e.currentTarget.value)}>
               </input>
-            </label>     
-            </div>  
-
-          {/* <div> Area Found </div>
-          <Textarea
-            name="foundArea"
-            required={true}
-            onChange={(e) => setFoundArea(e.currentTarget.value)}
-          />
-          </div> */}
+          </label>     
+        </div>  
 
           <div className=" mb-5">
           <div> Found Date </div>
@@ -293,7 +272,7 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
         </div>
 
 
-        <div className="w-[180px] mb-5">
+      <div className="w-[180px] mb-5">
         <label>
               Contact Details
               <input name="Contact Details"       
@@ -307,8 +286,8 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
                 padding: '0 10px', 
               }} onChange={(e) => setContactDetails(e.currentTarget.value)}>
               </input>
-            </label>     
-            </div>  
+          </label>     
+        </div>  
 
         {/* <div className=" mb-5">
           <div> Contact Details </div>

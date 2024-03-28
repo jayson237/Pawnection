@@ -113,6 +113,7 @@ model PetSitting {
 model LostPetReport {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   animalType        String?
+  animalBreed       String?
   petName           String?
   petSex            String?
   reportMessage     String?
@@ -120,7 +121,7 @@ model LostPetReport {
   lastSeenArea      String?
   lastSeenDate      DateTime?
   contactDetails    String?
-  image             String?
+  imageUrl          String?
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
@@ -129,6 +130,7 @@ model LostPetReport {
 model FoundPetReport {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   animalType        String?
+  animalBreed       String?
   petName           String?
   petSex            String?
   reportMessage     String?
@@ -136,7 +138,7 @@ model FoundPetReport {
   foundArea         String?
   foundDate         DateTime?
   contactDetails    String?
-  image             String?
+  imageUrl          String?
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
 }

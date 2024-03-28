@@ -29,7 +29,13 @@ import {   DropdownMenu,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuRadioGroup, } from "../ui/DropdownMenu"
-
+  import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "../ui/Select"
 import { useToast } from "@/hooks/useToast"
 
 interface LostPetReportDialogProps {
@@ -41,6 +47,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
   const [animalType, setAnimalType] = useState("")  
   const [name, setName] = useState("")
   const [sex, setSex] = useState("")
+  const [breed, setBreed] = useState("")
   const [message, setMessage] = useState("")
   const [description, setDescription] = useState("")
   const [lastSeenArea, setLastSeenArea] = useState("")
@@ -77,6 +84,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
           method: "POST",
           body: JSON.stringify({
             name: name,
+            breed: breed,
             sex: sex,
             message: message,
             description: description,
@@ -115,35 +123,77 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
 
         <form onSubmit={onSubmit}>
 
+        <div className="flex gap-4"> 
+          <div className="mb-5">
+            <label>
+              Pet Type
+            </label>
+          <Select>
+          <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select Pet Type" />
+            <SelectContent>
+              <SelectItem value="dog" onSelect={() => setAnimalType("Dog")}> Dog </SelectItem>
+              <SelectItem value="cat" onSelect={() => setAnimalType("Cat")}> Cat </SelectItem>
+              <SelectItem value="bird" onSelect={() => setAnimalType("Bird")}> Bird </SelectItem>
+              <SelectItem value="others" onSelect={() => setAnimalType("Others")}> Others </SelectItem>
+            </SelectContent>
+            </SelectTrigger>
+            </Select>
+          </div> 
+
+          <div className="w-[180px] mb-5">
+            <label>
+              Pet Breed 
+              <input name="Pet Breed"       
+                    style={{
+                    borderWidth: '1px',
+                    borderColor: 'black',
+                    borderStyle: 'solid',
+                    borderRadius: '10px', 
+                    height: '40px', 
+                    width: '100%', 
+                    padding: '0 10px', 
+                  }} onChange={(e) => setBreed(e.currentTarget.value)}>
+              </input>
+            </label>
+          </div>
+
+          <div className="w-[180px] mb-5">
+            <label>
+              Pet Name 
+              <input name="Pet Name"       
+                style={{
+                borderWidth: '1px',
+                borderColor: 'black',
+                borderStyle: 'solid',
+                borderRadius: '10px', 
+                height: '40px', 
+                width: '100%', 
+                padding: '0 10px', 
+              }} onChange={(e) => setName(e.currentTarget.value)}>
+              </input>
+            </label>
+          </div>
+        </div>
+
         <div className="mb-5">
-        <DropdownMenu>
-            <DropdownMenuTrigger className="border-2 border-black rounded-md">Animal Type: {animalType}</DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem onSelect={() => setAnimalType("Dog")}>Dog</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType("Cat")}>Cat</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType("Bird")}>Bird</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType("Others")}>Others</DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
-
-        </div>            
-        <div className=" mb-5">
-          <div> Name</div>
-          <Textarea
-            name="petName"
-            required={true}
-            onChange={(e) => setName(e.currentTarget.value)}
-          />
-          </div>
-
-          <div className=" mb-5">
-          <div> Gender </div>
-          <Textarea
-            name="petSex"
-            required={true}
-            onChange={(e) => setSex(e.currentTarget.value)}
-          />
-          </div>
+            <div>Gender
+            <input
+              type="radio"
+              value="Male"
+              name="petSex"
+              onChange={(e) => setSex(e.target.value)}
+              className="ml-5"
+            /> Male
+            <input
+              type="radio"
+              value="Female"
+              name="petSex"
+              onChange={(e) => setSex(e.target.value)}
+              className="ml-5"
+            /> Female
+            </div>
+        </div>
 
           <div className=" mb-5">
           <div> Message From Owner </div>
@@ -163,14 +213,22 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
           />
         </div>
 
-        <div className=" mb-5">
-          <div> Area Last Seen </div>
-          <Textarea
-            name="lastSeenArea"
-            required={true}
-            onChange={(e) => setLastSeenArea(e.currentTarget.value)}
-          />
-          </div>
+        <div className="w-[180px] mb-5">
+        <label>
+              Area Last Seen
+              <input name="Area Found"       
+                style={{
+                borderWidth: '1px',
+                borderColor: 'black',
+                borderStyle: 'solid',
+                borderRadius: '10px', 
+                height: '40px', 
+                width: '100%', 
+                padding: '0 10px', 
+              }} onChange={(e) => setLastSeenArea(e.currentTarget.value)}>
+              </input>
+          </label>     
+        </div>  
 
           <div className=" mb-5"> 
             <div> Last Seen Date </div>
@@ -182,14 +240,23 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
               />
             </div>
 
-        <div className=" mb-5"> 
-          <div> Contact Details </div>
-          <Textarea
-            name="contactDetails"
-            required={true}
-            onChange={(e) => setContactDetails(e.currentTarget.value)}
-          />
-        </div>
+            <div className="w-[180px] mb-5">
+              
+        <label>
+              Contact Details
+              <input name="Contact Details"       
+                style={{
+                borderWidth: '1px',
+                borderColor: 'black',
+                borderStyle: 'solid',
+                borderRadius: '10px', 
+                height: '40px', 
+                width: '100%', 
+                padding: '0 10px', 
+              }} onChange={(e) => setContactDetails(e.currentTarget.value)}>
+              </input>
+          </label>     
+        </div>  
 
           <input
             // className="mr-8 ml-20 w-1/4"

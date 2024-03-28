@@ -178,7 +178,7 @@ const PostForm = () => {
   return (
     <Dialog onOpenChange={handleDialogClose}>
       <DialogTrigger asChild>
-        <Button className="h-10">
+        <Button className="h-9">
           <Plus className="w-4 h-4 mr-2" />
           Create post
         </Button>

@@ -21,7 +21,15 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
   const [name, setName] = useState(currentUser?.name || "")
   const [username, setUsername] = useState(currentUser?.username || "")
   const [phone, setPhone] = useState(currentUser?.phone || "")
-  const [image, setImage] = useState(currentUser?.image || "/../../icon.png")
+  const [image, setImage] = useState(
+    currentUser?.image ||
+      `${
+        currentUser?.image?.split("/image/upload/")[0]
+      }/image/upload/c_fill,h_160,w_160/${
+        currentUser?.image?.split("/image/upload/")[1]
+      }` ||
+      "/../icon.png",
+  )
   const [isUsernameValid, setIsUsernameValid] = useState(true)
   const [isFormValid, setIsFormValid] = useState(false)
   const [isFormChanged, setIsFormChanged] = useState(false)
@@ -116,6 +124,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
             title: "Successful!",
             description: "Profile picture updated successfully",
           })
+          window.location.reload()
         } else {
           toast({
             variant: "destructive",
@@ -179,7 +188,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
           <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0 mx-auto">
             <Image
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-              loader={imageLoader}
+              // loader={imageLoader}
               src={image}
               width={160}
               height={160}

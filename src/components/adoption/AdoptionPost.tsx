@@ -13,6 +13,7 @@ import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
+import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup"
 import {
   Select,
   SelectContent,
@@ -151,26 +152,27 @@ function AdoptionPost() {
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
         <div className="grid grid-cols-2">
-          {/* <Image
-            src="/static/images/dog_left.png"
-            alt="hura"
-            width={604}
-            height={400}
-          /> */}
-
-          <div className="place-content-center ">
-            {selectedImage && (
+          <div className="place-content-end py-3">
+            {selectedImage ? (
               <Image
                 src={`${URL.createObjectURL(selectedImage)}`}
                 alt=""
                 width={0}
                 height={0}
                 sizes="100vw"
-                className="h-auto w-auto mx-auto"
+                className="h-auto w-auto mx-auto mb-4"
+              />
+            ) : (
+              <Image
+                src="/static/images/dog_left.png"
+                alt="hura"
+                width={604}
+                height={400}
               />
             )}
+
             <div
-              className="cursor-pointer text-sm border rounded-md h-fit"
+              className="cursor-pointer text-sm border rounded-lg border-dashed border-gray-600"
               {...getRootProps()}
             >
               <input {...getInputProps()} />
@@ -209,7 +211,7 @@ function AdoptionPost() {
                   placeholder="Enter pet's name"
                 />
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-6">
                 <div className="space-y-1">
                   <Label htmlFor="type">Pet Type</Label>
                   <Select
@@ -222,28 +224,34 @@ function AdoptionPost() {
                       <SelectValue placeholder="Select Pet Type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="udin">Udin</SelectItem>
-                      <SelectItem value="ucok">Ucok</SelectItem>
-                      <SelectItem value="bambang">Bambang</SelectItem>
+                      <SelectItem value="bird">Bird</SelectItem>
+                      <SelectItem value="cat">Cat</SelectItem>
+                      <SelectItem value="dog">Dog</SelectItem>
+                      <SelectItem value="fish">Fish</SelectItem>
+                      <SelectItem value="hamster">Hamster</SelectItem>
+                      <SelectItem value="lizard">Lizard</SelectItem>
+                      <SelectItem value="rabbit">Rabbit</SelectItem>
+                      <SelectItem value="turtle">Turtle</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="gender">Pet Gender</Label>
-                  <Select
+                  <RadioGroup
                     onValueChange={(val) => {
                       setValue("gender", val)
                     }}
                     defaultValue={watch("gender")}
                   >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select Pet Gender" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <RadioGroupItem value="Male" id="option-one" />
+                      <Label htmlFor="option-one" className="pr-2">
+                        Male
+                      </Label>
+                      <RadioGroupItem value="Female" id="option-two" />
+                      <Label htmlFor="option-two">Female</Label>
+                    </div>
+                  </RadioGroup>
                 </div>
               </div>
               <div className="space-y-1">

@@ -35,7 +35,7 @@ function AdoptionPost() {
   } = useForm<AdoptablePetPayloadType>({
     defaultValues: {
       name: "",
-      type: "ucok",
+      type: "",
       breed: "",
       age: parseInt("0"),
       gender: "",

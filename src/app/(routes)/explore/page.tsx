@@ -1,6 +1,6 @@
 import getCurrentUser from "@/actions/getCurrentUser"
-import FilterSearch from "@/components/community/FilterSearch"
-import PostForm from "@/components/community/posts/PostForm"
+import FilterSearch from "@/components/explore/FilterSearch"
+import PostForm from "@/components/explore/PostForm"
 import { redirect } from "next/navigation"
 
 export default async function Community() {
@@ -11,7 +11,6 @@ export default async function Community() {
       <div className="py-[40px] px-16">
         <div className="mx-auto flex flex-row items-center space-x-4">
           <FilterSearch />
-          <PostForm />
         </div>
       </div>
     </div>

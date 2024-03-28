@@ -122,7 +122,7 @@ const AuthForm = () => {
           }
 
           if (callback?.ok) {
-            router.push("/")
+            window.location.href = "/"
           }
         })
         .finally(() => setIsLoading(false))

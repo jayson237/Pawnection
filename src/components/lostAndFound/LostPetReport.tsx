@@ -14,8 +14,6 @@ const LostPetReport = () => {
   const [lastSeenDate, setLastSeenDate] = useState("")
   const [contactDetails, setContactDetails] = useState("")
   const [petImage, setPetImage] = useState<File | null>(null)
-  // const [petImageStr, setPetImageStr] = useState(null)
-  //   const [image, setImage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {

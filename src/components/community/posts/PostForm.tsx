@@ -160,7 +160,7 @@ const PostForm = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="h-10">
           <Plus className="w-4 h-4 mr-2" />
           Create post
         </Button>

@@ -27,6 +27,7 @@ const config = {
         main: "#FFF8F5",
         submain: "#FFECE4",
         mainAccent: "#FF7751",
+        subAccent: "#FFBBA9",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

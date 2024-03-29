@@ -51,8 +51,8 @@ const LostAndFound = ({
   }
 
   const transformImage = (url:string) => {
-    const parts = url.split('/upload/')
-    const transformationString = 'w_200,h_200,c_thumb,g_face,r_max,f_auto/'
+    const parts = url.split("/upload/")
+    const transformationString = "w_200,h_200,c_thumb,g_face,r_max,f_auto/"
     return `${parts[0]}/upload/${transformationString}${parts[1]}`
   }
   

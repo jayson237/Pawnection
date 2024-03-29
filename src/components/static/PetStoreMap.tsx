@@ -24,7 +24,7 @@ const PetStoreMap = () => {
           center={[10.776889, 106.700806]}
           zoom={13}
           scrollWheelZoom={false}
-          style={{ height: "312px", width: "1100px" }}
+          className="h-[312px] w-[1100px]"
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

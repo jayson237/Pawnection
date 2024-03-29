@@ -8,17 +8,12 @@ import HeaderTitle from "../../../components/HeaderTitle"
 export default async function Home() {
   const PetStoreMap = dynamic(() => import("@/components/static/PetStoreMap"), {
     loading: () => <p>A map is loading...</p>,
-    ssr: false, // This will prevent server-side rendering for the Map component.
+    ssr: false,
   })
 
   return (
     <section>
-      <div
-        className="py-[60px]"
-        style={{
-          background: "linear-gradient(180deg, #FFBBA9 0%, #FF6236 100%)",
-        }}
-      >
+      <div className="py-[60px] bg-gradient-to-b from-subAccent to-mainAccent ">
         <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
           <div className="flex items-center justify-center">
             <Image

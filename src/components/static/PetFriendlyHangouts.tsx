@@ -97,7 +97,7 @@ const PetFriendlyHangouts = () => {
               />
               <div>
                 <h3 className="text-xl font-semibold mb-1">{hangout.title}</h3>
-                <p className="text-sm mb-2" style={{ color: "#FF7751" }}>
+                <p className="text-sm mb-2 text-mainAccent">
                   Location: {hangout.location}
                 </p>
                 <p className="text-sm mb-3">{hangout.description}</p>

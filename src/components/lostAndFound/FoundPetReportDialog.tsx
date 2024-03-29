@@ -117,8 +117,8 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
   }
 
   const handleChangeAnimalType = (value: string) => {
-    setAnimalType(value);
-  };
+    setAnimalType(value)
+  }
 
 
   if (!isOpen) return null
@@ -253,28 +253,6 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
                 <Label htmlFor="r3">Unsure</Label>
               </div>
             </RadioGroup>
-          {/* <input
-            type="radio"
-            value="Male"
-            name="petSex"
-            onChange={(e) => setSex(e.target.value)}
-            className="ml-5"
-          /> Male
-          <input
-            type="radio"
-            value="Female"
-            name="petSex"
-            onChange={(e) => setSex(e.target.value)}
-            className="ml-5"
-          /> Female
-          <input
-            type="radio"
-            value="Unsure"
-            name="petSex"
-            onChange={(e) => setSex(e.target.value)}
-            className="ml-5"
-          /> Unsure */}
-          
           </div>
         </div>
 

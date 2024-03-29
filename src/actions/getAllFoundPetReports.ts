@@ -9,7 +9,7 @@ export default async function getAllFoundPetReports(): Promise<FoundPetReport[] 
         }
         return [...allFoundPetReports]
     } catch (error) {
-        return null
+       return null
     }
 
 }

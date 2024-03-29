@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react"
-
-// Assuming Button and Textarea are your custom components
+import { Label } from "../ui/Label"
+import { Input } from "../ui/Input"
+import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup"
 import { Button } from "../ui/Button"
 import { Textarea } from "../ui/TextArea"
 import {   Dialog,
@@ -115,6 +116,9 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
     }
   }
 
+  const handleChangeAnimalType = (value: string) => {
+    setAnimalType(value);
+  };
 
 
   if (!isOpen) return null
@@ -143,10 +147,10 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
         <div className="flex gap-4"> 
 
         <div className="mb-5">
-          <label>
+          <Label>
             Pet Type
-          </label>
-        <Select>
+          </Label>
+        {/* <Select>
         <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select Pet Type" />
           <SelectContent>
@@ -155,51 +159,101 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
             <SelectItem value="bird" onSelect={() => setAnimalType("Bird")}> Bird </SelectItem>
             <SelectItem value="others" onSelect={() => setAnimalType("Others")}> Others </SelectItem>
           </SelectContent>
-          </SelectTrigger>
-          </Select>
+          </SelectTrigger>          
+          </Select> */}
+
+        {/* <select style={{
+                borderWidth: "1px",
+                borderColor: "black",
+                borderStyle: "solid",
+                borderRadius: "10px", 
+                height: "40px", 
+                width: "100%", 
+                padding: "0 10px", 
+              }} 
+          onChange={ e=> setAnimalType(e.target.value)}>
+          <option value="Dog">Dog</option>
+          <option value="Cat">Cat</option>
+          <option value="Bird">Bird</option>
+          <option value="Others">Others</option>
+          </select>
+ */}
+
+          <Select
+            onValueChange={(val) => {
+              setAnimalType(val)
+            }}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select Animal Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Dog">Dog</SelectItem>
+              <SelectItem value="Cat">Cat</SelectItem>
+              <SelectItem value="Bird">Bird</SelectItem>
+              <SelectItem value="Others">Others</SelectItem>
+            </SelectContent>
+          </Select>          
         </div> 
 
         <div className="w-[180px] mb-5">
-          <label>
+          <Label>
             Pet Breed 
-          <input name="Pet Breed"       
+          <Input name="Pet Breed"    
                 style={{
-                borderWidth: '1px',
-                borderColor: 'black',
-                borderStyle: 'solid',
-                borderRadius: '10px', 
-                height: '40px', 
-                width: '100%', 
-                padding: '0 10px', 
-              }} onChange={(e) => setBreed(e.currentTarget.value)}>
-          </input>
-          </label>
+                borderWidth: "1px",
+                borderColor: "black",
+                borderStyle: "solid",
+                borderRadius: "10px", 
+                height: "40px", 
+                width: "100%", 
+                padding: "0 10px", 
+                 }}    
+                 onChange={(e) => setBreed(e.currentTarget.value)}>
+          </Input>
+          </Label>
 
           </div>
           
 
           <div className="w-[180px] mb-5">
-            <label>
+            <Label>
               Pet Name 
-              <input name="Pet Name"       
+              </Label>
+              <Input name="Pet Name"       
                 style={{
-                borderWidth: '1px',
-                borderColor: 'black',
-                borderStyle: 'solid',
-                borderRadius: '10px', 
-                height: '40px', 
-                width: '100%', 
-                padding: '0 10px', 
+                borderWidth: "1px",
+                borderColor: "black",
+                borderStyle: "solid",
+                borderRadius: "10px", 
+                height: "40px", 
+                width: "100%", 
+                padding: "0 10px", 
               }} onChange={(e) => setName(e.currentTarget.value)}>
-              </input>
-            </label>
+              </Input>
+            
           </div>
           
         </div>
 
+
         <div className="mb-5">
-          <div>Gender
-          <input
+          <div>
+            <Label> Gender </Label>
+            <RadioGroup defaultValue="comfortable"  onValueChange={setSex}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Male" id="r1" />
+                <Label htmlFor="r1">Male</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Female" id="r2" />
+                <Label htmlFor="r2">Female</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Unsure" id="r3" />
+                <Label htmlFor="r3">Unsure</Label>
+              </div>
+            </RadioGroup>
+          {/* <input
             type="radio"
             value="Male"
             name="petSex"
@@ -219,7 +273,8 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
             name="petSex"
             onChange={(e) => setSex(e.target.value)}
             className="ml-5"
-          /> Unsure
+          /> Unsure */}
+          
           </div>
         </div>
 
@@ -243,20 +298,20 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
         </div>
 
         <div className="w-[180px] mb-5">
-        <label>
+        <Label>
               Area Found
-              <input name="Area Found"       
+              <Input name="Area Found"       
                 style={{
-                borderWidth: '1px',
-                borderColor: 'black',
-                borderStyle: 'solid',
-                borderRadius: '10px', 
-                height: '40px', 
-                width: '100%', 
-                padding: '0 10px', 
+                borderWidth: "1px",
+                borderColor: "black",
+                borderStyle: "solid",
+                borderRadius: "10px", 
+                height: "40px", 
+                width: "100%", 
+                padding: "0 10px", 
               }} onChange={(e) => setFoundArea(e.currentTarget.value)}>
-              </input>
-          </label>     
+              </Input>
+          </Label>     
         </div>  
 
           <div className=" mb-5">
@@ -273,20 +328,20 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
 
 
       <div className="w-[180px] mb-5">
-        <label>
+        <Label>
               Contact Details
-              <input name="Contact Details"       
+              <Input name="Contact Details"       
                 style={{
-                borderWidth: '1px',
-                borderColor: 'black',
-                borderStyle: 'solid',
-                borderRadius: '10px', 
-                height: '40px', 
-                width: '100%', 
-                padding: '0 10px', 
+                borderWidth: "1px",
+                borderColor: "black",
+                borderStyle: "solid",
+                borderRadius: "10px", 
+                height: "40px", 
+                width: "100%", 
+                padding: "0 10px", 
               }} onChange={(e) => setContactDetails(e.currentTarget.value)}>
-              </input>
-          </label>     
+              </Input>
+          </Label>     
         </div>  
 
         {/* <div className=" mb-5">
@@ -298,7 +353,7 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
           />
           </div> */}
 
-          <input
+          <Input
             // className="mr-8 ml-20 w-1/4"
             type="file"
             accept="image/*"

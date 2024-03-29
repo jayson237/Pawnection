@@ -6,18 +6,23 @@ import { Button } from "../ui/Button"
 
 import { Dialog } from "../ui/Dialog"
 
-import { LostPetReport } from "@prisma/client"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+
 
 import LostPetReportDialog from "./LostPetReportDialog"
 
 import FoundPetReportDialog from "./FoundPetReportDialog"
+import { FoundPetReport, LostPetReport } from "@prisma/client"
 
-interface LostAndFoundProps {
-  allLostPetReports: any;
-  allFoundPetReports: any;
-}
 
-const LostAndFound: React.FC<LostAndFoundProps> = ( props ) => {
+const LostAndFound = ({
+  allLostPetReports,
+  allFoundPetReports
+} : {
+  allLostPetReports : LostPetReport[] | null
+  allFoundPetReports : FoundPetReport[] | null
+}) => {
   const [allSelected, setAllSeleceted] = useState(false)
   const [dogsSelected, setDogsSeleceted] = useState(false)
   const [catsSelected, setCatsSeleceted] = useState(false)
@@ -25,8 +30,8 @@ const LostAndFound: React.FC<LostAndFoundProps> = ( props ) => {
   const [othersSelected, setOthersSeleceted] = useState(false)
   const [isLostPetReportDialogOpen, setIsLostPetReportDialogOpen] = useState(false)
   const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] = useState(false)
-  const [lostPetReports, setLostPetReports] = useState(props.allLostPetReports);
-  const [foundPetReports, setFoundPetReports] = useState(props.allFoundPetReports);
+  const [lostPetReports, setLostPetReports] = useState(allLostPetReports)
+  const [foundPetReports, setFoundPetReports] = useState(allFoundPetReports)
 
 
   const handleOpenLostPetReportDialog = () => {
@@ -51,8 +56,14 @@ const LostAndFound: React.FC<LostAndFoundProps> = ( props ) => {
     return `${parts[0]}/upload/${transformationString}${parts[1]}`;
   }
   
-  
 
+  const router = useRouter()
+
+  const handleLostPetReportClick = (reportId : string) => {
+    router.push(`/lostAndFound/lostPetReportPage/${reportId}`)
+    // <Link href={`/lostPetReportPage/${reportId}`}/>
+  }
+  
   return (
     <main className="flex min-h-screen flex-col items-center divide-gray-100 w-full h-full">
 
@@ -157,10 +168,10 @@ const LostAndFound: React.FC<LostAndFoundProps> = ( props ) => {
 
         <div className="flex mt-2 mb-2 ">
 
-        {lostPetReports.map((report: any) => (
+        {lostPetReports == null ? "No Reports Available" : lostPetReports.map((report: LostPetReport) => (
           
           <div key={report.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "20px", marginRight:"50px",cursor: "pointer" }}
-            onClick={() => { /* your click handling logic here */ }}>
+          onClick={() => handleLostPetReportClick(report.id)}>
            
           <img src={transformImage(report.imageUrl)} alt="Pet" style={{ maxWidth: "100%", height: "auto", marginBottom: "20px" }}/>
           <p style={{ marginBottom: "10px" }}>Pet Name: {report.petName}</p>
@@ -179,10 +190,11 @@ const LostAndFound: React.FC<LostAndFoundProps> = ( props ) => {
 
         <h2 className="text-3xl font-semibold tracking-tight mt-8 mb-4">Found Pets</h2>
         <div className="flex mt-2 mb-2">
-        {foundPetReports.map((report: any) => (
+        {foundPetReports == null ? "No Reports Available" : foundPetReports.map((report: FoundPetReport) => (
           
           <div key={report.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "20px", marginRight:"50px",cursor: "pointer" }}
-            onClick={() => { /* your click handling logic here */ }}>          <img src={transformImage(report.imageUrl)} alt="Pet" style={{ maxWidth: "100%", height: "auto", marginBottom: "20px" }}/>
+            /*onClick={() => handleReportClick(report.id)}*/>          
+            <img src={transformImage(report.imageUrl)} alt="Pet" style={{ maxWidth: "100%", height: "auto", marginBottom: "20px" }}/>
           
           <p style={{ marginBottom: "10px" }}>Pet Name: {report.petName}</p>
           <p style={{ marginBottom: "10px" }}>Animal Type: {report.animalType}</p>

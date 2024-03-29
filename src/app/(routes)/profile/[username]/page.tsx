@@ -3,7 +3,6 @@ import Profile from "@/components/profile/Profile"
 import { notFound } from "next/navigation"
 
 import { getOneUser } from "../../../../lib/user"
-import { SafeUser } from "../../../../types"
 
 export default async function UserProfile({
   params,

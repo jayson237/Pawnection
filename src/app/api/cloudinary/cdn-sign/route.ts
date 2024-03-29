@@ -3,14 +3,17 @@ import { cdn } from "@/lib/cloudinary"
 import cloudinary from "cloudinary"
 import { NextResponse } from "next/server"
 
+enum FolderType {
+  adoptable = "adoptable",
+  post = "post",
+  avatar = "avatar",
+}
+
 cdn
-const signUploadForm = (type: string) => {
+const signUploadForm = (type: FolderType) => {
   const timestamp = Math.round(new Date().getTime() / 1000)
-  const eager = "e_blur:400,h_150,w_150|c_fill,h_150,w_150"
-  const folder =
-    type === "post"
-      ? process.env.CLOUDINARY_POST_FOLDER
-      : process.env.CLOUDINARY_AVATAR_FOLDER
+  const eager = "c_auto"
+  const folder = FolderType[type]
   const signature = cloudinary.v2.utils.api_sign_request(
     {
       timestamp,
@@ -25,22 +28,42 @@ const signUploadForm = (type: string) => {
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const type = searchParams.get("type")
-  if (!type)
+  const type = searchParams.get("type") as FolderType
+
+  if (!type) {
     return NextResponse.json(
       {
         message: "Type is required",
       },
       { status: 400 },
     )
+  }
+
+  if (!(type in FolderType)) {
+    return NextResponse.json(
+      {
+        message: "Invalid type",
+      },
+      { status: 400 },
+    )
+  }
   const currentUser = await getCurrentUser()
-  if (!currentUser)
+  if (!currentUser) {
     return NextResponse.json(
       {
         message: "Unauthorized",
       },
       { status: 401 },
     )
+  }
+  if (currentUser.type === "PetLover" && type === FolderType.adoptable) {
+    return NextResponse.json(
+      {
+        message: "Unauthorized",
+      },
+      { status: 401 },
+    )
+  }
 
   const cloudName = cloudinary.v2.config().cloud_name
   const apiKey = cloudinary.v2.config().api_key

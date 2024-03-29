@@ -2,7 +2,7 @@
 
 import "leaflet/dist/leaflet.css"
 import React, { useEffect, useState } from "react"
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet"
 
 import HeaderTitle from "../HeaderTitle"
 
@@ -13,27 +13,6 @@ const PetStoreMap = () => {
     // Add more pet store locations here
   ]
 
-  const [windowDimensions, setWindowDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  })
-  console.log(windowDimensions)
-
-  const mapWidth = windowDimensions.width > 768 ? "1100px" : "75%"
-  console.log(mapWidth)
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
-    }
-
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
-
   return (
     <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
       <div className="py-[60px] space-y-6">
@@ -41,13 +20,15 @@ const PetStoreMap = () => {
           See them on our mini map!
         </HeaderTitle>
 
-        <div className="flex justify-center w-full">
+        <div
+          className="flex justify-center w-full"
+          style={{ height: "100vh", width: "100%" }}
+        >
           <MapContainer
             center={[10.776889, 106.700806]}
             zoom={13}
             scrollWheelZoom={false}
-            // style={{ height: "312px", width: "1100px" }}
-            style={{ height: windowDimensions.height * 0.5, width: mapWidth }}
+            style={{ height: "50vh", width: "85vw" }}
           >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

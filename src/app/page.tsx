@@ -1,6 +1,6 @@
 export default async function Home() {
   return (
-    <div className="h-full w-full flex flex-col place-content-center place-items-center">
+    <div className="grid place-content-center place-items-center h-screen">
       Home
     </div>
   )

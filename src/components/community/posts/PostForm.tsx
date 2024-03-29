@@ -46,7 +46,6 @@ const PostForm = () => {
       imageUrl: "",
     },
   })
-  console.log(isValid)
 
   const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
@@ -148,7 +147,6 @@ const PostForm = () => {
       router.push("/community")
     }
   }
-  console.log(watch())
 
   return (
     <Dialog>

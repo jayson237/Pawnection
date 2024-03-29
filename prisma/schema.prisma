@@ -8,31 +8,42 @@ datasource db {
 }
 
 model User {
-  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
-  name               String?
-  email              String          @unique
-  username           String?         @unique
-  emailVerified      DateTime?
-  image              String?
-  phone              String?
-  hashedPassword     String?
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
-  type               UserType?
-  accounts           Account[]
-  posts              Post[]
-  likes              Like[]
-  comments           Comment[]
-  adoptablePets      AdoptablePet[]
-  lostPetReports     LostPetReport[]
-  petSittingListings PetSitting[]
-  followerUsers      UserRelation[]  @relation("FollowerRelation")
-  followingUsers     UserRelation[]  @relation("FollowingRelation")
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  email            String            @unique
+  username         String?           @unique
+  emailVerified    DateTime?
+  image            String?
+  phone            String?
+  bio              String?
+  hashedPassword   String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  type             UserType?
+  accounts         Account[]
+  posts            Post[]
+  likes            Like[]
+  comments         Comment[]
+  adoptablePets    AdoptablePet[]
+  adoptionRequests AdoptionRequest[]
+  lostPetReports   LostPetReport[]
+  followerUsers    UserRelation[]    @relation("FollowerRelation")
+  followingUsers   UserRelation[]    @relation("FollowingRelation")
 }
 
 enum UserType {
   PetLover
   PetAdoptionCentre
+}
+
+model UserRelation {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  followerId  String @db.ObjectId
+  follower    User   @relation(name: "FollowerRelation", fields: [followerId], references: [id])
+  followingId String @db.ObjectId
+  following   User   @relation(name: "FollowingRelation", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
 }
 
 model Account {
@@ -65,14 +76,9 @@ model Post {
   comments    Comment[]
 }
 
-model UserRelation {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  followerId  String @db.ObjectId
-  follower    User   @relation(name: "FollowerRelation", fields: [followerId], references: [id])
-  followingId String @db.ObjectId
-  following   User   @relation(name: "FollowingRelation", fields: [followingId], references: [id])
-
-  @@unique([followerId, followingId])
+enum PostType {
+  Post
+  PetSitting
 }
 
 model Like {
@@ -94,21 +100,6 @@ model Comment {
   postId    String   @db.ObjectId
 }
 
-model PetSitting {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  petName      String
-  petType      String
-  petBreed     String
-  location     String
-  compensation String
-  description  String
-  petAge       Int
-  petSex       String
-  image        String?
-  userId       String  @db.ObjectId
-  user         User    @relation(fields: [userId], references: [id])
-}
-
 model LostPetReport {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   petName           String?
@@ -125,17 +116,39 @@ model LostPetReport {
 }
 
 model AdoptablePet {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  type        String
-  breed       String
-  age         Int
-  gender      String
-  description String
-  imageUrl    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  type             String
+  breed            String
+  age              Int
+  gender           String
+  description      String
+  imageUrl         String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  adoptionRequests AdoptionRequest[]
 
   adoptionCentre   User   @relation(fields: [adoptionCentreId], references: [id])
   adoptionCentreId String @db.ObjectId
+}
+
+model AdoptionRequest {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  message           String
+  request_status    String
+  full_name         String
+  age               Int
+  phone_number      String?
+  address           String?
+  type_desired      String?
+  breed_desired     String?
+  work_details      String?
+  lifestyle_details String?
+  pet_experience    String?
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  adoptablePetId String       @db.ObjectId
+  adoptablePet   AdoptablePet @relation(fields: [adoptablePetId], references: [id])
 }

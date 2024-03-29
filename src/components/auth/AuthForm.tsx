@@ -122,7 +122,7 @@ const AuthForm = () => {
           }
 
           if (callback?.ok) {
-            router.push("/")
+            window.location.href = "/"
           }
         })
         .finally(() => setIsLoading(false))
@@ -150,7 +150,7 @@ const AuthForm = () => {
 
   return (
     <div className="grid sm:grid-cols-2 grid-cols-1">
-      <div className="order-first sm:order-first">
+      <div className="order-last sm:order-first">
         <Image
           src="/static/images/dog_left.png"
           alt="hura"

@@ -76,17 +76,17 @@ const PetFriendlyHangouts = () => {
   ]
 
   return (
-    <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
+    <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto px-8">
       <div className="py-[60px]">
-        <HeaderTitle className="max-w-full">
+        <HeaderTitle className="max-w-full text-2xl md:text-4xl">
           Recommended Pet-Friendly Hangouts
         </HeaderTitle>
 
-        <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 mt-6">
           {hangouts.map((hangout, index) => (
             <div
               key={index}
-              className="flex border p-4 rounded-xl bg-white h-full"
+              className="flex border p-4 rounded-xl md:p-6 bg-white h-full"
             >
               <Image
                 src={hangout.image}
@@ -97,7 +97,7 @@ const PetFriendlyHangouts = () => {
               />
               <div>
                 <h3 className="text-xl font-semibold mb-1">{hangout.title}</h3>
-                <p className="text-sm mb-2" style={{ color: "#FF7751" }}>
+                <p className="text-sm mb-2 text-mainAccent">
                   Location: {hangout.location}
                 </p>
                 <p className="text-sm mb-3">{hangout.description}</p>

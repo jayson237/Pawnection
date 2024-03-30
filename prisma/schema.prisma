@@ -139,12 +139,19 @@ model AdoptablePet {
   adoptionCentreId String @db.ObjectId
 }
 
+enum AdoptRequestStatus {
+  Pending
+  Approved
+  Rejected
+  Completed
+}
+
 model AdoptionRequest {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  message           String
-  request_status    String
-  full_name         String
-  age               Int
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  message           String?
+  request_status    AdoptRequestStatus
+  full_name         String?
+  age               Int?
   phone_number      String?
   address           String?
   type_desired      String?

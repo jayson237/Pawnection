@@ -1,4 +1,4 @@
-import getCurrentUser from "@/actions/getCurrentUser"
+import getCurrentUser from "@/lib/actions/getCurrentUser"
 import prisma from "@/lib/prismadb"
 import { AdoptablePetStatus } from "@prisma/client"
 import Link from "next/link"

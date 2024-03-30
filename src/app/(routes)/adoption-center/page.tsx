@@ -1,4 +1,4 @@
-import getCurrentUser from "@/actions/getCurrentUser"
+import getCurrentUser from "@/lib/actions/getCurrentUser"
 import { UserType } from "@prisma/client"
 import Link from "next/link"
 import { redirect } from "next/navigation"

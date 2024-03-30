@@ -1,7 +1,7 @@
 import prisma from "@/lib/prismadb"
 import { notFound } from "next/navigation"
 
-import getCurrentUser from "../../../../../actions/getCurrentUser"
+import getCurrentUser from "../../../../../lib/actions/getCurrentUser"
 import AdoptionCenterManageClientPage from "./client"
 
 export default async function AdoptionCenterManagePage({

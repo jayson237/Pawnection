@@ -1,4 +1,4 @@
-import getCurrentUser from "@/actions/getCurrentUser"
+import getCurrentUser from "@/lib/actions/getCurrentUser"
 import { cdn } from "@/lib/cloudinary"
 import cloudinary from "cloudinary"
 import { NextResponse } from "next/server"

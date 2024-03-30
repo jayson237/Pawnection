@@ -1,7 +1,7 @@
 import prisma from "@/lib/prismadb"
 import { NextResponse } from "next/server"
 
-import getCurrentUser from "../../../actions/getCurrentUser"
+import getCurrentUser from "../../../lib/actions/getCurrentUser"
 
 export async function GET() {
   try {

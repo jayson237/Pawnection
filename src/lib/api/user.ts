@@ -1,7 +1,7 @@
 import prisma from "@/lib/prismadb"
 
+import { SafeUser } from "../../types"
 import getCurrentUser from "../actions/getCurrentUser"
-import { SafeUser } from "../types"
 
 export async function getOneUser(username: string): Promise<SafeUser | null> {
   try {

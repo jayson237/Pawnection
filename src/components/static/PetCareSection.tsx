@@ -5,12 +5,32 @@ import React, { useState } from "react"
 
 import HeaderTitle from "../HeaderTitle"
 
-interface Tip {
-  id: string
-  title: string
-  description: string
-  icon: string
-}
+const tips = [
+  {
+    id: "bonding",
+    title: "Bonding",
+    message: "The secret to a stronger bond with your pet",
+    description:
+      "You can build a good relationship with your pets by rewarding them and walking them regularly!",
+    icon: "/static/images/bonding.svg",
+  },
+  {
+    id: "dog-training",
+    title: "Dog Training",
+    message: "The right way to train your dog",
+    description:
+      "Can be counter-effective if done wrongly. Don't hit your pets if you can't catch them on spot!",
+    icon: "/static/images/dog-training.svg",
+  },
+  {
+    id: "pet-health",
+    title: "Pet Health",
+    message: "How to drastically reduce your pet's risk of illness",
+    description:
+      "Remember to get your pets vax-ed cyclically. 70% of pet mortality is because of illness!",
+    icon: "/static/images/pet-health.svg",
+  },
+]
 
 const PetCareTips = () => {
   const [expandedTipId, setExpandedTipId] = useState<string | null>(null)
@@ -18,33 +38,6 @@ const PetCareTips = () => {
   const handleTipClick = (id: string) => {
     setExpandedTipId(expandedTipId === id ? null : id)
   }
-
-  const tips = [
-    {
-      id: "bonding",
-      title: "Bonding",
-      message: "The secret to a stronger bond with your pet",
-      description:
-        "You can build a good relationship with your pets by rewarding them and walking them regularly!",
-      icon: "/static/images/bonding.svg",
-    },
-    {
-      id: "dog-training",
-      title: "Dog Training",
-      message: "The right way to train your dog",
-      description:
-        "Can be counter-effective if done wrongly. Don't hit your pets if you can't catch them on spot!",
-      icon: "/static/images/dog-training.svg",
-    },
-    {
-      id: "pet-health",
-      title: "Pet Health",
-      message: "How to drastically reduce your pet's risk of illness",
-      description:
-        "Remember to get your pets vax-ed cyclically. 70% of pet mortality is because of illness!",
-      icon: "/static/images/pet-health.svg",
-    },
-  ]
 
   return (
     <div className="mx-auto w-full max-w-[1480px] md:px-0 px-4">

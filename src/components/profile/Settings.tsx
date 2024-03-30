@@ -5,10 +5,10 @@ import { SafeUser } from "@/types"
 import Image from "next/image"
 import { FormEvent, useState } from "react"
 
+import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
-import LoadingDots from "../ui/LoadingDots"
 
 interface SettingsProps {
   currentUser?: SafeUser | null
@@ -188,7 +188,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
           <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0 mx-auto">
             <Image
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-              // loader={imageLoader}
+              loader={imageLoader}
               src={image}
               width={160}
               height={160}

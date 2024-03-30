@@ -1,8 +1,8 @@
-import getCurrentUser from "@/actions/getCurrentUser"
 import Profile from "@/components/profile/Profile"
+import getCurrentUser from "@/lib/actions/getCurrentUser"
 import { notFound } from "next/navigation"
 
-import { getOneUser } from "../../../../lib/user"
+import { getOneUser } from "../../../../lib/api/user"
 
 export default async function UserProfile({
   params,

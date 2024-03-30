@@ -22,13 +22,13 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
   const [username, setUsername] = useState(currentUser?.username || "")
   const [phone, setPhone] = useState(currentUser?.phone || "")
   const [image, setImage] = useState(
-    currentUser?.image ||
-      `${
-        currentUser?.image?.split("/image/upload/")[0]
-      }/image/upload/c_fill,h_160,w_160/${
-        currentUser?.image?.split("/image/upload/")[1]
-      }` ||
-      "/../icon.png",
+    currentUser?.image
+      ? `${
+          currentUser?.image?.split("/image/upload/")[0]
+        }/image/upload/c_fill,h_160,w_160/${
+          currentUser?.image?.split("/image/upload/")[1]
+        }` || "/../icon.png"
+      : "/../icon.png",
   )
   const [isUsernameValid, setIsUsernameValid] = useState(true)
   const [isFormValid, setIsFormValid] = useState(false)

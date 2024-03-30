@@ -1,5 +1,5 @@
-import getCurrentUser from "@/actions/getCurrentUser"
 import TypeForm from "@/components/auth/TypeForm"
+import getCurrentUser from "@/lib/actions/getCurrentUser"
 import { redirect } from "next/navigation"
 
 export default async function AuthType() {

@@ -115,17 +115,24 @@ model LostPetReport {
   user   User   @relation(fields: [userId], references: [id])
 }
 
+enum AdoptablePetStatus {
+  Available
+  Adopted
+  Adopting
+}
+
 model AdoptablePet {
-  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
   name             String
   type             String
   breed            String
   age              Int
   gender           String
+  status           AdoptablePetStatus
   description      String
   imageUrl         String
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
   adoptionRequests AdoptionRequest[]
 
   adoptionCentre   User   @relation(fields: [adoptionCentreId], references: [id])

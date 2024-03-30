@@ -8,7 +8,7 @@ import { FileRejection, useDropzone } from "react-dropzone"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
 import { toast } from "../../hooks/useToast"
-import { AdoptablePetPayloadType } from "../../types/adoption-center"
+import { CreateAdoptablePetPayloadType } from "../../types/adoption-center"
 import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
@@ -33,7 +33,7 @@ function AdoptionPost() {
     setValue,
     getValues,
     watch,
-  } = useForm<AdoptablePetPayloadType>({
+  } = useForm<CreateAdoptablePetPayloadType>({
     defaultValues: {
       name: "",
       type: "",
@@ -44,7 +44,9 @@ function AdoptionPost() {
     },
   })
 
-  const onSubmit: SubmitHandler<AdoptablePetPayloadType> = async (data) => {
+  const onSubmit: SubmitHandler<CreateAdoptablePetPayloadType> = async (
+    data,
+  ) => {
     const set = await fetch("/api/adoption-center", {
       method: "POST",
       headers: {

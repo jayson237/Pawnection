@@ -9,7 +9,7 @@ import OwnAdoptablePost from "../../../components/adoption/OwnAdoptablePost"
 import { buttonVariants } from "../../../components/ui/Button"
 import { cn } from "../../../lib/utils"
 
-async function AdoptionCenterPage() {
+export default async function AdoptionCenterPage() {
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
   if (currUser.type !== UserType.PetAdoptionCentre) redirect("/adopt")
@@ -39,5 +39,3 @@ async function AdoptionCenterPage() {
     </div>
   )
 }
-
-export default AdoptionCenterPage

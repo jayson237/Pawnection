@@ -1,13 +1,8 @@
 import getCurrentUser from "@/lib/actions/getCurrentUser"
 import prisma from "@/lib/prismadb"
+import { PostData } from "@/types"
 import { PostType } from "@prisma/client"
 import { NextResponse } from "next/server"
-
-interface PostData {
-  imageUrl: string
-  description?: string
-  type: string
-}
 
 async function createPost({
   imageUrl,

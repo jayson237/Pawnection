@@ -1,20 +1,21 @@
 import getCurrentUser from "@/actions/getCurrentUser"
 import prisma from "@/lib/prismadb"
+import { SafeUser } from "@/types"
 import {
-  AdoptablePetPayloadSchema,
-  AdoptablePetPayloadType,
+  CreateAdoptablePetPayloadSchema,
+  CreateAdoptablePetPayloadType,
 } from "@/types/adoption-center"
+import { AdoptablePetStatus } from "@prisma/client"
 import { NextResponse } from "next/server"
 
-import { SafeUser } from "../../../types"
-
 async function createAdopablePet(
-  payload: AdoptablePetPayloadType,
+  payload: CreateAdoptablePetPayloadType,
   currentUser: SafeUser,
 ) {
   try {
     await prisma.adoptablePet.create({
       data: {
+        status: AdoptablePetStatus.Available,
         age: payload.age,
         breed: payload.breed,
         description: payload.description,
@@ -48,9 +49,8 @@ export async function POST(req: Request) {
       )
     }
 
-    const payload: AdoptablePetPayloadType = AdoptablePetPayloadSchema.parse(
-      await req.json(),
-    )
+    const payload: CreateAdoptablePetPayloadType =
+      CreateAdoptablePetPayloadSchema.parse(await req.json())
 
     const post = await createAdopablePet(payload, currentUser)
     return NextResponse.json(

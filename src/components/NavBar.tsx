@@ -29,7 +29,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
   const username = currentUser?.username
 
   return (
-    <div className="sticky top-0 z-[100] flex w-full place-content-between px-12 py-4 drop-shadow md:px-24 items-center border-b bg-main">
+    <div className="sticky top-0 z-[20] flex w-full place-content-between px-12 py-4 drop-shadow md:px-24 items-center border-b bg-main">
       <Image
         src="/pawnection.svg"
         alt="Pawnection"

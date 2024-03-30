@@ -1,12 +1,12 @@
 import getCurrentUser from "@/actions/getCurrentUser"
 import prisma from "@/lib/prismadb"
-import { NextResponse } from "next/server"
-
-import { SafeUser } from "../../../types"
 import {
   AdoptablePetPayloadSchema,
   AdoptablePetPayloadType,
-} from "../../../types/adoption-center"
+} from "@/types/adoption-center"
+import { NextResponse } from "next/server"
+
+import { SafeUser } from "../../../types"
 
 async function createAdopablePet(
   payload: AdoptablePetPayloadType,

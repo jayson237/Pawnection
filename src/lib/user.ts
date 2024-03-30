@@ -43,7 +43,7 @@ export async function getOneUser(username: string): Promise<SafeUser | null> {
     const { hashedPassword, followerUsers, followingUsers, ...rest } = user
 
     const followers = followerUsers.map((data) => ({
-      ...data.following, // see who was following us, so it became followers, agak bingung si but ok
+      ...data.following, 
       isCurrentFollowed:
         currentUser?.followingUsers
           ?.map((x) => x.followerId)
@@ -51,7 +51,7 @@ export async function getOneUser(username: string): Promise<SafeUser | null> {
         currentUser?.username === data.following.username,
     }))
     const following = followingUsers.map((data) => ({
-      ...data.follower, // for search who user was following, we then fetch from user follower, but it must followed right? hm
+      ...data.follower, 
       isCurrentFollowed:
         currentUser?.followingUsers
           ?.map((x) => x.followerId)

@@ -5,76 +5,76 @@ import React from "react"
 
 import HeaderTitle from "../HeaderTitle"
 
-const PetFriendlyHangouts = () => {
-  const hangouts = [
-    {
-      id: "dog-park",
-      title: "Dog Park",
-      location: "Central Park",
-      description:
-        "A spacious dog park where your furry friend can run and play freely.",
-      contact: "John",
-      avatar: "/avatar-user.svg",
-      image: "/cat.png",
-      tags: ["Outdoor", "Off-leash"],
-    },
-    {
-      id: "pet-friendly-cafe",
-      title: "Pet-friendly Cafe",
-      location: "Downtown",
-      description:
-        "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
-      contact: "Jane",
-      avatar: "/avatar-user.svg",
-      image: "/cat.png",
-      tags: ["Indoor", "Pet Menu"],
-    },
-    {
-      id: "pet-grooming-salon",
-      title: "Pet Grooming Salon",
-      location: "Beachside",
-      description:
-        "Treat your pet to a relaxing grooming session with professional groomers.",
-      contact: "Sarah",
-      avatar: "/avatar-user.svg",
-      image: "/cat.png",
-      tags: ["Spa Treatments", "Nail Trimming"],
-    },
-    {
-      id: "dog-park-2",
-      title: "Dog Park",
-      location: "Central Park",
-      description:
-        "A spacious dog park where your furry friend can run and play freely.",
-      contact: "John",
-      avatar: "/avatar-user.svg",
-      image: "/cat.png",
-      tags: ["Outdoor", "Off-leash"],
-    },
-    {
-      id: "pet-friendly-cafe-2",
-      title: "Pet-friendly Cafe",
-      location: "Downtown",
-      description:
-        "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
-      contact: "Jane",
-      avatar: "/avatar-user.svg",
-      image: "/cat.png",
-      tags: ["Indoor", "Pet Menu"],
-    },
-    {
-      id: "pet-grooming-salon-2",
-      title: "Pet Grooming Salon",
-      location: "Beachside",
-      description:
-        "Treat your pet to a relaxing grooming session with professional groomers.",
-      contact: "Sarah",
-      avatar: "/avatar-user.svg",
-      image: "/cat.png",
-      tags: ["Spa Treatments", "Nail Trimming"],
-    },
-  ]
+const hangouts = [
+  {
+    id: "dog-park",
+    title: "Dog Park",
+    location: "Central Park",
+    description:
+      "A spacious dog park where your furry friend can run and play freely.",
+    contact: "John",
+    avatar: "/avatar-user.svg",
+    image: "/cat.png",
+    tags: ["Outdoor", "Off-leash"],
+  },
+  {
+    id: "pet-friendly-cafe",
+    title: "Pet-friendly Cafe",
+    location: "Downtown",
+    description:
+      "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
+    contact: "Jane",
+    avatar: "/avatar-user.svg",
+    image: "/cat.png",
+    tags: ["Indoor", "Pet Menu"],
+  },
+  {
+    id: "pet-grooming-salon",
+    title: "Pet Grooming Salon",
+    location: "Beachside",
+    description:
+      "Treat your pet to a relaxing grooming session with professional groomers.",
+    contact: "Sarah",
+    avatar: "/avatar-user.svg",
+    image: "/cat.png",
+    tags: ["Spa Treatments", "Nail Trimming"],
+  },
+  {
+    id: "dog-park-2",
+    title: "Dog Park",
+    location: "Central Park",
+    description:
+      "A spacious dog park where your furry friend can run and play freely.",
+    contact: "John",
+    avatar: "/avatar-user.svg",
+    image: "/cat.png",
+    tags: ["Outdoor", "Off-leash"],
+  },
+  {
+    id: "pet-friendly-cafe-2",
+    title: "Pet-friendly Cafe",
+    location: "Downtown",
+    description:
+      "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
+    contact: "Jane",
+    avatar: "/avatar-user.svg",
+    image: "/cat.png",
+    tags: ["Indoor", "Pet Menu"],
+  },
+  {
+    id: "pet-grooming-salon-2",
+    title: "Pet Grooming Salon",
+    location: "Beachside",
+    description:
+      "Treat your pet to a relaxing grooming session with professional groomers.",
+    contact: "Sarah",
+    avatar: "/avatar-user.svg",
+    image: "/cat.png",
+    tags: ["Spa Treatments", "Nail Trimming"],
+  },
+]
 
+const PetFriendlyHangouts = () => {
   return (
     <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
       <div className="py-[60px]">

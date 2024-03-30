@@ -1,5 +1,6 @@
 "use client"
 
+import LoadingDots from "@/components/LoadingDots"
 import { Button } from "@/components/ui/Button"
 import {
   Dialog,
@@ -10,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog"
-import LoadingDots from "@/components/ui/LoadingDots"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/RadioGroup"
 import { Textarea } from "@/components/ui/TextArea"
 import { useToast } from "@/hooks/useToast"

@@ -1,7 +1,6 @@
 "use client"
 
 import { SafeUser } from "@/types"
-import { LogOutIcon } from "lucide-react"
 import { LogOut, Settings, User } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { signOut } from "next-auth/react"

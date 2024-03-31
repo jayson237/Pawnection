@@ -6,9 +6,9 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 
-import { toast } from "../../hooks/useToast"
-import { cn } from "../../lib/utils"
-import { EditAdoptablePetPayloadType } from "../../types/adoption-center"
+import { toast } from "@/hooks/useToast"
+import { cn } from "@/lib/utils"
+import { EditAdoptablePetPayloadType } from "@/types/adoption-center"
 import HeaderTitle from "../HeaderTitle"
 import {
   AlertDialog,

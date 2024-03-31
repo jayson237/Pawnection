@@ -3,8 +3,8 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
 
-import HeaderTitle from "../../../../components/HeaderTitle"
-import { getAllAdoptablePets } from "../../../../lib/actions/adopt"
+import HeaderTitle from "@/components/HeaderTitle"
+import { getAllAdoptablePets } from "@/lib/actions/adopt"
 
 export default async function AdoptViewAllPetsPage() {
   const adoptablePets = await getAllAdoptablePets()

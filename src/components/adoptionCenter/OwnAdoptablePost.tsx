@@ -1,11 +1,11 @@
 "use client"
 
+import { cn } from "@/lib/utils"
 import { AdoptablePet } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 
-import { cn } from "../../lib/utils"
 import { buttonVariants } from "../ui/Button"
 
 function OwnAdoptablePost() {

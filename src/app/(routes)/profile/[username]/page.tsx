@@ -1,8 +1,7 @@
 import Profile from "@/components/profile/Profile"
 import { getCurrentUser } from "@/lib/actions/user"
+import { getOneUser } from "@/lib/actions/user"
 import { notFound } from "next/navigation"
-
-import { getOneUser } from "../../../../lib/actions/user"
 
 export default async function UserProfile({
   params,

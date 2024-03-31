@@ -1,75 +1,12 @@
+import HeaderTitle from "@/components/HeaderTitle"
+import FeaturedCard from "@/components/adoption/FeaturedCard"
+import HowtoCard from "@/components/adoption/HowToCard"
+import { Button, buttonVariants } from "@/components/ui/Button"
 import { getCurrentUser } from "@/lib/actions/user"
-import Image from "next/image"
+import { cn } from "@/lib/utils"
+import { PetGender } from "@/types"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-
-import HeaderTitle from "../../../components/HeaderTitle"
-import { Button, buttonVariants } from "../../../components/ui/Button"
-import { cn } from "../../../lib/utils"
-
-enum PetGender {
-  male = "Male",
-  female = "Female",
-}
-
-function FeaturedCard({
-  imagePath,
-  petName,
-  petGender,
-  petAge,
-}: {
-  imagePath: string
-  petName: string
-  petGender: PetGender
-  petAge: string
-}) {
-  return (
-    <div className="border rounded-lg overflow-hidden">
-      <Image
-        src={imagePath}
-        className="h-full bg-cover bg-center border border-gray-200 object-cover max-h-[240px] w-[240px]"
-        width={240}
-        height={240}
-        alt="featured1"
-      />
-
-      <div className="p-3 space-y-1">
-        <h4 className="">{petName}</h4>
-        <p className="text-xl">
-          {petGender}, {petAge} {Number.parseInt(petAge) > 1 ? "years" : "year"}{" "}
-          old
-        </p>
-      </div>
-    </div>
-  )
-}
-
-function HowtoCard({
-  imagePath,
-  title,
-  description,
-}: {
-  imagePath: string
-  title: string
-  description: string
-}) {
-  return (
-    <div className="border rounded-lg bg-white shadow-md p-4 flex flex-row gap-4">
-      <Image
-        src={imagePath}
-        className="h-full bg-cover bg-center border border-gray-200 object-cover max-h-[100px] w-[100px]"
-        width={100}
-        height={100}
-        alt="featured1"
-      />
-
-      <div className="space-y-2">
-        <h4 className="text-lg">{title}</h4>
-        <p>{description}</p>
-      </div>
-    </div>
-  )
-}
 
 export default async function Adopt() {
   const currentUser = await getCurrentUser()

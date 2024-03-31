@@ -1,5 +1,7 @@
 "use client"
 
+import { toast } from "@/hooks/useToast"
+import { CreateAdoptablePetPayloadType } from "@/types/adoption-center"
 import { Paperclip } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -7,8 +9,6 @@ import React, { useCallback, useState } from "react"
 import { FileRejection, useDropzone } from "react-dropzone"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { toast } from "../../hooks/useToast"
-import { CreateAdoptablePetPayloadType } from "../../types/adoption-center"
 import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"

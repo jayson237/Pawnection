@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 
-import { FollowItemType, FollowType, SafeUser } from "../../types"
+import { FollowItemType, FollowType, SafeUser } from "@/types"
 import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 import {

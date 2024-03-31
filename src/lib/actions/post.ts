@@ -19,6 +19,9 @@ export async function getAllPosts() {
         },
         user: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     })
     return posts
   } catch (error) {

@@ -103,39 +103,16 @@ function Post({ user, imageSrc, imageAlt, text, tag }: PostProps) {
   )
 }
 
-const stories = [
-  {
-    userName: "User1",
-    userAvatar:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/3a6acc4c8d19a6040f9f6ed4a7e34b8e517cfa437892509037175168062c73ec?apiKey=69eab9a240d44e54a14cba756aca8c76&",
-    timeAgo: "1 hour ago",
-    storyImage:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/3a6acc4c8d19a6040f9f6ed4a7e34b8e517cfa437892509037175168062c73ec?apiKey=69eab9a240d44e54a14cba756aca8c76&",
-    storyTitle: "My dog enjoying the beach!",
-    storyCategory: "Vacation",
-  },
-  {
-    userName: "User2",
-    userAvatar:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/1ca62611976c2ddea0605fbf3a4dd78ac1c0b3600c7ba696550278b94f15d8c3?apiKey=69eab9a240d44e54a14cba756aca8c76&",
-    timeAgo: "2 days ago",
-    storyImage:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/1ca62611976c2ddea0605fbf3a4dd78ac1c0b3600c7ba696550278b94f15d8c3?apiKey=69eab9a240d44e54a14cba756aca8c76&",
-    storyTitle: "Adopted this adorable cat today!",
-    storyCategory: "Adoption",
-  },
-]
-
 const postDatas = [
   {
     user: {
       avatarUrl:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/3a6acc4c8d19a6040f9f6ed4a7e34b8e517cfa437892509037175168062c73ec?apiKey=69eab9a240d44e54a14cba756aca8c76&",
+        "/home/avatar.svg",
       username: "User1",
       timestamp: "1 hour ago",
     },
     imageSrc:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/3a6acc4c8d19a6040f9f6ed4a7e34b8e517cfa437892509037175168062c73ec?apiKey=69eab9a240d44e54a14cba756aca8c76&",
+      "/home/dog_glass.svg",
     imageAlt: "My dog enjoying the beach!",
     text: "My dog enjoying the beach!",
     tag: "Vacation",
@@ -143,12 +120,12 @@ const postDatas = [
   {
     user: {
       avatarUrl:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/1ca62611976c2ddea0605fbf3a4dd78ac1c0b3600c7ba696550278b94f15d8c3?apiKey=69eab9a240d44e54a14cba756aca8c76&",
+        "/home/avatar.svg",
       username: "User2",
       timestamp: "2 days ago",
     },
     imageSrc:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/1ca62611976c2ddea0605fbf3a4dd78ac1c0b3600c7ba696550278b94f15d8c3?apiKey=69eab9a240d44e54a14cba756aca8c76&",
+      "/home/cat_shark.svg",
     imageAlt: "Adopted cat",
     text: "Adopted this adorable cat today!",
     tag: "Adoption",

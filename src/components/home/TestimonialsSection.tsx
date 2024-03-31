@@ -113,14 +113,14 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 const testimonials = [
   {
     userAvatar:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/9e7420efde1aa3bfbcdc513894b272ff902c8f99d9a4af7a675e84ce641fb899?apiKey=69eab9a240d44e54a14cba756aca8c76&",
+      "/home/avatar.svg",
     userName: "User1",
     reviewText: "Great platform for pet owners!",
     emojiReaction: "😄",
   },
   {
     userAvatar:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/139a599e8e0960312415e5b3e1337a9799ea02302921c8d10b156f401b6c1421?apiKey=69eab9a240d44e54a14cba756aca8c76&",
+      "/home/avatar.svg",
     userName: "User2",
     reviewText: "Pawnection helped me find my lost cat.",
     emojiReaction: "😄",

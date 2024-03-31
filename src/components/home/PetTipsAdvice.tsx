@@ -25,8 +25,8 @@ const Article: React.FC<ArticleProps> = ({
       <div className="content">
         <div className="image-wrapper">
           <Image
-            width={0}
-            height={0}
+            width={100}
+            height={100}
             src={imageSrc}
             alt=""
             className="article-image"
@@ -181,7 +181,7 @@ const Article: React.FC<ArticleProps> = ({
 const articles: ArticleProps[] = [
   {
     imageSrc:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/784fa98c78b49a36cdbb9662c0ba5c81cea3d509e99e40fba585c794db41aac8?apiKey=69eab9a240d44e54a14cba756aca8c76&",
+      "/home/dog_white.svg",
     title: "How to Train Your Dog",
     subtitle: "Basic obedience training",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
@@ -190,7 +190,7 @@ const articles: ArticleProps[] = [
   },
   {
     imageSrc:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/1fbc8ee6b587bd208e16c0d49f49c1b74c3ef62b553f6a5c558df9c6ec9c9636?apiKey=69eab9a240d44e54a14cba756aca8c76&",
+      "/home/cat_milk.svg",
     title: "Caring for Your Cat",
     subtitle: "Health and grooming tips",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
@@ -207,10 +207,10 @@ function PetTipsAdvice() {
           <div className="hero-column">
             <div className="hero-image-wrapper">
               <Image
-                width={0}
-                height={0}
+                width={590}
+                height={592}
                 loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d68c0db79a758f22c6802bb74dc16c5cb1a92d32ecdd3c5fd2d3a35ecc9f3d8a?apiKey=69eab9a240d44e54a14cba756aca8c76&"
+                src="/home/dog_chiba.svg"
                 alt="Pet Tips and Advice"
                 className="hero-image"
               />

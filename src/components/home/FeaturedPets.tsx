@@ -9,22 +9,21 @@ const pets: PetInfoProps[] = [
     breed: "Dog",
     age: "2 years old",
     imageUrl:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/0292282df58077bf53368a2fdd74e79d071c9b1cc4c9c2cc4c1558eed0e66c1b?apiKey=69eab9a240d44e54a14cba756aca8c76&",
+      "/home/buddy.svg",
   },
   {
     name: "Whiskers",
     breed: "Cat",
     age: "1 year old",
     imageUrl:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/49e2273168bb442da11737bb61fe04a53f53520909c0fb65ce21aa36d84374d8?apiKey=69eab9a240d44e54a14cba756aca8c76&",
+      "/home/whiskers.svg",
   },
   {
     name: "Cotton",
     breed: "Rabbit",
     age: "6 months old",
     imageUrl:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/1b6571216772c4affbe2cdb0d8e27e9cc5a6961fcf85486a8968f1d699055582?apiKey=69eab9a240d44e54a14cba756aca8c76&",
-  },
+      "/home/cotton.svg" },
 ]
 interface PetInfoProps {
   name: string
@@ -40,6 +39,8 @@ const PetInfo: React.FC<PetInfoProps> = ({ name, breed, age, imageUrl }) => {
         src={imageUrl}
         alt={`${name} the ${breed}`}
         className="pet-image"
+        width={60}
+        height={60}
       />
       <div className="pet-details">
         <h2 className="pet-name">{name}</h2>
@@ -120,9 +121,11 @@ const FeaturedPets: React.FC = () => {
         <div className="pet-showcase">
           <div className="showcase-image">
             <Image
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/af471c2a4699aaa14512ca1ec7d9e2a6fd3a70cd16a6a251ed1de63dd5234320?apiKey=69eab9a240d44e54a14cba756aca8c76&"
+              src="/home/dog_happy.svg"
               alt="Featured adoptable pets showcase"
               className="showcase-img"
+              width={507 }
+              height={388}
             />
           </div>
           <div className="showcase-details">

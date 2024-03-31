@@ -15,7 +15,7 @@ const HomePetHangout = () => {
         "A spacious dog park where your furry friend can run and play freely.",
       contact: "John",
       avatar: "/avatar-user.svg",
-      image: "/cat.png",
+      image: "/home/bright_ferris.svg",
       tags: ["Outdoor", "Off-leash"],
     },
     {
@@ -26,7 +26,7 @@ const HomePetHangout = () => {
         "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
       contact: "Jane",
       avatar: "/avatar-user.svg",
-      image: "/cat.png",
+      image: "/home/dark_ferris.svg",
       tags: ["Indoor", "Pet Menu"],
     },
     {
@@ -37,7 +37,7 @@ const HomePetHangout = () => {
         "Treat your pet to a relaxing grooming session with professional groomers.",
       contact: "Sarah",
       avatar: "/avatar-user.svg",
-      image: "/cat.png",
+      image: "/home/cat_funny.svg",
       tags: ["Spa Treatments", "Nail Trimming"],
     },
   ]

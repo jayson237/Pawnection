@@ -41,7 +41,7 @@ const FilterSearch = () => {
   }
 
   return (
-    <div className="flex flex-row items-center space-x-2">
+    <div className="flex flex-row items-center space-x-2 px-4">
       <form
         className="flex grow flex-row items-center"
         onSubmit={handleSubmit(onSubmit)}

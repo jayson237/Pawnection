@@ -89,7 +89,13 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 <DropdownMenuTrigger asChild>
                   <Image
                     className="rounded-full h-10 w-10 ring-1 ring-primary ring-offset-2 hover:opacity-80 ease-in-out duration-200 cursor-pointer"
-                    src={currentUser?.image || "/../icon.png"}
+                    src={
+                      `${
+                        currentUser?.image?.split("/image/upload/")[0]
+                      }/image/upload/c_fill,h_160,w_160/${
+                        currentUser?.image?.split("/image/upload/")[1]
+                      }` || "/../icon.png"
+                    }
                     width={160}
                     height={160}
                     alt="Your avatar"

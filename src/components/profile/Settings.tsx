@@ -185,7 +185,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
       </div>
       <form className="space-y-5" onSubmit={submitHandler}>
         <div className="grid max-w-2xl mx-auto mt-6">
-          <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0 mx-auto">
+          <div className="flex flex-col space-y-5 mx-auto">
             <Image
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
               loader={imageLoader}
@@ -194,7 +194,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
               height={160}
               alt="Bordered avatar"
             />
-            <div className="flex flex-col space-y-5 sm:ml-8">
+            <div className="flex flex-col space-y-5 mx-auto">
               <Button
                 type="button"
                 className="w-28"

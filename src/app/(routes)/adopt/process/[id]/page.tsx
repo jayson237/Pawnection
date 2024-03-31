@@ -1,17 +1,10 @@
+import HeaderTitle from "@/components/HeaderTitle"
+import AdoptPetForm from "@/components/adoption/AdoptionRequest"
+import { getOneAdoptablePets } from "@/lib/actions/adopt"
+import { getCurrentUser } from "@/lib/actions/user"
 import Image from "next/image"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
-
-import HeaderTitle from "../../../../../components/HeaderTitle"
-import { buttonVariants } from "../../../../../components/ui/Button"
-import getCurrentUser from "../../../../../lib/actions/getCurrentUser"
-import {
-  getAllAdoptablePets,
-  getOneAdoptablePets,
-} from "../../../../../lib/api/adopt"
-import { cn } from "../../../../../lib/utils"
-import AdoptPetForm from "./form"
 
 export default async function AdoptProcessPage({
   params,

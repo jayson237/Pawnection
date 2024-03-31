@@ -1,13 +1,13 @@
+import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
 
 import HeaderTitle from "../../../../components/HeaderTitle"
-import { getAllAdoptablePets } from "../../../../lib/api/adopt"
+import { getAllAdoptablePets } from "../../../../lib/actions/adopt"
 
 export default async function AdoptViewAllPetsPage() {
   const adoptablePets = await getAllAdoptablePets()
-  console.log(adoptablePets)
 
   if (!adoptablePets) {
     return notFound()
@@ -26,7 +26,9 @@ export default async function AdoptViewAllPetsPage() {
             key={pet.id}
             className="bg-white rounded-lg shadow-md"
           >
-            <img
+            <Image
+              width={200}
+              height={200}
               src={pet.imageUrl}
               alt={pet.name}
               className="w-full h-[200px] object-cover rounded-t-lg"

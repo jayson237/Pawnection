@@ -1,4 +1,4 @@
-import getCurrentUser from "@/lib/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
 import { PostData } from "@/types"
 import { PostType } from "@prisma/client"

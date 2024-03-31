@@ -2,7 +2,7 @@ import NavBar from "@/components/NavBar"
 import Footer from "@/components/ui/Footer"
 import { Toaster } from "@/components/ui/Toaster"
 import AuthContext from "@/context/AuthContext"
-import getCurrentUser from "@/lib/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 

@@ -1,9 +1,10 @@
+import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
 
 import HeaderTitle from "../../../../components/HeaderTitle"
-import { getAllOwnAdpotRequests } from "../../../../lib/api/adopt"
+import { getAllOwnAdpotRequests } from "../../../../lib/actions/adopt"
 
 export default async function AdoptPetRequests() {
   const ownrequests = await getAllOwnAdpotRequests()
@@ -25,7 +26,9 @@ export default async function AdoptPetRequests() {
               key={request.id}
               className="bg-white rounded-lg shadow-md"
             >
-              <img
+              <Image
+                width={200}
+                height={200}
                 src={request.adoptablePet.imageUrl}
                 alt={request.adoptablePet.name}
                 className="w-full h-[200px] object-cover rounded-t-lg"

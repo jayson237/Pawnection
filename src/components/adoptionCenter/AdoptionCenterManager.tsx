@@ -4,10 +4,12 @@ import { AdoptablePet, AdoptionRequest } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 
-import HeaderTitle from "../../../../../components/HeaderTitle"
+import { toast } from "../../hooks/useToast"
+import { cn } from "../../lib/utils"
+import { EditAdoptablePetPayloadType } from "../../types/adoption-center"
+import HeaderTitle from "../HeaderTitle"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,36 +20,28 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../../../../../components/ui/AlertDialog"
-import { Button, buttonVariants } from "../../../../../components/ui/Button"
+} from "../ui/AlertDialog"
+import { Button, buttonVariants } from "../ui/Button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../../../components/ui/Form"
-import { Input } from "../../../../../components/ui/Input"
-import { Label } from "../../../../../components/ui/Label"
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "../../../../../components/ui/RadioGroup"
+} from "../ui/Form"
+import { Input } from "../ui/Input"
+import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../../../components/ui/Select"
-import { Textarea } from "../../../../../components/ui/TextArea"
-import { toast } from "../../../../../hooks/useToast"
-import { cn } from "../../../../../lib/utils"
-import { EditAdoptablePetPayloadType } from "../../../../../types/adoption-center"
+} from "../ui/Select"
+import { Textarea } from "../ui/TextArea"
 
-export default function AdoptionCenterManageClientPage({
+export default function AdoptionCenterManager({
   data,
 }: {
   data: AdoptablePet & { adoptionRequests: AdoptionRequest[] }

@@ -1,7 +1,42 @@
+import { authOptions } from "@/lib/authOptions"
 import prisma from "@/lib/prismadb"
+import { SafeUser } from "@/types"
+import { getServerSession } from "next-auth/next"
 
-import { SafeUser } from "../../types"
-import getCurrentUser from "../actions/getCurrentUser"
+export async function getCurrentUser(): Promise<SafeUser | null> {
+  try {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.email) {
+      return null
+    }
+
+    const currentUser = await prisma.user.findUnique({
+      include: {
+        followerUsers: true,
+        followingUsers: true,
+      },
+      where: {
+        email: session.user.email as string,
+      },
+    })
+
+    if (!currentUser) {
+      return null
+    }
+
+    const { hashedPassword, ...rest } = currentUser
+
+    return {
+      ...rest,
+      emailVerified: rest.emailVerified?.toISOString(),
+      createdAt: rest.createdAt.toISOString(),
+      updatedAt: rest.updatedAt.toISOString(),
+    }
+  } catch (error) {
+    return null
+  }
+}
 
 export async function getOneUser(username: string): Promise<SafeUser | null> {
   try {
@@ -43,7 +78,7 @@ export async function getOneUser(username: string): Promise<SafeUser | null> {
     const { hashedPassword, followerUsers, followingUsers, ...rest } = user
 
     const followers = followerUsers.map((data) => ({
-      ...data.following, 
+      ...data.following,
       isCurrentFollowed:
         currentUser?.followingUsers
           ?.map((x) => x.followerId)
@@ -51,7 +86,7 @@ export async function getOneUser(username: string): Promise<SafeUser | null> {
         currentUser?.username === data.following.username,
     }))
     const following = followingUsers.map((data) => ({
-      ...data.follower, 
+      ...data.follower,
       isCurrentFollowed:
         currentUser?.followingUsers
           ?.map((x) => x.followerId)

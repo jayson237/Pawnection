@@ -1,6 +1,6 @@
 import prisma from "@/lib/prismadb"
 
-import getCurrentUser from "../actions/getCurrentUser"
+import { getCurrentUser } from "./user"
 
 export const getAllAdoptablePets = async () => {
   try {
@@ -68,7 +68,6 @@ export const getAllOwnAdpotRequests = async () => {
         adoptablePet: true,
       },
     })
-    console.log(ownrequests)
 
     return ownrequests
   } catch (error) {

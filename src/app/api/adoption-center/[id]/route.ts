@@ -1,18 +1,11 @@
-import getCurrentUser from "@/lib/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
-import { AdoptablePetStatus } from "@prisma/client"
-import Link from "next/link"
-import { redirect } from "next/navigation"
-import { NextResponse } from "next/server"
-import React from "react"
-
-import { SafeUser } from "../../../../types"
+import { SafeUser } from "@/types"
 import {
-  CreateAdoptablePetPayloadSchema,
-  CreateAdoptablePetPayloadType,
   EditAdoptablePetPayloadSchema,
   EditAdoptablePetPayloadType,
-} from "../../../../types/adoption-center"
+} from "@/types/adoption-center"
+import { NextResponse } from "next/server"
 
 export async function GET(
   request: Request,

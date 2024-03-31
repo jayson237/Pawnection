@@ -1,8 +1,7 @@
+import AdoptionCenterManager from "@/components/adoptionCenter/AdoptionCenterManager"
+import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
 import { notFound } from "next/navigation"
-
-import getCurrentUser from "../../../../../lib/actions/getCurrentUser"
-import AdoptionCenterManageClientPage from "./client"
 
 export default async function AdoptionCenterManagePage({
   params,
@@ -29,7 +28,7 @@ export default async function AdoptionCenterManagePage({
     return (
       <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
         <div className="py-[60px]">
-          <AdoptionCenterManageClientPage data={getAllOwnAdoptablePet} />
+          <AdoptionCenterManager data={getAllOwnAdoptablePet} />
         </div>
       </div>
     )

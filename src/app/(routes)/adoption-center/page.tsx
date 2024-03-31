@@ -1,13 +1,12 @@
-import getCurrentUser from "@/lib/actions/getCurrentUser"
+import HeaderTitle from "@/components/HeaderTitle"
+import OwnAdoptablePost from "@/components/adoptionCenter/OwnAdoptablePost"
+import { buttonVariants } from "@/components/ui/Button"
+import { getCurrentUser } from "@/lib/actions/user"
+import { cn } from "@/lib/utils"
 import { UserType } from "@prisma/client"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import React from "react"
-
-import HeaderTitle from "../../../components/HeaderTitle"
-import OwnAdoptablePost from "../../../components/adoption/OwnAdoptablePost"
-import { buttonVariants } from "../../../components/ui/Button"
-import { cn } from "../../../lib/utils"
 
 export default async function AdoptionCenterPage() {
   const currUser = await getCurrentUser()

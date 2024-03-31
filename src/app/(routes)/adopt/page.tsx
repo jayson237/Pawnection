@@ -1,4 +1,4 @@
-import getCurrentUser from "@/lib/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"

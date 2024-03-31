@@ -1,5 +1,5 @@
 import UsernameForm from "@/components/auth/UsernameForm"
-import getCurrentUser from "@/lib/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import { redirect } from "next/navigation"
 
 export default async function AuthUsername() {

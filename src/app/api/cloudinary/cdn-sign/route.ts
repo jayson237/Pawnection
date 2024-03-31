@@ -1,4 +1,4 @@
-import getCurrentUser from "@/lib/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import { cdn } from "@/lib/cloudinary"
 import { FolderType } from "@/types"
 import cloudinary from "cloudinary"

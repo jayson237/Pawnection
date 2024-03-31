@@ -1,11 +1,14 @@
 "use client"
 
+import { toast } from "@/hooks/useToast"
+import { SafeUser } from "@/types"
+import { CreateAdoptRequestPayloadType } from "@/types/adopt"
 import { AdoptablePet } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import React from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 
-import { Button } from "../../../../../components/ui/Button"
+import { Button } from "../ui/Button"
 import {
   Form,
   FormControl,
@@ -13,12 +16,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../../../components/ui/Form"
-import { Input } from "../../../../../components/ui/Input"
-import { Textarea } from "../../../../../components/ui/TextArea"
-import { toast } from "../../../../../hooks/useToast"
-import { SafeUser } from "../../../../../types"
-import { CreateAdoptRequestPayloadType } from "../../../../../types/adopt"
+} from "../ui/Form"
+import { Input } from "../ui/Input"
+import { Textarea } from "../ui/TextArea"
 
 function AdoptPetForm({
   currentUser,

@@ -1,7 +1,6 @@
+import HeaderTitle from "@/components/HeaderTitle"
 import AuthForm from "@/components/auth/AuthForm"
 import { Suspense } from "react"
-
-import HeaderTitle from "../../../components/HeaderTitle"
 
 export default async function Auth() {
   return (

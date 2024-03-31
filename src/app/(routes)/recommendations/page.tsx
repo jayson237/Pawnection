@@ -1,9 +1,8 @@
+import HeaderTitle from "@/components/HeaderTitle"
 import PetCareTips from "@/components/static/PetCareSection"
 import PetFriendlyHangouts from "@/components/static/PetFriendlyHangouts"
 import dynamic from "next/dynamic"
 import Image from "next/image"
-
-import HeaderTitle from "../../../components/HeaderTitle"
 
 export default async function Home() {
   const PetStoreMap = dynamic(() => import("@/components/static/PetStoreMap"), {

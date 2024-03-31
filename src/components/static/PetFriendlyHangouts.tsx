@@ -15,7 +15,7 @@ const PetFriendlyHangouts = () => {
         "A spacious dog park where your furry friend can run and play freely.",
       contact: "John",
       avatar: "/avatar-user.svg",
-      image: "/cat.png",
+      image: "/static/bright_ferris.svg",
       tags: ["Outdoor", "Off-leash"],
     },
     {
@@ -26,7 +26,7 @@ const PetFriendlyHangouts = () => {
         "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
       contact: "Jane",
       avatar: "/avatar-user.svg",
-      image: "/cat.png",
+      image: "/static/dark_ferris.svg",
       tags: ["Indoor", "Pet Menu"],
     },
     {
@@ -37,7 +37,7 @@ const PetFriendlyHangouts = () => {
         "Treat your pet to a relaxing grooming session with professional groomers.",
       contact: "Sarah",
       avatar: "/avatar-user.svg",
-      image: "/cat.png",
+      image: "/static/cat_funny.svg",
       tags: ["Spa Treatments", "Nail Trimming"],
     },
     {
@@ -48,7 +48,7 @@ const PetFriendlyHangouts = () => {
         "A spacious dog park where your furry friend can run and play freely.",
       contact: "John",
       avatar: "/avatar-user.svg",
-      image: "/cat.png",
+      image: "/static/green_ferris_cabin.svg",
       tags: ["Outdoor", "Off-leash"],
     },
     {
@@ -59,7 +59,7 @@ const PetFriendlyHangouts = () => {
         "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
       contact: "Jane",
       avatar: "/avatar-user.svg",
-      image: "/cat.png",
+      image: "/static/cookies.svg",
       tags: ["Indoor", "Pet Menu"],
     },
     {
@@ -70,7 +70,7 @@ const PetFriendlyHangouts = () => {
         "Treat your pet to a relaxing grooming session with professional groomers.",
       contact: "Sarah",
       avatar: "/avatar-user.svg",
-      image: "/cat.png",
+      image: "/static/furniture.svg",
       tags: ["Spa Treatments", "Nail Trimming"],
     },
   ]
@@ -91,8 +91,8 @@ const PetFriendlyHangouts = () => {
               <Image
                 src={hangout.image}
                 alt={hangout.title}
-                width={60}
-                height={60}
+                width={100}
+                height={100}
                 className="w-24 h-24 object-cover rounded-lg mr-4"
               />
               <div>

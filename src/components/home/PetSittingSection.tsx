@@ -57,9 +57,9 @@ function PetSittingSection() {
             </div>
             <div className="image-content">
               <Image
-                width={0}
-                height={0}
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/1f907908505e27a650c5af37681c071f8b8ea6a8dea4482207f96835cc664bb4?apiKey=69eab9a240d44e54a14cba756aca8c76&"
+                width={520}
+                height={396}
+                src="/home/cat_pink.svg"
                 alt="Pet sitting illustration"
                 className="illustration"
               />

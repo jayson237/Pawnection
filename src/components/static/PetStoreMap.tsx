@@ -8,10 +8,11 @@ import HeaderTitle from "../HeaderTitle"
 
 const PetStoreMap = () => {
   const petStores = [
-    { id: 1, name: "Pet Store A", lat: 10.776889, lng: 106.700806 }, // Replace with actual locations
-    { id: 2, name: "Pet Store B", lat: 10.778113, lng: 106.698279 }, // Replace with actual locations
-    // Add more pet store locations here
+    { id: 1, name: "Pet Store A", lat: 1.352083, lng: 103.819836 }, // Example location in Singapore
+    { id: 2, name: "Pet Store B", lat: 1.303969, lng: 103.833160 }, // Example location in Singapore
+    // You can add more pet store locations here with accurate lat and lng values for Singapore
   ]
+
 
   return (
     <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
@@ -21,7 +22,7 @@ const PetStoreMap = () => {
         </HeaderTitle>
 
         <MapContainer
-          center={[10.776889, 106.700806]}
+          center={[1.3521, 103.8198]}
           zoom={13}
           scrollWheelZoom={false}
           style={{ height: "312px", width: "1100px" }}

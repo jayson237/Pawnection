@@ -58,9 +58,9 @@ const LostAndFoundForm: React.FC = () => {
           <div className="image-column">
             <Image
               loading="lazy"
-              width={0}
-              height={0}
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/b9aca02b472e95e7d4cb74aea7138d77582b78783109b728a9f179536f4e5c9b?apiKey=69eab9a240d44e54a14cba756aca8c76&"
+              width={590}
+              height={520}
+              src="/home/dog_luggage.svg"
               alt="Lost and found pet"
               className="pet-image"
             />

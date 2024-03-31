@@ -25,9 +25,9 @@ const WelcomeSection: React.FC = () => {
           </div>
           <div className="hero-image-container">
             <Image
-              width={0}
-              height={0}
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/ce26990155216a1f49589b4309ceaa3d7704cb03abb1215a2143e867c498032e?apiKey=69eab9a240d44e54a14cba756aca8c76&"
+              width={604}
+              height={400}
+              src="/home/shiba_1.svg"
               alt="Pawnection hero image"
               className="hero-image"
             />

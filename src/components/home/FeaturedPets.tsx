@@ -8,22 +8,20 @@ const pets: PetInfoProps[] = [
     name: "Buddy",
     breed: "Dog",
     age: "2 years old",
-    imageUrl:
-      "/home/buddy.svg",
+    imageUrl: "/home/buddy.svg",
   },
   {
     name: "Whiskers",
     breed: "Cat",
     age: "1 year old",
-    imageUrl:
-      "/home/whiskers.svg",
+    imageUrl: "/home/whiskers.svg",
   },
   {
     name: "Cotton",
     breed: "Rabbit",
     age: "6 months old",
-    imageUrl:
-      "/home/cotton.svg" },
+    imageUrl: "/home/cotton.svg",
+  },
 ]
 interface PetInfoProps {
   name: string
@@ -34,16 +32,16 @@ interface PetInfoProps {
 
 const PetInfo: React.FC<PetInfoProps> = ({ name, breed, age, imageUrl }) => {
   return (
-    <div className="pet-info">
+    <div className="flex items-center justify-center p-4">
       <Image
         src={imageUrl}
         alt={`${name} the ${breed}`}
-        className="pet-image"
+        className="pet-image mr-4"
         width={60}
         height={60}
       />
-      <div className="pet-details">
-        <h2 className="pet-name">{name}</h2>
+      <div className="flex-1 flex flex-col">
+        <h2 className="text-[20px] text-[#242851]">{name}</h2>
         <p className="pet-breed">{breed}</p>
       </div>
       <p className="pet-age">{age}</p>
@@ -84,13 +82,6 @@ const PetInfo: React.FC<PetInfoProps> = ({ name, breed, age, imageUrl }) => {
           }
         }
 
-        .pet-name {
-          color: var(--BlueText, #242851);
-          font:
-            20px/140% Inter,
-            sans-serif;
-        }
-
         .pet-breed {
           color: var(--subOrange, #ff7751);
           font:
@@ -124,15 +115,17 @@ const FeaturedPets: React.FC = () => {
               src="/home/dog_happy.svg"
               alt="Featured adoptable pets showcase"
               className="showcase-img"
-              width={507 }
+              width={507}
               height={388}
             />
           </div>
           <div className="showcase-details">
-            <h2 className="section-title">Featured Adoptable Pets</h2>
+            <h2 className="pb-5 font-bold text-5xl text-center">
+              Featured Adoptable Pets
+            </h2>
             {pets.map((pet) => (
               // eslint-disable-next-line react/jsx-key
-              <PetInfo {...pet} />
+              <PetInfo key={pet.name} {...pet} />
             ))}
           </div>
         </div>
@@ -206,18 +199,6 @@ const FeaturedPets: React.FC = () => {
           .showcase-details {
             width: 100%;
           }
-        }
-
-        .section-title {
-          color: #242851;
-          letter-spacing: -0.58px;
-          font:
-            800 48px/100% Inter,
-            -apple-system,
-            Roboto,
-            Helvetica,
-            sans-serif;
-          padding-bottom: 20px;
         }
 
         @media (max-width: 991px) {

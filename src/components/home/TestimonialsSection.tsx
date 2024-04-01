@@ -7,35 +7,34 @@ interface ReviewCardProps {
   userName: string
   userAvatar: string
   reviewText: string
-  emojiReaction: string
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
   userName,
   userAvatar,
   reviewText,
-  emojiReaction,
 }) => {
   return (
     <article className="review-card">
       <header className="user-info">
-        <div className="avatar" />
+        <Image
+          width={32}
+          height={32}
+          src={userAvatar}
+          alt="User Avatar"
+          className="avatar"
+        />
         <h3 className="username">{userName}</h3>
         <Image
           width={0}
           height={0}
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/9e7420efde1aa3bfbcdc513894b272ff902c8f99d9a4af7a675e84ce641fb899?apiKey=69eab9a240d44e54a14cba756aca8c76&"
-          alt="Company logo"
-          className="company-logo"
+          alt="Ratings"
+          className=" w-auto h-auto"
         />
       </header>
       <p className="review-text">{reviewText}</p>
-      <div
-        className="emoji-reaction"
-        aria-label={`Emoji reaction: ${emojiReaction}`}
-      >
-        {emojiReaction}
-      </div>
+
       <style jsx>{`
         .review-card {
           display: flex;
@@ -69,13 +68,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           font-weight: 500;
         }
 
-        .avatar {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background-color: rgba(0, 0, 0, 0.1);
-        }
-
         .username {
           margin: 0;
           font-family: Inter, sans-serif;
@@ -98,13 +90,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           text-overflow: ellipsis;
           overflow: hidden;
         }
-
-        .emoji-reaction {
-          margin-top: 16px;
-          font-family: Inter, sans-serif;
-          text-align: center;
-          color: #000;
-        }
       `}</style>
     </article>
   )
@@ -112,18 +97,14 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
 const testimonials = [
   {
-    userAvatar:
-      "/home/avatar.svg",
-    userName: "User1",
+    userAvatar: "/icon_2.svg",
+    userName: "jinjays",
     reviewText: "Great platform for pet owners!",
-    emojiReaction: "😄",
   },
   {
-    userAvatar:
-      "/home/avatar.svg",
-    userName: "User2",
+    userAvatar: "/icon_2.svg",
+    userName: "epanash",
     reviewText: "Pawnection helped me find my lost cat.",
-    emojiReaction: "😄",
   },
 ]
 

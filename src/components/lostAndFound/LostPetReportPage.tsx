@@ -1,16 +1,12 @@
 "use client"
 
-import { type FormEvent, useState } from "react"
-
-import { Button } from "../ui/Button"
-import { Textarea } from "../ui/TextArea"
-import getSpecificLostPetReport from "@/actions/getSpecificLostPetReport"
 import { LostPetReport } from "@prisma/client"
+import { useState } from "react"
 
 const LostPetReportPage = ({
-  lostPetReport
-} : {
-  lostPetReport : LostPetReport | null
+  lostPetReport,
+}: {
+  lostPetReport: LostPetReport | null
 }) => {
   const [thisLostPetReport, setThisLostPetReport] = useState(lostPetReport)
 
@@ -53,6 +49,3 @@ const LostPetReportPage = ({
   ) 
 }
 export default LostPetReportPage
-
-
-

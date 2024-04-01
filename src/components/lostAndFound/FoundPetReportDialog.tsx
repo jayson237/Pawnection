@@ -1,52 +1,37 @@
-import { FormEvent, useState } from "react"
-import { Label } from "../ui/Label"
-import { Input } from "../ui/Input"
-import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup"
-import { Button } from "../ui/Button"
-import { Textarea } from "../ui/TextArea"
-import {   Dialog,
-    DialogPortal,
-    DialogOverlay,
-    DialogClose,
-    DialogTrigger,
-    DialogContent,
-    DialogHeader,
-    DialogFooter,
-    DialogTitle,
-    DialogDescription, } from "../ui/Dialog"
-    import {
-      Select,
-      SelectContent,
-      SelectItem,
-      SelectTrigger,
-      SelectValue,
-    } from "../ui/Select"
-import { Calendar } from "../ui/Calendar"
-import {   DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuCheckboxItem,
-    DropdownMenuRadioItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuGroup,
-    DropdownMenuPortal,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
-    DropdownMenuRadioGroup, } from "../ui/DropdownMenu"
-
 import { useToast } from "@/hooks/useToast"
+import { FormEvent, useState } from "react"
+
+import { Button } from "../ui/Button"
+import { Calendar } from "../ui/Calendar"
+import {
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+} from "../ui/Dialog"
+import { Input } from "../ui/Input"
+import { Label } from "../ui/Label"
+import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/Select"
+import { Textarea } from "../ui/TextArea"
 
 interface FoundPetReportDialogProps {
-    isOpen: boolean;
-    onClose: () => void; 
-  }
+  isOpen: boolean
+  onClose: () => void
+}
 
-const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) => {
-  const [animalType, setAnimalType] = useState("")  
+const FoundPetReportDialog = ({
+  isOpen,
+  onClose,
+}: FoundPetReportDialogProps) => {
+  const [animalType, setAnimalType] = useState("")
   const [name, setName] = useState("")
   const [breed, setBreed] = useState("")
   const [sex, setSex] = useState("")
@@ -57,9 +42,7 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
   const [contactDetails, setContactDetails] = useState("")
   const [petImage, setPetImage] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [validationErrors, setValidationErrors] = useState({})
   const { toast } = useToast()
-
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -108,7 +91,7 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
           setIsLoading(false)
           toast({
             description: "Found Pet Report has been successfully created.",
-          })                 
+          })
         }
       }
     } catch (error) {
@@ -116,239 +99,148 @@ const FoundPetReportDialog = ({ isOpen, onClose }: FoundPetReportDialogProps) =>
     }
   }
 
-  const handleChangeAnimalType = (value: string) => {
-    setAnimalType(value)
-  }
-
-
   if (!isOpen) return null
 
   return (
-    <Dialog open={isOpen} onOpenChange={isOpen => isOpen ? null : onClose()}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(isOpen) => (isOpen ? null : onClose())}
+    >
       <DialogPortal>
         <DialogOverlay className="DialogOverlay" />
-        <DialogContent className="DialogContent" style={{ overflowY: "auto" }}>
-          <DialogTitle className="DialogTitle max-w-full">Report Found Pet</DialogTitle>
+        <DialogContent className="DialogContent overflow-y-auto">
+          <DialogTitle className="DialogTitle max-w-full">
+            Report Found Pet
+          </DialogTitle>
 
-        <form onSubmit={onSubmit}>
-          
-        {/* <div className="mb-5">
-        <DropdownMenu>
-            <DropdownMenuTrigger className="border-2 border-black rounded-md">Animal Type: {animalType}</DropdownMenuTrigger>
-            <DropdownMenuContent >
-                <DropdownMenuItem onSelect={() => setAnimalType("Dog")}>Dog</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType("Cat")}>Cat</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType("Bird")}>Bird</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setAnimalType("Others")}>Others</DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
-        </div>  */}
+          <form onSubmit={onSubmit}>
+            <div className="flex gap-4">
+              <div className="mb-5">
+                <Label>Pet Type</Label>
 
-        <div className="flex gap-4"> 
+                <Select
+                  onValueChange={(val) => {
+                    setAnimalType(val)
+                  }}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select Animal Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Dog">Dog</SelectItem>
+                    <SelectItem value="Cat">Cat</SelectItem>
+                    <SelectItem value="Bird">Bird</SelectItem>
+                    <SelectItem value="Others">Others</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-        <div className="mb-5">
-          <Label>
-            Pet Type
-          </Label>
-        {/* <Select>
-        <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select Pet Type" />
-          <SelectContent>
-            <SelectItem value="dog" onSelect={() => setAnimalType("Dog")}> Dog </SelectItem>
-            <SelectItem value="cat" onSelect={() => setAnimalType("Cat")}> Cat </SelectItem>
-            <SelectItem value="bird" onSelect={() => setAnimalType("Bird")}> Bird </SelectItem>
-            <SelectItem value="others" onSelect={() => setAnimalType("Others")}> Others </SelectItem>
-          </SelectContent>
-          </SelectTrigger>          
-          </Select> */}
+              <div className="w-[180px] mb-5">
+                <Label>
+                  Pet Breed
+                  <Input
+                    name="Pet Breed"
+                    className="border border-black rounded-md h-10 w-full px-2.5"
+                    onChange={(e) => setBreed(e.currentTarget.value)}
+                  ></Input>
+                </Label>
+              </div>
 
-        {/* <select style={{
-                borderWidth: "1px",
-                borderColor: "black",
-                borderStyle: "solid",
-                borderRadius: "10px", 
-                height: "40px", 
-                width: "100%", 
-                padding: "0 10px", 
-              }} 
-          onChange={ e=> setAnimalType(e.target.value)}>
-          <option value="Dog">Dog</option>
-          <option value="Cat">Cat</option>
-          <option value="Bird">Bird</option>
-          <option value="Others">Others</option>
-          </select>
- */}
+              <div className="w-[180px] mb-5">
+                <Label>Pet Name</Label>
+                <Input
+                  name="Pet Name"
+                  className="border border-black rounded-md h-10 w-full px-2.5"
+                  onChange={(e) => setName(e.currentTarget.value)}
+                ></Input>
+              </div>
+            </div>
 
-          <Select
-            onValueChange={(val) => {
-              setAnimalType(val)
-            }}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select Animal Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Dog">Dog</SelectItem>
-              <SelectItem value="Cat">Cat</SelectItem>
-              <SelectItem value="Bird">Bird</SelectItem>
-              <SelectItem value="Others">Others</SelectItem>
-            </SelectContent>
-          </Select>          
-        </div> 
+            <div className="mb-5">
+              <div>
+                <Label> Gender </Label>
+                <RadioGroup defaultValue="comfortable" onValueChange={setSex}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="Male" id="r1" />
+                    <Label htmlFor="r1">Male</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="Female" id="r2" />
+                    <Label htmlFor="r2">Female</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="Unsure" id="r3" />
+                    <Label htmlFor="r3">Unsure</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            </div>
 
-        <div className="w-[180px] mb-5">
-          <Label>
-            Pet Breed 
-          <Input name="Pet Breed"    
-                style={{
-                borderWidth: "1px",
-                borderColor: "black",
-                borderStyle: "solid",
-                borderRadius: "10px", 
-                height: "40px", 
-                width: "100%", 
-                padding: "0 10px", 
-                 }}    
-                 onChange={(e) => setBreed(e.currentTarget.value)}>
-          </Input>
-          </Label>
+            <div className=" mb-5">
+              <div> Message From Founder </div>
+              <Textarea
+                name="reportMessage"
+                required={true}
+                onChange={(e) => setMessage(e.currentTarget.value)}
+              />
+            </div>
 
-          </div>
-          
+            <div className=" mb-5">
+              <div> Description </div>
+              <Textarea
+                name="reportDescription"
+                required={true}
+                onChange={(e) => setDescription(e.currentTarget.value)}
+              />
+            </div>
 
-          <div className="w-[180px] mb-5">
-            <Label>
-              Pet Name 
+            <div className="w-[180px] mb-5">
+              <Label>
+                Area Found
+                <Input
+                  name="Area Found"
+                  className="border border-black rounded-md h-10 w-full px-2.5"
+                  onChange={(e) => setFoundArea(e.currentTarget.value)}
+                ></Input>
               </Label>
-              <Input name="Pet Name"       
-                style={{
-                borderWidth: "1px",
-                borderColor: "black",
-                borderStyle: "solid",
-                borderRadius: "10px", 
-                height: "40px", 
-                width: "100%", 
-                padding: "0 10px", 
-              }} onChange={(e) => setName(e.currentTarget.value)}>
-              </Input>
-            
-          </div>
-          
-        </div>
+            </div>
 
-
-        <div className="mb-5">
-          <div>
-            <Label> Gender </Label>
-            <RadioGroup defaultValue="comfortable"  onValueChange={setSex}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Male" id="r1" />
-                <Label htmlFor="r1">Male</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Female" id="r2" />
-                <Label htmlFor="r2">Female</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Unsure" id="r3" />
-                <Label htmlFor="r3">Unsure</Label>
-              </div>
-            </RadioGroup>
-          </div>
-        </div>
-
-
-          <div className=" mb-5">
-          <div> Message From Founder </div>
-          <Textarea
-            name="reportMessage"
-            required={true}
-            onChange={(e) => setMessage(e.currentTarget.value)}
-          />
-          </div>
-
-          <div className=" mb-5">
-          <div> Description </div>          
-          <Textarea
-            name="reportDescription"
-            required={true}
-            onChange={(e) => setDescription(e.currentTarget.value)}
-          />
-        </div>
-
-        <div className="w-[180px] mb-5">
-        <Label>
-              Area Found
-              <Input name="Area Found"       
-                style={{
-                borderWidth: "1px",
-                borderColor: "black",
-                borderStyle: "solid",
-                borderRadius: "10px", 
-                height: "40px", 
-                width: "100%", 
-                padding: "0 10px", 
-              }} onChange={(e) => setFoundArea(e.currentTarget.value)}>
-              </Input>
-          </Label>     
-        </div>  
-
-          <div className=" mb-5">
-          <div> Found Date </div>
-          {/* <Calendar onDayClick={(e) => setFoundDate(e)}  selected={date}/> */}
-            <Calendar
+            <div className=" mb-5">
+              <div> Found Date </div>
+              <Calendar
                 mode="single"
                 selected={foundDate}
                 onSelect={setFoundDate}
                 className="rounded-md border shadow flex justify-center"
+              />
+            </div>
+
+            <div className="w-[180px] mb-5">
+              <Label>
+                Contact Details
+                <Input
+                  name="Contact Details"
+                  className="border border-black rounded-md h-10 w-full px-2.5"
+                  onChange={(e) => setContactDetails(e.currentTarget.value)}
+                ></Input>
+              </Label>
+            </div>
+
+            <Input
+              type="file"
+              accept="image/*"
+              required={true}
+              onChange={(e) =>
+                setPetImage(e.target.files ? e.target.files[0] : null)
+              }
             />
 
-        </div>
-
-
-      <div className="w-[180px] mb-5">
-        <Label>
-              Contact Details
-              <Input name="Contact Details"       
-                style={{
-                borderWidth: "1px",
-                borderColor: "black",
-                borderStyle: "solid",
-                borderRadius: "10px", 
-                height: "40px", 
-                width: "100%", 
-                padding: "0 10px", 
-              }} onChange={(e) => setContactDetails(e.currentTarget.value)}>
-              </Input>
-          </Label>     
-        </div>  
-
-        {/* <div className=" mb-5">
-          <div> Contact Details </div>
-          <Textarea
-            name="contactDetails"
-            required={true}
-            onChange={(e) => setContactDetails(e.currentTarget.value)}
-          />
-          </div> */}
-
-          <Input
-            // className="mr-8 ml-20 w-1/4"
-            type="file"
-            accept="image/*"
-            required={true}
-            onChange={(e) =>
-              setPetImage(e.target.files ? e.target.files[0] : null)
-            }
-          />
-        
-          
-          <div className="flex justify-center">
-            <Button className="w-1/6 mt-10 justify-center" type="submit">
-              {isLoading ? "Loading..." : "Submit"}
-            </Button>
-          </div>
-        </form>
-
+            <div className="flex justify-center">
+              <Button className="w-1/6 mt-10 justify-center" type="submit">
+                {isLoading ? "Loading..." : "Submit"}
+              </Button>
+            </div>
+          </form>
         </DialogContent>
       </DialogPortal>
     </Dialog>

@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/Dialog"
 import LoadingDots from "@/components/ui/LoadingDots"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/RadioGroup"
 import { Textarea } from "@/components/ui/TextArea"
 import { useToast } from "@/hooks/useToast"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -23,19 +24,24 @@ import { FileRejection, useDropzone } from "react-dropzone"
 import { useForm } from "react-hook-form"
 import z from "zod"
 
+import { Label } from "../ui/Label"
+
 const createPostSchema = z.object({
   description: z.string(),
   imageUrl: z.string(),
+  type: z.string(),
 })
 
 const PostForm = () => {
   const { toast } = useToast()
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
 
   const {
     register,
     handleSubmit,
+    reset,
     watch,
     setValue,
     formState: { errors, isLoading, isValid },
@@ -44,9 +50,9 @@ const PostForm = () => {
     defaultValues: {
       description: "",
       imageUrl: "",
+      type: "post",
     },
   })
-  console.log(isValid)
 
   const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
@@ -77,6 +83,10 @@ const PostForm = () => {
   })
 
   const handleUpload = async (selectedImage: File | null) => {
+    setLoading(true)
+    toast({
+      title: "Uploading image...",
+    })
     const sign = await fetch("/api/cloudinary/cdn-sign?type=post")
     const data = await sign.json()
     const url = `https://api.cloudinary.com/v1_1/${data.cloudname}/auto/upload`
@@ -101,12 +111,14 @@ const PostForm = () => {
           toast({
             title: "Successfully uploaded image",
           })
+          setLoading(false)
         } else {
           toast({
             variant: "destructive",
             title: "Failed to upload image",
             description: "Please try again",
           })
+          setLoading(false)
         }
       } else {
         toast({
@@ -114,6 +126,7 @@ const PostForm = () => {
           title: "No picture uploaded",
           description: "Please try again",
         })
+        setLoading(false)
       }
     } catch (error) {
       toast({
@@ -121,10 +134,12 @@ const PostForm = () => {
         title: "Failed to upload image",
         description: "Please try again",
       })
+      setLoading(false)
     }
   }
 
   const onSubmit = async (data: z.infer<typeof createPostSchema>) => {
+    setLoading(true)
     const set = await fetch("/api/community/post", {
       method: "POST",
       headers: {
@@ -140,25 +155,35 @@ const PostForm = () => {
         title: "Failed to create post",
         description: msg.message,
       })
+      setLoading(false)
     } else {
       toast({
         title: "Post created successfully",
         description: "Successfully posted! Please wait...",
       })
-      router.push("/community")
+      setLoading(false)
+      router.push("/explore")
     }
   }
-  console.log(watch())
+
+  const handleDialogClose = () => {
+    reset({
+      description: "",
+      imageUrl: "",
+      type: "post",
+    })
+    setSelectedImage(null)
+  }
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={handleDialogClose}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="h-9">
           <Plus className="w-4 h-4 mr-2" />
           Create post
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <DialogHeader>
             <DialogTitle>New post</DialogTitle>
@@ -166,6 +191,23 @@ const PostForm = () => {
               Upload your image (Max 5 MB), and consider adding a description to
               your post as well
             </DialogDescription>
+            <RadioGroup
+              onValueChange={(val) => {
+                setValue("type", val)
+              }}
+              defaultValue={watch("type")}
+            >
+              <div className="flex items-center space-x-2 mt-1">
+                <RadioGroupItem value="post" id="option-one" />
+                <Label htmlFor="option-one" className="pr-2">
+                  Post
+                </Label>
+                <RadioGroupItem value="petSitting" id="option-two" />
+                <Label htmlFor="option-two" className="text-sm">
+                  Pet sitting
+                </Label>
+              </div>
+            </RadioGroup>
           </DialogHeader>
           {selectedImage && (
             <Image
@@ -193,7 +235,7 @@ const PostForm = () => {
               <div className="my-4 flex cursor-pointer flex-row items-center justify-center">
                 <Paperclip className="mr-1 mt-[1px] h-3 w-3" />
                 <p className="text-decoration: text-xsm font-semibold underline underline-offset-2">
-                  Upload by clicking or dropping an image
+                  Upload/replace by clicking or dropping an image
                 </p>
               </div>
             )}
@@ -205,7 +247,7 @@ const PostForm = () => {
           )}
           <DialogFooter>
             <Button type="submit" disabled={isLoading || !watch("imageUrl")}>
-              {isLoading ? (
+              {loading ? (
                 <>
                   <LoadingDots color="#FAFAFA" />
                 </>

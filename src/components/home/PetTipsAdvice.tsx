@@ -8,8 +8,6 @@ interface ArticleProps {
   title: string
   subtitle: string
   description: string
-  authorImage: string
-  authorName: string
 }
 
 const Article: React.FC<ArticleProps> = ({
@@ -17,8 +15,6 @@ const Article: React.FC<ArticleProps> = ({
   title,
   subtitle,
   description,
-  authorImage,
-  authorName,
 }) => {
   return (
     <article className="article">
@@ -36,16 +32,6 @@ const Article: React.FC<ArticleProps> = ({
           <h2 className="title">{title}</h2>
           <h3 className="subtitle">{subtitle}</h3>
           <p className="description">{description}</p>
-          <div className="author">
-            <Image
-              width={0}
-              height={0}
-              src={authorImage}
-              alt=""
-              className="author-image"
-            />
-            <span className="author-name">{authorName}</span>
-          </div>
         </div>
       </div>
 
@@ -119,26 +105,6 @@ const Article: React.FC<ArticleProps> = ({
           margin: 8px 0 0;
         }
 
-        .author {
-          display: flex;
-          font-weight: 500;
-          gap: 8px;
-          margin-top: 14px;
-          white-space: nowrap;
-        }
-
-        .author-image {
-          background-color: rgba(0, 0, 0, 0.1);
-          border-radius: 20px;
-          height: 20px;
-          width: 20px;
-        }
-
-        .author-name {
-          font-family: Inter, sans-serif;
-          text-overflow: ellipsis;
-        }
-
         @media (max-width: 991px) {
           .article {
             max-width: 100%;
@@ -180,22 +146,18 @@ const Article: React.FC<ArticleProps> = ({
 
 const articles: ArticleProps[] = [
   {
-    imageSrc:
-      "/home/dog_white.svg",
+    imageSrc: "/home/dog_white.svg",
     title: "How to Train Your Dog",
     subtitle: "Basic obedience training",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    authorImage: "",
-    authorName: "John Doe",
+    description:
+      "Use positive reinforcement, rewarding obedience with treats and praise to encourage good behavior",
   },
   {
-    imageSrc:
-      "/home/cat_milk.svg",
+    imageSrc: "/home/cat_milk.svg",
     title: "Caring for Your Cat",
     subtitle: "Health and grooming tips",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    authorImage: "",
-    authorName: "Jane Smith",
+    description:
+      "Regularly brush your cat and schedule annual vet checkups to maintain their health and grooming needs",
   },
 ]
 

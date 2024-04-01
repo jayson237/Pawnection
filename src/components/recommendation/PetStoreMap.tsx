@@ -8,11 +8,9 @@ import HeaderTitle from "../HeaderTitle"
 
 const PetStoreMap = () => {
   const petStores = [
-    { id: 1, name: "Pet Store A", lat: 1.352083, lng: 103.819836 }, // Example location in Singapore
-    { id: 2, name: "Pet Store B", lat: 1.303969, lng: 103.833160 }, // Example location in Singapore
-    // You can add more pet store locations here with accurate lat and lng values for Singapore
+    { id: 1, name: "Pet Store A", lat: 1.352083, lng: 103.819836 },
+    { id: 2, name: "Pet Store B", lat: 1.303969, lng: 103.83316 },
   ]
-
 
   return (
     <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">

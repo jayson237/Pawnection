@@ -1,6 +1,6 @@
 // "use client"
-import PetCareTips from "@/components/static/PetCareSection"
-import PetFriendlyHangouts from "@/components/static/PetFriendlyHangouts"
+import PetCareTips from "@/components/recommendation/PetCareSection"
+import PetFriendlyHangouts from "@/components/recommendation/PetFriendlyHangouts"
 import { Button } from "@/components/ui/Button"
 import Footer from "@/components/ui/Footer"
 import dynamic from "next/dynamic"
@@ -11,7 +11,7 @@ import HeaderTitle from "../../../components/HeaderTitle"
 
 export default async function Home() {
   const PetStoreMap = dynamic(
-    () => import("@/components/static/PetStoreMap"), // Adjust the path as necessary.
+    () => import("@/components/recommendation/PetStoreMap"), // Adjust the path as necessary.
     {
       loading: () => <p>A map is loading...</p>,
       ssr: false, // This will prevent server-side rendering for the Map component.

@@ -1,14 +1,11 @@
 "use client"
 
+import { MoveRight } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import * as React from "react"
 
 import { Button } from "../ui/Button"
-
-interface ButtonProps {
-  children: React.ReactNode
-  className: string
-}
 
 const WelcomeSection: React.FC = () => {
   return (
@@ -19,12 +16,19 @@ const WelcomeSection: React.FC = () => {
             <h1 className="hero-title">Welcome to Pawnection!</h1>
             <p className="hero-description">Join our pet-loving community</p>
             <div className="hero-actions">
-              <Button className="login-button">Log In</Button>
-              <Button className="signup-button">Sign Up</Button>
+              <Button>
+                <Link href="/auth">
+                  <div className="space-x-2 items-center flex flex-row">
+                    <p>Get Started</p>
+                    <MoveRight className="w-4" />
+                  </div>
+                </Link>
+              </Button>
             </div>
           </div>
           <div className="hero-image-container">
             <Image
+              priority
               width={604}
               height={400}
               src="/home/shiba_1.svg"
@@ -124,32 +128,10 @@ const WelcomeSection: React.FC = () => {
           line-height: 150%;
         }
 
-        .login-button {
-          font-family: Inter, sans-serif;
-          justify-content: center;
-          border-radius: 6px;
-          background-color: var(
-            --GreenButt,
-            linear-gradient(180deg, #c3e48f 0%, #8ec637 65%)
-          );
-          padding: 12px;
-        }
-
         @media (max-width: 991px) {
           .login-button {
             padding: 0 20px;
           }
-        }
-
-        .signup-button {
-          font-family: Inter, sans-serif;
-          justify-content: center;
-          border-radius: 6px;
-          background-color: var(
-            --OrangeButt,
-            linear-gradient(180deg, #ffa992 0%, #ff7852 65%)
-          );
-          padding: 12px;
         }
 
         @media (max-width: 991px) {

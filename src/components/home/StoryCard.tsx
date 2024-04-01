@@ -106,26 +106,22 @@ function Post({ user, imageSrc, imageAlt, text, tag }: PostProps) {
 const postDatas = [
   {
     user: {
-      avatarUrl:
-        "/home/avatar.svg",
+      avatarUrl: "/home/avatar.svg",
       username: "User1",
       timestamp: "1 hour ago",
     },
-    imageSrc:
-      "/home/dog_glass.svg",
+    imageSrc: "/home/dog_glass.svg",
     imageAlt: "My dog enjoying the beach!",
     text: "My dog enjoying the beach!",
     tag: "Vacation",
   },
   {
     user: {
-      avatarUrl:
-        "/home/avatar.svg",
+      avatarUrl: "/home/avatar.svg",
       username: "User2",
       timestamp: "2 days ago",
     },
-    imageSrc:
-      "/home/cat_shark.svg",
+    imageSrc: "/home/cat_shark.svg",
     imageAlt: "Adopted cat",
     text: "Adopted this adorable cat today!",
     tag: "Adoption",
@@ -142,7 +138,7 @@ const LatestPetStories: React.FC = () => {
       <div className="stories-container">
         {postDatas.map((post) => (
           // eslint-disable-next-line react/jsx-key
-          <Post {...post} />
+          <Post key={post.user.username} {...post} />
         ))}
       </div>
       <style jsx>{`

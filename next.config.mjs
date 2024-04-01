@@ -1,13 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    formats: ["image/avif", "image/webp"],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-        port: "",
-        pathname: "/ewkdfgs/image/upload/**",
-      },
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
@@ -16,14 +13,11 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "**",
-      }, // emit all images hostname heheh, not recommend, but since in dev
+        hostname: "cdn.builder.io",
+        pathname: "/api/v1/image/assets/**",
+      },
     ],
-    formats: ["image/webp"],
   },
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // }
 }
 
 export default nextConfig

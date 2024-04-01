@@ -66,29 +66,7 @@ const LostAndFoundForm: React.FC = () => {
             />
           </div>
           <div className="form-column">
-            <form className="form-container">
-              <h1 className="form-title">Lost &amp; Found Pet Form</h1>
-              {inputFields.map(({ label, placeholder }) => (
-                <Input key={label} label={label} placeholder={placeholder} />
-              ))}
-              <div className="upload-container">
-                <span className="upload-label">Upload Photo</span>
-                <div className="upload-field" />
-              </div>
-              <Input
-                key={"Contact Info"}
-                label={"Contact Info"}
-                placeholder={"Enter your contact information"}
-              />
-              <div className="button-group">
-                <Button type="button" className="cancel-button">
-                  Cancel
-                </Button>
-                <Button type="submit" className="submit-button">
-                  Submit
-                </Button>
-              </div>
-            </form>
+            <h1 className="form-title">Lost &amp; Found Pet Form</h1>
           </div>
         </div>
       </main>

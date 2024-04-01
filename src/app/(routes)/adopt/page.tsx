@@ -77,7 +77,7 @@ export default async function Adopt() {
       <div className="py-[60px]">
         <div className="mx-auto flex flex-col items-center">
           <HeaderTitle description="Browse through the profiles and find your new furry friend!">
-            Welcome to the Adopotion Center
+            Welcome to the Adoption Center
           </HeaderTitle>
         </div>
       </div>

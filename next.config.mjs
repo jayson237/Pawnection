@@ -6,18 +6,8 @@ const nextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
         port: "",
-        pathname: "/ewkdfgs/image/upload/**",
-      },
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-        port: "",
         pathname: "/duyqfuucs/image/upload/**",
       },
-      {
-        protocol: "https",
-        hostname: "**",
-      }, // emit all images hostname heheh, not recommend, but since in dev
     ],
     formats: ["image/webp"],
   },
@@ -26,9 +16,6 @@ const nextConfig = {
     config.externals = [...config.externals, "bcrypt"]
     return config
   },
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // }
 }
 
 export default nextConfig

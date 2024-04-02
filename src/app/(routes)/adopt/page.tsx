@@ -15,8 +15,12 @@ export default async function Adopt() {
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
         <div className="mx-auto flex flex-col items-center">
-          <HeaderTitle description="Browse through the profiles and find your new furry friend!">
-            Welcome to the Adopotion Center
+          <HeaderTitle
+            className="max-md:text-2xl"
+            descriptionClassName="max-md:text-lg"
+            description="Browse through the profiles and find your new furry friend!"
+          >
+            Welcome to the Adoption Center
           </HeaderTitle>
 
           <Link
@@ -28,19 +32,21 @@ export default async function Adopt() {
         </div>
       </div>
 
-      <div className="py-[60px]">
-        <div className="grid grid-cols-2 items-center">
-          <div>
-            <HeaderTitle className="text-left">Featured Pets</HeaderTitle>
+      <div className="py-8 px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 items-center px-10 gap-3">
+          <div className="flex flex-col items-center text-center md:text-left ">
+            <HeaderTitle className="text-center md:text-left max-md:text-2xl">
+              Featured Pets
+            </HeaderTitle>
             <Link
               href="/adopt/all-pets"
-              className={cn("mt-4", buttonVariants({ variant: "default" }))}
+              className={cn("my-6", buttonVariants({ variant: "default" }))}
             >
               View All Pets
             </Link>
           </div>
 
-          <div className="flex flex-rows gap-4">
+          <div className="flex flex-col items-center md:flex-row gap-6">
             <FeaturedCard
               imagePath="/static/images/featured-1.png"
               petName="Buddy"
@@ -59,11 +65,11 @@ export default async function Adopt() {
 
       <div className="py-[60px]">
         <div className="flex flex-col items-center">
-          <HeaderTitle>How to Adopt</HeaderTitle>
+          <HeaderTitle className="max-md:text-2xl">How to Adopt</HeaderTitle>
           <Button className="mt-4">Learn More</Button>
         </div>
 
-        <div className="gap-10 grid grid-cols-2 py-7 mt-6">
+        <div className="gap-10 grid sm:grid-cols-2 grid-cols-1 py-7 mt-6 px-4">
           <HowtoCard
             imagePath="/static/images/featured-1.png"
             title="Find a Pet"

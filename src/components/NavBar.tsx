@@ -97,11 +97,13 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                   <Image
                     className="rounded-full h-10 w-10 ring-1 ring-primary ring-offset-2 hover:opacity-80 ease-in-out duration-200 cursor-pointer"
                     src={
-                      `${
-                        currentUser?.image?.split("/image/upload/")[0]
-                      }/image/upload/c_fill,h_160,w_160/${
-                        currentUser?.image?.split("/image/upload/")[1]
-                      }` || "/../icon.png"
+                      !currentUser?.image
+                        ? "/../icon.png"
+                        : `${
+                            currentUser?.image?.split("/image/upload/")[0]
+                          }/image/upload/c_fill,h_160,w_160/${
+                            currentUser?.image?.split("/image/upload/")[1]
+                          }`
                     }
                     width={160}
                     height={160}
@@ -188,11 +190,13 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                       <div>
                         <Image
                           src={
-                            `${
-                              currentUser?.image?.split("/image/upload/")[0]
-                            }/image/upload/c_fill,h_160,w_160/${
-                              currentUser?.image?.split("/image/upload/")[1]
-                            }` || "/../icon.png"
+                            !currentUser?.image
+                              ? "/../icon.png"
+                              : `${
+                                  currentUser?.image?.split("/image/upload/")[0]
+                                }/image/upload/c_fill,h_160,w_160/${
+                                  currentUser?.image?.split("/image/upload/")[1]
+                                }`
                           }
                           width={48}
                           height={48}

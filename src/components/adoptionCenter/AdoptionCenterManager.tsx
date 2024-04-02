@@ -1,14 +1,14 @@
 "use client"
 
+import { toast } from "@/hooks/useToast"
+import { cn } from "@/lib/utils"
+import { EditAdoptablePetPayloadType } from "@/types/adoption-center"
 import { AdoptablePet, AdoptionRequest } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 
-import { toast } from "@/hooks/useToast"
-import { cn } from "@/lib/utils"
-import { EditAdoptablePetPayloadType } from "@/types/adoption-center"
 import HeaderTitle from "../HeaderTitle"
 import {
   AlertDialog,
@@ -94,7 +94,7 @@ export default function AdoptionCenterManager({
   return (
     <>
       <div className="flex justify-between">
-        <div className="flex gap-2">
+        <div className="flex gap-12">
           <Link
             className={cn(buttonVariants({ variant: "outline" }))}
             href="/adoption-center"
@@ -151,7 +151,7 @@ export default function AdoptionCenterManager({
           </AlertDialog>
         </div>
       </div>
-      <div className="grid md:grid-cols-3 gap-8 mt-8">
+      <div className="grid grid-cols-3 max-md:grid-cols-1 gap-12 mt-8 max-md:w-3/4 mx-auto p-4">
         <div className="rounded-xl border border-gray-400 h-full col-span-1">
           <div>
             <Image
@@ -165,7 +165,7 @@ export default function AdoptionCenterManager({
           <div className="px-3.5 py-4">
             <Form {...form}>
               <form
-                className="space-y-6 pt-6"
+                className="space-y-6 pt-6 "
                 onSubmit={form.handleSubmit(onSubmit)}
               >
                 <FormField

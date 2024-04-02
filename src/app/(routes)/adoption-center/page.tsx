@@ -1,23 +1,26 @@
-import getCurrentUser from "@/actions/getCurrentUser"
+import HeaderTitle from "@/components/HeaderTitle"
+import OwnAdoptablePost from "@/components/adoptionCenter/OwnAdoptablePost"
+import { buttonVariants } from "@/components/ui/Button"
+import { getCurrentUser } from "@/lib/actions/user"
+import { cn } from "@/lib/utils"
 import { UserType } from "@prisma/client"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import React from "react"
 
-import HeaderTitle from "../../../components/HeaderTitle"
-import OwnAdoptablePost from "../../../components/adoption/OwnAdoptablePost"
-import { buttonVariants } from "../../../components/ui/Button"
-import { cn } from "../../../lib/utils"
-
-async function AdoptionCenterPage() {
+export default async function AdoptionCenterPage() {
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
   if (currUser.type !== UserType.PetAdoptionCentre) redirect("/adopt")
   return (
-    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
-      <div className="py-[60px]">
+    <div className="w-full max-w-[1240px] mx-auto sm:px-8 px-8">
+      <div className="py-[30px] px-[15px] sm:py-[50px]">
         <div className="mx-auto flex flex-col items-center">
-          <HeaderTitle description="Browse through the profiles and find your new furry friend!">
+          <HeaderTitle
+            className="max-md:text-2xl"
+            descriptionClassName="max-md:text-lg"
+            description="Browse through the profiles and find your new furry friend!"
+          >
             Manage your Pet Adoption listing here
           </HeaderTitle>
           <Link
@@ -29,15 +32,14 @@ async function AdoptionCenterPage() {
         </div>
       </div>
 
-      <div className="py-[60px]">
-        <div className="mx-auto flex flex-col items-center space-y-6">
-          <HeaderTitle>Your Pet Postings</HeaderTitle>
-
+      <div className="md:py-[30px] lg:py-[40px]">
+        <div className="mx-auto flex flex-col items-center space-y-10">
+          <HeaderTitle className="max-md:text-2xl">
+            Your Pet Postings
+          </HeaderTitle>
           <OwnAdoptablePost />
         </div>
       </div>
     </div>
   )
 }
-
-export default AdoptionCenterPage

@@ -5,10 +5,10 @@ import { SafeUser } from "@/types"
 import Image from "next/image"
 import { FormEvent, useState } from "react"
 
+import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
-import LoadingDots from "../ui/LoadingDots"
 import { Textarea } from "../ui/TextArea"
 
 interface SettingsProps {
@@ -24,13 +24,13 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
   const [username, setUsername] = useState(currentUser?.username || "")
   const [phone, setPhone] = useState(currentUser?.phone || "")
   const [image, setImage] = useState(
-    currentUser?.image ||
-      `${
-        currentUser?.image?.split("/image/upload/")[0]
-      }/image/upload/c_fill,h_160,w_160/${
-        currentUser?.image?.split("/image/upload/")[1]
-      }` ||
-      "/../icon.png",
+    currentUser?.image
+      ? `${
+          currentUser?.image?.split("/image/upload/")[0]
+        }/image/upload/c_fill,h_160,w_160/${
+          currentUser?.image?.split("/image/upload/")[1]
+        }` || "/../icon.png"
+      : "/../icon.png",
   )
   const [bio, setBio] = useState(currentUser?.bio || "")
   const [isUsernameValid, setIsUsernameValid] = useState(true)
@@ -196,7 +196,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
       </div>
       <form className="space-y-5" onSubmit={submitHandler}>
         <div className="grid max-w-2xl mx-auto mt-6">
-          <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0 mx-auto">
+          <div className="flex flex-col items-center space-y-5 mx-auto">
             <Image
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
               loader={imageLoader}
@@ -205,7 +205,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
               height={160}
               alt="Bordered avatar"
             />
-            <div className="flex flex-col space-y-5 sm:ml-8">
+            <div className="flex flex-col space-y-5">
               <Button
                 type="button"
                 className="w-28"

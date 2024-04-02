@@ -72,6 +72,7 @@ model Post {
   createdAt   DateTime  @default(now())
   user        User      @relation(fields: [userId], references: [id])
   userId      String    @db.ObjectId
+  type        PostType
   likes       Like[]
   comments    Comment[]
 }
@@ -115,29 +116,43 @@ model LostPetReport {
   user   User   @relation(fields: [userId], references: [id])
 }
 
+enum AdoptablePetStatus {
+  Available
+  Adopted
+  Adopting
+}
+
 model AdoptablePet {
-  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
   name             String
   type             String
   breed            String
   age              Int
   gender           String
+  status           AdoptablePetStatus
   description      String
   imageUrl         String
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
   adoptionRequests AdoptionRequest[]
 
   adoptionCentre   User   @relation(fields: [adoptionCentreId], references: [id])
   adoptionCentreId String @db.ObjectId
 }
 
+enum AdoptRequestStatus {
+  Pending
+  Approved
+  Rejected
+  Completed
+}
+
 model AdoptionRequest {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  message           String
-  request_status    String
-  full_name         String
-  age               Int
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  message           String?
+  request_status    AdoptRequestStatus
+  full_name         String?
+  age               Int?
   phone_number      String?
   address           String?
   type_desired      String?

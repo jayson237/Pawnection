@@ -1,8 +1,7 @@
 "use client"
 
 import { SafeUser } from "@/types"
-import { LogOutIcon, Menu } from "lucide-react"
-import { LogOut, Settings, User, X } from "lucide-react"
+import { LogOut, Menu, Settings, User, X } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { signOut } from "next-auth/react"
 import Image from "next/image"
@@ -35,26 +34,26 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
   }
 
   return (
-    <div className="sticky top-0 z-[100] flex w-full place-content-between px-12 py-4 drop-shadow md:px-24 items-center border-b bg-main">
+    <div className="sticky top-0 z-[20] flex w-full place-content-between px-4 py-4 drop-shadow md:px-12 items-center border-b bg-main">
       <Image
         src="/pawnection.svg"
         alt="Pawnection"
         width={0}
         height={0}
         priority={true}
-        className="cursor-pointer h-[30px] w-[187.5px]"
+        className="cursor-pointer h-[30px] w-[187.5px] mr-12"
         onClick={() => {
           router.push("/")
         }}
       />
       <NavigationMenu>
-        <NavigationMenuList className="hidden sm:flex">
+        <NavigationMenuList className="hidden md:flex md:ml-12">
           {session.status === "authenticated" && (
             <>
               <div className="flex items-center space-x-1 ">
                 <Link
                   href="/lostAndFound"
-                  className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
+                  className="text-primary text-center text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                 >
                   Lost & Found
                 </Link>
@@ -151,7 +150,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
             )
           )}
         </NavigationMenuList>
-        <div className="sm:hidden cursor-pointer pl-24 flex items-center space-x-4">
+        <div className="md:hidden cursor-pointer pl-24 flex items-center space-x-4">
           {session.status === "authenticated" && (
             <>
               <Menu size={24} onClick={toggleMenu} />
@@ -166,7 +165,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
         <div
           className={
             isOpen
-              ? "fixed right-0 top-0 w-[65%] sm:hidden h-screen bg-[#FFECE4] p-10 ease-in duration-500"
+              ? "fixed right-0 top-0 w-[55%] md:hidden h-screen bg-[#FFECE4] p-10 ease-in duration-500"
               : "fixed right-[-100%] top-0 p-10 ease in duration-500"
           }
         >
@@ -247,7 +246,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                       onClick={toggleMenu}
                       className="text-primary text-sm font-medium hover:bg-accent rounded-md ease-in-out duration-200 py-2 px-4"
                     >
-                      Adoption Center
+                      Centre Management
                     </Link>
                   </li>
                 )}

@@ -3,6 +3,7 @@
 import { type FormEvent, useState } from "react"
 
 import { Button } from "../ui/Button"
+import { Input } from "../ui/Input"
 import { Textarea } from "../ui/TextArea"
 
 const LostPetReport = () => {
@@ -14,8 +15,6 @@ const LostPetReport = () => {
   const [lastSeenDate, setLastSeenDate] = useState("")
   const [contactDetails, setContactDetails] = useState("")
   const [petImage, setPetImage] = useState<File | null>(null)
-  // const [petImageStr, setPetImageStr] = useState(null)
-  //   const [image, setImage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -135,7 +134,7 @@ const LostPetReport = () => {
             onChange={(e) => setContactDetails(e.currentTarget.value)}
           />
 
-          <input
+          <Input
             className="mr-8 ml-20 w-1/4"
             type="file"
             accept="image/*"

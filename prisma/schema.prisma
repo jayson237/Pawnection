@@ -15,6 +15,7 @@ model User {
   emailVerified    DateTime?
   image            String?
   phone            String?
+  bio              String?
   hashedPassword   String?
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt

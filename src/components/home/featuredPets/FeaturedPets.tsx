@@ -74,10 +74,12 @@ const FeaturedPets: React.FC = () => {
             <h2 className="pb-5 font-bold text-5xl text-left">
               Adoptable Pets
             </h2>
-            {pets.map((pet) => (
-              // eslint-disable-next-line react/jsx-key
-              <PetInfo key={pet.name} {...pet} />
-            ))}
+            <div className="py-5">
+              {pets.map((pet) => (
+                // eslint-disable-next-line react/jsx-key
+                <PetInfo key={pet.name} {...pet} />
+              ))}
+            </div>
           </div>
         </div>
       </section>

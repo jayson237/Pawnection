@@ -37,9 +37,11 @@ const PetCareTips = () => {
   ]
 
   return (
-    <div className="mx-auto w-full max-w-[1480px] md:px-0 px-4">
+    <div className="mx-auto w-full max-w-[1480px] px-8">
       <div className="py-[60px] bg-submain rounded-[50px]">
-        <HeaderTitle className="max-w-full">Pet care tips</HeaderTitle>
+        <HeaderTitle className="max-w-full text-3xl md:text-4xl">
+          Pet Care Tips
+        </HeaderTitle>
 
         <div
           className={`mt-6 flex gap-10 justify-center flex-wrap ${expandedTipId ? "items-start" : "items-center"}`}

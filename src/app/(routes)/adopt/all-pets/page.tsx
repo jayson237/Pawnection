@@ -1,10 +1,9 @@
+import HeaderTitle from "@/components/HeaderTitle"
+import { getAllAdoptablePets } from "@/lib/actions/adopt"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
-
-import HeaderTitle from "@/components/HeaderTitle"
-import { getAllAdoptablePets } from "@/lib/actions/adopt"
 
 export default async function AdoptViewAllPetsPage() {
   const adoptablePets = await getAllAdoptablePets()
@@ -14,12 +13,12 @@ export default async function AdoptViewAllPetsPage() {
   }
 
   return (
-    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
+    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-8">
       <div className="py-[60px] w-full">
         <HeaderTitle className="max-w-full">Adoptable Pets</HeaderTitle>
       </div>
 
-      <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4 w-full">
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 w-full">
         {adoptablePets.map((pet) => (
           <Link
             href={"/adopt/process/" + pet.id}

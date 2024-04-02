@@ -12,12 +12,12 @@ export default async function AdoptPetRequests() {
     return notFound()
   }
   return (
-    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
+    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-8">
       <div className="py-[60px]">
         <HeaderTitle className="max-w-full">Your Adoption Requests</HeaderTitle>
       </div>
 
-      <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4 w-full">
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 w-full">
         {ownrequests?.length > 0 ? (
           ownrequests.map((request) => (
             <Link

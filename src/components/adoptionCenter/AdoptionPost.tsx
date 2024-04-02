@@ -153,19 +153,37 @@ function AdoptionPost() {
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-7 flex flex-col max-sm:flex-col">
       <div className="py-[60px]">
-        <div className="grid grid-cols-1 sm:grid-cols-3">
-          <div className="items-start xl:flex-row">
-            <div className="place-content-end py-3 flex-grow-1 flex-shrink">
-              {selectedImage ? (
-                <div className="sm:col-span-1">
-                  <Image
-                    src={`${URL.createObjectURL(selectedImage)}`}
-                    alt=""
-                    width={604}
-                    height={400}
-                    sizes="100vw"
-                    className="mx-auto mb-4 max-sm:w-72 max-sm:h-48"
-                  />
+        <div className="grid grid-cols-2">
+          <div className="place-content-end py-3">
+            {selectedImage ? (
+              <Image
+                src={`${URL.createObjectURL(selectedImage)}`}
+                alt=""
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="h-auto w-auto mx-auto mb-4"
+              />
+            ) : (
+              <Image
+                src="/static/images/dog_left.webp"
+                alt="hura"
+                width={604}
+                height={400}
+              />
+            )}
+
+            <div
+              className="cursor-pointer text-sm border rounded-lg border-dashed border-gray-600"
+              {...getRootProps()}
+            >
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <div className="my-4 flex cursor-pointer flex-row items-center justify-center">
+                  <Paperclip className="mr-1 mt-[1px] h-3 w-3" />
+                  <p className="font-semiboldtext-decoration: text-sm underline underline-offset-2">
+                    Drop image here
+                  </p>
                 </div>
               ) : (
                 <div className="sm:col-span-1">

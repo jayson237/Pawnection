@@ -7,70 +7,58 @@ import HeaderTitle from "../HeaderTitle"
 
 const hangouts = [
   {
-    id: "dog-park",
-    title: "Dog Park",
-    location: "Central Park",
+    id: "katong-park",
+    title: "Katong Park",
+    location: "59 Fort Rd",
     description:
-      "A spacious dog park where your furry friend can run and play freely.",
-    contact: "John",
-    avatar: "/avatar-user.svg",
-    image: "/cat.png",
+      "Get active with your pup by bringing them to this dog-friendly park.",
+    image: "/katong-park.png",
+    tags: ["Outdoor", "Dog-friendly"],
+  },
+  {
+    id: "east-coast-park",
+    title: "East Coast Park",
+    location: "East Coast Park Service Road",
+    description:
+      "Let your dogs run safely off-leash and socialise with other furry friends at the dog run at Parkland Green (Area C) or near Xtreme SkatePark (Area F).",
+    image: "/east-coast-park.png",
     tags: ["Outdoor", "Off-leash"],
   },
   {
-    id: "pet-friendly-cafe",
-    title: "Pet-friendly Cafe",
-    location: "Downtown",
+    id: "woodlands-waterfront-park",
+    title: "Woodlands Waterfront Park",
+    location: "Admiralty Rd West",
     description:
-      "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
-    contact: "Jane",
-    avatar: "/avatar-user.svg",
-    image: "/cat.png",
-    tags: ["Indoor", "Pet Menu"],
+      "Let your furry ones run loose in the big open space within the dog run.",
+    image: "/woodlands-waterfront-park.png",
+    tags: ["Waterfront", "Open Space"],
   },
   {
-    id: "pet-grooming-salon",
-    title: "Pet Grooming Salon",
-    location: "Beachside",
+    id: "punggol-waterway-park",
+    title: "Punggol Waterway Park",
+    location: "Sentul Crescent",
     description:
-      "Treat your pet to a relaxing grooming session with professional groomers.",
-    contact: "Sarah",
-    avatar: "/avatar-user.svg",
-    image: "/cat.png",
-    tags: ["Spa Treatments", "Nail Trimming"],
+      "Let your dogs run free and mingle with their furry friends at the dog run.",
+    image: "/punggol-waterway-park.png",
+    tags: ["Waterway", "Dog Run"],
   },
   {
-    id: "dog-park-2",
-    title: "Dog Park",
-    location: "Central Park",
+    id: "bedok-town-park",
+    title: "Bedok Town Park",
+    location: "Bedok North Ave 3",
     description:
-      "A spacious dog park where your furry friend can run and play freely.",
-    contact: "John",
-    avatar: "/avatar-user.svg",
-    image: "/cat.png",
-    tags: ["Outdoor", "Off-leash"],
+      "Set your dog free to sprint or play with other dogs in the dog run.",
+    image: "/bedok-town-park.png",
+    tags: ["Town Park", "Dog Run"],
   },
   {
-    id: "pet-friendly-cafe-2",
-    title: "Pet-friendly Cafe",
-    location: "Downtown",
+    id: "tiong-bahru-park",
+    title: "Tiong Bahru Park",
+    location: "1 Henderson Rd",
     description:
-      "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
-    contact: "Jane",
-    avatar: "/avatar-user.svg",
-    image: "/cat.png",
-    tags: ["Indoor", "Pet Menu"],
-  },
-  {
-    id: "pet-grooming-salon-2",
-    title: "Pet Grooming Salon",
-    location: "Beachside",
-    description:
-      "Treat your pet to a relaxing grooming session with professional groomers.",
-    contact: "Sarah",
-    avatar: "/avatar-user.svg",
-    image: "/cat.png",
-    tags: ["Spa Treatments", "Nail Trimming"],
+      "Let your dog run free and socialise with other canines in the enclosed dog run.",
+    image: "/tiong-bahru-park.png",
+    tags: ["Enclosed", "Socialise"],
   },
 ]
 
@@ -110,18 +98,6 @@ const PetFriendlyHangouts = () => {
                       {tag}
                     </span>
                   ))}
-                </div>
-                <div className="flex items-center mt-2">
-                  <span className="inline-block w-8 h-8 rounded-full overflow-hidden mr-2">
-                    <Image
-                      src={hangout.avatar}
-                      alt={`${hangout.contact}'s avatar`}
-                      width={60}
-                      height={60}
-                      className="w-full h-full object-cover"
-                    />
-                  </span>
-                  <span className="text-sm">@{hangout.contact}</span>
                 </div>
               </div>
             </div>

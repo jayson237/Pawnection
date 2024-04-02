@@ -22,19 +22,19 @@ function OwnAdoptablePost() {
     <>
       {data ? (
         data.length > 0 ? (
-          <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4 w-full">
+          <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4 sm:gap-6 lg:gap-7 w-full">
             {data.map((item) => (
               <div
                 key={item.id}
-                className="rounded-xl border border-gray-400 h-full"
+                className="rounded-xl border border-gray-400 flex flex-col"
               >
-                <div>
+                <div className="w-full relative" style={{ paddingTop: "70%" }}>
                   <Image
                     src={item.imageUrl}
                     alt={item.name}
-                    width={1000}
-                    height={1000}
-                    className="rounded-xl h-full bg-cover bg-center w-full object-cover max-h-[440px]"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-xl"
                   />
                 </div>
                 <div className="px-3.5 py-4">

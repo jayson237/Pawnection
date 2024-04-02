@@ -21,13 +21,15 @@ export default async function AdoptProcessPage({
   }
 
   return (
-    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
+    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-6">
       <div className="py-[60px] w-full">
-        <HeaderTitle className="max-w-full">Adoptable Pets</HeaderTitle>
+        <HeaderTitle className="max-w-full max-md:text-3xl">
+          Adoptable Pets
+        </HeaderTitle>
       </div>
 
-      <div className="relative grid md:grid-cols-3 gap-8">
-        <div className="sticky top-28 rounded-xl border border-gray-400 h-fit col-span-1">
+      <div className="relative grid sm:grid-cols-1 md:grid-cols-3 gap-8 px-4">
+        <div className="sticky top-28 rounded-xl border border-gray-400 h-fit md:col-span-1">
           <div>
             <Image
               src={adoptablePet.imageUrl}
@@ -66,9 +68,8 @@ export default async function AdoptProcessPage({
             </div>
           </div>
         </div>
-
-        <div className="h-full col-span-2">
-          <HeaderTitle className="max-w-full">
+        <div className="h-full md:col-span-2 px-4">
+          <HeaderTitle className="max-w-full mt-4 max-md:text-3xl">
             Fill in your personal information
           </HeaderTitle>
 

@@ -1,5 +1,5 @@
-import getCurrentUser from "@/actions/getCurrentUser"
 import Settings from "@/components/profile/Settings"
+import { getCurrentUser } from "@/lib/actions/user"
 
 export default async function profile() {
   const currentUser = await getCurrentUser()

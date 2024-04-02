@@ -1,22 +1,22 @@
-import getCurrentUser from "@/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
+import { PostData } from "@/types"
+import { PostType } from "@prisma/client"
 import { NextResponse } from "next/server"
-
-interface PostData {
-  imageUrl: string
-  description?: string
-}
 
 async function createPost({
   imageUrl,
   description,
+  type,
   userEmail,
 }: PostData & { userEmail: string }) {
+  const postType = type === "post" ? PostType.Post : PostType.PetSitting
   try {
     const post = await prisma.post.create({
       data: {
         imageUrl,
         description,
+        type: postType,
         user: {
           connect: {
             email: userEmail,
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       )
     }
 
-    const { imageUrl, description }: PostData = await req.json()
+    const { imageUrl, description, type }: PostData = await req.json()
     if (!imageUrl) {
       return NextResponse.json(
         { message: "No image provided" },
@@ -55,6 +55,7 @@ export async function POST(req: Request) {
     const post = await createPost({
       imageUrl,
       description,
+      type,
       userEmail: currentUser.email,
     })
     return NextResponse.json(

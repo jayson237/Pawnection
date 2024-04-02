@@ -1,5 +1,6 @@
 "use client"
 
+import LoadingDots from "@/components/LoadingDots"
 import { Button } from "@/components/ui/Button"
 import {
   Dialog,
@@ -10,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog"
-import LoadingDots from "@/components/ui/LoadingDots"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/RadioGroup"
 import { Textarea } from "@/components/ui/TextArea"
 import { useToast } from "@/hooks/useToast"
@@ -140,7 +140,7 @@ const PostForm = () => {
 
   const onSubmit = async (data: z.infer<typeof createPostSchema>) => {
     setLoading(true)
-    const set = await fetch("/api/community/post", {
+    const set = await fetch("/api/explore/post", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -246,7 +246,11 @@ const PostForm = () => {
             <p className="text-red-500">{errors.description.message}</p>
           )}
           <DialogFooter>
-            <Button type="submit" disabled={isLoading || !watch("imageUrl")}>
+            <Button
+              className="w-20"
+              type="submit"
+              disabled={isLoading || !watch("imageUrl")}
+            >
               {loading ? (
                 <>
                   <LoadingDots color="#FAFAFA" />

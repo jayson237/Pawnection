@@ -11,10 +11,10 @@ import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form"
 
 import HeaderTitle from "../HeaderTitle"
 import { Icons } from "../Icons"
+import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
-import LoadingDots from "../ui/LoadingDots"
 
 type Variant = "LOGIN" | "REGISTER"
 
@@ -160,17 +160,20 @@ const AuthForm = () => {
         />
       </div>
 
-      <div className="py-3 rounded-lg px-6 w-full">
+      <div className="flex flex-col justify-between overflow-y-auto py-3 md:py-2 rounded-lg px-6 md:px-4 w-full md:w-3/4">
         {variant === "REGISTER" ? (
-          <HeaderTitle className="max-w-full">Sign Up</HeaderTitle>
+          <HeaderTitle className="max-w-full max-lg:text-2xl">Sign Up</HeaderTitle>
         ) : (
-          <HeaderTitle className="max-w-full">Sign in</HeaderTitle>
+          <HeaderTitle className="max-w-full max-lg:text-2xl">Sign in</HeaderTitle>
         )}
 
-        <form className="space-y-6 pt-6" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="space-y-6 pt-6 max-lg:space-y-4 max-lg:pt-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           {variant === "REGISTER" && (
             <>
-              <div className="space-y-1">
+              <div className="space-y-1 max-lg:space-y-0">
                 <Label htmlFor="text">Username</Label>
                 <Input
                   id="username"
@@ -185,7 +188,7 @@ const AuthForm = () => {
               </div>
             </>
           )}
-          <div className="space-y-1">
+          <div className="space-y-1 max-lg:space-y-0">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
@@ -196,7 +199,7 @@ const AuthForm = () => {
               placeholder="Enter your email"
             />
           </div>
-          <div className="space-y-1">
+          <div className="space-y-1 max-lg:space-y-0">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
@@ -208,7 +211,7 @@ const AuthForm = () => {
             />
           </div>
           {variant === "REGISTER" && (
-            <div className="space-y-1">
+            <div className="space-y-1 max-lg:space-y-0">
               <Label htmlFor="password2">Confirm Password</Label>
               <Input
                 id="password2"
@@ -303,8 +306,7 @@ const AuthForm = () => {
             text-sm
             mt-4
             px-2
-            text-gray-500
-          "
+            text-gray-500"
         >
           <div>
             {variant === "LOGIN"

@@ -1,17 +1,9 @@
 "use client"
 
-import Image from "next/image"
 import React, { useState } from "react"
 
 import HeaderTitle from "../HeaderTitle"
 import { Icons } from "../Icons"
-
-interface Tip {
-  id: string
-  title: string
-  description: string
-  icon: string
-}
 
 const PetCareTips = () => {
   const [expandedTipId, setExpandedTipId] = useState<string | null>(null)

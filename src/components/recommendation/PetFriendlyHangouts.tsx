@@ -5,76 +5,16 @@ import React from "react"
 
 import HeaderTitle from "../HeaderTitle"
 
-const PetFriendlyHangouts = () => {
-  const hangouts = [
-    {
-      id: "dog-park",
-      title: "Dog Park",
-      location: "Central Park",
-      description:
-        "A spacious dog park where your furry friend can run and play freely.",
-      contact: "John",
-      avatar: "/avatar-user.svg",
-      image: "/static/bright_ferris.svg",
-      tags: ["Outdoor", "Off-leash"],
-    },
-    {
-      id: "pet-friendly-cafe",
-      title: "Pet-friendly Cafe",
-      location: "Downtown",
-      description:
-        "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
-      contact: "Jane",
-      avatar: "/avatar-user.svg",
-      image: "/static/dark_ferris.svg",
-      tags: ["Indoor", "Pet Menu"],
-    },
-    {
-      id: "pet-grooming-salon",
-      title: "Pet Grooming Salon",
-      location: "Beachside",
-      description:
-        "Treat your pet to a relaxing grooming session with professional groomers.",
-      contact: "Sarah",
-      avatar: "/avatar-user.svg",
-      image: "/static/cat_funny.svg",
-      tags: ["Spa Treatments", "Nail Trimming"],
-    },
-    {
-      id: "dog-park-2",
-      title: "Dog Park",
-      location: "Central Park",
-      description:
-        "A spacious dog park where your furry friend can run and play freely.",
-      contact: "John",
-      avatar: "/avatar-user.svg",
-      image: "/static/green_ferris_cabin.svg",
-      tags: ["Outdoor", "Off-leash"],
-    },
-    {
-      id: "pet-friendly-cafe-2",
-      title: "Pet-friendly Cafe",
-      location: "Downtown",
-      description:
-        "Enjoy a cup of coffee or a meal with your pet by your side in a cozy environment.",
-      contact: "Jane",
-      avatar: "/avatar-user.svg",
-      image: "/static/cookies.svg",
-      tags: ["Indoor", "Pet Menu"],
-    },
-    {
-      id: "pet-grooming-salon-2",
-      title: "Pet Grooming Salon",
-      location: "Beachside",
-      description:
-        "Treat your pet to a relaxing grooming session with professional groomers.",
-      contact: "Sarah",
-      avatar: "/avatar-user.svg",
-      image: "/static/furniture.svg",
-      tags: ["Spa Treatments", "Nail Trimming"],
-    },
-  ]
+interface HangoutLocation {
+  id: string
+  title: string
+  location: string
+  description: string
+  image: string
+  tags: string[]
+}
 
+const PetFriendlyHangouts = ({ hangouts }: { hangouts: HangoutLocation[] }) => {
   return (
     <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
       <div className="py-[60px]">
@@ -91,13 +31,13 @@ const PetFriendlyHangouts = () => {
               <Image
                 src={hangout.image}
                 alt={hangout.title}
-                width={100}
-                height={100}
+                width={1200}
+                height={1200}
                 className="w-24 h-24 object-cover rounded-lg mr-4"
               />
               <div>
                 <h3 className="text-xl font-semibold mb-1">{hangout.title}</h3>
-                <p className="text-sm mb-2" style={{ color: "#FF7751" }}>
+                <p className="text-sm mb-2 text-mainAccent">
                   Location: {hangout.location}
                 </p>
                 <p className="text-sm mb-3">{hangout.description}</p>
@@ -110,18 +50,6 @@ const PetFriendlyHangouts = () => {
                       {tag}
                     </span>
                   ))}
-                </div>
-                <div className="flex items-center mt-2">
-                  <span className="inline-block w-8 h-8 rounded-full overflow-hidden mr-2">
-                    <Image
-                      src={hangout.avatar}
-                      alt={`${hangout.contact}'s avatar`}
-                      width={60}
-                      height={60}
-                      className="w-full h-full object-cover"
-                    />
-                  </span>
-                  <span className="text-sm">@{hangout.contact}</span>
                 </div>
               </div>
             </div>

@@ -34,7 +34,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
   }
 
   return (
-    <div className="sticky top-0 z-[20] flex w-full place-content-between px-4 py-4 drop-shadow md:px-12 items-center border-b bg-main">
+    <div className="sticky top-0 z-[100] flex w-full place-content-between px-4 py-4 drop-shadow md:px-12 items-center border-b bg-main">
       <Image
         src="/pawnection.svg"
         alt="Pawnection"
@@ -80,7 +80,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                     href="/adoption-center"
                     className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
                   >
-                    Centre Management
+                    Adoption Management
                   </Link>
                 )}
               </div>
@@ -95,7 +95,13 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 <DropdownMenuTrigger asChild>
                   <Image
                     className="rounded-full h-10 w-10 ring-1 ring-primary ring-offset-2 hover:opacity-80 ease-in-out duration-200 cursor-pointer"
-                    src={currentUser?.image || "/../icon.png"}
+                    src={
+                      `${
+                        currentUser?.image?.split("/image/upload/")[0]
+                      }/image/upload/c_fill,h_160,w_160/${
+                        currentUser?.image?.split("/image/upload/")[1]
+                      }` || "/../icon.png"
+                    }
                     width={160}
                     height={160}
                     alt="Your avatar"

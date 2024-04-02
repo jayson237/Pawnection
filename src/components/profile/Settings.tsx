@@ -24,13 +24,13 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
   const [username, setUsername] = useState(currentUser?.username || "")
   const [phone, setPhone] = useState(currentUser?.phone || "")
   const [image, setImage] = useState(
-    currentUser?.image
-      ? `${
-          currentUser?.image?.split("/image/upload/")[0]
-        }/image/upload/c_fill,h_160,w_160/${
-          currentUser?.image?.split("/image/upload/")[1]
-        }` || "/../icon.png"
-      : "/../icon.png",
+    currentUser?.image ||
+      `${
+        currentUser?.image?.split("/image/upload/")[0]
+      }/image/upload/c_fill,h_160,w_160/${
+        currentUser?.image?.split("/image/upload/")[1]
+      }` ||
+      "/../icon.png",
   )
   const [bio, setBio] = useState(currentUser?.bio || "")
   const [isUsernameValid, setIsUsernameValid] = useState(true)
@@ -65,6 +65,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
           title: "Successful!",
           description: "Profile updated successfully",
         })
+        window.location.reload()
       }
 
       const result = await updateResponse.json()
@@ -205,6 +206,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
               height={160}
               alt="Bordered avatar"
             />
+<<<<<<< HEAD
             <div className="flex flex-col space-y-5">
               <Button
                 type="button"
@@ -220,6 +222,22 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
                 )}
               </Button>
             </div>
+=======
+
+            <Button
+              type="button"
+              className="w-28"
+              onClick={(
+                event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+              ) => changePicture(event)}
+            >
+              {isImageLoading ? (
+                <LoadingDots color="#FAFAFA" />
+              ) : (
+                "Edit Picture"
+              )}
+            </Button>
+>>>>>>> 60fee3f95acdc419b0d23afa57f8395ccc9585b9
           </div>
 
           <div className="items-center mt-8">

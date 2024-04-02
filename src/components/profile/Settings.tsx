@@ -3,12 +3,12 @@
 import { useToast } from "@/hooks/useToast"
 import { SafeUser } from "@/types"
 import Image from "next/image"
-import { FormEvent, useEffect, useState } from "react"
+import { FormEvent, useState } from "react"
 
+import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
-import LoadingDots from "../ui/LoadingDots"
 
 interface SettingsProps {
   currentUser?: SafeUser | null
@@ -21,7 +21,15 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
   const [name, setName] = useState(currentUser?.name || "")
   const [username, setUsername] = useState(currentUser?.username || "")
   const [phone, setPhone] = useState(currentUser?.phone || "")
-  const [image, setImage] = useState(currentUser?.image || "/../../icon.png")
+  const [image, setImage] = useState(
+    currentUser?.image
+      ? `${
+          currentUser?.image?.split("/image/upload/")[0]
+        }/image/upload/c_fill,h_160,w_160/${
+          currentUser?.image?.split("/image/upload/")[1]
+        }` || "/../icon.png"
+      : "/../icon.png",
+  )
   const [isUsernameValid, setIsUsernameValid] = useState(true)
   const [isFormValid, setIsFormValid] = useState(false)
   const [isFormChanged, setIsFormChanged] = useState(false)
@@ -116,6 +124,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
             title: "Successful!",
             description: "Profile picture updated successfully",
           })
+          window.location.reload()
         } else {
           toast({
             variant: "destructive",

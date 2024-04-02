@@ -1,11 +1,17 @@
+import HeaderTitle from "@/components/HeaderTitle"
+import OwnAdoptablePost from "@/components/adoptionCenter/OwnAdoptablePost"
+import { buttonVariants } from "@/components/ui/Button"
+import { getCurrentUser } from "@/lib/actions/user"
+import { cn } from "@/lib/utils"
+import { UserType } from "@prisma/client"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import React from "react"
 
-import HeaderTitle from "../../../components/HeaderTitle"
-import { Button, buttonVariants } from "../../../components/ui/Button"
-import { cn } from "../../../lib/utils"
-
-function AdoptionCenterPage() {
+export default async function AdoptionCenterPage() {
+  const currUser = await getCurrentUser()
+  if (!currUser) redirect("/auth")
+  if (currUser.type !== UserType.PetAdoptionCentre) redirect("/adopt")
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
@@ -23,12 +29,12 @@ function AdoptionCenterPage() {
       </div>
 
       <div className="py-[60px]">
-        <div className="mx-auto flex flex-col items-center">
+        <div className="mx-auto flex flex-col items-center space-y-6">
           <HeaderTitle>Your Pet Postings</HeaderTitle>
+
+          <OwnAdoptablePost />
         </div>
       </div>
     </div>
   )
 }
-
-export default AdoptionCenterPage

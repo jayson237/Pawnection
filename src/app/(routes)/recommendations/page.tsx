@@ -1,7 +1,7 @@
-import getCurrentUser from "@/actions/getCurrentUser"
 import HeaderTitle from "@/components/HeaderTitle"
 import PetCareTips from "@/components/recommendation/PetCareSection"
 import PetFriendlyHangouts from "@/components/recommendation/PetFriendlyHangouts"
+import { getCurrentUser } from "@/lib/actions/user"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import { redirect } from "next/navigation"
@@ -76,12 +76,7 @@ export default async function Recommendation() {
 
   return (
     <section>
-      <div
-        className="py-[60px]"
-        style={{
-          background: "linear-gradient(180deg, #FFBBA9 0%, #FF6236 100%)",
-        }}
-      >
+      <div className="py-[60px] bg-gradient-to-b from-subAccent to-mainAccent ">
         <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
           <div className="flex items-center justify-center">
             <Image

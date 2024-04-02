@@ -1,8 +1,7 @@
-import getCurrentUser from "@/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
+import { unfollowUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
 import { NextResponse } from "next/server"
-
-import { followUser, unfollowUser } from "../../../../lib/user"
 
 export async function POST(req: Request) {
   const currentUser = await getCurrentUser()

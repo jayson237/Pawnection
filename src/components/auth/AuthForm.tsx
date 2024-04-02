@@ -152,7 +152,7 @@ const AuthForm = () => {
     <div className="grid sm:grid-cols-2 grid-cols-1">
       <div className="order-last sm:order-first">
         <Image
-          src="/static/images/dog_left.png"
+          src="/static/images/dog_left.webp"
           alt="hura"
           width={604}
           height={400}

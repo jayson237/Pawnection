@@ -170,7 +170,7 @@ function AdoptionPost() {
               ) : (
                 <div className="sm:col-span-1">
                   <Image
-                    src="/static/images/dog_left.png"
+                    src="/static/images/dog_left.webp"
                     alt="hura"
                     width={604}
                     height={400}

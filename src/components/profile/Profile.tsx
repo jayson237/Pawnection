@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
+import { useRouter } from "next/navigation"
 
 import { SafeUser } from "../../types"
 import HeaderTitle from "../HeaderTitle"
@@ -17,8 +18,11 @@ import {
   DialogTrigger,
 } from "../ui/Dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
+import { LostPetReport } from "@prisma/client"
+import { FoundPetReport } from "@prisma/client"
+import { useState, useEffect } from "react"
 
-type TabType = "posts" | "about"
+type TabType = "posts" | "about" | "reports"
 
 const Profile = ({
   user,
@@ -29,6 +33,57 @@ const Profile = ({
   isProfileOwner: boolean
   currentUser: SafeUser | null
 }) => {
+  const [reports, setReports] = useState<FoundPetReport[] | LostPetReport[] | null>(null);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await fetch("/api/user/reports", { method: "GET" });
+
+        if (!response.ok) {
+          throw new Error('Error loading reports');
+        }
+
+        const data = await response.json();
+        const typedReports = data.map((report : LostPetReport | FoundPetReport) => ({
+          ...report,
+          type: 'foundArea' in report ? 'FoundPetReport' : 'LostPetReport',
+        }))
+        console.log(typedReports)
+        setReports(typedReports);
+      } catch (error) {
+        console.error("Failed to fetch user reports:", error);
+        setReports(null); // Consider setting state to null or handling the error state differently
+      }
+    };
+
+    fetchReports();
+  }, []); // Empty dependency array means this effect runs once on component mount
+
+  const transformImage = (url: string) => {
+    const parts = url.split("/upload/")
+    const transformationString = "w_200,h_200,c_thumb,g_face,r_max,f_auto/"
+    return `${parts[0]}/upload/${transformationString}${parts[1]}`
+  }
+
+  const router = useRouter()
+
+  const handleLostPetReportClick = (reportId: string) => {
+    router.push(`/lostAndFound/lostPetReportPage/${reportId}`)
+  }
+
+  const handleFoundPetReportClick = (reportId: string) => {
+    router.push(`/lostAndFound/foundPetReportPage/${reportId}`)
+  }  
+  const handleReportClick = (report: LostPetReport | FoundPetReport) => {
+    if ('lastSeenArea' in report) {
+      handleLostPetReportClick(report.id);
+    } else if ('foundArea' in report) {
+      handleFoundPetReportClick(report.id);
+    }
+  };
+  
+
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
@@ -264,6 +319,12 @@ const Profile = ({
             >
               About
             </TabsTrigger>
+            <TabsTrigger
+              value="reports"
+              className="text-base py-2 px-4 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-8 data-[state=active]:shadow-none"
+            >
+              Reports
+            </TabsTrigger>            
           </TabsList>
 
           <TabsContent value="posts" className="w-full h-full pt-16">
@@ -289,6 +350,36 @@ const Profile = ({
             </div>
           </TabsContent>
           <TabsContent value="about">Abount ??</TabsContent>
+
+          <TabsContent value="reports" className="w-full h-full pt-16">
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+
+              {reports == null? "No Reports Available" :
+
+                  reports.map(report => (
+                  <div
+                    key={report.id}
+                    className="flex flex-col items-center mb-5 mr-12 cursor-pointer"
+                    onClick={() => handleReportClick(report)}
+                  >
+                  <Image
+                    className="object-cover w-20 h-20 rounded-md"
+                    src={transformImage(report.imageUrl)}
+                    width={80}
+                    height={80}
+                    alt="Bordered avatar"
+                  />                    
+                    <p className="mb-[10px]">{'foundArea' in report ? 'Found Pet Report' : 'Missing Pet Report'}</p>
+
+
+                    <p className="mb-[10px]">{report.petName}</p>
+                    <p className="mb-[10px]">{report.animalType}</p>
+                    <p className="mb-[10px]"> {report.animalBreed}  </p>
+                  </div>
+                ))}
+
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
     </div>

@@ -40,6 +40,18 @@ const LostAndFound = ({
     router.push(`/lostAndFound/lostPetReportPage/${reportId}`)
   }
 
+  const handleFoundPetReportClick = (reportId: string) => {
+    router.push(`/lostAndFound/foundPetReportPage/${reportId}`)
+  }  
+
+  const handleViewMoreLostPetReports = () => {
+    router.push(`/lostAndFound/allLostPetReports`)
+  }
+
+  const handleViewMoreFoundPetReports = () => {
+    router.push(`/lostAndFound/allFoundPetReports`)
+  }  
+
   return (
     <main className="flex min-h-screen flex-col items-center divide-gray-100 w-full h-full">
       <div className="flex flex-col pb-4 w-full h-1/4 px-4 items-center mt-10">
@@ -47,7 +59,7 @@ const LostAndFound = ({
           Lost & Found Pets
         </h2>
 
-        <div className="flex mt-2 mb-2 ">
+        {/* <div className="flex mt-2 mb-2 ">
           <Button
             onClick={() => {
               setAllSeleceted(true)
@@ -137,7 +149,7 @@ const LostAndFound = ({
           >
             Others
           </Button>
-        </div>
+        </div> */}
 
         <div className="flex mt-4">
           <Button
@@ -168,15 +180,16 @@ const LostAndFound = ({
         </div>
       </div>
 
-      <div className="flex border-t-2 border-black flex-col pb-4 w-full h-full px-4 items-center">
-        <h2 className="text-3xl font-semibold tracking-tight mb-4 flex">
+      <div className="flex border-t-2 border-black my-4 flex-col items-center border-b-5 pb-4 w-full h-full">
+      
+        <h2 className="text-3xl font-semibold tracking-tight mt-8 mb-4">
           Lost Pets
         </h2>
 
-        <div className="flex mt-2 mb-2 ">
+        <div className="flex mt-2 mb-2 items-center ">
           {lostPetReports == null
             ? "No Reports Available"
-            : lostPetReports.map((report: LostPetReport) => (
+            : lostPetReports.slice(-5).map((report: LostPetReport) => (
                 <div
                   key={report.id}
                   className="flex flex-col items-center mb-5 mr-12 cursor-pointer"
@@ -187,7 +200,7 @@ const LostAndFound = ({
                     width={200}
                     height={200}
                     alt="Pet"
-                    className="max-w-full h-auto mb-5"
+                    className="max-w-full h-auto mb-5 rounded-full"
                   />
                   <p className="mb-[10px]">Pet Name: {report.petName}</p>
                   <p className="mb-[10px]">Animal Type: {report.animalType}</p>
@@ -196,6 +209,15 @@ const LostAndFound = ({
                   </p>
                 </div>
               ))}
+          <Button type="button" className="bg-gray-800 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-red-700 hover:text-white px-3"
+                  onClick ={() => handleViewMoreLostPetReports()}>
+            <div className="flex flex-row align-middle">
+              <span className="mr-2">More</span>
+              <svg className="w-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+          </Button>
         </div>
       </div>
 
@@ -203,20 +225,21 @@ const LostAndFound = ({
         <h2 className="text-3xl font-semibold tracking-tight mt-8 mb-4">
           Found Pets
         </h2>
-        <div className="flex mt-2 mb-2">
+        <div className="flex mt-2 mb-2 items-center">
           {foundPetReports == null
             ? "No Reports Available"
-            : foundPetReports.map((report: FoundPetReport) => (
+            : foundPetReports.slice(-5).map((report: FoundPetReport) => (
                 <div
                   key={report.id}
                   className="flex flex-col items-center mb-5 mr-12 cursor-pointer"
+                  onClick={() => handleFoundPetReportClick(report.id)}
                 >
                   <Image
                     src={transformImage(report.imageUrl)}
                     width={200}
                     height={200}
                     alt="Pet"
-                    className="max-w-full h-auto mb-5"
+                    className="max-w-full h-auto mb-5 rounded-full"
                   />
 
                   <p className="mb-[10px]">Pet Name: {report.petName}</p>
@@ -226,6 +249,15 @@ const LostAndFound = ({
                   </p>
                 </div>
               ))}
+          <Button type="button" className="bg-gray-800 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-red-700 hover:text-white px-3"
+                            onClick ={() => handleViewMoreFoundPetReports()}>
+            <div className="flex flex-row align-middle">
+              <span className="mr-2">More</span>
+              <svg className="w-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+          </Button>
         </div>
       </div>
     </main>

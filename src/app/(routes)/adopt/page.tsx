@@ -20,7 +20,7 @@ export default async function Adopt() {
             descriptionClassName="max-md:text-lg"
             description="Browse through the profiles and find your new furry friend!"
           >
-            Welcome to the Adopotion Center
+            Welcome to the Adoption Center
           </HeaderTitle>
 
           <Link

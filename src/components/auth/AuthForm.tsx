@@ -11,10 +11,10 @@ import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form"
 
 import HeaderTitle from "../HeaderTitle"
 import { Icons } from "../Icons"
-import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
+import { Spinner } from "../ui/Spinner"
 
 type Variant = "LOGIN" | "REGISTER"
 
@@ -229,7 +229,7 @@ const AuthForm = () => {
             >
               {isLoading ? (
                 <>
-                  <LoadingDots color="#FAFAFA" />
+                  <Spinner />
                 </>
               ) : (
                 "Register"
@@ -243,7 +243,7 @@ const AuthForm = () => {
             >
               {isLoading ? (
                 <>
-                  <LoadingDots color="#FAFAFA" />
+                  <Spinner />
                 </>
               ) : (
                 "Sign in"

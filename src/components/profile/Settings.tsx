@@ -16,7 +16,6 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
-  console.log(currentUser)
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [isImageLoading, setIsImageLoading] = useState(false)
@@ -206,23 +205,6 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
               height={160}
               alt="Bordered avatar"
             />
-<<<<<<< HEAD
-            <div className="flex flex-col space-y-5">
-              <Button
-                type="button"
-                className="w-28"
-                onClick={(
-                  event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-                ) => changePicture(event)}
-              >
-                {isImageLoading ? (
-                  <LoadingDots color="#FAFAFA" />
-                ) : (
-                  "Edit Picture"
-                )}
-              </Button>
-            </div>
-=======
 
             <Button
               type="button"
@@ -237,7 +219,6 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
                 "Edit Picture"
               )}
             </Button>
->>>>>>> 60fee3f95acdc419b0d23afa57f8395ccc9585b9
           </div>
 
           <div className="items-center mt-8">

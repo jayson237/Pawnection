@@ -1,0 +1,163 @@
+.testimonials-section {
+  justify-content: center;
+  align-self: stretch;
+  padding: 60px 80px;
+}
+
+@media (max-width: 991px) {
+  .testimonials-section {
+    padding: 0 20px;
+  }
+}
+
+.testimonials-container {
+  gap: 20px;
+  display: flex;
+}
+
+@media (max-width: 991px) {
+  .testimonials-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0px;
+  }
+}
+
+.testimonials-column {
+  display: flex;
+  flex-direction: column;
+  line-height: normal;
+  width: 50%;
+  margin-left: 0px;
+}
+
+@media (max-width: 991px) {
+  .testimonials-column {
+    width: 100%;
+  }
+}
+
+.testimonials-title {
+  align-self: stretch;
+  color: #242851;
+  letter-spacing: -0.58px;
+  margin: auto 0;
+  font:
+    800 48px/100% Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+}
+
+@media (max-width: 991px) {
+  .testimonials-title {
+    max-width: 100%;
+    margin-top: 40px;
+    font-size: 40px;
+  }
+}
+
+.testimonials-wrapper {
+  justify-content: center;
+  flex-grow: 1;
+}
+
+@media (max-width: 991px) {
+  .testimonials-wrapper {
+    max-width: 100%;
+    margin-top: 40px;
+  }
+}
+
+.testimonials-list {
+  gap: 20px;
+  display: flex;
+}
+
+@media (max-width: 991px) {
+  .testimonials-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0px;
+  }
+}
+
+.testimonial-card {
+  justify-content: center;
+  border-radius: 6px;
+  box-shadow:
+    0px 2px 4px -2px rgba(0, 0, 0, 0.1),
+    0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background-color: var(--white, #fff);
+  display: flex;
+  width: 100%;
+  flex-grow: 1;
+  flex-direction: column;
+  font-size: 16px;
+  color: #242851;
+  font-weight: 400;
+  line-height: 150%;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+@media (max-width: 991px) {
+  .testimonial-card {
+    margin-top: 40px;
+    white-space: initial;
+  }
+}
+
+.user-info {
+  display: flex;
+  gap: 4px;
+  font-weight: 500;
+}
+
+@media (max-width: 991px) {
+  .user-info {
+    white-space: initial;
+  }
+}
+
+.user-avatar {
+  border-radius: 32px;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 32px;
+  height: 32px;
+}
+
+.user-name {
+  text-overflow: ellipsis;
+  font-family: Inter, sans-serif;
+  margin: auto 0;
+}
+
+.user-image {
+  aspect-ratio: 5.88;
+  object-fit: contain;
+  object-position: center;
+  width: 58px;
+  margin: auto 0;
+}
+
+.testimonial-text {
+  text-overflow: ellipsis;
+  font-family: Inter, sans-serif;
+  line-height: 24px;
+  margin-top: 16px;
+}
+
+@media (max-width: 991px) {
+  .testimonial-text {
+    white-space: initial;
+  }
+}
+
+.testimonial-emoji {
+  text-align: center;
+  text-overflow: ellipsis;
+  font-family: Inter, sans-serif;
+  margin-top: 16px;
+}

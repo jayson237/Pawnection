@@ -35,20 +35,38 @@ const AllFoundPetReports = ({
         router.push(`/lostAndFound/foundPetReportPage/${reportId}`)
     }
 
+    const fetchReports = async (animalType: string) => {
+      const response = await fetch("/api/lostAndFound/getFoundPetReports", { 
+        method: "POST",
+        body: JSON.stringify({animalType}) 
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch reports")
+      }
+
+      const data = await response.json()
+      // console.log(data)
+      setFoundPetReports(data)
+    }
+
     return (
         <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
         <div className="py-[60px]">
           <HeaderTitle className="max-w-full">
-            All Found Pet Reports
+            Found Pet Reports
           </HeaderTitle>
 
           <div className="mb-5 mt-5">
                 <Label>Pet Type</Label>
                 <Select
-                  // onValueChange={(val) => {
-                  //   setAnimalType(val)
-                  // }}
-                >
+                  onValueChange={(val) => {
+                    const fetchData = async () => {
+                      fetchReports(val)
+                    }
+                    fetchData()
+                  }}
+                  defaultValue="All">
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select Animal Type" />
                   </SelectTrigger>
@@ -63,9 +81,9 @@ const AllFoundPetReports = ({
               </div>
   
           <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
-            {allFoundPetReports == null 
-            ? "No Lost Pet Reports "
-            : allFoundPetReports.map((report, index) => (
+            {foundPetReports == null 
+            ? "No Found Pet Reports"
+            : foundPetReports.map((report, index) => (
               <div
                 key={index}
                 className="flex border p-4 rounded-xl bg-white h-full  cursor-pointer"

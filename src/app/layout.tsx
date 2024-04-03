@@ -1,8 +1,8 @@
-import getCurrentUser from "@/actions/getCurrentUser"
 import NavBar from "@/components/NavBar"
 import Footer from "@/components/ui/Footer"
 import { Toaster } from "@/components/ui/Toaster"
 import AuthContext from "@/context/AuthContext"
+import { getCurrentUser } from "@/lib/actions/user"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
@@ -32,7 +32,7 @@ export default async function RootLayout({
       >
         <AuthContext>
           <NavBar currentUser={currentUser} />
-          <main className="min-h-[calc(100vh-78px)] w-full ">{children}</main>
+          <main className="min-h-[calc(100vh-78px)] w-full">{children}</main>
           <Footer />
         </AuthContext>
         <Toaster />

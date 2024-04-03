@@ -1,8 +1,8 @@
-import getCurrentUser from "@/actions/getCurrentUser"
 import Profile from "@/components/profile/Profile"
+import { getCurrentUser } from "@/lib/actions/user"
+import { getOneUser } from "@/lib/actions/user"
 import { notFound } from "next/navigation"
-
-import { getOneUser } from "../../../../lib/user"
+import { redirect } from "next/navigation"
 
 export default async function UserProfile({
   params,
@@ -11,6 +11,7 @@ export default async function UserProfile({
 }) {
   const username = params.username
   const currentUser = await getCurrentUser()
+  if (!currentUser) redirect("/auth")
   const user = await getOneUser(username)
 
   const isProfileOwner = currentUser?.username === username

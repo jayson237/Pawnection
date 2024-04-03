@@ -1,5 +1,5 @@
 import getAllFoundPetReports from "@/actions/getAllFoundPetReports"
-import getCurrentUser from "@/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import { redirect } from "next/navigation"
 import AllFoundPetReports from "@/components/lostAndFound/AllFoundPetReports"
 

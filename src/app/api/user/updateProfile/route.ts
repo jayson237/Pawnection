@@ -1,4 +1,4 @@
-import getCurrentUser from "@/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
 import { NextResponse } from "next/server"
 
@@ -15,6 +15,7 @@ export async function PUT(request: Request) {
         username: data.username,
         phone: data.phone,
         image: data.image,
+        bio: data.bio,
       },
     })
 

@@ -12,9 +12,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "../ui/Dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
@@ -137,13 +135,20 @@ const Profile = ({
                 </Button>
               )}
             </div>
-            <div className="my-2 border rounded-xl px-1.5 py-1 text-sm w-fit">
-              {user?.type}
+            <div className="flex flex-col space-x-2">
+              <div className="my-2 border rounded-xl px-1.5 py-1 text-sm w-fit">
+                {user?.type}
+              </div>
+              <p className="mb-2 text-sm">{currentUser?.bio}</p>
             </div>
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="ghost" disabled={!currentUser}>
+                <Button
+                  className="hover:bg-submain"
+                  variant="ghost"
+                  disabled={!currentUser}
+                >
                   {user.following?.length} Following
                 </Button>
               </DialogTrigger>
@@ -223,7 +228,11 @@ const Profile = ({
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="ghost" disabled={!currentUser}>
+                <Button
+                  className="hover:bg-submain"
+                  variant="ghost"
+                  disabled={!currentUser}
+                >
                   {user.followers?.length} Follower
                 </Button>
               </DialogTrigger>
@@ -304,7 +313,7 @@ const Profile = ({
         </div>
       </div>
 
-      <div className="">
+      <div>
         <Tabs defaultValue="posts" className="">
           <TabsList className="bg-transparent w-full gap-8 h-18">
             <TabsTrigger

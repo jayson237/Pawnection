@@ -1,6 +1,5 @@
-import getCurrentUser from "@/actions/getCurrentUser"
 import FilterSearch from "@/components/explore/FilterSearch"
-import PostForm from "@/components/explore/PostForm"
+import { getCurrentUser } from "@/lib/actions/user"
 import { redirect } from "next/navigation"
 
 export default async function Community() {

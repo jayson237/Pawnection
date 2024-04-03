@@ -1,4 +1,4 @@
-import getCurrentUser from "@/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import getSpecificLostPetReport from "@/actions/getSpecificLostPetReport"
 import LostPetReportPage from "@/components/lostAndFound/LostPetReportPage"
 import { redirect } from "next/navigation"
@@ -14,5 +14,5 @@ export default async function lostPetReportPage({
   const id = params.reportId
   const lostPetReport = await getSpecificLostPetReport(id)
   if (!currUser) redirect("/auth")
-  return <LostPetReportPage lostPetReport={lostPetReport} />
+  return <LostPetReportPage lostPetReport={lostPetReport} currUser = {currUser}/>
 }

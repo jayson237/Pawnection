@@ -5,10 +5,11 @@ import { SafeUser } from "@/types"
 import Image from "next/image"
 import { FormEvent, useState } from "react"
 
+import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
-import LoadingDots from "../ui/LoadingDots"
+import { Textarea } from "../ui/TextArea"
 
 interface SettingsProps {
   currentUser?: SafeUser | null
@@ -30,6 +31,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
       }` ||
       "/../icon.png",
   )
+  const [bio, setBio] = useState(currentUser?.bio || "")
   const [isUsernameValid, setIsUsernameValid] = useState(true)
   const [isFormValid, setIsFormValid] = useState(false)
   const [isFormChanged, setIsFormChanged] = useState(false)
@@ -45,6 +47,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
           name,
           username,
           phone,
+          bio,
         }),
       })
 
@@ -61,6 +64,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
           title: "Successful!",
           description: "Profile updated successfully",
         })
+        window.location.reload()
       }
 
       const result = await updateResponse.json()
@@ -172,8 +176,15 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
     setIsFormChanged(true)
   }
 
+  const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value
+    setBio(value)
+    setIsFormValid(true)
+    setIsFormChanged(true)
+  }
+
   return (
-    <div className="w-full px-8 sm:max-w-xl sm:rounded-lg mx-auto">
+    <div className="w-full px-8 sm:max-w-xl sm:rounded-lg mx-auto mt-12">
       <h2 className="text-2xl font-bold sm:text-xl text-center">
         Profile Settings
       </h2>
@@ -185,30 +196,29 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
       </div>
       <form className="space-y-5" onSubmit={submitHandler}>
         <div className="grid max-w-2xl mx-auto mt-6">
-          <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0 mx-auto">
+          <div className="flex flex-col items-center space-y-5 mx-auto">
             <Image
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-              // loader={imageLoader}
+              loader={imageLoader}
               src={image}
               width={160}
               height={160}
               alt="Bordered avatar"
             />
-            <div className="flex flex-col space-y-5 sm:ml-8">
-              <Button
-                type="button"
-                className="w-28"
-                onClick={(
-                  event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-                ) => changePicture(event)}
-              >
-                {isImageLoading ? (
-                  <LoadingDots color="#FAFAFA" />
-                ) : (
-                  "Edit Picture"
-                )}
-              </Button>
-            </div>
+
+            <Button
+              type="button"
+              className="w-28"
+              onClick={(
+                event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+              ) => changePicture(event)}
+            >
+              {isImageLoading ? (
+                <LoadingDots color="#FAFAFA" />
+              ) : (
+                "Edit Picture"
+              )}
+            </Button>
           </div>
 
           <div className="items-center mt-8">
@@ -283,6 +293,20 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
                 placeholder="Your contact number"
                 defaultValue={currentUser?.phone || ""}
                 onChange={handleContactChange}
+              />
+            </div>
+
+            <div className="mb-2 sm:mb-6">
+              <Label htmlFor="bio" className="block mb-2 text-sm font-medium">
+                Bio
+              </Label>
+              <Textarea
+                id="bio"
+                placeholder="Your bio"
+                defaultValue={currentUser?.bio || ""}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  handleBioChange(e)
+                }
               />
             </div>
 

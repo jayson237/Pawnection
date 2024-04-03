@@ -1,5 +1,5 @@
-import getCurrentUser from "@/actions/getCurrentUser"
-import AdoptionPost from "@/components/adoption/AdoptionPost"
+import AdoptionPost from "@/components/adoptionCenter/AdoptionPost"
+import { getCurrentUser } from "@/lib/actions/user"
 import { UserType } from "@prisma/client"
 import { redirect } from "next/navigation"
 

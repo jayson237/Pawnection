@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form"
 
+import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
-import LoadingDots from "../ui/LoadingDots"
 
 const UsernameForm = () => {
   const { toast } = useToast()

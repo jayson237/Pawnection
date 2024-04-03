@@ -1,0 +1,142 @@
+.featured-pets {
+  border-radius: 50px;
+  background-color: #ffece4;
+  padding: 60px 80px 0;
+}
+
+@media (max-width: 991px) {
+  .featured-pets {
+    padding: 0 20px;
+  }
+}
+
+.pet-showcase {
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 991px) {
+  .pet-showcase {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+}
+
+.showcase-image {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-top: 20px;
+  flex-grow: 1;
+  padding: 0 17px 80px;
+}
+
+@media (max-width: 991px) {
+  .showcase-image {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 40px;
+  }
+}
+
+.showcase-img {
+  width: 100%;
+  aspect-ratio: 1.28;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 991px) {
+  .showcase-img {
+    max-width: 100%;
+  }
+}
+
+.showcase-details {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+@media (max-width: 991px) {
+  .showcase-details {
+    width: 100%;
+  }
+}
+
+@media (max-width: 991px) {
+  .section-title {
+    max-width: 100%;
+    font-size: 40px;
+    margin-top: 40px;
+  }
+}
+
+.pet-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+@media (max-width: 991px) {
+  .pet-card {
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+}
+
+.pet-image {
+  width: 60px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center;
+  align-self: stretch;
+}
+
+.pet-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  margin: auto 0;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+@media (max-width: 991px) {
+  .pet-details {
+    white-space: initial;
+  }
+}
+
+.pet-name {
+  color: #242851;
+  font:
+    20px/140% Inter,
+    sans-serif;
+}
+
+.pet-type {
+  color: #ff7751;
+  font:
+    14px/143% Inter,
+    sans-serif;
+}
+
+.pet-age {
+  color: #242851;
+  text-align: right;
+  align-self: stretch;
+  margin: auto 0;
+  font:
+    600 18px/156% Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+}

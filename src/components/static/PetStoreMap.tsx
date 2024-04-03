@@ -1,8 +1,8 @@
 "use client"
 
 import "leaflet/dist/leaflet.css"
-import React from "react"
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
+import React, { useEffect, useState } from "react"
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet"
 
 import HeaderTitle from "../HeaderTitle"
 
@@ -20,22 +20,27 @@ const PetStoreMap = () => {
           See them on our mini map!
         </HeaderTitle>
 
-        <MapContainer
-          center={[10.776889, 106.700806]}
-          zoom={13}
-          scrollWheelZoom={false}
-          className="h-[312px] w-[1100px]"
+        <div
+          className="flex justify-center w-full"
+          style={{ height: "100vh", width: "100%" }}
         >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          {petStores.map((store) => (
-            <Marker key={store.id} position={[store.lat, store.lng]}>
-              <Popup>{store.name}</Popup>
-            </Marker>
-          ))}
-        </MapContainer>
+          <MapContainer
+            center={[10.776889, 106.700806]}
+            zoom={13}
+            scrollWheelZoom={false}
+            style={{ height: "50vh", width: "85vw" }}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            {petStores.map((store) => (
+              <Marker key={store.id} position={[store.lat, store.lng]}>
+                <Popup>{store.name}</Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        </div>
       </div>
     </div>
   )

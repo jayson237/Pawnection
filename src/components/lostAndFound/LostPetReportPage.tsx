@@ -6,14 +6,20 @@ import HeaderTitle
  import { SafeUser } from "@/types" 
 import { Button } from "../ui/Button"
 import { useRouter } from "next/navigation"
-import getCurrentUser from "@/actions/getCurrentUser"
+import { getCurrentUser } from "@/lib/actions/user"
 import { useState, useEffect } from "react"
+import { type } from "os"
 const LostPetReportPage = ({
   lostPetReport,
+  currUser
 }: {
   lostPetReport: LostPetReport | null
+  currUser : SafeUser | null
 }) => {
   const [thisLostPetReport, setThisLostPetReport] = useState(lostPetReport)
+  const [showButton, setShowButton] = useState(false)
+  const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("")
+
   const router = useRouter()
 
   const transformImage = (url:string) => {
@@ -22,6 +28,38 @@ const LostPetReportPage = ({
     return `${parts[0]}/upload/${transformationString}${parts[1]}`
   }
 
+
+  const checkShowButtonOrNot = async() => {
+
+    try{
+      const userId = currUser?.id
+      
+
+      const reportId = thisLostPetReport?.userId
+      
+      console.log("userId: ", userId, typeof(userId))
+      console.log("reportId: ", reportId, typeof(reportId))
+      console.log(showButton)
+      if ((userId?.trim()) == reportId?.trim()) {
+        setShowButton(true)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  } 
+  
+  useEffect(() => {
+    if (thisLostPetReport?.lastSeenDate) {
+      const date = new Date(thisLostPetReport.lastSeenDate)
+      const formattedDate = date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      setFormattedLastSeenDate(formattedDate)
+    }
+  }, [thisLostPetReport?.lastSeenDate])
+    
 
   const deleteReport = async () => {
     if (thisLostPetReport && confirm("Are you sure you want to delete this report?")) {
@@ -60,7 +98,9 @@ const LostPetReportPage = ({
             <div className="flex gap-8">
               <HeaderTitle className="text-left">{thisLostPetReport.petName}</HeaderTitle>
             </div>
-            <Button onClick = {()=> deleteReport()}> Delete Report </Button>
+            <div>
+          {thisLostPetReport.userId ===  currUser?.id  && (<Button onClick={() => deleteReport()}>Delete Report</Button>)}   
+            </div>
             </div>
 
             <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
@@ -73,7 +113,7 @@ const LostPetReportPage = ({
                 <p style={{ marginBottom: "10px" }}>Animal Breed: {thisLostPetReport.animalBreed}</p>
                 <p style={{ marginBottom: "10px" }}>Contact Details: {thisLostPetReport.contactDetails}</p>
                 <p style={{ marginBottom: "10px" }}>Last Seen Area: {thisLostPetReport.lastSeenArea}</p>
-                <p style={{ marginBottom: "10px" }}>Last Seen Date: {thisLostPetReport.lastSeenDate.toLocaleDateString()}</p>
+                <p style={{ marginBottom: "10px" }}>Last Seen Date: {formattedLastSeenDate}</p>
                 <p style={{ marginBottom: "10px" }}>Report Description: {thisLostPetReport.reportDescription}</p>
                 <p style={{ marginBottom: "10px" }}>Report Message: {thisLostPetReport.reportMessage}</p>
               </div>

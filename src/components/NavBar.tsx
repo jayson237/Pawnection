@@ -99,11 +99,15 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                     src={
                       !currentUser?.image
                         ? "/../icon.png"
-                        : `${
-                            currentUser?.image?.split("/image/upload/")[0]
-                          }/image/upload/c_fill,h_160,w_160/${
-                            currentUser?.image?.split("/image/upload/")[1]
-                          }`
+                        : currentUser?.image
+                              .split("image/upload")[0]
+                              .includes("cloudinary")
+                          ? `${
+                              currentUser?.image?.split("/image/upload/")[0]
+                            }/image/upload/c_fill,h_160,w_160/${
+                              currentUser?.image?.split("/image/upload/")[1]
+                            }`
+                          : currentUser?.image
                     }
                     width={160}
                     height={160}
@@ -192,11 +196,19 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                           src={
                             !currentUser?.image
                               ? "/../icon.png"
-                              : `${
-                                  currentUser?.image?.split("/image/upload/")[0]
-                                }/image/upload/c_fill,h_160,w_160/${
-                                  currentUser?.image?.split("/image/upload/")[1]
-                                }`
+                              : currentUser?.image
+                                    .split("image/upload")[0]
+                                    .includes("cloudinary")
+                                ? `${
+                                    currentUser?.image?.split(
+                                      "/image/upload/",
+                                    )[0]
+                                  }/image/upload/c_fill,h_160,w_160/${
+                                    currentUser?.image?.split(
+                                      "/image/upload/",
+                                    )[1]
+                                  }`
+                                : currentUser?.image
                           }
                           width={48}
                           height={48}

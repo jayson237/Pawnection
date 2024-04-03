@@ -6,9 +6,9 @@ export async function GET(request: Request) {
     try{
         const animalType = await request.json()
 
-        const reports = animalType === 'All' 
+        const reports = animalType === "All" 
         ? await prisma.lostPetReport.findMany()
-        : await prisma.lostPetReport.findMany({ where: { animalType: animalType } });
+        : await prisma.lostPetReport.findMany({ where: { animalType: animalType } })
         
         return NextResponse.json(reports)
     } catch (error) {

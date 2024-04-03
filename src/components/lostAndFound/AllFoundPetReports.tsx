@@ -25,7 +25,7 @@ const AllFoundPetReports = ({
 
     const transformImage = (url:string) => {
         const parts = url.split("/upload/")
-        const transformationString = "w_500,h_500,c_thumb,g_face,r_max,f_auto,bo_5px_solid_black/";
+        const transformationString = "w_500,h_500,c_thumb,g_face,r_max,f_auto,bo_5px_solid_black/"
         return `${parts[0]}/upload/${transformationString}${parts[1]}`
     }
 

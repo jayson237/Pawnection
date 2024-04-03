@@ -11,13 +11,13 @@ export async function GET(request: Request) {
         where: {
           userId: userId
         },
-      });
+      })
 
     const lostPetReports = await prisma.lostPetReport.findMany({
         where: {
         userId: userId
         },
-    });
+    })
 
     const combinedReports = [...foundPetReports, ...lostPetReports]
     

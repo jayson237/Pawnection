@@ -1,6 +1,6 @@
 // Renamed and generalized function
-import { LostPetReport } from "@prisma/client";
-import prisma from "@/lib/prismadb";
+import { LostPetReport } from "@prisma/client"
+import prisma from "@/lib/prismadb"
 
 export default async function getLostPetReportsByType(animalType: string): Promise<LostPetReport[] | null> {
     try { 
@@ -8,10 +8,10 @@ export default async function getLostPetReportsByType(animalType: string): Promi
             where: {
               animalType: animalType
             },
-        });
-        return reports.length ? reports : null;
+        })
+        return reports.length ? reports : null
     } catch (error) {
-        console.error(error);
-        return null;
+        console.error(error)
+        return null
     }
 }

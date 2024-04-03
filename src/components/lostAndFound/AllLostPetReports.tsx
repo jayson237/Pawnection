@@ -26,7 +26,7 @@ const AllLostPetReports = ({
 
     const [lostPetReports, setLostPetReports] = useState(allLostPetReports)
 
-    console.log(allLostPetReports)
+    // console.log(allLostPetReports)
     const transformImage = (url:string) => {
         const parts = url.split("/upload/")
         const transformationString = "w_500,h_500,c_thumb,g_face,r_max,f_auto,bo_5px_solid_black/"
@@ -37,6 +37,21 @@ const AllLostPetReports = ({
 
     const handleLostPetReportClick = (reportId: string) => {
         router.push(`/lostAndFound/lostPetReportPage/${reportId}`)
+    }
+
+    const fetchReports = async (animalType: string) => {
+      const response = await fetch("/api/lostAndFound/getLostPetReports", { 
+        method: "POST",
+        body: JSON.stringify({animalType}) 
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch reports")
+      }
+
+      const data = await response.json()
+      // console.log(data)
+      setLostPetReports(data)
     }
 
 
@@ -62,7 +77,7 @@ const AllLostPetReports = ({
         <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
         <div className="py-[60px]">
           <HeaderTitle className="max-w-full">
-            All Lost Pet Reports
+            Lost Pet Reports
           </HeaderTitle>
   
           <div className="mb-5 mt-5">
@@ -70,16 +85,11 @@ const AllLostPetReports = ({
                 <Select
                   onValueChange={(val) => {
                     const fetchData = async () => {
-                      if (val === "All") {
-                        setLostPetReports(allLostPetReports)
-                      } else {
-                        const data = await getLostPetReportsByType(val)
-                        setLostPetReports(data)
-                      }
+                      fetchReports(val)
                     }
                     fetchData()
                   }}
->
+                  defaultValue="All">
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select Animal Type" />
                   </SelectTrigger>
@@ -95,7 +105,7 @@ const AllLostPetReports = ({
 
           <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
             {lostPetReports == null 
-            ? "No Lost Pet Reports "
+            ? "No Lost Pet Reports " 
             : lostPetReports.map((report, index) => (
               <div
                 key={index}

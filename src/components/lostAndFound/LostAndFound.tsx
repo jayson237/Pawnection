@@ -45,11 +45,11 @@ const LostAndFound = ({
   }  
 
   const handleViewMoreLostPetReports = () => {
-    router.push(`/lostAndFound/allLostPetReports`)
+    router.push("/lostAndFound/allLostPetReports")
   }
 
   const handleViewMoreFoundPetReports = () => {
-    router.push(`/lostAndFound/allFoundPetReports`)
+    router.push("/lostAndFound/allFoundPetReports")
   }  
 
   return (

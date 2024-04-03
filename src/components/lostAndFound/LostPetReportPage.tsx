@@ -30,21 +30,21 @@ const LostPetReportPage = ({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ reportId: thisLostPetReport.id }),
-        });
+        })
   
         if (!response.ok) {
-          throw new Error("Failed to delete the report.");
+          throw new Error("Failed to delete the report.")
         }
   
-        alert("Report deleted successfully");
-        setThisLostPetReport(null);
-        router.push(`/lostAndFound`)
+        alert("Report deleted successfully")
+        setThisLostPetReport(null)
+        router.push("/lostAndFound")
       } catch (error) {
-        console.error("Error deleting report:", error);
-        alert("Failed to delete the report.");
+        console.error("Error deleting report:", error)
+        alert("Failed to delete the report.")
       }
     }
-  };
+  }
 
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">

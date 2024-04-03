@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 
     await prisma.foundPetReport.delete({
         where: { id: reportId },
-    });
+    })
      
     return new NextResponse("Successfully deleted report", { status: 200 })
   } catch (error) {

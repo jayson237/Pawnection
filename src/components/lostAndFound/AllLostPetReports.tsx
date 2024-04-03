@@ -29,7 +29,7 @@ const AllLostPetReports = ({
     console.log(allLostPetReports)
     const transformImage = (url:string) => {
         const parts = url.split("/upload/")
-        const transformationString = "w_500,h_500,c_thumb,g_face,r_max,f_auto,bo_5px_solid_black/";
+        const transformationString = "w_500,h_500,c_thumb,g_face,r_max,f_auto,bo_5px_solid_black/"
         return `${parts[0]}/upload/${transformationString}${parts[1]}`
     }
 
@@ -71,13 +71,13 @@ const AllLostPetReports = ({
                   onValueChange={(val) => {
                     const fetchData = async () => {
                       if (val === "All") {
-                        setLostPetReports(allLostPetReports);
+                        setLostPetReports(allLostPetReports)
                       } else {
-                        const data = await getLostPetReportsByType(val);
-                        setLostPetReports(data);
+                        const data = await getLostPetReportsByType(val)
+                        setLostPetReports(data)
                       }
-                    };
-                    fetchData();
+                    }
+                    fetchData()
                   }}
 >
                   <SelectTrigger className="w-[180px]">

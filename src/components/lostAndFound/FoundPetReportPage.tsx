@@ -20,21 +20,21 @@ const FoundPetReportPage = ({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ reportId: thisFoundPetReport.id }),
-        });
+        })
   
         if (!response.ok) {
-          throw new Error("Failed to delete the report.");
+          throw new Error("Failed to delete the report.")
         }
   
-        alert("Report deleted successfully");
-        setThisFoundPetReport(null);
-        router.push(`/lostAndFound`)
+        alert("Report deleted successfully")
+        setThisFoundPetReport(null)
+        router.push("/lostAndFound")
       } catch (error) {
-        console.error("Error deleting report:", error);
-        alert("Failed to delete the report.");
+        console.error("Error deleting report:", error)
+        alert("Failed to delete the report.")
       }
     }
-  };
+  }
 
   const transformImage = (url:string) => {
     const parts = url.split("/upload/")

@@ -33,32 +33,32 @@ const Profile = ({
   isProfileOwner: boolean
   currentUser: SafeUser | null
 }) => {
-  const [reports, setReports] = useState<FoundPetReport[] | LostPetReport[] | null>(null);
+  const [reports, setReports] = useState<FoundPetReport[] | LostPetReport[] | null>(null)
 
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch("/api/user/reports", { method: "GET" });
+        const response = await fetch("/api/user/reports", { method: "GET" })
 
         if (!response.ok) {
-          throw new Error('Error loading reports');
+          throw new Error("Error loading reports")
         }
 
-        const data = await response.json();
+        const data = await response.json()
         const typedReports = data.map((report : LostPetReport | FoundPetReport) => ({
           ...report,
-          type: 'foundArea' in report ? 'FoundPetReport' : 'LostPetReport',
+          type: "foundArea" in report ? "FoundPetReport" : "LostPetReport",
         }))
-        console.log(typedReports)
-        setReports(typedReports);
+        // console.log(typedReports)
+        setReports(typedReports)
       } catch (error) {
-        console.error("Failed to fetch user reports:", error);
-        setReports(null); // Consider setting state to null or handling the error state differently
+        console.error("Failed to fetch user reports:", error)
+        setReports(null) // Consider setting state to null or handling the error state differently
       }
-    };
+    }
 
-    fetchReports();
-  }, []); // Empty dependency array means this effect runs once on component mount
+    fetchReports()
+  }, []) // Empty dependency array means this effect runs once on component mount
 
   const transformImage = (url: string) => {
     const parts = url.split("/upload/")
@@ -76,12 +76,12 @@ const Profile = ({
     router.push(`/lostAndFound/foundPetReportPage/${reportId}`)
   }  
   const handleReportClick = (report: LostPetReport | FoundPetReport) => {
-    if ('lastSeenArea' in report) {
-      handleLostPetReportClick(report.id);
-    } else if ('foundArea' in report) {
-      handleFoundPetReportClick(report.id);
+    if ("lastSeenArea" in report) {
+      handleLostPetReportClick(report.id)
+    } else if ("foundArea" in report) {
+      handleFoundPetReportClick(report.id)
     }
-  };
+  }
   
 
   return (
@@ -369,7 +369,7 @@ const Profile = ({
                     height={80}
                     alt="Bordered avatar"
                   />                    
-                    <p className="mb-[10px]">{'foundArea' in report ? 'Found Pet Report' : 'Missing Pet Report'}</p>
+                    <p className="mb-[10px]">{"foundArea" in report ? "Found Pet Report" : "Missing Pet Report"}</p>
 
 
                     <p className="mb-[10px]">{report.petName}</p>

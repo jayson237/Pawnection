@@ -40,37 +40,16 @@ const AllLostPetReports = ({
     }
 
     const fetchReports = async (animalType: string) => {
-      const response = await fetch("/api/lostAndFound/getLostPetReports", { 
-        method: "POST",
-        body: JSON.stringify({animalType}) 
-      })
+      const url = "/api/lostAndFound/getLostPetReports?type=".concat(animalType) 
 
+      const response = await fetch(url)
       if (!response.ok) {
         throw new Error("Failed to fetch reports")
       }
 
       const data = await response.json()
-      // console.log(data)
       setLostPetReports(data)
     }
-
-
-    // const fetchReports = async (animalType: string) => {
-    //   // Constructing a query string
-    //   const queryString = new URLSearchParams({ animalType }).toString();
-    //   const response = await fetch(`/api/lostAndFound/getLostPetReportsByType?${queryString}`, {
-    //     method: "GET",
-    //     // headers: { // This line is commented out because GET requests typically don't need a Content-Type header
-    //     //   'Content-Type': 'application/json',
-    //     // },
-    //   });
-    //   if (!response.ok) {
-    //       throw new Error("Failed to fetch reports.");
-    //   }
-    //   const data = await response.json();
-    //   setLostPetReports(data);
-    // };
-    
 
 
     return (

@@ -1,11 +1,11 @@
 import prisma from "@/lib/prismadb"
 import { NextResponse } from "next/server"
 
-export async function POST(request: Request) {
+export async function GET(req: Request) {
+    const { searchParams } = new URL(req.url)
+    const animalType = searchParams.get("type") as string
 
     try{
-        const data = await request.json()
-        const animalType = data.animalType
 
         const reports = animalType === "All" 
         ? await prisma.foundPetReport.findMany()
@@ -14,10 +14,8 @@ export async function POST(request: Request) {
         if (!reports.length) {
             return NextResponse.json(null)
         }
-
         return NextResponse.json(reports)
     } catch (error) {
         return new NextResponse("Internal Error", { status: 500 })
       }
-
 }

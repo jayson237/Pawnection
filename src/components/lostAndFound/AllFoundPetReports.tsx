@@ -36,19 +36,17 @@ const AllFoundPetReports = ({
     }
 
     const fetchReports = async (animalType: string) => {
-      const response = await fetch("/api/lostAndFound/getFoundPetReports", { 
-        method: "POST",
-        body: JSON.stringify({animalType}) 
-      })
+      const url = "/api/lostAndFound/getFoundPetReports?type=".concat(animalType) 
 
+      const response = await fetch(url)
       if (!response.ok) {
         throw new Error("Failed to fetch reports")
       }
 
       const data = await response.json()
-      // console.log(data)
       setFoundPetReports(data)
     }
+
 
     return (
         <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">

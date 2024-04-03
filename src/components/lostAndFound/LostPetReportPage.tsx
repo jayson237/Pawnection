@@ -61,6 +61,7 @@ const LostPetReportPage = ({
   }, [thisLostPetReport?.lastSeenDate])
     
 
+
   const deleteReport = async () => {
     if (thisLostPetReport && confirm("Are you sure you want to delete this report?")) {
       try {
@@ -84,6 +85,10 @@ const LostPetReportPage = ({
     }
   }
 
+  const updateReport= () => {
+    router.push(`/lostAndFound/updateLostPetReportPage/${lostPetReport?.id}`)
+  }  
+  
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
     <div className="py-[60px]">
@@ -99,7 +104,8 @@ const LostPetReportPage = ({
               <HeaderTitle className="text-left">{thisLostPetReport.petName}</HeaderTitle>
             </div>
             <div>
-          {thisLostPetReport.userId ===  currUser?.id  && (<Button onClick={() => deleteReport()}>Delete Report</Button>)}   
+            {thisLostPetReport.userId ===  currUser?.id  && (<Button onClick={() => updateReport()}>Edit Report</Button>)}     
+            {thisLostPetReport.userId ===  currUser?.id  && (<Button onClick={() => deleteReport()}>Delete Report</Button>)}   
             </div>
             </div>
 

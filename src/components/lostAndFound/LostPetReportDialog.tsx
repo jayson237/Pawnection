@@ -206,6 +206,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
                 selected={lastSeenDate}
                 onSelect={setLastSeenDate}
                 className="rounded-md border shadow flex justify-center "
+                disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
               />
             </div>
 

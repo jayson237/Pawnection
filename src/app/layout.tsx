@@ -27,12 +27,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} min-h-screen w-screen overflow-x-hidden`}
-      >
+      <body className={`${inter.className} w-screen overflow-x-hidden`}>
         <AuthContext>
-          <NavBar currentUser={currentUser} />
-          <main className="min-h-[calc(100vh-78px)] w-full">{children}</main>
+          <main className="min-h-[calc(100vh-78px)] w-full">
+            <NavBar currentUser={currentUser} />
+            {children}
+          </main>
           <Footer />
         </AuthContext>
         <Toaster />

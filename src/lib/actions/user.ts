@@ -1,6 +1,7 @@
 import { authOptions } from "@/lib/authOptions"
 import prisma from "@/lib/prismadb"
 import { SafeUser } from "@/types"
+import { User } from "@prisma/client"
 import { getServerSession } from "next-auth/next"
 
 export async function getCurrentUser(): Promise<SafeUser | null> {
@@ -33,6 +34,24 @@ export async function getCurrentUser(): Promise<SafeUser | null> {
       createdAt: rest.createdAt.toISOString(),
       updatedAt: rest.updatedAt.toISOString(),
     }
+  } catch (error) {
+    return null
+  }
+}
+
+export async function getAllUsers(): Promise<User[] | null> {
+  try {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) {
+      return null
+    }
+    const users = await prisma.user.findMany({
+      include: {
+        followerUsers: true,
+        followingUsers: true,
+      },
+    })
+    return users
   } catch (error) {
     return null
   }

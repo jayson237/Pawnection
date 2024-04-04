@@ -4,7 +4,7 @@ import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-
+import { Button } from "../ui/Button"
 import HeaderTitle from "../HeaderTitle"
 import { Label } from "../ui/Label"
 import {
@@ -14,14 +14,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/Select"
-
+import FoundPetReportDialog from "./FoundPetReportDialog"
 const AllFoundPetReports = ({
   allFoundPetReports,
 }: {
   allFoundPetReports: FoundPetReport[] | null
 }) => {
   const [foundPetReports, setFoundPetReports] = useState(allFoundPetReports)
-
+  const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
   const transformImage = (url: string) => {
     const parts = url.split("/upload/")
     const transformationString =
@@ -51,6 +52,29 @@ const AllFoundPetReports = ({
       <div className="py-[60px]">
         <HeaderTitle className="max-w-full">Found Pet Reports</HeaderTitle>
 
+        <Button
+            variant="outline"
+            className="mr-8 w-60 mb-5 bg-black text-white"
+            onClick={() => setIsFoundPetReportDialogOpen(true)}
+          >
+            Report A Found Pet
+          </Button>
+
+          <FoundPetReportDialog
+            isOpen={isFoundPetReportDialogOpen}
+            onClose={() => setIsFoundPetReportDialogOpen(false)}
+          />
+
+          <div className="mb-5">
+            <input
+              type="text"
+              placeholder="Search reports..."
+              className="border px-4 py-2"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>          
+
         <div className="mb-5 mt-5">
           <Label>Pet Type</Label>
           <Select
@@ -78,7 +102,18 @@ const AllFoundPetReports = ({
         <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
           {foundPetReports == null
             ? "No Found Pet Reports"
-            : foundPetReports.map((report, index) => (
+            : foundPetReports.filter((report) => {
+              // Adjust the condition to search other fields as needed
+              return (
+                report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.animalBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.contactDetails.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.foundArea.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.petSex.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.reportMessage.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.reportDescription.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+            }).map((report, index) => (
                 <div
                   key={index}
                   className="flex border p-4 rounded-xl bg-white h-full  cursor-pointer"

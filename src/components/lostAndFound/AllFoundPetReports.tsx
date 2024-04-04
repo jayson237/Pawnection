@@ -102,7 +102,6 @@ const AllFoundPetReports = ({
           {foundPetReports == null
             ? "No Found Pet Reports"
             : foundPetReports.filter((report) => {
-              // Adjust the condition to search other fields as needed
               return (
                 report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 report.animalType.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -130,7 +129,7 @@ const AllFoundPetReports = ({
                   />
                   <div className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
                   : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} >
-                    {report.isActive ? "Missing Pet " : "Pet has been found"}
+                    {report.isActive ? "Found Pet " : "Pet has been returned"}
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold mb-1">
@@ -147,7 +146,6 @@ const AllFoundPetReports = ({
           {foundPetReports == null
             ? "No Found Pet Reports"
             : foundPetReports.filter((report) => {
-              // Adjust the condition to search other fields as needed
               return (
                 report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 report.animalBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||

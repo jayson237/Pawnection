@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
+import { ChevronDownCircle } from "lucide-react"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
@@ -7,7 +8,7 @@ export async function POST(request: Request) {
   try {
     const data = await request.json()
 
-    const missingReport = await prisma.lostPetReport.create({
+    const missingReport = await prisma.foundPetReport.create({
       data: {
         user: {
           connect: {
@@ -20,10 +21,10 @@ export async function POST(request: Request) {
         petSex: data.sex,
         reportMessage: data.message,
         reportDescription: data.description,
-        lastSeenArea: data.lastSeenArea,
-        lastSeenDate: data.lastSeenDate,
+        foundArea: data.foundArea,
+        foundDate: data.foundDate,
         contactDetails: data.contactDetails,
-        imageUrl : data.petImage,
+        imageUrl : data.petImage
       },
     })
 

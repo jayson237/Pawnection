@@ -2,7 +2,7 @@
 
 import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
-import { EditAdoptablePetPayloadType } from "@/types/adoption-center"
+import { EditAdoptablePetPayloadType } from "@/types/adoptionCenter"
 import { AdoptablePet, AdoptionRequest } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
@@ -64,7 +64,7 @@ export default function AdoptionCenterManager({
   const onSubmit: SubmitHandler<EditAdoptablePetPayloadType> = async (
     formData,
   ) => {
-    const set = await fetch("/api/adoption-center/" + data.id, {
+    const set = await fetch("/api/adoptionCenter/" + data.id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export default function AdoptionCenterManager({
         <div className="flex gap-12">
           <Link
             className={cn(buttonVariants({ variant: "outline" }))}
-            href="/adoption-center"
+            href="/adoptionCenter"
           >
             Back
           </Link>
@@ -121,7 +121,7 @@ export default function AdoptionCenterManager({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
-                    const set = await fetch("/api/adoption-center/" + data.id, {
+                    const set = await fetch("/api/adoptionCenter/" + data.id, {
                       method: "DELETE",
                       headers: {
                         "Content-Type": "application/json",
@@ -140,7 +140,7 @@ export default function AdoptionCenterManager({
                         title: "Post deleted successfully",
                         description: "Successfully deleted! Please wait...",
                       })
-                      router.push("/adoption-center")
+                      router.push("/adoptionCenter")
                     }
                   }}
                 >

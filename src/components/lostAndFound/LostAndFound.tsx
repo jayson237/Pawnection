@@ -1,6 +1,7 @@
 "use client"
 
 import { FoundPetReport, LostPetReport } from "@prisma/client"
+import { Move, MoveRight } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -16,11 +17,6 @@ const LostAndFound = ({
   allLostPetReports: LostPetReport[] | null
   allFoundPetReports: FoundPetReport[] | null
 }) => {
-  const [allSelected, setAllSeleceted] = useState(false)
-  const [dogsSelected, setDogsSeleceted] = useState(false)
-  const [catsSelected, setCatsSeleceted] = useState(false)
-  const [birdsSelected, setBirdsSeleceted] = useState(false)
-  const [othersSelected, setOthersSeleceted] = useState(false)
   const [isLostPetReportDialogOpen, setIsLostPetReportDialogOpen] =
     useState(false)
   const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] =
@@ -37,20 +33,20 @@ const LostAndFound = ({
   const router = useRouter()
 
   const handleLostPetReportClick = (reportId: string) => {
-    router.push(`/lostAndFound/lostPetReportPage/${reportId}`)
+    router.push(`/lostAndFound/losses/${reportId}`)
   }
 
   const handleFoundPetReportClick = (reportId: string) => {
-    router.push(`/lostAndFound/foundPetReportPage/${reportId}`)
-  }  
+    router.push(`/lostAndFound/founds/${reportId}`)
+  }
 
   const handleViewMoreLostPetReports = () => {
-    router.push("/lostAndFound/allLostPetReports")
+    router.push("/lostAndFound/losses")
   }
 
   const handleViewMoreFoundPetReports = () => {
-    router.push("/lostAndFound/allFoundPetReports")
-  }  
+    router.push("/lostAndFound/founds")
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center divide-gray-100 w-full h-full">
@@ -58,98 +54,6 @@ const LostAndFound = ({
         <h2 className="text-3xl font-semibold tracking-tight mb-4 flex">
           Lost & Found Pets
         </h2>
-
-        {/* <div className="flex mt-2 mb-2 ">
-          <Button
-            onClick={() => {
-              setAllSeleceted(true)
-              setDogsSeleceted(false)
-              setCatsSeleceted(false)
-              setBirdsSeleceted(false)
-              setOthersSeleceted(false)
-            }}
-            variant="outline"
-            className={
-              allSelected
-                ? "mr-8 w-40 bg-white text-black"
-                : "mr-8 w-40 bg-gray-300"
-            }
-          >
-            All
-          </Button>
-
-          <Button
-            onClick={() => {
-              setDogsSeleceted(true)
-              setAllSeleceted(false)
-              setCatsSeleceted(false)
-              setBirdsSeleceted(false)
-              setOthersSeleceted(false)
-            }}
-            variant="outline"
-            className={
-              dogsSelected
-                ? "mr-8 w-40 bg-white text-black"
-                : "mr-8 w-40 bg-gray-300"
-            }
-          >
-            Dogs
-          </Button>
-
-          <Button
-            onClick={() => {
-              setCatsSeleceted(true)
-              setDogsSeleceted(false)
-              setAllSeleceted(false)
-              setBirdsSeleceted(false)
-              setOthersSeleceted(false)
-            }}
-            variant="outline"
-            className={
-              catsSelected
-                ? "mr-8 w-40 bg-white text-black"
-                : "mr-8 w-40 bg-gray-300"
-            }
-          >
-            Cats
-          </Button>
-
-          <Button
-            onClick={() => {
-              setBirdsSeleceted(true)
-              setDogsSeleceted(false)
-              setCatsSeleceted(false)
-              setAllSeleceted(false)
-              setOthersSeleceted(false)
-            }}
-            variant="outline"
-            className={
-              birdsSelected
-                ? "mr-8 w-40 bg-white text-black"
-                : "mr-8 w-40 bg-gray-300"
-            }
-          >
-            Birds
-          </Button>
-
-          <Button
-            onClick={() => {
-              setOthersSeleceted(true)
-              setDogsSeleceted(false)
-              setCatsSeleceted(false)
-              setBirdsSeleceted(false)
-              setAllSeleceted(false)
-            }}
-            variant="outline"
-            className={
-              othersSelected
-                ? "mr-8 w-40 bg-white text-black"
-                : "mr-8 w-40 bg-gray-300"
-            }
-          >
-            Others
-          </Button>
-        </div> */}
 
         <div className="flex mt-4">
           <Button
@@ -181,7 +85,6 @@ const LostAndFound = ({
       </div>
 
       <div className="flex border-t-2 border-black my-4 flex-col items-center border-b-5 pb-4 w-full h-full">
-      
         <h2 className="text-3xl font-semibold tracking-tight mt-8 mb-4">
           Lost Pets
         </h2>
@@ -209,13 +112,14 @@ const LostAndFound = ({
                   </p>
                 </div>
               ))}
-          <Button type="button" className="bg-gray-800 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-red-700 hover:text-white px-3"
-                  onClick ={() => handleViewMoreLostPetReports()}>
-            <div className="flex flex-row align-middle">
+          <Button
+            type="button"
+            className="bg-gray-800 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-red-700 hover:text-white px-3"
+            onClick={() => handleViewMoreLostPetReports()}
+          >
+            <div className="flex flex-row items-center">
               <span className="mr-2">More</span>
-              <svg className="w-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-              </svg>
+              <MoveRight className="w-4" />
             </div>
           </Button>
         </div>
@@ -249,13 +153,14 @@ const LostAndFound = ({
                   </p>
                 </div>
               ))}
-          <Button type="button" className="bg-gray-800 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-red-700 hover:text-white px-3"
-                            onClick ={() => handleViewMoreFoundPetReports()}>
-            <div className="flex flex-row align-middle">
+          <Button
+            type="button"
+            className="bg-gray-800 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-red-700 hover:text-white px-3"
+            onClick={() => handleViewMoreFoundPetReports()}
+          >
+            <div className="flex flex-row items-center">
               <span className="mr-2">More</span>
-              <svg className="w-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-              </svg>
+              <MoveRight className="w-4" />
             </div>
           </Button>
         </div>

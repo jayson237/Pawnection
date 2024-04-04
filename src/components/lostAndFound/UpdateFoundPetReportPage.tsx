@@ -18,6 +18,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "../ui/Select"
+import { DatePicker } from "../ui/DatePicker"
 
 const UpdateFoundPetReportPage = ({
     foundPetReport
@@ -42,7 +43,9 @@ const UpdateFoundPetReportPage = ({
     const [animalBreed, setAnimalBreed] = useState(foundPetReport?.animalBreed || "")
     const [contactDetails, setContactDetails] = useState(foundPetReport?.contactDetails || "")
     const [foundArea, setFoundArea] = useState(foundPetReport?.foundArea || "")
-    const [foundDate, setFoundDate] = useState<Date | undefined>(foundPetReport?.foundDate)
+    const [foundDate, setFoundDate] = useState<Date>(
+      foundPetReport?.foundDate ? new Date(foundPetReport.foundDate) : new Date()
+    )
     const [reportDescription, setReportDescription] = useState(foundPetReport?.reportDescription || "")
     const [reportMessage, setReportMessage] = useState(foundPetReport?.reportMessage || "")
     const [reportId, setReportId] = useState(foundPetReport?.id)
@@ -207,13 +210,13 @@ const UpdateFoundPetReportPage = ({
         setIsFormChanged(true)
       }          
       
-      const handleFoundDateChange = (value : Date | undefined) => {
-        // const value = (e.target as HTMLInputElement).value
-        // setFoundDate(value)
-        setFoundDate(value)
-        setIsFormValid(true)
-        setIsFormChanged(true)
-      }           
+      // const handleFoundDateChange = (value : Date | undefined) => {
+      //   // const value = (e.target as HTMLInputElement).value
+      //   // setFoundDate(value)
+      //   setFoundDate(value)
+      //   setIsFormValid(true)
+      //   setIsFormChanged(true)
+      // }           
     const handleReportDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = e.target.value
         setReportDescription(value)
@@ -373,14 +376,15 @@ const UpdateFoundPetReportPage = ({
                     <Label htmlFor="foundDate" className="block mb-2 text-sm font-medium">
                     Found Date
                     </Label>
-                    <Calendar
+                    {/* <Calendar
                       id="foundDate"
                         mode="single"
                         selected={foundDate}
                         onSelect={handleFoundDateChange}
                         className="rounded-md border shadow flex justify-center "
                         disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-                    />
+                    /> */}
+                    <DatePicker date={foundDate} setDate={setFoundDate} />    
                 </div>                
 
                 <div className="mb-2 sm:mb-6">

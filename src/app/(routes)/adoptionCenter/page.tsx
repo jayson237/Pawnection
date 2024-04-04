@@ -25,7 +25,7 @@ export default async function AdoptionCenterPage() {
           </HeaderTitle>
           <Link
             className={cn(buttonVariants({ variant: "default" }), "mt-4")}
-            href="/adoption-center/post"
+            href="/adoptionCenter/post"
           >
             Post a Pet
           </Link>

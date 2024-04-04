@@ -109,6 +109,7 @@ const AllLostPetReports = ({
               // Adjust the condition to search other fields as needed
               return (
                 report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.animalType.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 report.animalBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 report.contactDetails.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 report.lastSeenArea.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -119,7 +120,9 @@ const AllLostPetReports = ({
             }).map((report, index) => (
                 <div
                   key={index}
-                  className="flex border p-4 rounded-xl bg-white h-full  cursor-pointer"
+                  
+                  className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
+                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} 
                   onClick={() => handleLostPetReportClick(report.id)}
                 >
                   <Image
@@ -129,6 +132,10 @@ const AllLostPetReports = ({
                     height={60}
                     className="w-24 h-24 object-cover rounded-lg mr-4"
                   />
+                  {/* <div className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
+                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} > */}
+                    {report.isActive ? "Missing Pet " : "Pet has been found"}   
+                    {/* </div>                */}
                   <div>
                     <h3 className="text-xl font-semibold mb-1">
                       {report.petName}

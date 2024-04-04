@@ -15,6 +15,7 @@ export async function POST(request: Request) {
             id: currentUser?.id,
           },
         },
+        isActive: data.isActive,
         animalType: data.animalType,
         animalBreed: data.breed,
         petName: data.name,

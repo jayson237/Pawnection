@@ -73,6 +73,7 @@ const FoundPetReportDialog = ({
         const response = await fetch("/api/lostAndFound/createFoundPetReport", {
           method: "POST",
           body: JSON.stringify({
+            isActive: true,
             animalType: animalType,
             name: name,
             breed: breed,
@@ -121,7 +122,7 @@ const FoundPetReportDialog = ({
               <div className="mb-5">
                 <Label>Pet Type</Label>
 
-                <Select
+                <Select required = {true}
                   onValueChange={(val) => {
                     setAnimalType(val)
                   }}
@@ -141,7 +142,7 @@ const FoundPetReportDialog = ({
               <div className="w-[180px] mb-5">
                 <Label>
                   Pet Breed
-                  <Input
+                  <Input required = {true}
                     name="Pet Breed"
                     className="border border-black rounded-md h-10 w-full px-2.5"
                     onChange={(e) => setBreed(e.currentTarget.value)}
@@ -151,7 +152,7 @@ const FoundPetReportDialog = ({
 
               <div className="w-[180px] mb-5">
                 <Label>Pet Name</Label>
-                <Input
+                <Input required = {true}
                   name="Pet Name"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setName(e.currentTarget.value)}
@@ -162,7 +163,7 @@ const FoundPetReportDialog = ({
             <div className="mb-5">
               <div>
                 <Label> Gender </Label>
-                <RadioGroup defaultValue="comfortable" onValueChange={setSex}>
+                <RadioGroup required = {true} onValueChange={setSex}>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="Male" id="r1" />
                     <Label htmlFor="r1">Male</Label>
@@ -204,6 +205,7 @@ const FoundPetReportDialog = ({
                   name="Area Found"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setFoundArea(e.currentTarget.value)}
+                  required = {true}
                 ></Input>
               </Label>
             </div>
@@ -227,6 +229,7 @@ const FoundPetReportDialog = ({
                   name="Contact Details"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setContactDetails(e.currentTarget.value)}
+                  required = {true}
                 ></Input>
               </Label>
             </div>

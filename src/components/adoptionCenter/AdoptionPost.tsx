@@ -1,7 +1,7 @@
 "use client"
 
 import { toast } from "@/hooks/useToast"
-import { CreateAdoptablePetPayloadType } from "@/types/adoption-center"
+import { CreateAdoptablePetPayloadType } from "@/types/adoptionCenter"
 import { Paperclip } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -47,7 +47,7 @@ function AdoptionPost() {
   const onSubmit: SubmitHandler<CreateAdoptablePetPayloadType> = async (
     data,
   ) => {
-    const set = await fetch("/api/adoption-center", {
+    const set = await fetch("/api/adoptionCenter", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +70,7 @@ function AdoptionPost() {
         title: "Post created successfully",
         description: "Successfully posted! Please wait...",
       })
-      router.push("/adoption-center")
+      router.push("/adoptionCenter")
     }
   }
 

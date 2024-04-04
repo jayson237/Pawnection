@@ -27,6 +27,7 @@ model User {
   adoptablePets    AdoptablePet[]
   adoptionRequests AdoptionRequest[]
   lostPetReports   LostPetReport[]
+  foundPetReports  FoundPetReport[]
   followerUsers    UserRelation[]    @relation("FollowerRelation")
   followingUsers   UserRelation[]    @relation("FollowingRelation")
 }
@@ -102,18 +103,36 @@ model Comment {
 }
 
 model LostPetReport {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  petName           String?
-  petSex            String?
-  reportMessage     String?
-  reportDescription String?
-  lastSeenArea      String?
-  lastSeenDate      String?
-  contactDetails    String?
-  image             String?
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  animalType        String
+  animalBreed       String
+  petName           String
+  petSex            String
+  reportMessage     String
+  reportDescription String
+  lastSeenArea      String
+  lastSeenDate      DateTime
+  contactDetails    String
+  imageUrl          String
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
+}
+
+model FoundPetReport {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  animalType        String
+  animalBreed       String
+  petName           String
+  petSex            String
+  reportMessage     String
+  reportDescription String
+  foundArea         String
+  foundDate         DateTime
+  contactDetails    String
+  imageUrl          String
+  userId            String   @db.ObjectId
+  user              User     @relation(fields: [userId], references: [id])
 }
 
 enum AdoptablePetStatus {

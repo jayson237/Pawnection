@@ -1,6 +1,6 @@
 import HeaderTitle from "@/components/HeaderTitle"
-import FeaturedCard from "@/components/adoption/FeaturedCard"
-import HowtoCard from "@/components/adoption/HowToCard"
+import FeaturedCard from "@/components/adopt/FeaturedCard"
+import HowtoCard from "@/components/adopt/HowToCard"
 import { Button, buttonVariants } from "@/components/ui/Button"
 import { getCurrentUser } from "@/lib/actions/user"
 import { cn } from "@/lib/utils"
@@ -39,7 +39,7 @@ export default async function Adopt() {
               Featured Pets
             </HeaderTitle>
             <Link
-              href="/adopt/all-pets"
+              href="/adopt/pets"
               className={cn("my-6", buttonVariants({ variant: "default" }))}
             >
               View All Pets

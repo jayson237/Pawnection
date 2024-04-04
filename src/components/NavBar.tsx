@@ -78,7 +78,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 </Link>
                 {currentUser?.type === "PetAdoptionCentre" && (
                   <Link
-                    href="/adoption-center"
+                    href="/adoptionCenter"
                     className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
                   >
                     Adoption Management
@@ -99,11 +99,15 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                     src={
                       !currentUser?.image
                         ? "/../icon.png"
-                        : `${
-                            currentUser?.image?.split("/image/upload/")[0]
-                          }/image/upload/c_fill,h_160,w_160/${
-                            currentUser?.image?.split("/image/upload/")[1]
-                          }`
+                        : currentUser?.image
+                              .split("image/upload")[0]
+                              .includes("cloudinary")
+                          ? `${
+                              currentUser?.image?.split("/image/upload/")[0]
+                            }/image/upload/c_fill,h_160,w_160/${
+                              currentUser?.image?.split("/image/upload/")[1]
+                            }`
+                          : currentUser?.image
                     }
                     width={160}
                     height={160}
@@ -192,11 +196,19 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                           src={
                             !currentUser?.image
                               ? "/../icon.png"
-                              : `${
-                                  currentUser?.image?.split("/image/upload/")[0]
-                                }/image/upload/c_fill,h_160,w_160/${
-                                  currentUser?.image?.split("/image/upload/")[1]
-                                }`
+                              : currentUser?.image
+                                    .split("image/upload")[0]
+                                    .includes("cloudinary")
+                                ? `${
+                                    currentUser?.image?.split(
+                                      "/image/upload/",
+                                    )[0]
+                                  }/image/upload/c_fill,h_160,w_160/${
+                                    currentUser?.image?.split(
+                                      "/image/upload/",
+                                    )[1]
+                                  }`
+                                : currentUser?.image
                           }
                           width={48}
                           height={48}
@@ -256,7 +268,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 {currentUser?.type === "PetAdoptionCentre" && (
                   <li>
                     <Link
-                      href="/adoption-center"
+                      href="/adoptionCenter"
                       onClick={toggleMenu}
                       className="text-primary text-sm font-medium hover:bg-main/70 rounded-md ease-in-out duration-200 py-2 px-4"
                     >

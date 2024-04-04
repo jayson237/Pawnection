@@ -4,7 +4,7 @@ import { SafeUser } from "@/types"
 import {
   CreateAdoptablePetPayloadSchema,
   CreateAdoptablePetPayloadType,
-} from "@/types/adoption-center"
+} from "@/types/adoptionCenter"
 import { AdoptablePetStatus } from "@prisma/client"
 import { NextResponse } from "next/server"
 

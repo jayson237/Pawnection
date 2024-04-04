@@ -3,25 +3,35 @@
 import { User } from "@prisma/client"
 import { Post } from "@prisma/client"
 import Image from "next/image"
+import Link from "next/link"
+
+import TimeStamp from "../TimeStamp"
 
 const PostContent = ({ post }: { post: Post & { user: User } }) => {
+  const time = new Date(post.createdAt).toISOString()
   return (
-    <div className="rounded-xl border bg-submain h-full">
-      <div className="flex items-center p-3">
-        <Image
-          src={
-            `${
-              post.user.image?.split("/image/upload/")[0]
-            }/image/upload/c_fill,h_160,w_160/${
-              post.user.image?.split("/image/upload/")[1]
-            }` || "/../icon.png"
-          }
-          width={160}
-          height={160}
-          alt={post.user.username || "User image"}
-          className="rounded-full h-10 w-10 mr-3"
-        />
-        <span className="font-bold">{post.user.username}</span>
+    <div className="rounded-xl border bg-white h-full max-w-xl">
+      <div className="flex items-center px-4 py-4">
+        <div className="transition-all duration-300 ease-in-out hover:cursor-pointer hover:opacity/90 ">
+          <Link href={`/profile/${post.user.username}`} target="_blank">
+            <div className="flex flex-row items-center">
+              <Image
+                src={
+                  `${
+                    post.user.image?.split("/image/upload/")[0]
+                  }/image/upload/c_fill,h_160,w_160/${
+                    post.user.image?.split("/image/upload/")[1]
+                  }` || "/../icon.png"
+                }
+                width={160}
+                height={160}
+                alt={post.user.username || "User image"}
+                className="rounded-full h-10 w-10 mr-3"
+              />
+              <span className="font-bold">{post.user.username}</span>
+            </div>
+          </Link>
+        </div>
       </div>
       <Image
         src={post.imageUrl}
@@ -30,9 +40,11 @@ const PostContent = ({ post }: { post: Post & { user: User } }) => {
         alt="Post picture"
         className="w-full"
       />
-      <div className="flex justify-start space-x-2 px-4 py-2">
-        <button className="focus:outline-none">1</button>
-        <button className="focus:outline-none">2</button>
+      <div className="flex justify-start px-6 py-6">
+        <div className="flex flex-col">
+          <p className="mb-2">{post?.description}</p>
+          <TimeStamp datetimeISO={time} />
+        </div>
       </div>
     </div>
   )

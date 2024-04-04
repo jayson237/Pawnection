@@ -9,7 +9,6 @@ export async function getAllPosts() {
       return null
     }
     const posts = await prisma.post.findMany({
-      take: 20,
       include: {
         likes: true,
         comments: {

@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/actions/user"
-import getSpecificLostPetReport from "@/actions/getSpecificLostPetReport"
+// import getSpecificLostPetReport from "@/actions/getSpecificLostPetReport"
+import { getSpecificLostPetReport } from "@/lib/actions/lostAndFound"
 import FoundPetReportPage from "@/components/lostAndFound/FoundPetReportPage"
 import { redirect } from "next/navigation"
 import { useRouter } from "next/router"

@@ -1,3 +1,5 @@
+"use client"
+
 import { useToast } from "@/hooks/useToast"
 import { FormEvent, useState } from "react"
 
@@ -21,6 +23,7 @@ import {
   SelectValue,
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
+import { DatePicker } from "../ui/DatePicker"
 
 interface FoundPetReportDialogProps {
   isOpen: boolean
@@ -38,7 +41,7 @@ const FoundPetReportDialog = ({
   const [message, setMessage] = useState("")
   const [description, setDescription] = useState("")
   const [foundArea, setFoundArea] = useState("")
-  const [foundDate, setFoundDate] = useState<Date | undefined>()
+  const [foundDate, setFoundDate] = useState(new Date())
   const [contactDetails, setContactDetails] = useState("")
   const [petImage, setPetImage] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -207,13 +210,14 @@ const FoundPetReportDialog = ({
 
             <div className=" mb-5">
               <div> Found Date </div>
-              <Calendar
+              {/* <Calendar
                 mode="single"
                 selected={foundDate}
                 onSelect={setFoundDate}
                 className="rounded-md border shadow flex justify-center"
                 disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-              />
+              /> */}
+              <DatePicker date={foundDate} setDate={setFoundDate} />
             </div>
 
             <div className="w-[180px] mb-5">

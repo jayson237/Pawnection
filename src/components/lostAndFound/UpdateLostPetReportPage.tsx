@@ -18,6 +18,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "../ui/Select"
+import { DatePicker } from "../ui/DatePicker"
 
 const UpdateLostPetReportPage = ({
     lostPetReport
@@ -42,7 +43,9 @@ const UpdateLostPetReportPage = ({
     const [animalBreed, setAnimalBreed] = useState(lostPetReport?.animalBreed || "")
     const [contactDetails, setContactDetails] = useState(lostPetReport?.contactDetails || "")
     const [lastSeenArea, setLastSeenArea] = useState(lostPetReport?.lastSeenArea || "")
-    const [lastSeenDate, setLastSeenDate] = useState<Date | undefined>(lostPetReport?.lastSeenDate)
+    const [lastSeenDate, setLastSeenDate] = useState<Date>(
+      lostPetReport?.lastSeenDate ? new Date(lostPetReport.lastSeenDate) : new Date()
+    )
     const [reportDescription, setReportDescription] = useState(lostPetReport?.reportDescription || "")
     const [reportMessage, setReportMessage] = useState(lostPetReport?.reportMessage || "")
     const [reportId, setReportId] = useState(lostPetReport?.id)
@@ -208,7 +211,7 @@ const UpdateLostPetReportPage = ({
       }          
       
       const handleLastSeenDateChange = (value : Date | undefined) => {
-        setLastSeenDate(value)
+        // setLastSeenDate(value)
         setIsFormValid(true)
         setIsFormChanged(true)
       }           
@@ -372,14 +375,15 @@ const UpdateLostPetReportPage = ({
                     <Label htmlFor="foundDate" className="block mb-2 text-sm font-medium">
                     Found Date
                     </Label>
-                    <Calendar
+                    {/* <Calendar
                       id="foundDate"
                         mode="single"
                         selected={lastSeenDate}
                         onSelect={handleLastSeenDateChange}
                         className="rounded-md border shadow flex justify-center "
                         disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-                    />
+                    /> */}
+                    <DatePicker date={lastSeenDate} setDate={setLastSeenDate} />                    
                 </div>                
 
                 <div className="mb-2 sm:mb-6">

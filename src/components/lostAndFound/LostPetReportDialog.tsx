@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
+import { DatePicker } from "../ui/DatePicker"
 
 interface LostPetReportDialogProps {
   isOpen: boolean
@@ -35,7 +36,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
   const [message, setMessage] = useState("")
   const [description, setDescription] = useState("")
   const [lastSeenArea, setLastSeenArea] = useState("")
-  const [lastSeenDate, setLastSeenDate] = useState<Date | undefined>()
+  const [lastSeenDate, setLastSeenDate] = useState(new Date())
   const [contactDetails, setContactDetails] = useState("")
   const [petImage, setPetImage] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -201,14 +202,15 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
 
             <div className=" mb-5">
               <div> Last Seen Date </div>
-              <Calendar
+              {/* <Calendar
                 mode="single"
                 selected={lastSeenDate}
                 onSelect={setLastSeenDate}
                 className="rounded-md border shadow flex justify-center "
                 disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-              />
-            </div>
+              /> */}
+                <DatePicker date={lastSeenDate} setDate={setLastSeenDate} />
+              </div>
 
             <div className="w-[180px] mb-5">
               <Label>

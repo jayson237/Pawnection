@@ -17,10 +17,8 @@ const LostAndFound = ({
   allLostPetReports: LostPetReport[] | null
   allFoundPetReports: FoundPetReport[] | null
 }) => {
-  const [isLostPetReportDialogOpen, setIsLostPetReportDialogOpen] =
-    useState(false)
-  const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] =
-    useState(false)
+  const [isLostPetReportDialogOpen, setIsLostPetReportDialogOpen] = useState(false)
+  const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] = useState(false)
   const [lostPetReports, setLostPetReports] = useState(allLostPetReports)
   const [foundPetReports, setFoundPetReports] = useState(allFoundPetReports)
 
@@ -55,33 +53,6 @@ const LostAndFound = ({
           Lost & Found Pets
         </h2>
 
-        <div className="flex mt-4">
-          <Button
-            variant="outline"
-            className="mr-8 w-60 mb-5 bg-black text-white"
-            onClick={() => setIsLostPetReportDialogOpen(true)}
-          >
-            Report A Missing Pet
-          </Button>
-
-          <LostPetReportDialog
-            isOpen={isLostPetReportDialogOpen}
-            onClose={() => setIsLostPetReportDialogOpen(false)}
-          />
-
-          <Button
-            variant="outline"
-            className="mr-8 w-60 mb-5 bg-black text-white"
-            onClick={() => setIsFoundPetReportDialogOpen(true)}
-          >
-            Report A Found Pet
-          </Button>
-
-          <FoundPetReportDialog
-            isOpen={isFoundPetReportDialogOpen}
-            onClose={() => setIsFoundPetReportDialogOpen(false)}
-          />
-        </div>
       </div>
 
       <div className="flex border-t-2 border-black my-4 flex-col items-center border-b-5 pb-4 w-full h-full">

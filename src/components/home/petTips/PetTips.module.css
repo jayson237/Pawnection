@@ -47,7 +47,7 @@
 }
 
 .hero-image-wrapper {
-  align-items: start;
+  flex: start;
   display: flex;
   padding-top: 80px;
   flex-direction: column;

@@ -78,7 +78,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 </Link>
                 {currentUser?.type === "PetAdoptionCentre" && (
                   <Link
-                    href="/adoption-center"
+                    href="/adoptionCenter"
                     className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
                   >
                     Adoption Management
@@ -268,7 +268,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 {currentUser?.type === "PetAdoptionCentre" && (
                   <li>
                     <Link
-                      href="/adoption-center"
+                      href="/adoptionCenter"
                       onClick={toggleMenu}
                       className="text-primary text-sm font-medium hover:bg-main/70 rounded-md ease-in-out duration-200 py-2 px-4"
                     >

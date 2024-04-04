@@ -1,5 +1,5 @@
 import HeaderTitle from "@/components/HeaderTitle"
-import AdoptPetForm from "@/components/adoption/AdoptionRequest"
+import AdoptPetForm from "@/components/adopt/AdoptionRequest"
 import { getOneAdoptablePets } from "@/lib/actions/adopt"
 import { getCurrentUser } from "@/lib/actions/user"
 import Image from "next/image"

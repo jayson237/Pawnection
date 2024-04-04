@@ -1,3 +1,5 @@
+"use client"
+
 import { useToast } from "@/hooks/useToast"
 import { FormEvent, useState } from "react"
 

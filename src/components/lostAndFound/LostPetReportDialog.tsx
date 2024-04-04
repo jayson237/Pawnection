@@ -68,6 +68,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
         const response = await fetch("/api/lostAndFound/createLostPetReport", {
           method: "POST",
           body: JSON.stringify({
+            isActive: true,
             animalType: animalType,
             name: name,
             breed: breed,
@@ -113,13 +114,13 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
             <div className="flex gap-4">
               <div className="mb-5">
                 <Label>Pet Type</Label>
-                <Select
+                <Select required = {true}
                   onValueChange={(val) => {
                     setAnimalType(val)
                   }}
                 >
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select Animal Type" />
+                    <SelectValue placeholder="Select Animal Type"/>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Dog">Dog</SelectItem>
@@ -137,6 +138,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
                     name="Pet Breed"
                     className="border border-black rounded-md h-10 w-full px-2.5"
                     onChange={(e) => setBreed(e.currentTarget.value)}
+                    required = {true}
                   ></Input>
                 </Label>
               </div>
@@ -148,6 +150,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
                     name="Pet Name"
                     className="border border-black rounded-md h-10 w-full px-2.5"
                     onChange={(e) => setName(e.currentTarget.value)}
+                    required = {true}
                   ></Input>
                 </Label>
               </div>
@@ -155,7 +158,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
 
             <div className="mb-5">
               <Label> Gender </Label>
-              <RadioGroup defaultValue="comfortable" onValueChange={setSex}>
+              <RadioGroup onValueChange={setSex} required = {true}>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="Male" id="r1" />
                   <Label htmlFor="r1">Male</Label>
@@ -219,6 +222,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
                   name="Contact Details"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setContactDetails(e.currentTarget.value)}
+                  required = {true}
                 ></Input>
               </Label>
             </div>

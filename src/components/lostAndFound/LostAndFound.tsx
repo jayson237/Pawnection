@@ -66,7 +66,8 @@ const LostAndFound = ({
             : lostPetReports.slice(-5).map((report: LostPetReport) => (
                 <div
                   key={report.id}
-                  className="flex flex-col items-center mb-5 mr-12 cursor-pointer"
+                  className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
+                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} 
                   onClick={() => handleLostPetReportClick(report.id)}
                 >
                   <Image
@@ -76,6 +77,10 @@ const LostAndFound = ({
                     alt="Pet"
                     className="max-w-full h-auto mb-5 rounded-full"
                   />
+                  <div className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
+                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} >
+                    {report.isActive ? "Missing Pet " : "Pet has been found"}
+                    </div>                  
                   <p className="mb-[10px]">Pet Name: {report.petName}</p>
                   <p className="mb-[10px]">Animal Type: {report.animalType}</p>
                   <p className="mb-[10px]">
@@ -105,8 +110,9 @@ const LostAndFound = ({
             ? "No Reports Available"
             : foundPetReports.slice(-5).map((report: FoundPetReport) => (
                 <div
-                  key={report.id}
-                  className="flex flex-col items-center mb-5 mr-12 cursor-pointer"
+                  key={report.id} 
+                  className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
+                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} 
                   onClick={() => handleFoundPetReportClick(report.id)}
                 >
                   <Image
@@ -116,7 +122,11 @@ const LostAndFound = ({
                     alt="Pet"
                     className="max-w-full h-auto mb-5 rounded-full"
                   />
-
+                  <div className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
+                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} >
+                    {report.isActive ? "Missing Pet " : "Pet has been returned"}
+                  </div>
+                  
                   <p className="mb-[10px]">Pet Name: {report.petName}</p>
                   <p className="mb-[10px]">Animal Type: {report.animalType}</p>
                   <p className="mb-[10px]">

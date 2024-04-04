@@ -104,6 +104,7 @@ model Comment {
 
 model LostPetReport {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  isActive          Boolean
   animalType        String
   animalBreed       String
   petName           String
@@ -121,6 +122,7 @@ model LostPetReport {
 
 model FoundPetReport {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  isActive          Boolean
   animalType        String
   animalBreed       String
   petName           String

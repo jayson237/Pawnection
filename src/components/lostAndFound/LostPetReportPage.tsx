@@ -19,6 +19,7 @@ const LostPetReportPage = ({
   const [thisLostPetReport, setThisLostPetReport] = useState(lostPetReport)
   const [showButton, setShowButton] = useState(false)
   const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("")
+  const [reportActive, setReportActive] = useState(true)
 
   const router = useRouter()
 
@@ -79,6 +80,32 @@ const LostPetReportPage = ({
     }
   }
 
+  const updateStatus = async () => {
+    if (
+      thisLostPetReport &&
+      confirm("Are you sure you pet has been returned to owner?")
+    ) {
+      try {
+        const response = await fetch("/api/lostAndFound/updateLostPetReportStatus", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reportId: thisLostPetReport.id }),
+        })
+
+        if (!response.ok) {
+          throw new Error("Failed to update the report status.")
+        }
+
+        alert("Report status updated successfully")
+        setReportActive(false)
+        router.push("/lostAndFound")
+      } catch (error) {
+        console.error("Error updating report status:", error)
+        alert("Failed to update the report status.")
+      }
+    }
+  }    
+
   const updateReport= () => {
     router.push(`/lostAndFound/updateLostPetReportPage/${lostPetReport?.id}`)
   }  
@@ -102,8 +129,12 @@ const LostPetReportPage = ({
               <HeaderTitle className="text-left">{thisLostPetReport.petName}</HeaderTitle>
             </div>
             <div>
-            {thisLostPetReport.userId ===  currUser?.id  && (<Button onClick={() => updateReport()}>Edit Report</Button>)}     
+            {thisLostPetReport.userId ===  currUser?.id  && thisLostPetReport.isActive && (<Button onClick={() => updateReport()}>Edit Report</Button>)}     
             {thisLostPetReport.userId ===  currUser?.id  && (<Button onClick={() => deleteReport()}>Delete Report</Button>)}   
+            {thisLostPetReport.userId === currUser?.id && thisLostPetReport.isActive && (
+                  <Button onClick={() => updateStatus()}> Pet has been found </Button>
+                )}
+              {thisLostPetReport.isActive ? "Missing Pet " : "Pet has been found"}
             </div>
             </div>
 

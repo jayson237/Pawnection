@@ -16,7 +16,7 @@ interface HangoutLocation {
 
 const PetFriendlyHangouts = ({ hangouts }: { hangouts: HangoutLocation[] }) => {
   return (
-    <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
+    <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto px-4">
       <div className="py-[60px]">
         <HeaderTitle className="max-w-full">
           Recommended Pet-Friendly Hangouts

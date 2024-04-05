@@ -9,7 +9,7 @@ import { Button } from "../ui/Button"
 const LostAndFound = () => {
   const router = useRouter()
   return (
-    <div className="grid grid-cols-2 space-x-12 py-20 px-20">
+    <div className="grid md:grid-cols-2 grid-cols-1 md:space-x-12 space-x-2 py-20 px-20 max-md:items-start items-center">
       <Image
         width={590}
         height={520}
@@ -17,9 +17,11 @@ const LostAndFound = () => {
         alt="Lost and found pet"
         className="w-full"
       />
-      <div className="flex flex-col justify-center">
-        <HeaderTitle className="text-5xl text-left">Lost and Found</HeaderTitle>
-        <p className="text-lg py-5 mt-10">
+      <div className="flex flex-col md:ml-0 ml-[-10px]">
+        <HeaderTitle className="text-5xl text-left max-md:mt-7">
+          Lost and Found
+        </HeaderTitle>
+        <p className="text-lg py-5 mt-2">
           Have you lost a beloved pet or found one wandering around? Our Lost
           and Found section is here to help reunite pets with their owners.
         </p>

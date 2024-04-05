@@ -59,7 +59,7 @@ const Profile = ({
     }
 
     fetchReports()
-  }, []) // Empty dependency array means this effect runs once on component mount
+  }, [])
 
   const transformImage = (url: string) => {
     const parts = url.split("/upload/")

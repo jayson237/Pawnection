@@ -1,5 +1,6 @@
 "use client"
 
+import { SafeUser } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Post, PostType } from "@prisma/client"
 import { User } from "@prisma/client"
@@ -20,9 +21,10 @@ import {
 import PostContent from "./PostContent"
 import UserCard from "./UserCard"
 
-interface PostListProps {
+interface FeedProps {
   fetchedPosts: (Post & { user: User })[] | null
   fetchedUsers: User[] | null
+  currentUser?: SafeUser
 }
 
 const searchSchema = z.object({
@@ -30,7 +32,11 @@ const searchSchema = z.object({
   filter: z.string(),
 })
 
-const PostList: React.FC<PostListProps> = ({ fetchedPosts, fetchedUsers }) => {
+const Feed: React.FC<FeedProps> = ({
+  fetchedPosts,
+  fetchedUsers,
+  currentUser,
+}) => {
   const [posts, setPosts] = useState<(Post & { user: User })[] | null>(
     fetchedPosts,
   )
@@ -117,16 +123,46 @@ const PostList: React.FC<PostListProps> = ({ fetchedPosts, fetchedUsers }) => {
         </Select>
       </div>
 
-      <div className="flex justify-center">
-        <div className="grid grid-cols-1 space-y-4">
+      <div className="flex mx-auto">
+        <div className="flex flex-col space-y-4">
           {filter !== "users" ? (
             posts && posts?.length > 0 ? (
-              posts?.map((post) => <PostContent key={post.id} post={post} />)
+              posts?.map((post) => {
+                const username = post.user?.username
+                const isOwnProfile = currentUser?.username === username
+                return (
+                  <PostContent
+                    key={post.id}
+                    post={post}
+                    isOwnProfile={isOwnProfile}
+                    isCurrentFollowed={
+                      currentUser?.followingUsers?.some(
+                        (followingUsers) =>
+                          followingUsers?.followerId === post.user?.id,
+                      ) || false
+                    }
+                  />
+                )
+              })
             ) : (
               <p className="py-4">No posts found</p>
             )
           ) : users && users?.length > 0 ? (
-            users?.map((user) => <UserCard key={user.id} user={user} />)
+            users?.map((user) => {
+              const isOwnProfile = currentUser?.username === user.username
+              return (
+                <UserCard
+                  key={user.id}
+                  user={user}
+                  isOwnProfile={isOwnProfile}
+                  isCurrentFollowed={
+                    currentUser?.followingUsers?.some(
+                      (followingUser) => followingUser?.followerId === user.id,
+                    ) || false
+                  }
+                />
+              )
+            })
           ) : (
             <p className="py-4">No users found</p>
           )}
@@ -136,4 +172,4 @@ const PostList: React.FC<PostListProps> = ({ fetchedPosts, fetchedUsers }) => {
   )
 }
 
-export default PostList
+export default Feed

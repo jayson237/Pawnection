@@ -36,7 +36,7 @@ export default async function AdoptProcessPage({
               alt={adoptablePet.name}
               width={1000}
               height={1000}
-              className="rounded-xl h-full bg-cover bg-center w-full object-cover max-h-[440px]"
+              className="rounded-t-xl h-full bg-cover bg-center w-full object-cover max-h-[440px]"
             />
           </div>
           <div className="px-3.5 py-4 space-y-2">

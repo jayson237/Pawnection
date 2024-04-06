@@ -7,7 +7,7 @@ import Link from "next/link"
 
 import { Button } from "../ui/Button"
 
-const UserCard = ({
+const UserItem = ({
   user,
   isOwnProfile,
   isCurrentFollowed,
@@ -43,7 +43,7 @@ const UserCard = ({
   }
 
   return (
-    <div className="flex rounded-xl border w-full bg-white px-8 py-8 items-center justify-between">
+    <div className="flex rounded-xl border w-[409px] bg-white px-8 py-8 items-center justify-between">
       <Link href={`/profile/${user.username}`} target="_blank">
         <div className="flex flex-row items-center transition-all duration-300 ease-in-out hover:cursor-pointer hover:opacity-80">
           <Image
@@ -70,18 +70,14 @@ const UserCard = ({
         (isCurrentFollowed ? (
           <Button
             variant="outline"
-            className="w-20 ml-[118px]"
+            className="w-20"
             size={"sm"}
             onClick={handleUnfollow}
           >
             Unfollow
           </Button>
         ) : (
-          <Button
-            className="w-20 ml-[118px]"
-            size={"sm"}
-            onClick={handleFollow}
-          >
+          <Button className="w-20" size={"sm"} onClick={handleFollow}>
             Follow
           </Button>
         ))}
@@ -89,4 +85,4 @@ const UserCard = ({
   )
 }
 
-export default UserCard
+export default UserItem

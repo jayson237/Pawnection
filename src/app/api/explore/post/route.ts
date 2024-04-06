@@ -66,3 +66,55 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "An error occurred" }, { status: 500 })
   }
 }
+
+export async function PUT(request: Request) {
+  const currentUser = await getCurrentUser()
+  if (!currentUser) {
+    return NextResponse.json(
+      {
+        message: "Unauthorized",
+      },
+      { status: 401 },
+    )
+  }
+  const { newDescription, postId }: { newDescription: string; postId: string } =
+    await request.json()
+
+  const getPost = await prisma.post.findFirst({
+    where: {
+      id: postId,
+    },
+  })
+
+  if (!getPost) {
+    return NextResponse.json(
+      {
+        message: "Post not found",
+      },
+      { status: 404 },
+    )
+  }
+
+  const updatePost = await prisma.post.update({
+    where: {
+      id: postId,
+    },
+    data: {
+      description: newDescription,
+    },
+  })
+
+  if (!updatePost) {
+    return NextResponse.json(
+      {
+        message: "Error updating post, please try again",
+      },
+      { status: 400 },
+    )
+  }
+
+  return NextResponse.json(
+    { message: "Post updated successfully" },
+    { status: 200 },
+  )
+}

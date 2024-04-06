@@ -166,6 +166,7 @@ const PostForm = () => {
       setOpen(false)
       setLoading(false)
       revalPath("/explore")
+      router.push("/explore")
     }
   }
 

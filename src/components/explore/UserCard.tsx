@@ -4,7 +4,6 @@ import { revalPath } from "@/lib/revalidate"
 import { User } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 
 import { Button } from "../ui/Button"
 
@@ -17,7 +16,32 @@ const UserCard = ({
   isOwnProfile: boolean
   isCurrentFollowed: boolean
 }) => {
-  const router = useRouter()
+  const handleUnfollow = async () => {
+    await fetch("/api/user/unfollow", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: user.username,
+      }),
+    })
+    revalPath("/explore")
+  }
+
+  const handleFollow = async () => {
+    await fetch("/api/user/follow", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: user.username,
+      }),
+    })
+    revalPath("/explore")
+  }
+
   return (
     <div className="flex rounded-xl border w-full bg-white px-8 py-8 items-center justify-between">
       <Link href={`/profile/${user.username}`} target="_blank">
@@ -48,18 +72,7 @@ const UserCard = ({
             variant="outline"
             className="w-20 ml-[118px]"
             size={"sm"}
-            onClick={async () => {
-              await fetch("/api/user/unfollow", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  username: user.username,
-                }),
-              })
-              revalPath("/explore")
-            }}
+            onClick={handleUnfollow}
           >
             Unfollow
           </Button>
@@ -67,18 +80,7 @@ const UserCard = ({
           <Button
             className="w-20 ml-[118px]"
             size={"sm"}
-            onClick={async () => {
-              await fetch("/api/user/follow", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  username: user.username,
-                }),
-              })
-              revalPath("/explore")
-            }}
+            onClick={handleFollow}
           >
             Follow
           </Button>

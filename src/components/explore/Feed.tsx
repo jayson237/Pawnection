@@ -4,6 +4,7 @@ import { SafeUser } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Post, PostType } from "@prisma/client"
 import { User } from "@prisma/client"
+import { Like } from "@prisma/client"
 import { Search, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -24,7 +25,7 @@ import PostItem from "./PostItem"
 import UserItem from "./UserItem"
 
 interface FeedProps {
-  fetchedPosts: (Post & { user: User })[] | null
+  fetchedPosts: (Post & { user: User; likes: Like[] })[] | null
   fetchedUsers: User[] | null
   currentUser?: SafeUser
 }
@@ -40,9 +41,9 @@ const Feed: React.FC<FeedProps> = ({
   fetchedUsers,
   currentUser,
 }) => {
-  const [posts, setPosts] = useState<(Post & { user: User })[] | null>(
-    fetchedPosts,
-  )
+  const [posts, setPosts] = useState<
+    (Post & { user: User; likes: Like[] })[] | null
+  >(fetchedPosts)
   const [users, setUsers] = useState<User[] | null>(fetchedUsers)
   const { register, setValue, watch } = useForm<z.infer<typeof searchSchema>>({
     resolver: zodResolver(searchSchema),
@@ -59,7 +60,7 @@ const Feed: React.FC<FeedProps> = ({
 
   useEffect(() => {
     const filterPosts = (
-      posts: (Post & { user: User })[] | null,
+      posts: (Post & { user: User; likes: Like[] })[] | null,
       typeCheck: PostType,
       followingCondition = true,
     ) =>
@@ -169,10 +170,15 @@ const Feed: React.FC<FeedProps> = ({
               posts?.map((post) => {
                 const username = post.user?.username
                 const isOwnProfile = currentUser?.username === username
+                const isLiked = post.likes.some(
+                  (like) => like.userId === currentUser?.id,
+                )
+
                 return (
                   <div key={post.id}>
                     <PostItem
                       post={post}
+                      isLiked={isLiked}
                       isOwnProfile={isOwnProfile}
                       isCurrentFollowed={
                         currentUser?.followingUsers?.some(

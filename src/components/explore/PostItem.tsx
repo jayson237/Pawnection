@@ -31,6 +31,7 @@ const PostItem = ({
   isCurrentFollowed: boolean
 }) => {
   const { toast } = useToast()
+  const [isImageLoading, setImageLoading] = useState(true)
   const [description, setDescription] = useState(post.description)
   const [isEdit, setIsEdit] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -105,6 +106,7 @@ const PostItem = ({
     } else {
       toast({
         title: "Successfully updated description",
+        description: "Please close this window",
       })
       revalPath("/explore")
     }
@@ -131,6 +133,7 @@ const PostItem = ({
     } else {
       toast({
         title: "Successfully deleted post",
+        description: "Please close this window",
       })
       revalPath("/explore")
     }
@@ -158,7 +161,7 @@ const PostItem = ({
                 }
                 width={160}
                 height={160}
-                alt={post.user.username || "User image"}
+                alt={post.user.username || "User"}
                 className="rounded-full h-10 w-10 mr-3"
               />
               <span className="font-bold">{post.user.username}</span>
@@ -184,12 +187,14 @@ const PostItem = ({
         ) : (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <MoreVertical className="w-6 h-6 hover:cursor-pointer" />
+              <Button variant="ghost" className="px-2">
+                <MoreVertical className="w-6 h-6 hover:cursor-pointer" />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-fit bg-white">
               <DropdownMenuGroup>
                 <DropdownMenuItem
-                  className="focus:bg-slate-100"
+                  className="focus:bg-accent"
                   onClick={() => setIsEdit(!isEdit)}
                 >
                   <Edit3 className="mr-2 h-4 w-4" />
@@ -197,7 +202,7 @@ const PostItem = ({
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                  className="focus:bg-slate-100"
+                  className="focus:bg-accent"
                   onClick={handleDelete}
                 >
                   <Trash2 className="mr-2 h-4 w-4 text-red-700" />
@@ -212,8 +217,9 @@ const PostItem = ({
         src={post.imageUrl}
         width={1000}
         height={1000}
-        alt="Post picture"
-        className="w-full"
+        alt="Picture"
+        onLoad={() => setImageLoading(false)}
+        className={`w-full ${isImageLoading ? "blur" : "remove-blur"}`}
       />
 
       <div className="flex flex-col px-6 py-6">

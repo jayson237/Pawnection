@@ -9,7 +9,7 @@ import styles from "./WelcomeSection.module.css"
 
 const WelcomeSection: React.FC = () => {
   return (
-    <section className="flex justify-center w-full p-15 px-20 sm:p-5 sm:px-5">
+    <section className="flex justify-center w-full p-15 px-20 sm:p-6 sm:px-12">
       <div className={styles["hero-container"]}>
         <div className={styles["hero-content"]}>
           <h1 className={styles["hero-title"]}>Welcome to Pawnection!</h1>

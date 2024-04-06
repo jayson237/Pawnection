@@ -41,7 +41,7 @@ const PostContent = ({
 
   const time = new Date(post.createdAt).toISOString()
 
-  function isExpandable(): boolean | undefined {
+  const isExpandable = () => {
     if (containerRef.current && descriptionRef.current) {
       const conth = containerRef.current.clientHeight
       const parah = parseInt(
@@ -55,6 +55,86 @@ const PostContent = ({
   useEffect(() => {
     isExpandable() === true ? setExpandedable(true) : setExpandedable(false)
   }, [])
+
+  const handleUnfollow = async () => {
+    await fetch("/api/user/unfollow", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: post.user.username,
+      }),
+    })
+    revalPath("/explore")
+  }
+
+  const handleFollow = async () => {
+    await fetch("/api/user/follow", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: post.user.username,
+      }),
+    })
+    revalPath("/explore")
+  }
+
+  const handleUpdate = async () => {
+    setIsEdit(!isEdit)
+    toast({
+      title: "Updating...",
+    })
+
+    const set = await fetch("/api/explore/post", {
+      method: "PUT",
+      body: JSON.stringify({
+        newDescription: description,
+        postId: post.id,
+      }),
+    })
+    const msg = await set.json()
+    if (!set.ok) {
+      toast({
+        variant: "destructive",
+        title: "Failed to update description",
+        description: msg.message,
+      })
+    } else {
+      toast({
+        title: "Successfully updated description",
+      })
+      revalPath("/explore")
+    }
+  }
+
+  const handleDelete = async () => {
+    toast({
+      title: "Deleting...",
+    })
+
+    const set = await fetch("/api/explore/deletePost", {
+      method: "POST",
+      body: JSON.stringify({
+        postId: post.id,
+      }),
+    })
+    const msg = await set.json()
+    if (!set.ok) {
+      toast({
+        variant: "destructive",
+        title: "Failed to delete post",
+        description: msg.message,
+      })
+    } else {
+      toast({
+        title: "Successfully deleted post",
+      })
+      revalPath("/explore")
+    }
+  }
 
   return (
     <div className="rounded-xl border bg-white h-full max-w-xl">
@@ -92,38 +172,12 @@ const PostContent = ({
               variant="outline"
               className="w-20"
               size={"sm"}
-              onClick={async () => {
-                await fetch("/api/user/unfollow", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    username: post.user.username,
-                  }),
-                })
-                revalPath("/explore")
-              }}
+              onClick={handleUnfollow}
             >
               Unfollow
             </Button>
           ) : (
-            <Button
-              className="w-20"
-              size={"sm"}
-              onClick={async () => {
-                await fetch("/api/user/follow", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    username: post.user.username,
-                  }),
-                })
-                revalPath("/explore")
-              }}
-            >
+            <Button className="w-20" size={"sm"} onClick={handleFollow}>
               Follow
             </Button>
           )
@@ -144,31 +198,7 @@ const PostContent = ({
 
                 <DropdownMenuItem
                   className="focus:bg-slate-100"
-                  onClick={async () => {
-                    toast({
-                      title: "Deleting...",
-                    })
-
-                    const set = await fetch("/api/explore/deletePost", {
-                      method: "POST",
-                      body: JSON.stringify({
-                        postId: post.id,
-                      }),
-                    })
-                    const msg = await set.json()
-                    if (!set.ok) {
-                      toast({
-                        variant: "destructive",
-                        title: "Failed to delete post",
-                        description: msg.message,
-                      })
-                    } else {
-                      toast({
-                        title: "Successfully deleted post",
-                      })
-                      revalPath("/explore")
-                    }
-                  }}
+                  onClick={handleDelete}
                 >
                   <Trash2 className="mr-2 h-4 w-4 text-red-700" />
                   <span className="text-red-700">Delete</span>
@@ -227,37 +257,7 @@ const PostContent = ({
               >
                 Cancel
               </Button>
-              <Button
-                className="w-20"
-                size={"sm"}
-                onClick={async () => {
-                  setIsEdit(!isEdit)
-                  toast({
-                    title: "Updating...",
-                  })
-
-                  const set = await fetch("/api/explore/post", {
-                    method: "PUT",
-                    body: JSON.stringify({
-                      newDescription: description,
-                      postId: post.id,
-                    }),
-                  })
-                  const msg = await set.json()
-                  if (!set.ok) {
-                    toast({
-                      variant: "destructive",
-                      title: "Failed to update description",
-                      description: msg.message,
-                    })
-                  } else {
-                    toast({
-                      title: "Successfully updated description",
-                    })
-                    revalPath("/explore")
-                  }
-                }}
-              >
+              <Button className="w-20" size={"sm"} onClick={handleUpdate}>
                 Save
               </Button>
             </div>

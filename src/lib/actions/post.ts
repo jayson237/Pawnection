@@ -11,7 +11,6 @@ export async function getAllPosts() {
     const posts = await prisma.post.findMany({
       include: {
         likes: true,
-        comments: true,
         user: {
           include: {
             followerUsers: true,

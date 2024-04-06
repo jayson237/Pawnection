@@ -4,7 +4,8 @@ import { useToast } from "@/hooks/useToast"
 import { revalPath } from "@/lib/revalidate"
 import { User } from "@prisma/client"
 import { Post } from "@prisma/client"
-import { Edit3, MoreVertical, Trash2 } from "lucide-react"
+import { Like } from "@prisma/client"
+import { Edit3, Heart, MessageCircle, MoreVertical, Trash2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -23,10 +24,12 @@ import { Textarea } from "../ui/TextArea"
 
 const PostItem = ({
   post,
+  isLiked,
   isOwnProfile,
   isCurrentFollowed,
 }: {
-  post: Post & { user: User }
+  post: Post & { user: User; likes: Like[] }
+  isLiked: boolean
   isOwnProfile: boolean
   isCurrentFollowed: boolean
 }) => {
@@ -36,6 +39,7 @@ const PostItem = ({
   const [isEdit, setIsEdit] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [expandable, setexpandable] = useState(false)
+  // const [liking, setLiking] = useState(isLiked)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
@@ -117,7 +121,7 @@ const PostItem = ({
       title: "Deleting...",
     })
 
-    const set = await fetch("/api/explore/deletePost", {
+    const set = await fetch("/api/explore/post/deletePost", {
       method: "POST",
       body: JSON.stringify({
         postId: post.id,
@@ -135,6 +139,44 @@ const PostItem = ({
         title: "Successfully deleted post",
         description: "Please close this window",
       })
+      revalPath("/explore")
+    }
+  }
+
+  const handleLike = async () => {
+    const set = await fetch("/api/explore/post/like", {
+      method: "POST",
+      body: JSON.stringify({
+        postId: post.id,
+      }),
+    })
+    const msg = await set.json()
+    if (!set.ok) {
+      toast({
+        variant: "destructive",
+        title: "Failed to like post",
+        description: msg.message,
+      })
+    } else {
+      revalPath("/explore")
+    }
+  }
+
+  const handleDislike = async () => {
+    const set = await fetch("/api/explore/post/dislike", {
+      method: "POST",
+      body: JSON.stringify({
+        postId: post.id,
+      }),
+    })
+    const msg = await set.json()
+    if (!set.ok) {
+      toast({
+        variant: "destructive",
+        title: "Failed to dislike post",
+        description: msg.message,
+      })
+    } else {
       revalPath("/explore")
     }
   }
@@ -223,7 +265,27 @@ const PostItem = ({
       />
 
       <div className="flex flex-col px-6 py-6">
-        <div className="mb-2">
+        <div className="flex flex-row items-center space-x-4 pb-2">
+          {!isLiked ? (
+            <Heart
+              className="w-6 h-6 bg-transparent hover:cursor-pointer transition-all ease-in-out hover:duration-200 hover:text-red-400 hover:fill-red-400"
+              onClick={handleLike}
+            />
+          ) : (
+            <Heart
+              className="w-6 h-6 fill-red-400 text-red-400 hover:cursor-pointer"
+              onClick={handleDislike}
+            />
+          )}
+          <MessageCircle className="w-6 h-6" />
+        </div>
+        {post.likes.length > 0 &&
+          (post.likes.length === 1 ? (
+            <p className="font-bold text-sm">{post.likes.length} Like</p>
+          ) : (
+            <p className="font-bold text-sm">{post.likes.length} Likes</p>
+          ))}
+        <div className="py-2">
           {!isEdit ? (
             <div ref={containerRef}>
               <p

@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
+import { DatePicker } from "../ui/DatePicker"
 
 interface FoundPetReportDialogProps {
   isOpen: boolean
@@ -40,7 +41,7 @@ const FoundPetReportDialog = ({
   const [message, setMessage] = useState("")
   const [description, setDescription] = useState("")
   const [foundArea, setFoundArea] = useState("")
-  const [foundDate, setFoundDate] = useState<Date | undefined>()
+  const [foundDate, setFoundDate] = useState(new Date())
   const [contactDetails, setContactDetails] = useState("")
   const [petImage, setPetImage] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -72,6 +73,7 @@ const FoundPetReportDialog = ({
         const response = await fetch("/api/lostAndFound/createFoundPetReport", {
           method: "POST",
           body: JSON.stringify({
+            isActive: true,
             animalType: animalType,
             name: name,
             breed: breed,
@@ -120,7 +122,7 @@ const FoundPetReportDialog = ({
               <div className="mb-5">
                 <Label>Pet Type</Label>
 
-                <Select
+                <Select required = {true}
                   onValueChange={(val) => {
                     setAnimalType(val)
                   }}
@@ -140,7 +142,7 @@ const FoundPetReportDialog = ({
               <div className="w-[180px] mb-5">
                 <Label>
                   Pet Breed
-                  <Input
+                  <Input required = {true}
                     name="Pet Breed"
                     className="border border-black rounded-md h-10 w-full px-2.5"
                     onChange={(e) => setBreed(e.currentTarget.value)}
@@ -150,7 +152,7 @@ const FoundPetReportDialog = ({
 
               <div className="w-[180px] mb-5">
                 <Label>Pet Name</Label>
-                <Input
+                <Input required = {true}
                   name="Pet Name"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setName(e.currentTarget.value)}
@@ -161,7 +163,7 @@ const FoundPetReportDialog = ({
             <div className="mb-5">
               <div>
                 <Label> Gender </Label>
-                <RadioGroup defaultValue="comfortable" onValueChange={setSex}>
+                <RadioGroup required = {true} onValueChange={setSex}>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="Male" id="r1" />
                     <Label htmlFor="r1">Male</Label>
@@ -203,18 +205,21 @@ const FoundPetReportDialog = ({
                   name="Area Found"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setFoundArea(e.currentTarget.value)}
+                  required = {true}
                 ></Input>
               </Label>
             </div>
 
             <div className=" mb-5">
               <div> Found Date </div>
-              <Calendar
+              {/* <Calendar
                 mode="single"
                 selected={foundDate}
                 onSelect={setFoundDate}
                 className="rounded-md border shadow flex justify-center"
-              />
+                disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
+              /> */}
+              <DatePicker date={foundDate} setDate={setFoundDate} />
             </div>
 
             <div className="w-[180px] mb-5">
@@ -224,6 +229,7 @@ const FoundPetReportDialog = ({
                   name="Contact Details"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setContactDetails(e.currentTarget.value)}
+                  required = {true}
                 ></Input>
               </Label>
             </div>

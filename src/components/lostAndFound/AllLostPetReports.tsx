@@ -4,7 +4,7 @@ import { LostPetReport } from "@prisma/client"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-
+import { Button } from "../ui/Button"
 import HeaderTitle from "../HeaderTitle"
 import { Label } from "../ui/Label"
 import {
@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/Select"
+import LostPetReportDialog from "./LostPetReportDialog"
 
 const AllLostPetReports = ({
   allLostPetReports,
@@ -21,6 +22,9 @@ const AllLostPetReports = ({
   allLostPetReports: LostPetReport[] | null
 }) => {
   const [lostPetReports, setLostPetReports] = useState(allLostPetReports)
+  const [isLostPetReportDialogOpen, setIsLostPetReportDialogOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
+
   const transformImage = (url: string) => {
     const parts = url.split("/upload/")
     const transformationString =
@@ -50,6 +54,29 @@ const AllLostPetReports = ({
     <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
       <div className="py-[60px]">
         <HeaderTitle className="max-w-full">Lost Pet Reports</HeaderTitle>
+        <Button
+            variant="outline"
+            className="mr-8 w-60 mb-5 bg-black text-white"
+            onClick={() => setIsLostPetReportDialogOpen(true)}
+          >            
+          Report A Missing Pet
+        </Button>
+
+        <LostPetReportDialog
+          isOpen={isLostPetReportDialogOpen}
+          onClose={() => setIsLostPetReportDialogOpen(false)}
+        />
+
+        <div className="mb-5">
+            <input
+              type="text"
+              placeholder="Search reports..."
+              className="border px-4 py-2"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
 
         <div className="mb-5 mt-5">
           <Label>Pet Type</Label>
@@ -78,10 +105,24 @@ const AllLostPetReports = ({
         <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
           {lostPetReports == null
             ? "No Lost Pet Reports "
-            : lostPetReports.map((report, index) => (
+            : lostPetReports.filter((report) => {
+              // Adjust the condition to search other fields as needed
+              return (
+                report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.animalType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.animalBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.contactDetails.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.lastSeenArea.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.petSex.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.reportMessage.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                report.reportDescription.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+            }).map((report, index) => (
                 <div
                   key={index}
-                  className="flex border p-4 rounded-xl bg-white h-full  cursor-pointer"
+                  
+                  className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
+                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} 
                   onClick={() => handleLostPetReportClick(report.id)}
                 >
                   <Image
@@ -91,6 +132,10 @@ const AllLostPetReports = ({
                     height={60}
                     className="w-24 h-24 object-cover rounded-lg mr-4"
                   />
+                  {/* <div className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
+                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} > */}
+                    {report.isActive ? "Missing Pet " : "Pet has been found"}   
+                    {/* </div>                */}
                   <div>
                     <h3 className="text-xl font-semibold mb-1">
                       {report.petName}

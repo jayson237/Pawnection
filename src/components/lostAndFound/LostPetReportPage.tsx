@@ -19,6 +19,7 @@ const LostPetReportPage = ({
   const [thisLostPetReport, setThisLostPetReport] = useState(lostPetReport)
   const [showButton, setShowButton] = useState(false)
   const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("")
+  const [reportActive, setReportActive] = useState(true)
 
   const router = useRouter()
 
@@ -52,6 +53,7 @@ const LostPetReportPage = ({
     }
   }, [thisLostPetReport?.lastSeenDate])
 
+
   const deleteReport = async () => {
     if (
       thisLostPetReport &&
@@ -78,6 +80,36 @@ const LostPetReportPage = ({
     }
   }
 
+  const updateStatus = async () => {
+    if (
+      thisLostPetReport &&
+      confirm("Are you sure you pet has been returned to owner?")
+    ) {
+      try {
+        const response = await fetch("/api/lostAndFound/updateLostPetReportStatus", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reportId: thisLostPetReport.id }),
+        })
+
+        if (!response.ok) {
+          throw new Error("Failed to update the report status.")
+        }
+
+        alert("Report status updated successfully")
+        setReportActive(false)
+        router.push("/lostAndFound")
+      } catch (error) {
+        console.error("Error updating report status:", error)
+        alert("Failed to update the report status.")
+      }
+    }
+  }    
+
+  const updateReport= () => {
+    router.push(`/lostAndFound/updateLostPetReportPage/${lostPetReport?.id}`)
+  }  
+  
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
@@ -92,20 +124,19 @@ const LostPetReportPage = ({
                 className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
               />
 
-              <div className="col-span-5">
-                <div className="flex gap-8">
-                  <HeaderTitle className="text-left">
-                    {thisLostPetReport.petName}
-                  </HeaderTitle>
-                </div>
-                <div>
-                  {thisLostPetReport.userId === currUser?.id && (
-                    <Button onClick={() => deleteReport()}>
-                      Delete Report
-                    </Button>
-                  )}
-                </div>
-              </div>
+            <div className="col-span-5">
+            <div className="flex gap-8">
+              <HeaderTitle className="text-left">{thisLostPetReport.petName}</HeaderTitle>
+            </div>
+            <div>
+            {thisLostPetReport.userId ===  currUser?.id  && thisLostPetReport.isActive && (<Button onClick={() => updateReport()}>Edit Report</Button>)}     
+            {thisLostPetReport.userId ===  currUser?.id  && (<Button onClick={() => deleteReport()}>Delete Report</Button>)}   
+            {thisLostPetReport.userId === currUser?.id && thisLostPetReport.isActive && (
+                  <Button onClick={() => updateStatus()}> Pet has been found </Button>
+                )}
+              {thisLostPetReport.isActive ? "Missing Pet " : "Pet has been found"}
+            </div>
+            </div>
 
               <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
                 <div className="flex border p-4 rounded-xl bg-white h-full  cursor-pointer">

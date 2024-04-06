@@ -21,7 +21,7 @@ import {
 } from "../ui/DropdownMenu"
 import { Textarea } from "../ui/TextArea"
 
-const PostContent = ({
+const PostItem = ({
   post,
   isOwnProfile,
   isCurrentFollowed,
@@ -34,7 +34,7 @@ const PostContent = ({
   const [description, setDescription] = useState(post.description)
   const [isEdit, setIsEdit] = useState(false)
   const [expanded, setExpanded] = useState(false)
-  const [expandedable, setExpandedable] = useState(false)
+  const [expandable, setexpandable] = useState(false)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
@@ -49,11 +49,11 @@ const PostContent = ({
       )
 
       const lineCount = conth / parah
-      return lineCount > 3
+      return lineCount > 1
     }
   }
   useEffect(() => {
-    isExpandable() === true ? setExpandedable(true) : setExpandedable(false)
+    isExpandable() === true ? setexpandable(true) : setexpandable(false)
   }, [])
 
   const handleUnfollow = async () => {
@@ -216,35 +216,37 @@ const PostContent = ({
         className="w-full"
       />
 
-      <div className="flex flex-col px-6 py-6" ref={containerRef}>
-        {!isEdit ? (
-          <>
-            <p
-              className={`${expanded || !expandedable ? "" : "line-clamp-2"} mb-2`}
-              ref={descriptionRef}
-            >
-              {post?.description}
-            </p>
-            {/* <span>
-              {expandedable && (
-                <button
-                  onClick={() => setExpanded(!expanded)}
-                  className="font-bold text-navy-300 transition-all ease-in-out hover:underline hover:duration-300"
-                >
-                  {!expanded ? "See more" : "See less"}
-                </button>
-              )}
-            </span> */}
-          </>
-        ) : (
-          <Textarea
-            className="mb-4"
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Your description here..."
-            defaultValue={post?.description || ""}
-            style={{ resize: "none" }}
-          />
-        )}
+      <div className="flex flex-col px-6 py-6">
+        <div className="mb-2">
+          {!isEdit ? (
+            <div ref={containerRef}>
+              <p
+                className={`mb-1 text-[14px] ${expanded || !expandable ? "" : "line-clamp-1"} `}
+                ref={descriptionRef}
+              >
+                {post?.description}
+              </p>
+              <span className="text-sm">
+                {expandable && (
+                  <div
+                    onClick={() => setExpanded(!expanded)}
+                    className=" text-gray-500 transition-all ease-in-out hover:underline hover:duration-300"
+                  >
+                    {!expanded ? "See more..." : "See less"}
+                  </div>
+                )}
+              </span>
+            </div>
+          ) : (
+            <Textarea
+              className="mb-4"
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Your description here..."
+              defaultValue={post?.description || ""}
+              style={{ resize: "none" }}
+            />
+          )}
+        </div>
         <div className="flex justify-between items-center">
           <TimeStamp datetimeISO={time} />
           {isEdit && (
@@ -268,4 +270,4 @@ const PostContent = ({
   )
 }
 
-export default PostContent
+export default PostItem

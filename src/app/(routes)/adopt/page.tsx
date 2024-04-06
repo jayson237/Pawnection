@@ -66,14 +66,13 @@ export default async function Adopt() {
       <div className="py-[60px]">
         <div className="flex flex-col items-center">
           <HeaderTitle className="max-md:text-2xl">How to Adopt</HeaderTitle>
-          <h3 className="text-lg text-[#FF7751] font-semibold leading-8 tracking-tight text-center py-6 max-md:px-4">
+          <h3 className="text-lg text-mainAccent font-semibold leading-8 tracking-tight text-center py-6 max-md:px-4">
             Disclaimer: The following steps are conducted between the adoptee
             and the adoption agency!
           </h3>
-
         </div>
 
-        <div className="gap-10 grid sm:grid-cols-2 grid-cols-1 py-7 mt-6 px-4">
+        <div className="gap-10 grid sm:grid-cols-2 grid-cols-1 py-7 px-4">
           <HowtoCard
             imagePath="/static/images/findpet.png"
             title="Find a Pet"

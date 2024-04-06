@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import z from "zod"
 
+import Loading from "../Loading"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import {
@@ -18,8 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/Select"
-import PostContent from "./PostContent"
-import UserCard from "./UserCard"
+import { Switch } from "../ui/Switch"
+import PostItem from "./PostItem"
+import UserItem from "./UserItem"
 
 interface FeedProps {
   fetchedPosts: (Post & { user: User })[] | null
@@ -30,6 +32,7 @@ interface FeedProps {
 const searchSchema = z.object({
   searchTerm: z.string(),
   filter: z.string(),
+  viewFollowingPosts: z.boolean(),
 })
 
 const Feed: React.FC<FeedProps> = ({
@@ -46,38 +49,60 @@ const Feed: React.FC<FeedProps> = ({
     defaultValues: {
       searchTerm: "",
       filter: "post",
+      viewFollowingPosts: false,
     },
   })
 
   const searchTerm = watch("searchTerm")
   const filter = watch("filter")
+  const viewFollowingPosts = watch("viewFollowingPosts")
 
   useEffect(() => {
-    if (filter === "users") {
-      const filtered = fetchedUsers?.filter((user) =>
-        user?.username?.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
-      setUsers(filtered || null)
-    } else if (filter === "post") {
-      const filtered = fetchedPosts?.filter(
+    const filterPosts = (
+      posts: (Post & { user: User })[] | null,
+      typeCheck: PostType,
+      followingCondition = true,
+    ) =>
+      posts?.filter(
         (post) =>
           post?.description?.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          post.type === PostType.Post,
-      )
-      setPosts(filtered || null)
-    } else {
-      const filtered = fetchedPosts?.filter(
-        (post) =>
-          post?.description?.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          post.type === PostType.PetSitting,
-      )
-      setPosts(filtered || null)
+          post.type === typeCheck &&
+          (!followingCondition ||
+            currentUser?.followingUsers?.some(
+              (followingUser) => followingUser?.followerId === post.user?.id,
+            )),
+      ) || null
+    switch (filter) {
+      case "users":
+        setUsers(
+          fetchedUsers?.filter((user) =>
+            user?.username?.toLowerCase().includes(searchTerm.toLowerCase()),
+          ) || null,
+        )
+        break
+      case "post":
+        setPosts(filterPosts(fetchedPosts, PostType.Post, viewFollowingPosts))
+        break
+      case "petSitting":
+        setPosts(
+          filterPosts(fetchedPosts, PostType.PetSitting, viewFollowingPosts),
+        )
+        break
+      default:
+        break
     }
-  }, [searchTerm, filter, fetchedPosts, fetchedUsers])
+  }, [
+    searchTerm,
+    filter,
+    fetchedPosts,
+    fetchedUsers,
+    viewFollowingPosts,
+    currentUser,
+  ])
 
   return (
     <div className="flex flex-col space-x-4 space-y-4">
-      <div className="flex flex-row space-x-2 px-4">
+      <div className="flex flex-row space-x-2 px-4 items-center">
         <div className="flex flex-row items-center">
           <div className="relative flex grow items-center bg-white rounded-md">
             <Input
@@ -87,7 +112,7 @@ const Feed: React.FC<FeedProps> = ({
               className="pr-20 py-2 grow bg-white outline-none rounded-md"
             />
 
-            {watch("searchTerm").length !== 0 && (
+            {searchTerm.length !== 0 && (
               <Button
                 onClick={() => {
                   setValue("searchTerm", "")
@@ -110,7 +135,7 @@ const Feed: React.FC<FeedProps> = ({
         </div>
         <Select
           onValueChange={(val) => setValue("filter", val)}
-          defaultValue={watch("filter")}
+          defaultValue={filter}
         >
           <SelectTrigger className="w-[120px]">
             <SelectValue placeholder="Select filter" />
@@ -121,27 +146,42 @@ const Feed: React.FC<FeedProps> = ({
             <SelectItem value="users">Users</SelectItem>
           </SelectContent>
         </Select>
+        {(filter === "post" || filter === "petSitting") && (
+          <>
+            <Switch
+              checked={viewFollowingPosts}
+              onCheckedChange={() =>
+                setValue("viewFollowingPosts", !viewFollowingPosts)
+              }
+            />
+            <p className="text-[11px]">See followings only</p>
+          </>
+        )}
       </div>
 
-      <div className="flex mx-auto">
+      <div
+        className={`${!fetchedPosts || !fetchedUsers ? "flex justify-center" : ""}`}
+      >
         <div className="flex flex-col space-y-4">
+          {(!fetchedPosts || !fetchedUsers) && <Loading />}
           {filter !== "users" ? (
             posts && posts?.length > 0 ? (
               posts?.map((post) => {
                 const username = post.user?.username
                 const isOwnProfile = currentUser?.username === username
                 return (
-                  <PostContent
-                    key={post.id}
-                    post={post}
-                    isOwnProfile={isOwnProfile}
-                    isCurrentFollowed={
-                      currentUser?.followingUsers?.some(
-                        (followingUsers) =>
-                          followingUsers?.followerId === post.user?.id,
-                      ) || false
-                    }
-                  />
+                  <div key={post.id}>
+                    <PostItem
+                      post={post}
+                      isOwnProfile={isOwnProfile}
+                      isCurrentFollowed={
+                        currentUser?.followingUsers?.some(
+                          (followingUsers) =>
+                            followingUsers?.followerId === post.user?.id,
+                        ) || false
+                      }
+                    />
+                  </div>
                 )
               })
             ) : (
@@ -151,16 +191,18 @@ const Feed: React.FC<FeedProps> = ({
             users?.map((user) => {
               const isOwnProfile = currentUser?.username === user.username
               return (
-                <UserCard
-                  key={user.id}
-                  user={user}
-                  isOwnProfile={isOwnProfile}
-                  isCurrentFollowed={
-                    currentUser?.followingUsers?.some(
-                      (followingUser) => followingUser?.followerId === user.id,
-                    ) || false
-                  }
-                />
+                <div key={user.id}>
+                  <UserItem
+                    user={user}
+                    isOwnProfile={isOwnProfile}
+                    isCurrentFollowed={
+                      currentUser?.followingUsers?.some(
+                        (followingUser) =>
+                          followingUser?.followerId === user.id,
+                      ) || false
+                    }
+                  />
+                </div>
               )
             })
           ) : (

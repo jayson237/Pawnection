@@ -2,6 +2,7 @@
 
 import { useToast } from "@/hooks/useToast"
 import { revalPath } from "@/lib/revalidate"
+import { SafeUser } from "@/types"
 import { User } from "@prisma/client"
 import { Post } from "@prisma/client"
 import { Like } from "@prisma/client"
@@ -13,6 +14,13 @@ import { useRef } from "react"
 
 import TimeStamp from "../TimeStamp"
 import { Button } from "../ui/Button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTrigger,
+} from "../ui/Dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,7 +36,7 @@ const PostItem = ({
   isOwnProfile,
   isCurrentFollowed,
 }: {
-  post: Post & { user: User; likes: Like[] }
+  post: Post & { user: User; likes: (Like & { user: SafeUser })[] }
   isLiked: boolean
   isOwnProfile: boolean
   isCurrentFollowed: boolean
@@ -39,7 +47,6 @@ const PostItem = ({
   const [isEdit, setIsEdit] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [expandable, setexpandable] = useState(false)
-  // const [liking, setLiking] = useState(isLiked)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
@@ -61,27 +68,27 @@ const PostItem = ({
     isExpandable() === true ? setexpandable(true) : setexpandable(false)
   }, [])
 
-  const handleUnfollow = async () => {
+  const handleUnfollow = async (username?: string) => {
     await fetch("/api/user/unfollow", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: post.user.username,
+        username: username,
       }),
     })
     revalPath("/explore")
   }
 
-  const handleFollow = async () => {
+  const handleFollow = async (username?: string) => {
     await fetch("/api/user/follow", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: post.user.username,
+        username: username,
       }),
     })
     revalPath("/explore")
@@ -217,12 +224,16 @@ const PostItem = ({
               variant="outline"
               className="w-20"
               size={"sm"}
-              onClick={handleUnfollow}
+              onClick={() => handleUnfollow(post.user.username || "")}
             >
               Unfollow
             </Button>
           ) : (
-            <Button className="w-20" size={"sm"} onClick={handleFollow}>
+            <Button
+              className="w-20"
+              size={"sm"}
+              onClick={() => handleFollow(post.user.username || "")}
+            >
               Follow
             </Button>
           )
@@ -279,12 +290,69 @@ const PostItem = ({
           )}
           <MessageCircle className="w-6 h-6" />
         </div>
-        {post.likes.length > 0 &&
-          (post.likes.length === 1 ? (
-            <p className="font-bold text-sm">{post.likes.length} Like</p>
-          ) : (
-            <p className="font-bold text-sm">{post.likes.length} Likes</p>
-          ))}
+        <Dialog>
+          <DialogTrigger asChild>
+            <div className="hover:cursor-pointer">
+              {post.likes.length > 0 &&
+                (post.likes.length === 1 ? (
+                  <p className="font-bold text-sm">{post.likes.length} Like</p>
+                ) : (
+                  <p className="font-bold text-sm">{post.likes.length} Likes</p>
+                ))}
+            </div>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogDescription>Liked by</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-1">
+              {post.likes.length > 0 ? (
+                post.likes.map((like) => (
+                  <Link
+                    href={`/profile/${like.user.username}`}
+                    key={like.user.username}
+                    className="flex items-center justify-between hover:bg-gray-200/20 p-2 rounded-lg transition-all duration-200"
+                  >
+                    <div className="flex items-center gap-4">
+                      <Image
+                        className="object-cover w-10 h-10 rounded-full"
+                        src={
+                          like.user.image ? like.user.image : "/../../icon.png"
+                        }
+                        width={40}
+                        height={40}
+                        alt="Bordered avatar"
+                      />
+                      <p>{like.user.username}</p>
+                    </div>
+                    {!isOwnProfile ? (
+                      !like.user.isCurrentFollowed ? (
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={() => handleFollow(like.user.username || "")}
+                        >
+                          Follow
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleFollow(like.user.username || "")}
+                        >
+                          Unfollow
+                        </Button>
+                      )
+                    ) : null}
+                  </Link>
+                ))
+              ) : (
+                <p className="text-center">No Likes</p>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+
         <div className="py-2">
           {!isEdit ? (
             <div ref={containerRef}>

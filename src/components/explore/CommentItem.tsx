@@ -87,29 +87,15 @@ const CommentItem = ({ comment }: { comment: Comment & { user: User } }) => {
         </div>
       </Link>
       <div className="flex flex-col flex-grow space-y-1">
-        <div className="flex flex-row items-center space-x-2">
-          <Link href={`/profile/${comment.user.username}`} target="_blank">
-            <p className="font-semibold hover:cursor-pointer">
-              {comment.user.username}
-            </p>
-          </Link>
-          <TimeStamp datetimeISO={commentTime} />
-        </div>
-        {!isEdit ? (
-          <span className="text-sm">{comment.content}</span>
-        ) : (
-          <Textarea
-            className="mb-4"
-            onChange={(e) => setComment(e.target.value)}
-            placeholder="Your description here..."
-            defaultValue={comment.content || ""}
-            style={{ resize: "none" }}
-          />
-        )}
-        <div className="flex flex-row justify-between py-1 items-center hover:cursor-pointer transition-all ease-in-out duration-300">
-          {/* <span className="text-xs text-gray-500 hover:text-mainAccent">
-          Reply
-        </span> */}
+        <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row items-center space-x-2">
+            <Link href={`/profile/${comment.user.username}`} target="_blank">
+              <p className="font-semibold hover:cursor-pointer">
+                {comment.user.username}
+              </p>
+            </Link>
+            <TimeStamp datetimeISO={commentTime} />
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <MoreHorizontal className="w-4 h-4 hover:cursor-pointer hover:text-mainAccent " />
@@ -134,7 +120,19 @@ const CommentItem = ({ comment }: { comment: Comment & { user: User } }) => {
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-
+        </div>
+        {!isEdit ? (
+          <span className="text-sm">{comment.content}</span>
+        ) : (
+          <Textarea
+            className="mb-4"
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Your description here..."
+            defaultValue={comment.content || ""}
+            style={{ resize: "none" }}
+          />
+        )}
+        <div className="flex flex-row justify-end py-1 items-center hover:cursor-pointer transition-all ease-in-out duration-300">
           {isEdit && (
             <div className="flex justify-end items-center">
               <div className="flex flex-row items-center space-x-2">

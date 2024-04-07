@@ -22,7 +22,7 @@ export async function POST(req: Request) {
   })
 
   if (!getPost) {
-    return NextResponse.json({ message: "Post not found" }, { status: 400 })
+    return NextResponse.json({ message: "Post not found" }, { status: 404 })
   }
 
   const likePost = await prisma.like.create({

@@ -4,6 +4,7 @@ import { SafeUser } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Post, PostType } from "@prisma/client"
 import { User } from "@prisma/client"
+import { Comment } from "@prisma/client"
 import { Like } from "@prisma/client"
 import { Search, X } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -26,7 +27,11 @@ import UserItem from "./UserItem"
 
 interface FeedProps {
   fetchedPosts:
-    | (Post & { user: User; likes: (Like & { user: SafeUser })[] })[]
+    | (Post & {
+        user: User
+        likes: (Like & { user: SafeUser })[]
+        comments: (Comment & { user: User })[]
+      })[]
     | null
   fetchedUsers: User[] | null
   currentUser?: SafeUser
@@ -44,7 +49,12 @@ const Feed: React.FC<FeedProps> = ({
   currentUser,
 }) => {
   const [posts, setPosts] = useState<
-    (Post & { user: User; likes: (Like & { user: SafeUser })[] })[] | null
+    | (Post & {
+        user: User
+        likes: (Like & { user: SafeUser })[]
+        comments: (Comment & { user: User })[]
+      })[]
+    | null
   >(fetchedPosts)
   const [users, setUsers] = useState<User[] | null>(fetchedUsers)
   const { register, setValue, watch } = useForm<z.infer<typeof searchSchema>>({
@@ -55,14 +65,19 @@ const Feed: React.FC<FeedProps> = ({
       viewFollowingPosts: false,
     },
   })
-
   const searchTerm = watch("searchTerm")
   const filter = watch("filter")
   const viewFollowingPosts = watch("viewFollowingPosts")
 
   useEffect(() => {
     const filterPosts = (
-      posts: (Post & { user: User; likes: (Like & { user: SafeUser })[] })[] | null,
+      posts:
+        | (Post & {
+            user: User
+            likes: (Like & { user: SafeUser })[]
+            comments: (Comment & { user: User })[]
+          })[]
+        | null,
       typeCheck: PostType,
       followingCondition = true,
     ) =>

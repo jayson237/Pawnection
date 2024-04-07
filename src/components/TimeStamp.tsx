@@ -34,7 +34,7 @@ const TimeStamp = ({ datetimeISO }: { datetimeISO: string }) => {
 
   return (
     <div>
-      <p className="text-xs mt-2 truncate leading-5 text-gray-500 ease-in-out">
+      <p className="text-xs truncate leading-5 text-gray-500 ease-in-out">
         {calculateTimeDiff(datetimeISO)}
       </p>
     </div>

@@ -39,18 +39,48 @@ export async function getCurrentUser(): Promise<SafeUser | null> {
   }
 }
 
-export async function getAllUsers(): Promise<User[] | null> {
+export async function getAllUsers(
+  cursorId: string | null,
+  username?: string | null,
+): Promise<User[] | null> {
   try {
     const currentUser = await getCurrentUser()
     if (!currentUser) {
       return null
     }
-    const users = await prisma.user.findMany({
-      include: {
-        followerUsers: true,
-        followingUsers: true,
-      },
-    })
+    let cursorCondition = {}
+    if (cursorId) {
+      cursorCondition = {
+        cursor: { id: cursorId },
+        skip: 1,
+      }
+    }
+
+    let users: User[] = []
+    if (!username) {
+      users = await prisma.user.findMany({
+        ...cursorCondition,
+        take: 10,
+        include: {
+          followerUsers: true,
+          followingUsers: true,
+        },
+      })
+    } else {
+      users = await prisma.user.findMany({
+        ...cursorCondition,
+        where: {
+          username: {
+            contains: username,
+          },
+        },
+        take: 10,
+        include: {
+          followerUsers: true,
+          followingUsers: true,
+        },
+      })
+    }
     return users
   } catch (error) {
     return null

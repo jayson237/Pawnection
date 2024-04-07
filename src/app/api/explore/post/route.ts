@@ -1,3 +1,4 @@
+import { getAllPosts } from "@/lib/actions/post"
 import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
 import { PostData } from "@/types"
@@ -28,6 +29,36 @@ async function createPost({
   } catch (error) {
     console.error("Failed to create post:", error)
     throw new Error("Unable to create post, please try again")
+  }
+}
+
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url)
+    const cursor = searchParams.get("cursor")
+    const type = searchParams.get("type")
+    const seachTerm = searchParams.get("q")
+    const following = searchParams.get("following")
+
+    const currentUser = await getCurrentUser()
+    if (!currentUser) {
+      return NextResponse.json(
+        {
+          message: "Unauthorized",
+        },
+        { status: 401 },
+      )
+    }
+    const posts = await getAllPosts(
+      cursor,
+      type,
+      seachTerm || "",
+      following || "false",
+    )
+    return NextResponse.json(posts, { status: 200 })
+  } catch (error) {
+    console.log(error)
+    return NextResponse.json({ message: "An error occurred" }, { status: 500 })
   }
 }
 

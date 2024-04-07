@@ -1,24 +1,27 @@
 import Feed from "@/components/explore/Feed"
-import { getAllPosts } from "@/lib/actions/post"
+import SearchBar from "@/components/explore/SearchBar"
 import { getCurrentUser } from "@/lib/actions/user"
-import { getAllUsers } from "@/lib/actions/user"
 import { redirect } from "next/navigation"
 
-export default async function Community() {
+export default async function Explore({
+  searchParams,
+}: {
+  searchParams: {
+    q: string
+    type: "post" | "users" | "petSitting"
+    following: string
+  }
+}) {
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
-
-  const posts = await getAllPosts()
-  const users = await getAllUsers()
 
   return (
     <div className="flex justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
       <div className="py-[40px]">
-        <Feed
-          fetchedPosts={posts}
-          fetchedUsers={users}
-          currentUser={currUser}
-        />
+        <div className="flex flex-col space-x-4 space-y-4">
+          <SearchBar />
+          <Feed currentUser={currUser} searchParams={searchParams} />
+        </div>
       </div>
     </div>
   )

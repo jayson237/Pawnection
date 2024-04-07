@@ -25,7 +25,9 @@ import PostItem from "./PostItem"
 import UserItem from "./UserItem"
 
 interface FeedProps {
-  fetchedPosts: (Post & { user: User; likes: Like[] })[] | null
+  fetchedPosts:
+    | (Post & { user: User; likes: (Like & { user: SafeUser })[] })[]
+    | null
   fetchedUsers: User[] | null
   currentUser?: SafeUser
 }
@@ -42,7 +44,7 @@ const Feed: React.FC<FeedProps> = ({
   currentUser,
 }) => {
   const [posts, setPosts] = useState<
-    (Post & { user: User; likes: Like[] })[] | null
+    (Post & { user: User; likes: (Like & { user: SafeUser })[] })[] | null
   >(fetchedPosts)
   const [users, setUsers] = useState<User[] | null>(fetchedUsers)
   const { register, setValue, watch } = useForm<z.infer<typeof searchSchema>>({
@@ -60,7 +62,7 @@ const Feed: React.FC<FeedProps> = ({
 
   useEffect(() => {
     const filterPosts = (
-      posts: (Post & { user: User; likes: Like[] })[] | null,
+      posts: (Post & { user: User; likes: (Like & { user: SafeUser })[] })[] | null,
       typeCheck: PostType,
       followingCondition = true,
     ) =>

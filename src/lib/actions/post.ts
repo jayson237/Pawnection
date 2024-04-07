@@ -64,7 +64,7 @@ export async function getAllPosts(
             },
           },
         },
-        take: 10,
+        take: 2,
         orderBy: {
           createdAt: "desc",
         },
@@ -91,7 +91,7 @@ export async function getAllPosts(
             },
           },
         },
-        take: 10,
+        take: 2,
         orderBy: {
           createdAt: "desc",
         },

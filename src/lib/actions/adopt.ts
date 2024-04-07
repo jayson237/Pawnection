@@ -16,6 +16,7 @@ export const getAllAdoptablePets = async () => {
             username: true,
           },
         },
+        adoptionRequests: true,
       },
     })
     return adoptablePets

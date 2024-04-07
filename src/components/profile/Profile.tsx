@@ -154,7 +154,7 @@ const Profile = ({
                   {user.following?.length} Following
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogDescription>Following</DialogDescription>
                 </DialogHeader>
@@ -238,7 +238,7 @@ const Profile = ({
                   {user.followers?.length} Follower
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogDescription>Follower</DialogDescription>
                 </DialogHeader>
@@ -369,7 +369,11 @@ const Profile = ({
                 : reports.map((report) => (
                     <div
                       key={report.id}
-                      className= {report.isActive ? "flex flex-col items-center mb-5 mr-12 cursor-pointer" :  "flex flex-col items-center mb-5 mr-12 cursor-pointer  bg-gray-500"}           
+                      className={
+                        report.isActive
+                          ? "flex flex-col items-center mb-5 mr-12 cursor-pointer"
+                          : "flex flex-col items-center mb-5 mr-12 cursor-pointer  bg-gray-500"
+                      }
                       onClick={() => handleReportClick(report)}
                     >
                       <Image
@@ -379,10 +383,17 @@ const Profile = ({
                         height={80}
                         alt="Bordered avatar"
                       />
-                      <div className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
-                      : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} >
-                        {report.isActive ? "Missing Pet " : "Pet has been found"}   
-                        </div>                                     
+                      <div
+                        className={
+                          report.isActive
+                            ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer"
+                            : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"
+                        }
+                      >
+                        {report.isActive
+                          ? "Missing Pet "
+                          : "Pet has been found"}
+                      </div>
                       <p className="mb-[10px]">
                         {"foundArea" in report
                           ? "Found Pet Report"

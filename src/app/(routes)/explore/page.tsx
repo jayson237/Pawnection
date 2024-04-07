@@ -13,7 +13,7 @@ export default async function Community() {
 
   return (
     <div className="flex justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
-      <div className="py-[40px] px-16 w-fit">
+      <div className="py-[40px]">
         <Feed
           fetchedPosts={posts}
           fetchedUsers={users}

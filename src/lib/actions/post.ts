@@ -1,7 +1,17 @@
 import prisma from "@/lib/prismadb"
-import { User } from "@prisma/client"
+import { SafeUser } from "@/types"
+import { Comment, Like, Post, User } from "@prisma/client"
 
 import { getCurrentUser } from "./user"
+
+type ExtendedPost = Post & {
+  comments: (Comment & { user: User })[]
+  likes: (Like & { user: SafeUser })[]
+  user: User & {
+    followerUsers: { id: string; followerId: string; followingId: string }[]
+    followingUsers: { id: string; followerId: string; followingId: string }[]
+  }
+}
 
 const transformUserToSafeUser = (user: User) => {
   const { hashedPassword, ...rest } = user
@@ -13,7 +23,7 @@ const transformUserToSafeUser = (user: User) => {
   }
 }
 
-export async function getAllPosts() {
+export async function getAllPosts(): Promise<ExtendedPost[] | null> {
   try {
     const currentUser = await getCurrentUser()
     if (!currentUser) {
@@ -39,18 +49,35 @@ export async function getAllPosts() {
       },
     })
 
-    const transformedPosts = posts.map((post) => ({
-      ...post,
-      likes: post.likes.map((like) => ({
-        ...like,
-        user: transformUserToSafeUser(like.user),
-      })),
-      user: post.user,
-    }))
+    const postsWithLimitedComments = await Promise.all(
+      posts.map(async (post) => {
+        const comments = await prisma.comment.findMany({
+          where: { postId: post.id },
+          orderBy: {
+            createdAt: "desc",
+          },
+          include: {
+            user: true,
+          },
+        })
 
-    return transformedPosts
+        return {
+          ...post,
+          comments: comments.map((comment) => ({
+            ...comment,
+            user: comment.user,
+          })),
+          likes: post.likes.map((like) => ({
+            ...like,
+            user: transformUserToSafeUser(like.user),
+          })),
+        }
+      }),
+    )
+
+    return postsWithLimitedComments as ExtendedPost[]
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return null
   }
 }

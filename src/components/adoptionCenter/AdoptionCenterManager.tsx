@@ -2,12 +2,10 @@
 
 import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
-import { EditAdoptablePetPayloadType } from "@/types/adoptionCenter"
 import { AdoptablePet, AdoptionRequest } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { SubmitHandler, useForm } from "react-hook-form"
 
 import HeaderTitle from "../HeaderTitle"
 import {
@@ -22,24 +20,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/AlertDialog"
 import { Button, buttonVariants } from "../ui/Button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/Form"
-import { Input } from "../ui/Input"
-import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/Select"
-import { Textarea } from "../ui/TextArea"
+import AdoptionCenterManagerForm from "./AdoptionCenterManagerForm"
 
 export default function AdoptionCenterManager({
   data,
@@ -48,46 +29,51 @@ export default function AdoptionCenterManager({
 }) {
   const router = useRouter()
 
-  const form = useForm<EditAdoptablePetPayloadType>({
-    defaultValues: {
-      name: data?.name,
-      type: data?.type,
-      breed: data?.breed,
-      age: data?.age,
-      gender: data?.gender,
-      description: data?.description,
-      imageUrl: data?.imageUrl,
-      status: data.status,
-    },
-  })
-
-  const onSubmit: SubmitHandler<EditAdoptablePetPayloadType> = async (
-    formData,
-  ) => {
-    const set = await fetch("/api/adoptionCenter/" + data.id, {
-      method: "PUT",
+  const handleAccept = async (id: string) => {
+    const set = await fetch(`/api/adoptionCenter/${data.id}/${id}/accept`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ...formData,
-        age: parseInt(formData.age.toString()),
-      }),
       cache: "no-store",
     })
     const msg = await set.json()
     if (!set.ok) {
       toast({
         variant: "destructive",
-        title: "Failed to create post",
+        title: "Failed to accept request",
         description: msg.message,
       })
     } else {
       toast({
-        title: "Post created successfully",
-        description: "Successfully posted! Please wait...",
+        title: "Request accepted successfully",
+        description: "Successfully accepted! Please wait...",
       })
-      window.location.reload()
+      router.refresh()
+    }
+  }
+
+  const handleReject = async (id: string) => {
+    const set = await fetch(`/api/adoptionCenter/${data.id}/${id}/reject`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    })
+    const msg = await set.json()
+    if (!set.ok) {
+      toast({
+        variant: "destructive",
+        title: "Failed to reject request",
+        description: msg.message,
+      })
+    } else {
+      toast({
+        title: "Request rejected successfully",
+        description: "Successfully rejected! Please wait...",
+      })
+      router.refresh()
     }
   }
 
@@ -106,7 +92,7 @@ export default function AdoptionCenterManager({
 
         <div>
           <AlertDialog>
-            <AlertDialogTrigger>
+            <AlertDialogTrigger asChild>
               <Button variant="destructive">Delete</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -163,146 +149,7 @@ export default function AdoptionCenterManager({
             />
           </div>
           <div className="px-3.5 py-4">
-            <Form {...form}>
-              <form
-                className="space-y-6 pt-6 "
-                onSubmit={form.handleSubmit(onSubmit)}
-              >
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Pet Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Enter pet's name" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Pet Type</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select Pet Type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="bird">Bird</SelectItem>
-                          <SelectItem value="cat">Cat</SelectItem>
-                          <SelectItem value="dog">Dog</SelectItem>
-                          <SelectItem value="fish">Fish</SelectItem>
-                          <SelectItem value="hamster">Hamster</SelectItem>
-                          <SelectItem value="lizard">Lizard</SelectItem>
-                          <SelectItem value="rabbit">Rabbit</SelectItem>
-                          <SelectItem value="turtle">Turtle</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="gender"
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormLabel>Pet Gender</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex items-center space-x-2 mt-1"
-                        >
-                          <FormItem className="flex items-center space-x-3 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="Male" />
-                            </FormControl>
-                            <FormLabel className="font-normal">Male</FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-3 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="Female" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Female
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="age"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Pet Age</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          type="number"
-                          placeholder="Enter pet's age"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="breed"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Pet Breed</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Enter pet's breed" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          {...field}
-                          placeholder="Enter a brief description"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={form.formState.isLoading || !form.formState.isDirty}
-                >
-                  Edit
-                </Button>
-              </form>
-            </Form>
+            <AdoptionCenterManagerForm data={data} />
           </div>
         </div>
 
@@ -326,6 +173,30 @@ export default function AdoptionCenterManager({
                       <p className="text-lg font-bold">{request.full_name}</p>
                       <p>{request.id}</p>
                     </div>
+
+                    {request.request_status === "Pending" && (
+                      <div className="space-x-2">
+                        <Button
+                          onClick={async () => await handleAccept(request.id)}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={async () => await handleReject(request.id)}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    )}
+
+                    {request.request_status === "Approved" && (
+                      <p className="text-green-600">Approved</p>
+                    )}
+
+                    {request.request_status === "Rejected" && (
+                      <p className="text-red-600">Rejected</p>
+                    )}
                   </div>
                 ))}
               </div>

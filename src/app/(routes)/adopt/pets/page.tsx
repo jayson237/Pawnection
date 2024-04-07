@@ -5,6 +5,8 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
 
+import { Label } from "../../../../components/ui/Label"
+
 export default async function AdoptViewAllPetsPage() {
   const adoptablePets = await getAllAdoptablePets()
 
@@ -36,6 +38,11 @@ export default async function AdoptViewAllPetsPage() {
               <h2 className="text-xl font-bold">{pet.name}</h2>
               <p className="text-gray-500">{pet.breed}</p>
               <p className="text-gray-500">{pet.age} years old</p>
+              {pet.status === "Adopted" ? (
+                <Label className="text-red-500">Adopted</Label>
+              ) : (
+                <Label>Available</Label>
+              )}
             </div>
           </Link>
         ))}

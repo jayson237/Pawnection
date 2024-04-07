@@ -24,6 +24,16 @@ export const POST = async (
 
     const payload: CreateAdoptRequestPayloadType =
       CreateAdoptRequestSchema.parse(await req.json())
+
+    const find = await prisma.adoptablePet.findFirst({
+      where: {
+        id: params.id,
+      },
+    })
+    if (find?.status == "Adopted") {
+      throw new Error("Pet has been adopted.")
+    }
+
     await prisma.adoptionRequest.create({
       data: {
         ...payload,

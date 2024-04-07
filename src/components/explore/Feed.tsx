@@ -1,238 +1,164 @@
 "use client"
 
 import { SafeUser } from "@/types"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Post, PostType } from "@prisma/client"
-import { User } from "@prisma/client"
-import { Comment } from "@prisma/client"
-import { Like } from "@prisma/client"
-import { Search, X } from "lucide-react"
-import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import z from "zod"
+import { Comment, Like, Post, User } from "@prisma/client"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import Loading from "../Loading"
-import { Button } from "../ui/Button"
-import { Input } from "../ui/Input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/Select"
-import { Switch } from "../ui/Switch"
 import PostItem from "./PostItem"
 import UserItem from "./UserItem"
 
-interface FeedProps {
-  fetchedPosts:
-    | (Post & {
-        user: User
-        likes: (Like & { user: SafeUser })[]
-        comments: (Comment & { user: User })[]
-      })[]
-    | null
-  fetchedUsers: User[] | null
-  currentUser?: SafeUser
+type ExtendedPost = Post & {
+  user: User
+  likes: (Like & { user: SafeUser })[]
+  comments: (Comment & { user: User })[]
 }
 
-const searchSchema = z.object({
-  searchTerm: z.string(),
-  filter: z.string(),
-  viewFollowingPosts: z.boolean(),
-})
-
-const Feed: React.FC<FeedProps> = ({
-  fetchedPosts,
-  fetchedUsers,
+const Feed = ({
   currentUser,
+  searchParams,
+}: {
+  currentUser: SafeUser
+  searchParams: {
+    q: string
+    type: "post" | "users" | "petSitting"
+    following: string
+  }
 }) => {
-  const [posts, setPosts] = useState<
-    | (Post & {
-        user: User
-        likes: (Like & { user: SafeUser })[]
-        comments: (Comment & { user: User })[]
-      })[]
-    | null
-  >(fetchedPosts)
-  const [users, setUsers] = useState<User[] | null>(fetchedUsers)
-  const { register, setValue, watch } = useForm<z.infer<typeof searchSchema>>({
-    resolver: zodResolver(searchSchema),
-    defaultValues: {
-      searchTerm: "",
-      filter: "post",
-      viewFollowingPosts: false,
-    },
-  })
-  const searchTerm = watch("searchTerm")
-  const filter = watch("filter")
-  const viewFollowingPosts = watch("viewFollowingPosts")
+  const [content, setContent] = useState<{
+    posts: ExtendedPost[]
+    users: User[]
+  }>({ posts: [], users: [] })
+  const [loading, setLoading] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+  const loadMoreTriggerRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const filterPosts = (
-      posts:
-        | (Post & {
-            user: User
-            likes: (Like & { user: SafeUser })[]
-            comments: (Comment & { user: User })[]
-          })[]
-        | null,
-      typeCheck: PostType,
-      followingCondition = true,
-    ) =>
-      posts?.filter(
-        (post) =>
-          post?.description?.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          post.type === typeCheck &&
-          (!followingCondition ||
-            currentUser?.followingUsers?.some(
-              (followingUser) => followingUser?.followerId === post.user?.id,
-            )),
-      ) || null
-    switch (filter) {
-      case "users":
-        setUsers(
-          fetchedUsers?.filter((user) =>
-            user?.username?.toLowerCase().includes(searchTerm.toLowerCase()),
-          ) || null,
-        )
-        break
-      case "post":
-        setPosts(filterPosts(fetchedPosts, PostType.Post, viewFollowingPosts))
-        break
-      case "petSitting":
-        setPosts(
-          filterPosts(fetchedPosts, PostType.PetSitting, viewFollowingPosts),
-        )
-        break
-      default:
-        break
+  const fetchContent = useCallback(async () => {
+    if (loading || !hasMore) return
+    setLoading(true)
+
+    const type = searchParams.type
+    const cursor =
+      type === "post" || type === "petSitting"
+        ? content.posts.length > 0
+          ? content.posts[content.posts.length - 1].id
+          : null
+        : content.users.length > 0
+          ? content.users[content.users.length - 1].id
+          : null
+
+    const queryParams = []
+
+    if (cursor) queryParams.push(`cursor=${cursor}`)
+    if (type) queryParams.push(`type=${type}`)
+    if (searchParams?.q) queryParams.push(`q=${searchParams.q}`)
+    if (searchParams?.following === "true") queryParams.push("following=true")
+
+    const queryString =
+      queryParams.length > 0 ? `?${queryParams.join("&")}` : ""
+
+    const endpoint =
+      searchParams.type === "users" ? "/api/user" : "/api/explore/post"
+
+    try {
+      const response = await fetch(`${endpoint}${queryString}`)
+      const data = await response.json()
+      setContent((prev) => ({
+        ...prev,
+        posts:
+          searchParams.type !== "users" ? [...prev.posts, ...data] : prev.posts,
+        users:
+          searchParams.type === "users" ? [...prev.users, ...data] : prev.users,
+      }))
+      setHasMore(data.length !== 0)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
     }
   }, [
-    searchTerm,
-    filter,
-    fetchedPosts,
-    fetchedUsers,
-    viewFollowingPosts,
-    currentUser,
+    loading,
+    hasMore,
+    searchParams,
+    content.posts.length,
+    content.users.length,
   ])
 
+  useEffect(() => {
+    setHasMore(true)
+    setContent({ posts: [], users: [] })
+  }, [searchParams])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) fetchContent()
+      },
+      { rootMargin: "0px 0px 100px" },
+    )
+
+    if (loadMoreTriggerRef.current) observer.observe(loadMoreTriggerRef.current)
+
+    return () => observer.disconnect()
+  }, [fetchContent])
+
+  const renderPostItem = (
+    post: Post & {
+      user: User
+      likes: (Like & { user: SafeUser })[]
+      comments: (Comment & { user: User })[]
+    },
+  ) => {
+    const isOwnProfile = currentUser?.username === post.user?.username
+    const isLiked = post.likes.some((like) => like.userId === currentUser?.id)
+
+    return (
+      <div key={post.id}>
+        <PostItem
+          post={post}
+          isLiked={isLiked}
+          isOwnProfile={isOwnProfile}
+          isCurrentFollowed={
+            currentUser?.followingUsers?.some(
+              (followingUsers) => followingUsers?.followerId === post.user?.id,
+            ) || false
+          }
+        />
+      </div>
+    )
+  }
+
+  const renderUserItem = (user: User) => {
+    const isOwnProfile = currentUser?.username === user.username
+    return (
+      <div key={user.id}>
+        <UserItem
+          user={user}
+          isOwnProfile={isOwnProfile}
+          isCurrentFollowed={
+            currentUser?.followingUsers?.some(
+              (followingUser) => followingUser?.followerId === user.id,
+            ) || false
+          }
+        />
+      </div>
+    )
+  }
+
   return (
-    <div className="flex flex-col space-x-4 space-y-4">
-      <div className="flex flex-row space-x-2 px-4 items-center">
-        <div className="flex flex-row items-center">
-          <div className="relative flex grow items-center bg-white rounded-md">
-            <Input
-              {...register("searchTerm")}
-              type="text"
-              placeholder="Search..."
-              className="pr-20 py-2 grow bg-white outline-none rounded-md"
-            />
-
-            {searchTerm.length !== 0 && (
-              <Button
-                onClick={() => {
-                  setValue("searchTerm", "")
-                }}
-                className="absolute right-8"
-                variant="search"
-              >
-                <X className="text-gray-500 hover:text-primary duration-300 ease-in-out transition-all w-5 h-5" />
-              </Button>
-            )}
-
-            <Button
-              type="submit"
-              className="absolute right-2 pr-2"
-              variant="search"
-            >
-              <Search className="text-gray-500 hover:text-primary duration-300 ease-in-out transition-all w-5 h-5" />
-            </Button>
-          </div>
+    <div className="flex flex-col space-y-4">
+      {searchParams.type !== "users"
+        ? content.posts.map(renderPostItem)
+        : content.users.map(renderUserItem)}
+      {loading && (
+        <div className="flex justify-center py-4">
+          <Loading />
         </div>
-        <Select
-          onValueChange={(val) => setValue("filter", val)}
-          defaultValue={filter}
-        >
-          <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder="Select filter" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="post">Pet posts</SelectItem>
-            <SelectItem value="petSitting">Pet sittings</SelectItem>
-            <SelectItem value="users">Users</SelectItem>
-          </SelectContent>
-        </Select>
-        {(filter === "post" || filter === "petSitting") && (
-          <>
-            <Switch
-              checked={viewFollowingPosts}
-              onCheckedChange={() =>
-                setValue("viewFollowingPosts", !viewFollowingPosts)
-              }
-            />
-            <p className="text-[11px]">See followings only</p>
-          </>
-        )}
-      </div>
-
-      <div
-        className={`${!fetchedPosts || !fetchedUsers ? "flex justify-center" : ""}`}
-      >
-        <div className="flex flex-col space-y-4">
-          {(!fetchedPosts || !fetchedUsers) && <Loading />}
-          {filter !== "users" ? (
-            posts && posts?.length > 0 ? (
-              posts?.map((post) => {
-                const username = post.user?.username
-                const isOwnProfile = currentUser?.username === username
-                const isLiked = post.likes.some(
-                  (like) => like.userId === currentUser?.id,
-                )
-
-                return (
-                  <div key={post.id}>
-                    <PostItem
-                      post={post}
-                      isLiked={isLiked}
-                      isOwnProfile={isOwnProfile}
-                      isCurrentFollowed={
-                        currentUser?.followingUsers?.some(
-                          (followingUsers) =>
-                            followingUsers?.followerId === post.user?.id,
-                        ) || false
-                      }
-                    />
-                  </div>
-                )
-              })
-            ) : (
-              <p className="py-4">No posts found</p>
-            )
-          ) : users && users?.length > 0 ? (
-            users?.map((user) => {
-              const isOwnProfile = currentUser?.username === user.username
-              return (
-                <div key={user.id}>
-                  <UserItem
-                    user={user}
-                    isOwnProfile={isOwnProfile}
-                    isCurrentFollowed={
-                      currentUser?.followingUsers?.some(
-                        (followingUser) =>
-                          followingUser?.followerId === user.id,
-                      ) || false
-                    }
-                  />
-                </div>
-              )
-            })
-          ) : (
-            <p className="py-4">No users found</p>
-          )}
-        </div>
-      </div>
+      )}
+      {!loading && content.posts.length === 0 && content.users.length === 0 && (
+        <p className="py-4 text-center">No results found</p>
+      )}
+      <div ref={loadMoreTriggerRef} className="mb-8" />
     </div>
   )
 }

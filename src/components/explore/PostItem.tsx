@@ -3,10 +3,15 @@
 import { useToast } from "@/hooks/useToast"
 import { revalPath } from "@/lib/revalidate"
 import { SafeUser } from "@/types"
-import { User } from "@prisma/client"
-import { Post } from "@prisma/client"
-import { Like } from "@prisma/client"
-import { Edit3, Heart, MessageCircle, MoreVertical, Trash2 } from "lucide-react"
+import { Comment, Like, Post, User } from "@prisma/client"
+import {
+  Edit3,
+  Heart,
+  MessageCircle,
+  MoreHorizontal,
+  SendHorizonal,
+  Trash2,
+} from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -28,7 +33,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/DropdownMenu"
+import { Input } from "../ui/Input"
 import { Textarea } from "../ui/TextArea"
+import CommentItem from "./CommentItem"
 
 const PostItem = ({
   post,
@@ -36,20 +43,30 @@ const PostItem = ({
   isOwnProfile,
   isCurrentFollowed,
 }: {
-  post: Post & { user: User; likes: (Like & { user: SafeUser })[] }
+  post: Post & {
+    user: User
+    likes: (Like & { user: SafeUser })[]
+    comments: (Comment & { user: User })[]
+  }
   isLiked: boolean
   isOwnProfile: boolean
   isCurrentFollowed: boolean
 }) => {
   const { toast } = useToast()
   const [isImageLoading, setImageLoading] = useState(true)
+
   const [description, setDescription] = useState(post.description)
+  const [comment, setComment] = useState("")
+
+  const [isCommenting, setIsCommenting] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
+
   const [expanded, setExpanded] = useState(false)
   const [expandable, setexpandable] = useState(false)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
 
   const time = new Date(post.createdAt).toISOString()
 
@@ -188,12 +205,36 @@ const PostItem = ({
     }
   }
 
+  const handleComment = async () => {
+    setComment("")
+    const set = await fetch("/api/explore/post/comment", {
+      method: "POST",
+      body: JSON.stringify({
+        content: comment,
+        postId: post.id,
+      }),
+    })
+    const msg = await set.json()
+    if (!set.ok) {
+      toast({
+        variant: "destructive",
+        title: "Failed to comment",
+        description: msg.message,
+      })
+    } else {
+      revalPath("/explore")
+      if (dialogRef.current) {
+        dialogRef.current.scrollTo(0, 0)
+      }
+    }
+  }
+
   return (
     <div className="rounded-xl border bg-white h-full max-w-xl">
       <div className="flex items-center px-6 py-4 justify-between">
-        <div className="transition-all duration-300 ease-in-out hover:cursor-pointer hover:opacity-80 ">
+        <div className="transition-all duration-300 ease-in-out hover:cursor-pointer ">
           <Link href={`/profile/${post.user.username}`} target="_blank">
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center space-x-3  ">
               <Image
                 src={
                   !post.user?.image
@@ -211,9 +252,10 @@ const PostItem = ({
                 width={160}
                 height={160}
                 alt={post.user.username || "User"}
-                className="rounded-full h-10 w-10 mr-3"
+                className="rounded-full h-10 w-10"
               />
               <span className="font-bold">{post.user.username}</span>
+              <TimeStamp datetimeISO={time} />
             </div>
           </Link>
         </div>
@@ -241,7 +283,7 @@ const PostItem = ({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="px-2">
-                <MoreVertical className="w-6 h-6 hover:cursor-pointer" />
+                <MoreHorizontal className="w-6 h-6 hover:cursor-pointer" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-fit bg-white">
@@ -288,8 +330,12 @@ const PostItem = ({
               onClick={handleDislike}
             />
           )}
-          <MessageCircle className="w-6 h-6" />
+          <MessageCircle
+            className="w-6 h-6 hover:cursor-pointer hover:duration-300 ease-in-out transition-all hover:text-mainAccent"
+            onClick={() => setIsCommenting(!isCommenting)}
+          />
         </div>
+
         <Dialog>
           <DialogTrigger asChild>
             <div className="hover:cursor-pointer">
@@ -301,7 +347,7 @@ const PostItem = ({
                 ))}
             </div>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
             <DialogHeader>
               <DialogDescription>Liked by</DialogDescription>
             </DialogHeader>
@@ -357,7 +403,7 @@ const PostItem = ({
           {!isEdit ? (
             <div ref={containerRef}>
               <p
-                className={`mb-1 text-[14px] ${expanded || !expandable ? "" : "line-clamp-1"} `}
+                className={`text-[14px] ${expanded || !expandable ? "" : "line-clamp-1"} `}
                 ref={descriptionRef}
               >
                 {post?.description}
@@ -383,9 +429,9 @@ const PostItem = ({
             />
           )}
         </div>
-        <div className="flex justify-between items-center">
-          <TimeStamp datetimeISO={time} />
-          {isEdit && (
+
+        {isEdit ? (
+          <div className="flex justify-end items-center">
             <div className="flex flex-row items-center space-x-2">
               <Button
                 variant="destructive"
@@ -399,8 +445,81 @@ const PostItem = ({
                 Save
               </Button>
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <>
+            {post.comments.length > 0 && (
+              <>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <p className="text-sm text-gray-500 hover:text-mainAccent ease-in-out transition-all hover:cursor-pointer w-fit">
+                      View all comments
+                    </p>
+                  </DialogTrigger>
+                  <DialogContent
+                    className="sm:max-w-[700px] max-h-[70vh] overflow-y-auto pb-0"
+                    ref={dialogRef}
+                  >
+                    <DialogHeader>
+                      <DialogDescription>Comments</DialogDescription>
+                    </DialogHeader>
+
+                    {post.comments.length > 0 ? (
+                      post.comments.map((comment) => (
+                        <div className="w-full" key={comment.id}>
+                          <CommentItem comment={comment} />
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-center">No comments</p>
+                    )}
+                    <div className="sticky bottom-0 left-0 w-full px-4 py-4 bg-white">
+                      <Input
+                        placeholder="Add a comment..."
+                        className="pr-12"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                      />
+                      {comment !== "" && (
+                        <SendHorizonal
+                          className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 hover:cursor-pointer hover:duration-300 ease-in-out transition-all hover:text-mainAccent"
+                          onClick={handleComment}
+                        />
+                      )}
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+                <div className="items-center py-2">
+                  {post.comments.slice(0, 2).map((comment) => (
+                    <div key={comment.id} className="text-sm flex flex-row">
+                      <p className="font-semibold mr-1">
+                        {comment.user.username}
+                      </p>
+                      <p className="line-clamp-1">{comment.content}</p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+            {isCommenting && (
+              <div className="relative py-2">
+                <Input
+                  placeholder="Add a comment..."
+                  className="pr-12"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
+                {comment !== "" && (
+                  <SendHorizonal
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 hover:cursor-pointer hover:duration-300 ease-in-out transition-all hover:text-mainAccent"
+                    onClick={handleComment}
+                  />
+                )}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   )

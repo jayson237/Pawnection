@@ -35,7 +35,7 @@ export async function POST(req: Request) {
   if (!likeRecord) {
     return NextResponse.json(
       { message: "Like not found or could not be removed" },
-      { status: 400 },
+      { status: 404 },
     )
   }
 

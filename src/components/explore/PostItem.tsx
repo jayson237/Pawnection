@@ -310,8 +310,8 @@ const PostItem = ({
       </div>
       <Image
         src={post.imageUrl}
-        width={1000}
-        height={1000}
+        width={800}
+        height={800}
         alt="Picture"
         onLoad={() => setImageLoading(false)}
         className={`w-full ${isImageLoading ? "blur" : "remove-blur"}`}

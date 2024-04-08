@@ -59,6 +59,7 @@
 
 .stories-container {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
@@ -66,6 +67,7 @@
   max-width: 1240px;
   padding: 0 60px;
   margin-top: 24px;
+  gap: 20px;
 }
 
 @media (max-width: 991px) {

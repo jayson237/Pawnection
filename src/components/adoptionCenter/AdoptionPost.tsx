@@ -151,11 +151,11 @@ function AdoptionPost() {
   }
 
   return (
-    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-7 flex flex-col sm:flex-row">
+    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-7 items-center">
       <div className="py-[60px]">
         <div className="md:grid grid-cols-1 md:grid-cols-3">
-          <div className="col-span-1 pr-3">
-            <div className="place-content-end py-3">
+          <div className="flex flex-col justify-end py-3 col-span-1 pr-3">
+            <div className="">
               {selectedImage ? (
                 <Image
                   src={`${URL.createObjectURL(selectedImage)}`}

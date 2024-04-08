@@ -14,6 +14,9 @@ export async function POST(request: Request) {
             id: currentUser?.id,
           },
         },
+        isActive: data.isActive,
+        animalType: data.animalType,
+        animalBreed: data.breed,
         petName: data.name,
         petSex: data.sex,
         reportMessage: data.message,
@@ -21,6 +24,7 @@ export async function POST(request: Request) {
         lastSeenArea: data.lastSeenArea,
         lastSeenDate: data.lastSeenDate,
         contactDetails: data.contactDetails,
+        imageUrl : data.petImage,
       },
     })
 

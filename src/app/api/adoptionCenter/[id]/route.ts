@@ -4,7 +4,7 @@ import { SafeUser } from "@/types"
 import {
   EditAdoptablePetPayloadSchema,
   EditAdoptablePetPayloadType,
-} from "@/types/adoption-center"
+} from "@/types/adoptionCenter"
 import { NextResponse } from "next/server"
 
 export async function GET(

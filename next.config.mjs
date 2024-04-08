@@ -24,6 +24,11 @@ const nextConfig = {
       },
     ],
   },
+  // issue https://github.com/vercel/next.js/issues/46493#issuecomment-1447650463
+  webpack: (config) => {
+    config.externals = [...config.externals, "bcrypt"]
+    return config
+  },
 }
 
 export default nextConfig

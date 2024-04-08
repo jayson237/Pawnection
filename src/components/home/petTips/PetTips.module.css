@@ -14,6 +14,10 @@
 
 @media (max-width: 991px) {
   .main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     max-width: 100%;
     padding: 0 20px;
   }
@@ -47,7 +51,7 @@
 }
 
 .hero-image-wrapper {
-  align-items: start;
+  flex: start;
   display: flex;
   padding-top: 80px;
   flex-direction: column;
@@ -74,14 +78,19 @@
   margin-top: 6px;
   padding-bottom: 20px;
   flex-direction: column;
+  
 }
 
 @media (max-width: 991px) {
   .hero-text-content {
     max-width: 100%;
     margin-top: 40px;
+    align-items: center;
+    justify-content: center;
   }
 }
+
+
 
 .hero-title {
   color: #242851;

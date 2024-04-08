@@ -38,7 +38,7 @@ const Article: React.FC<ArticleProps> = ({
 }) => {
   const router = useRouter()
   return (
-    <div className="transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg hover:scale-105 hover:z-10">
+    <div className="transition-all duration-300 ease-in-out hover:cursor-pointer hover:scale-105 hover:z-10">
       <article
         className={articleStyles["article"]}
         onClick={() => router.push("/recommendations")}
@@ -76,7 +76,7 @@ function PetTips() {
               loading="lazy"
               src="/static/images/dog_front.webp"
               alt="Pet Tips and Advice"
-              className="w-3/4"
+              className="w-1/2 md:w-3/4 mx-auto"
             />
           </div>
         </div>

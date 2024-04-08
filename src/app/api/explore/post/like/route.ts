@@ -40,6 +40,17 @@ export async function POST(req: Request) {
     },
   })
 
+  await prisma.post.update({
+    data: {
+      likes_count: {
+        increment: 1,
+      },
+    },
+    where: {
+      id: postId,
+    },
+  })
+
   if (!likePost) {
     return NextResponse.json({ message: "Please try again" }, { status: 400 })
   }

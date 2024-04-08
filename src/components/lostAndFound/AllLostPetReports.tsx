@@ -24,6 +24,8 @@ const AllLostPetReports = ({
   const [lostPetReports, setLostPetReports] = useState(allLostPetReports)
   const [isLostPetReportDialogOpen, setIsLostPetReportDialogOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
+  const [reportActivity, setReportActivity] = useState<null | boolean>(null)
+
 
   const transformImage = (url: string) => {
     const parts = url.split("/upload/")
@@ -50,13 +52,19 @@ const AllLostPetReports = ({
     setLostPetReports(data)
   }
 
+
   return (
-    <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
+    <div className="container mx-auto">
       <div className="py-[60px]">
+
         <HeaderTitle className="max-w-full">Lost Pet Reports</HeaderTitle>
+
+        <div className="flex flex-row space-x-4 mt-10">
+
+        <div className="flex items-center">
         <Button
             variant="outline"
-            className="mr-8 w-60 mb-5 bg-black text-white"
+            className=" bg-black text-white w-[180px] px-4 py-2 h-[40px]"
             onClick={() => setIsLostPetReportDialogOpen(true)}
           >            
           Report A Missing Pet
@@ -66,31 +74,35 @@ const AllLostPetReports = ({
           isOpen={isLostPetReportDialogOpen}
           onClose={() => setIsLostPetReportDialogOpen(false)}
         />
+        </div>
+        <div className="flex items-center">
+          <Select
+              onValueChange={(val) => {
+                setReportActivity(val === "Active" ? true : val === "Inactive" ? false : null)
+              }}              
+          >
+            <SelectTrigger className="w-[180px] px-4 py-2 h-[40px]">
+              <SelectValue placeholder="Filter Report Status" />
+            </SelectTrigger>
+            <SelectContent>
+            <SelectItem value="All">All</SelectItem>
+              <SelectItem value="Active">Active</SelectItem>
+              <SelectItem value="Inactive">Inactive</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-        <div className="mb-5">
-            <input
-              type="text"
-              placeholder="Search reports..."
-              className="border px-4 py-2"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-
-
-        <div className="mb-5 mt-5">
-          <Label>Pet Type</Label>
+        <div className="flex items-center">
           <Select
             onValueChange={(val) => {
               const fetchData = async () => {
                 fetchReports(val)
               }
               fetchData()
-            }}
-            defaultValue="All"
+            }}            
           >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select Animal Type" />
+            <SelectTrigger className="w-[180px] px-4 py-2 h-[40px]">
+              <SelectValue placeholder="Filter Animal Type" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="All">All </SelectItem>
@@ -102,13 +114,23 @@ const AllLostPetReports = ({
           </Select>
         </div>
 
+        <div className="flex items-center">
+            <input
+              type="text"
+              placeholder="Search reports..."
+              className="border px-4 py-2 w-[180px] h-[40px] rounded-md"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+        </div>
+
         <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
           {lostPetReports == null
             ? "No Lost Pet Reports "
-            : lostPetReports.filter((report) => {
-              // Adjust the condition to search other fields as needed
-              return (
-                report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            : lostPetReports.filter(report => {
+              const matchesSearchTerm = report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 report.animalType.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 report.animalBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 report.contactDetails.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -116,36 +138,35 @@ const AllLostPetReports = ({
                 report.petSex.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 report.reportMessage.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 report.reportDescription.toLowerCase().includes(searchTerm.toLowerCase())
-              )
+        
+              const matchesActivityStatus = reportActivity === null || report.isActive === reportActivity
+        
+              return matchesSearchTerm && matchesActivityStatus
             }).map((report, index) => (
-                <div
-                  key={index}
-                  
-                  className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
-                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} 
-                  onClick={() => handleLostPetReportClick(report.id)}
-                >
-                  <Image
-                    src={transformImage(report.imageUrl)}
-                    alt="None"
-                    width={60}
-                    height={60}
-                    className="w-24 h-24 object-cover rounded-lg mr-4"
-                  />
-                  {/* <div className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
-                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} > */}
-                    {report.isActive ? "Missing Pet " : "Pet has been found"}   
-                    {/* </div>                */}
-                  <div>
-                    <h3 className="text-xl font-semibold mb-1">
-                      {report.petName}
-                    </h3>
-                    <p className="text-sm mb-2 text-mainAccent">
-                      {report.animalType}
-                    </p>
-                    <p className="text-sm mb-3">{report.reportDescription}</p>
-                  </div>
-                </div>
+              <div
+              key={index}
+              className={report.isActive ? "flex items-center border p-4 rounded-xl bg-white h-full cursor-pointer" 
+              : "flex items-center p-4 rounded-xl bg-gray-300/40 h-full  cursor-pointer"} 
+              onClick={() => handleLostPetReportClick(report.id)}
+            >
+              <Image
+                src={transformImage(report.imageUrl)}
+                alt="None"
+                width={60}
+                height={60}
+                className="w-24 h-24 rounded-full mr-4"
+              />
+              <div>
+                <h3 className="text-xl font-semibold mb-1">
+                  Name: {report.petName}
+                </h3>
+                <p className="text-sm mb-2 text-mainAccent">
+                  {report.animalType}
+                </p>
+                <p className="text-sm mb-2">Description: {report.reportDescription}</p>
+                <p className="text-sm mb-3 text-gray-500">Status: {report.isActive ? " Missing Pet " : "Pet has been found"}</p>
+              </div>
+            </div>
               ))}
         </div>
       </div>

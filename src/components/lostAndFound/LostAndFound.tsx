@@ -9,6 +9,8 @@ import { useState } from "react"
 import { Button } from "../ui/Button"
 import FoundPetReportDialog from "./FoundPetReportDialog"
 import LostPetReportDialog from "./LostPetReportDialog"
+import Link from "next/link"
+
 
 const LostAndFound = ({
   allLostPetReports,
@@ -26,6 +28,16 @@ const LostAndFound = ({
     const parts = url.split("/upload/")
     const transformationString = "w_200,h_200,c_thumb,g_face,r_max,f_auto/"
     return `${parts[0]}/upload/${transformationString}${parts[1]}`
+  }
+
+  const formattedDate = (date : Date) => {
+    const formattedDate = date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    })
+
+    return formattedDate
   }
 
   const router = useRouter()
@@ -48,105 +60,85 @@ const LostAndFound = ({
 
   return (
     <main className="flex min-h-screen flex-col items-center divide-gray-100 w-full h-full">
-      <div className="flex flex-col pb-4 w-full h-1/4 px-4 items-center mt-10">
-        <h2 className="text-3xl font-semibold tracking-tight mb-4 flex">
-          Lost & Found Pets
-        </h2>
+    <div className="flex flex-col pb-4 w-full h-1/4 px-4 items-center mt-10">
+      <h2 className="text-4xl font-bold tracking-tight mb-4 flex">
+        Lost & Found Pets
+      </h2>
+      <p className="text-xl">Find your lost pets & help other pet owners!</p>
 
+    </div>
+
+    <div className="container mx-auto w-full h-full border-b border-t border-solid border-black pb-10">
+
+      <div className="flex items-center justify-center mb-10 relative mt-5">
+        <h2 className="font-bold text-3xl">Lost Pet</h2>
+        <Link href='/lostAndFound/losses' className="flex space-x-1 items-center absolute top-0 right-0">
+          <p>More</p>
+          <MoveRight size={20} />
+        </Link>
       </div>
 
-      <div className="flex border-t-2 border-black my-4 flex-col items-center border-b-5 pb-4 w-full h-full">
-        <h2 className="text-3xl font-semibold tracking-tight mt-8 mb-4">
-          Lost Pets
-        </h2>
+      <div className="flex w-full">
+      {lostPetReports == null || lostPetReports.length === 0
+          ? "No Reports Available"
+          : lostPetReports.slice(-5).map((report: LostPetReport) => (
+              <div
+                key={report.id}
+                className="w-1/3 flex flex-col items-center cursor-pointer"
+                onClick={() => handleLostPetReportClick(report.id)}
+              >
+                <Image
+                  src={transformImage(report.imageUrl)}
+                  width={100}
+                  height={100}
+                  alt="Pet"
+                  className="h-auto mb-5 rounded-full"
+                />
+                <p className="mb-[10px] font-medium text-xl">{report.petName}</p>
+                <p className="mb-[10px] text-gray-500">Lost on: {formattedDate(report.lastSeenDate)}</p>
+                <p className="mb-[10px] text-xl font-medium">
+                  Location: {report.lastSeenArea}
+                </p>
+              </div>
+            ))}
+      </div>
+    </div>
 
-        <div className="flex mt-2 mb-2 items-center ">
-          {lostPetReports == null
-            ? "No Reports Available"
-            : lostPetReports.slice(-5).map((report: LostPetReport) => (
-                <div
-                  key={report.id}
-                  className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
-                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} 
-                  onClick={() => handleLostPetReportClick(report.id)}
-                >
-                  <Image
-                    src={transformImage(report.imageUrl)}
-                    width={200}
-                    height={200}
-                    alt="Pet"
-                    className="max-w-full h-auto mb-5 rounded-full"
-                  />
-                  <div className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
-                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} >
-                    {report.isActive ? "Missing Pet " : "Pet has been found"}
-                    </div>                  
-                  <p className="mb-[10px]">Pet Name: {report.petName}</p>
-                  <p className="mb-[10px]">Animal Type: {report.animalType}</p>
-                  <p className="mb-[10px]">
-                    Animal Breed: {report.animalBreed}
-                  </p>
-                </div>
-              ))}
-          <Button
-            type="button"
-            className="bg-gray-800 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-red-700 hover:text-white px-3"
-            onClick={() => handleViewMoreLostPetReports()}
-          >
-            <div className="flex flex-row items-center">
-              <span className="mr-2">More</span>
-              <MoveRight className="w-4" />
-            </div>
-          </Button>
-        </div>
+    <div className="container mx-auto w-full h-full mt-5">
+      <div className="flex items-center justify-center mb-10 relative">
+        <h2 className="font-bold text-3xl">Found Pet</h2>
+        <Link href='/lostAndFound/founds' className="flex space-x-1 items-center absolute top-0 right-0">
+          <p>More</p>
+          <MoveRight size={20} />
+        </Link>
       </div>
 
-      <div className="flex border-t-2 border-black my-4 flex-col items-center border-b-5 pb-4 w-full h-full">
-        <h2 className="text-3xl font-semibold tracking-tight mt-8 mb-4">
-          Found Pets
-        </h2>
-        <div className="flex mt-2 mb-2 items-center">
-          {foundPetReports == null
-            ? "No Reports Available"
-            : foundPetReports.slice(-5).map((report: FoundPetReport) => (
-                <div
-                  key={report.id} 
-                  className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
-                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} 
-                  onClick={() => handleFoundPetReportClick(report.id)}
-                >
-                  <Image
-                    src={transformImage(report.imageUrl)}
-                    width={200}
-                    height={200}
-                    alt="Pet"
-                    className="max-w-full h-auto mb-5 rounded-full"
-                  />
-                  <div className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
-                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} >
-                    {report.isActive ? "Missing Pet " : "Pet has been returned"}
-                  </div>
-                  
-                  <p className="mb-[10px]">Pet Name: {report.petName}</p>
-                  <p className="mb-[10px]">Animal Type: {report.animalType}</p>
-                  <p className="mb-[10px]">
-                    Animal Breed: {report.animalBreed}
-                  </p>
-                </div>
-              ))}
-          <Button
-            type="button"
-            className="bg-gray-800 text-white rounded-r-md py-2 border-l border-gray-200 hover:bg-red-700 hover:text-white px-3"
-            onClick={() => handleViewMoreFoundPetReports()}
-          >
-            <div className="flex flex-row items-center">
-              <span className="mr-2">More</span>
-              <MoveRight className="w-4" />
-            </div>
-          </Button>
-        </div>
+      <div className="flex w-full">
+      {foundPetReports == null || foundPetReports.length === 0
+          ? "No Reports Available"
+          : foundPetReports.slice(-5).map((report: FoundPetReport) => (
+              <div
+                key={report.id}
+                className="w-1/3 flex flex-col items-center cursor-pointer"
+                onClick={() => handleFoundPetReportClick(report.id)}
+              >
+                <Image
+                  src={transformImage(report.imageUrl)}
+                  width={100}
+                  height={100}
+                  alt="Pet"
+                  className="h-auto mb-5 rounded-full"
+                />
+                <p className="mb-[10px] font-medium text-xl">{report.petName}</p>
+                <p className="mb-[10px] text-gray-500">Lost on: {formattedDate(report.foundDate)}</p>
+                <p className="mb-[10px] text-xl font-medium">
+                  Location: {report.foundArea}
+                </p>
+              </div>
+            ))}
       </div>
-    </main>
+    </div>
+  </main>
   )
 }
 

@@ -35,7 +35,7 @@ export async function getAllPosts(
         skip: 1,
       }
     }
-    let posts: (Post & { likes: (Like & { user: User })[] })[] = []
+    let posts: (Post & { likes: Like[] })[] = []
 
     if (following === "true") {
       const followingUserIds = currentUser?.followingUsers?.map(
@@ -53,8 +53,8 @@ export async function getAllPosts(
         },
         include: {
           likes: {
-            include: {
-              user: true,
+            where: {
+              userId: currentUser?.id,
             },
           },
           user: {
@@ -80,8 +80,8 @@ export async function getAllPosts(
         },
         include: {
           likes: {
-            include: {
-              user: true,
+            where: {
+              userId: currentUser?.id,
             },
           },
           user: {
@@ -117,15 +117,14 @@ export async function getAllPosts(
             ...comment,
             user: comment.user,
           })),
-          likes: post.likes.map((like) => ({
-            ...like,
-            user: transformUserToSafeUser(like.user),
-          })),
+          isCurrentUserLike: post.likes.length > 0,
         }
       }),
     )
 
-    return postsWithLimitedComments as ExtendedPost[]
+    return postsWithLimitedComments as (ExtendedPost & {
+      isCurrentUserLike: boolean
+    })[]
   } catch (error) {
     console.error(error)
     return null

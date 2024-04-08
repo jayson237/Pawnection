@@ -52,5 +52,16 @@ export async function POST(req: Request) {
     )
   }
 
+  await prisma.post.update({
+    data: {
+      likes_count: {
+        decrement: 1,
+      },
+    },
+    where: {
+      id: postId,
+    },
+  })
+
   return NextResponse.json({ message: "Like removed" }, { status: 200 })
 }

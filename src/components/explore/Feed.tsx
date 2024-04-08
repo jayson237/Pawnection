@@ -3,7 +3,7 @@
 import { SafeUser } from "@/types"
 import { Comment, Like, Post, User } from "@prisma/client"
 import { useCallback, useEffect, useRef, useState } from "react"
-import useSWR from "swr"
+import useSWR, { useSWRConfig } from "swr"
 
 import { fetcher } from "../../lib/utils"
 import Loading from "../Loading"
@@ -14,6 +14,7 @@ type ExtendedPost = Post & {
   user: User
   likes: (Like & { user: SafeUser })[]
   comments: (Comment & { user: User })[]
+  isCurrentUserLike: boolean
 }
 
 const Feed = ({
@@ -29,7 +30,10 @@ const Feed = ({
 }) => {
   const [api, setApi] = useState<string | null>(null)
 
-  const { data, mutate } = useSWR(() => (api ? `${api}` : null), fetcher)
+  const { data, mutate } = useSWR(() => (api ? `${api}` : null), fetcher, {
+    revalidateOnMount: true,
+  })
+  // const { mutate } = useSWRConfig()
   const [content, setContent] = useState<{
     posts: ExtendedPost[]
     users: User[]
@@ -39,9 +43,6 @@ const Feed = ({
   const loadMoreTriggerRef = useRef<HTMLDivElement>(null)
 
   const fetchContent = useCallback(async () => {
-    if (loading || !hasMore) return
-    setLoading(true)
-
     const type = searchParams.type
     const cursor =
       type === "post" || type === "petSitting"
@@ -65,6 +66,11 @@ const Feed = ({
     const endpoint =
       searchParams.type === "users" ? "/api/user" : "/api/explore/post"
 
+    if (loading || !hasMore) {
+      setApi(endpoint + "?type=" + type)
+      return
+    }
+    setLoading(true)
     setApi(`${endpoint}${queryString}`)
   }, [
     loading,
@@ -85,14 +91,22 @@ const Feed = ({
               : prev.users,
         }))
       } else {
-        setContent((prev) => ({
-          ...prev,
-          posts:
-            searchParams.type !== "users"
-              ? [...prev.posts, ...data]
-              : prev.posts,
-        }))
-        setHasMore(data.length !== 0)
+        setContent((prev) => {
+          const mergedPosts = prev.posts
+            .concat(data)
+            .reduce((acc: any, post) => {
+              const existingIndex = acc.findIndex((p: Post) => p.id === post.id) // Replace 'id' with your actual unique identifier
+              if (existingIndex !== -1) {
+                // Replace existing post
+                acc[existingIndex] = post
+              } else {
+                // Add post if not found in previous data
+                acc.push(post)
+              }
+              return acc
+            }, [])
+          return { ...prev, posts: mergedPosts }
+        })
       }
       setHasMore(data.length !== 0)
       setLoading(false)
@@ -105,33 +119,31 @@ const Feed = ({
   }, [searchParams])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) fetchContent()
-      },
-      { rootMargin: "0px 0px 100px" },
-    )
+    const observer = new IntersectionObserver((entries) => {}, {
+      rootMargin: "0px 0px 100px",
+    })
 
     if (loadMoreTriggerRef.current) observer.observe(loadMoreTriggerRef.current)
 
     return () => observer.disconnect()
   }, [fetchContent])
 
-  const renderPostItem = (
-    post: Post & {
-      user: User
-      likes: (Like & { user: SafeUser })[]
-      comments: (Comment & { user: User })[]
-    },
-  ) => {
+  const renderPostItem = (post: ExtendedPost) => {
     const isOwnProfile = currentUser?.username === post.user?.username
-    const isLiked = post.likes.some((like) => like.userId === currentUser?.id)
+    const isLiked = post.isCurrentUserLike
 
     return (
       <div key={post.id}>
         <PostItem
           post={post}
           isLiked={isLiked}
+          mutate={mutate}
+          api={
+            searchParams.type === "users"
+              ? "/api/user"
+              : "/api/explore/post" +
+                (searchParams.q ? `?q=${searchParams.q}` : "")
+          }
           isOwnProfile={isOwnProfile}
           isCurrentFollowed={
             currentUser?.followingUsers?.some(

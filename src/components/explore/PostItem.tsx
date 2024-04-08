@@ -16,6 +16,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useRef } from "react"
+import { KeyedMutator } from "swr"
 
 import TimeStamp from "../TimeStamp"
 import { Button } from "../ui/Button"
@@ -42,6 +43,8 @@ const PostItem = ({
   isLiked,
   isOwnProfile,
   isCurrentFollowed,
+  mutate,
+  api,
 }: {
   post: Post & {
     user: User
@@ -51,6 +54,8 @@ const PostItem = ({
   isLiked: boolean
   isOwnProfile: boolean
   isCurrentFollowed: boolean
+  mutate: KeyedMutator<any>
+  api: string
 }) => {
   const { toast } = useToast()
   const [isImageLoading, setImageLoading] = useState(true)
@@ -95,7 +100,8 @@ const PostItem = ({
         username: username,
       }),
     })
-    revalPath("/explore")
+    // revalPath("/explore")
+    mutate()
   }
 
   const handleFollow = async (username?: string) => {
@@ -108,7 +114,8 @@ const PostItem = ({
         username: username,
       }),
     })
-    revalPath("/explore")
+    // revalPath("/explore")
+    mutate()
   }
 
   const handleUpdate = async () => {
@@ -182,7 +189,8 @@ const PostItem = ({
         description: msg.message,
       })
     } else {
-      revalPath("/explore")
+      // revalPath("/explore")
+      mutate()
     }
   }
 
@@ -201,7 +209,8 @@ const PostItem = ({
         description: msg.message,
       })
     } else {
-      revalPath("/explore")
+      // revalPath("/explore")
+      mutate()
     }
   }
 
@@ -339,20 +348,20 @@ const PostItem = ({
         <Dialog>
           <DialogTrigger asChild>
             <div className="hover:cursor-pointer">
-              {post.likes.length > 0 &&
-                (post.likes.length === 1 ? (
-                  <p className="font-bold text-sm">{post.likes.length} Like</p>
+              {post.likes_count > 0 &&
+                (post.likes_count === 1 ? (
+                  <p className="font-bold text-sm">{post.likes_count} Like</p>
                 ) : (
-                  <p className="font-bold text-sm">{post.likes.length} Likes</p>
+                  <p className="font-bold text-sm">{post.likes_count} Likes</p>
                 ))}
             </div>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
+          {/* <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
             <DialogHeader>
               <DialogDescription>Liked by</DialogDescription>
             </DialogHeader>
             <div className="space-y-1">
-              {post.likes.length > 0 ? (
+              {post.likes_count > 0 ? (
                 post.likes.map((like) => (
                   <Link
                     href={`/profile/${like.user.username}`}
@@ -396,7 +405,7 @@ const PostItem = ({
                 <p className="text-center">No Likes</p>
               )}
             </div>
-          </DialogContent>
+          </DialogContent> */}
         </Dialog>
 
         <div className="py-2">

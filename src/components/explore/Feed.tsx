@@ -3,7 +3,9 @@
 import { SafeUser } from "@/types"
 import { Comment, Like, Post, User } from "@prisma/client"
 import { useCallback, useEffect, useRef, useState } from "react"
+import useSWR from "swr"
 
+import { fetcher } from "../../lib/utils"
 import Loading from "../Loading"
 import PostItem from "./PostItem"
 import UserItem from "./UserItem"
@@ -25,6 +27,9 @@ const Feed = ({
     following: string
   }
 }) => {
+  const [api, setApi] = useState<string | null>(null)
+
+  const { data, mutate } = useSWR(() => (api ? `${api}` : null), fetcher)
   const [content, setContent] = useState<{
     posts: ExtendedPost[]
     users: User[]
@@ -60,22 +65,7 @@ const Feed = ({
     const endpoint =
       searchParams.type === "users" ? "/api/user" : "/api/explore/post"
 
-    try {
-      const response = await fetch(`${endpoint}${queryString}`)
-      const data = await response.json()
-      setContent((prev) => ({
-        ...prev,
-        posts:
-          searchParams.type !== "users" ? [...prev.posts, ...data] : prev.posts,
-        users:
-          searchParams.type === "users" ? [...prev.users, ...data] : prev.users,
-      }))
-      setHasMore(data.length !== 0)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
+    setApi(`${endpoint}${queryString}`)
   }, [
     loading,
     hasMore,
@@ -83,6 +73,31 @@ const Feed = ({
     content.posts.length,
     content.users.length,
   ])
+
+  useEffect(() => {
+    if (data) {
+      if (searchParams.type === "users") {
+        setContent((prev) => ({
+          ...prev,
+          users:
+            searchParams.type === "users"
+              ? [...prev.users, ...data]
+              : prev.users,
+        }))
+      } else {
+        setContent((prev) => ({
+          ...prev,
+          posts:
+            searchParams.type !== "users"
+              ? [...prev.posts, ...data]
+              : prev.posts,
+        }))
+        setHasMore(data.length !== 0)
+      }
+      setHasMore(data.length !== 0)
+      setLoading(false)
+    }
+  }, [data])
 
   useEffect(() => {
     setHasMore(true)

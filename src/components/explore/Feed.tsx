@@ -5,17 +5,11 @@ import { Comment, Like, Post, User } from "@prisma/client"
 import { useCallback, useEffect, useRef, useState } from "react"
 import useSWR, { useSWRConfig } from "swr"
 
+import { ExtendedPost } from "../../lib/actions/post"
 import { fetcher } from "../../lib/utils"
 import Loading from "../Loading"
 import PostItem from "./PostItem"
 import UserItem from "./UserItem"
-
-type ExtendedPost = Post & {
-  user: User
-  likes: (Like & { user: SafeUser })[]
-  comments: (Comment & { user: User })[]
-  isCurrentUserLike: boolean
-}
 
 const Feed = ({
   currentUser,

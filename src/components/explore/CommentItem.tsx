@@ -23,7 +23,7 @@ const CommentItem = ({
   comment,
   postId,
 }: {
-  comment: Comment & { user: User }
+  comment: Comment & { user: Pick<User, "username" | "image"> }
   postId: string
 }) => {
   const { toast } = useToast()

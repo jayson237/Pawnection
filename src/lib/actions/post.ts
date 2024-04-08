@@ -5,7 +5,7 @@ import { getCurrentUser } from "./user"
 
 export type ExtendedPost = Post & {
   likes: Like[]
-  user: Pick<User, "username" | "image">
+  user: Pick<User, "username" | "image" | "id">
   isCurrentUserLike: boolean
 }
 
@@ -59,6 +59,7 @@ export async function getAllPosts(
             select: {
               username: true,
               image: true,
+              id: true,
             },
           },
         },
@@ -90,6 +91,7 @@ export async function getAllPosts(
             select: {
               username: true,
               image: true,
+              id: true,
             },
           },
         },

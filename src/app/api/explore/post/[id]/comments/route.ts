@@ -2,10 +2,12 @@ import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
 import { NextResponse } from "next/server"
 
-export async function GET(req: Request) {
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } },
+) {
   try {
-    const { searchParams } = new URL(req.url)
-    const postId = searchParams.get("postId")
+    const postId = params.id
     if (!postId) {
       return NextResponse.json(
         { message: "Post ID is required" },
@@ -32,6 +34,7 @@ export async function GET(req: Request) {
         user: {
           select: {
             username: true,
+            image: true,
           },
         },
       },

@@ -20,7 +20,7 @@ import {
 import { Input } from "../ui/Input"
 import CommentItem from "./CommentItem"
 
-function CommentContainer({
+function CommentDialog({
   post,
   isOpen,
   setOpen,
@@ -112,4 +112,4 @@ function CommentContainer({
   )
 }
 
-export default CommentContainer
+export default CommentDialog

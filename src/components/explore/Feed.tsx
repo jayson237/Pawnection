@@ -115,7 +115,9 @@ const Feed = ({
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) fetchContent()
+        if (entries[0].isIntersecting) {
+          if (hasMore) fetchContent()
+        }
       },
       { rootMargin: "0px 0px 100px" },
     )

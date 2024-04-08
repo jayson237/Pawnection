@@ -464,17 +464,21 @@ const Profile = ({
               {reports == null
                 ? "No Reports Available"
                 : reports.filter(report => {
-                  const matchesSearchTerm = report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  const commonMatches = report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     report.animalType.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     report.animalBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     report.contactDetails.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     report.petSex.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     report.reportMessage.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     report.reportDescription.toLowerCase().includes(searchTerm.toLowerCase())
-            
+                
+                  const areaMatches = "foundArea" in report ?
+                    report.foundArea.toLowerCase().includes(searchTerm.toLowerCase()) :
+                    report.lastSeenArea.toLowerCase().includes(searchTerm.toLowerCase())
+                
                   const matchesActivityStatus = reportActivity === null || report.isActive === reportActivity
-            
-                  return matchesSearchTerm && matchesActivityStatus
+                
+                  return commonMatches && areaMatches && matchesActivityStatus
                 }).map((report) => (
                     <div
                       key={report.id}

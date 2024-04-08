@@ -1,13 +1,12 @@
 import prisma from "@/lib/prismadb"
-import { SafeUser } from "@/types"
-import { Comment, Like, Post, PostType, User } from "@prisma/client"
+import { Like, Post, PostType, User } from "@prisma/client"
 
 import { getCurrentUser } from "./user"
 
-type ExtendedPost = Post & {
-  comments: (Comment & { user: User })[]
-  likes: (Like & { user: SafeUser })[]
-  user: User
+export type ExtendedPost = Post & {
+  likes: Like[]
+  user: Pick<User, "username" | "image">
+  isCurrentUserLike: boolean
 }
 
 const transformUserToSafeUser = (user: User) => {
@@ -35,13 +34,12 @@ export async function getAllPosts(
         skip: 1,
       }
     }
-    let posts: (Post & { likes: Like[] })[] = []
 
     if (following === "true") {
       const followingUserIds = currentUser?.followingUsers?.map(
         (followingUser) => followingUser.followerId,
       )
-      posts = await prisma.post.findMany({
+      const posts = await prisma.post.findMany({
         where: {
           type: type === "post" ? PostType.Post : PostType.PetSitting,
           description: {
@@ -58,9 +56,9 @@ export async function getAllPosts(
             },
           },
           user: {
-            include: {
-              followerUsers: true,
-              followingUsers: true,
+            select: {
+              username: true,
+              image: true,
             },
           },
         },
@@ -70,8 +68,12 @@ export async function getAllPosts(
         },
         ...cursorCondition,
       })
+      return posts.map((x) => ({
+        ...x,
+        isCurrentUserLike: x.likes.length > 0,
+      }))
     } else {
-      posts = await prisma.post.findMany({
+      const posts = await prisma.post.findMany({
         where: {
           type: type === "post" ? PostType.Post : PostType.PetSitting,
           description: {
@@ -85,9 +87,9 @@ export async function getAllPosts(
             },
           },
           user: {
-            include: {
-              followerUsers: true,
-              followingUsers: true,
+            select: {
+              username: true,
+              image: true,
             },
           },
         },
@@ -97,34 +99,11 @@ export async function getAllPosts(
         },
         ...cursorCondition,
       })
+      return posts.map((x) => ({
+        ...x,
+        isCurrentUserLike: x.likes.length > 0,
+      }))
     }
-
-    const postsWithLimitedComments = await Promise.all(
-      posts.map(async (post) => {
-        const comments = await prisma.comment.findMany({
-          where: { postId: post.id },
-          orderBy: {
-            createdAt: "desc",
-          },
-          include: {
-            user: true,
-          },
-        })
-
-        return {
-          ...post,
-          comments: comments.map((comment) => ({
-            ...comment,
-            user: comment.user,
-          })),
-          isCurrentUserLike: post.likes.length > 0,
-        }
-      }),
-    )
-
-    return postsWithLimitedComments as (ExtendedPost & {
-      isCurrentUserLike: boolean
-    })[]
   } catch (error) {
     console.error(error)
     return null
@@ -148,7 +127,12 @@ export async function getOnePost(id: string) {
             user: true,
           },
         },
-        user: true,
+        user: {
+          select: {
+            username: true,
+            image: true,
+          },
+        },
       },
     })
     return post

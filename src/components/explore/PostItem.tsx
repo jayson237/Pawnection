@@ -465,15 +465,15 @@ const PostItem = ({
           </div>
         ) : (
           <>
-            {post.comments.length > 0 && (
+            {post.comments_count > 0 && (
               <>
                 <Dialog>
                   <DialogTrigger asChild>
                     <p className="text-sm text-gray-500 hover:text-mainAccent ease-in-out transition-all hover:cursor-pointer w-fit">
-                      View all comments
+                      View all {post.comments_count} comments
                     </p>
                   </DialogTrigger>
-                  <DialogContent
+                  {/* <DialogContent
                     className="sm:max-w-[700px] max-h-[70vh] overflow-y-auto pb-0"
                     ref={dialogRef}
                   >
@@ -484,7 +484,7 @@ const PostItem = ({
                     {post.comments.length > 0 ? (
                       post.comments.map((comment) => (
                         <div className="w-full" key={comment.id}>
-                          <CommentItem comment={comment} />
+                          <CommentItem comment={comment} postId={post.id} />
                         </div>
                       ))
                     ) : (
@@ -504,18 +504,18 @@ const PostItem = ({
                         />
                       )}
                     </div>
-                  </DialogContent>
+                  </DialogContent> */}
                 </Dialog>
 
                 <div className="items-center py-2">
-                  {post.comments.slice(0, 2).map((comment) => (
+                  {/* {post.comments.slice(0, 2).map((comment) => (
                     <div key={comment.id} className="text-sm flex flex-row">
                       <p className="font-semibold mr-1">
                         {comment.user.username}
                       </p>
                       <p className="line-clamp-1">{comment.content}</p>
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               </>
             )}

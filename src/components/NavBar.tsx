@@ -53,24 +53,28 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
             <>
               <div className="flex items-center space-x-1 ">
                 <Link
+                  prefetch={false}
                   href="/lostAndFound"
                   className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                 >
                   Lost & Found
                 </Link>
                 <Link
+                  prefetch={false}
                   href="/adopt"
                   className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                 >
                   Adopt
                 </Link>
                 <Link
+                  prefetch={false}
                   href="/explore"
                   className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                 >
                   Explore
                 </Link>
                 <Link
+                  prefetch={false}
                   href="/recommendations"
                   className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
                 >
@@ -78,6 +82,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 </Link>
                 {currentUser?.type === "PetAdoptionCentre" && (
                   <Link
+                    prefetch={false}
                     href="/adoptionCenter"
                     className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
                   >
@@ -187,6 +192,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
               <ul className="space-y-5">
                 <li>
                   <Link
+                    prefetch={false}
                     href={`/profile/${currentUser?.username}`}
                     onClick={toggleMenu}
                   >
@@ -231,6 +237,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
 
                 <li>
                   <Link
+                    prefetch={false}
                     href="/lost-and-found"
                     onClick={toggleMenu}
                     className="text-primary text-sm font-medium hover:bg-main/70 py-2 px-4 rounded-md ease-in-out duration-200"
@@ -240,6 +247,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 </li>
                 <li>
                   <Link
+                    prefetch={false}
                     href="/adopt"
                     onClick={toggleMenu}
                     className="text-primary text-sm font-medium hover:bg-main/70 py-2 px-4 rounded-md ease-in-out duration-200"
@@ -249,6 +257,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 </li>
                 <li>
                   <Link
+                    prefetch={false}
                     href="/community"
                     onClick={toggleMenu}
                     className="text-primary text-sm font-medium hover:bg-main/70 py-2 px-4 rounded-md ease-in-out duration-200"
@@ -258,6 +267,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 </li>
                 <li>
                   <Link
+                    prefetch={false}
                     href="/recommendations"
                     onClick={toggleMenu}
                     className="text-primary text-sm font-medium hover:bg-main/70 rounded-md ease-in-out duration-200 py-2 px-4"
@@ -268,6 +278,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 {currentUser?.type === "PetAdoptionCentre" && (
                   <li>
                     <Link
+                      prefetch={false}
                       href="/adoptionCenter"
                       onClick={toggleMenu}
                       className="text-primary text-sm font-medium hover:bg-main/70 rounded-md ease-in-out duration-200 py-2 px-4"
@@ -283,6 +294,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 </li>
                 <li>
                   <Link
+                    prefetch={false}
                     href="/settings"
                     onClick={toggleMenu}
                     className="text-primary text-sm font-medium hover:bg-main/70 py-2 px-4 rounded-md ease-in-out duration-200"

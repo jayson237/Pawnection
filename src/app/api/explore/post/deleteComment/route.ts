@@ -15,7 +15,8 @@ export async function POST(req: Request) {
       )
     }
 
-    const { commentId }: { commentId: string } = await req.json()
+    const { commentId, postId }: { commentId: string; postId: string } =
+      await req.json()
     if (!commentId) {
       return NextResponse.json(
         { message: "CommentId is required" },
@@ -23,28 +24,34 @@ export async function POST(req: Request) {
       )
     }
 
-    const comment = await prisma.comment.findUnique({
-      where: { id: commentId },
-    })
+    await prisma.$transaction(async (tx) => {
+      const dlt = await tx.comment.deleteMany({
+        where: {
+          OR: [
+            { id: commentId, userId: currentUser.id },
+            { parentId: commentId, userId: currentUser.id },
+          ],
+        },
+      })
+      const numberOfCommentDeleted = dlt.count
 
-    if (!comment) {
-      return NextResponse.json(
-        { message: "Comment not found" },
-        { status: 404 },
-      )
-    }
+      await tx.post.update({
+        data: {
+          comments_count: {
+            decrement: numberOfCommentDeleted,
+          },
+        },
+        where: {
+          id: postId,
+        },
+      })
 
-    if (comment.userId !== currentUser.id) {
-      return NextResponse.json(
-        { message: "You do not have permission to delete this comment" },
-        { status: 403 },
-      )
-    }
-
-    await prisma.comment.deleteMany({
-      where: {
-        OR: [{ id: commentId }, { parentId: commentId }],
-      },
+      if (!dlt) {
+        return NextResponse.json(
+          { message: "Failed to delete comment" },
+          { status: 400 },
+        )
+      }
     })
 
     return NextResponse.json(

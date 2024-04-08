@@ -1,5 +1,6 @@
 import { useToast } from "@/hooks/useToast"
 import { FormEvent, useState } from "react"
+import { useRouter } from "next/navigation"
 
 import { Button } from "../ui/Button"
 import { Calendar } from "../ui/Calendar"
@@ -22,6 +23,9 @@ import {
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
 import { DatePicker } from "../ui/DatePicker"
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
+import { revalPath } from "@/lib/revalidate"
 
 interface LostPetReportDialogProps {
   isOpen: boolean
@@ -41,6 +45,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
   const [petImage, setPetImage] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -91,6 +96,8 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
           toast({
             description: "Missing Pet Report has been successfully created.",
           })
+          // location.reload()
+          revalPath("/lostAndFound/losses")
         }
       }
     } catch (error) {

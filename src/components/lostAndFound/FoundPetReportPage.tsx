@@ -5,7 +5,6 @@ import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-
 import { Button } from "../ui/Button"
 
 
@@ -20,6 +19,7 @@ const FoundPetReportPage = ({
   const [formattedFoundDate, setFormattedFoundDate] = useState("")
   const [reportActive, setReportActive] = useState(true)
   const router = useRouter()
+
 
   useEffect(() => {
     if (thisFoundPetReport?.foundDate) {
@@ -85,6 +85,32 @@ const FoundPetReportPage = ({
     }
   }  
 
+  const unupdateStatus = async () => {
+    if (
+      thisFoundPetReport &&
+      confirm("Are you sure you pet has not been returned to owner?")
+    ) {
+      try {
+        const response = await fetch("/api/lostAndFound/unupdateFoundPetReportStatus", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reportId: thisFoundPetReport.id }),
+        })
+
+        if (!response.ok) {
+          throw new Error("Failed to update the report status.")
+        }
+
+        alert("Report status updated successfully")
+        setReportActive(true)
+        router.push("/lostAndFound")
+      } catch (error) {
+        console.error("Error updating report status:", error)
+        alert("Failed to update the report status.")
+      }
+    }
+  }        
+
   const updateReport= () => {
     router.push(`/lostAndFound/updateFoundPetReportPage/${foundPetReport?.id}`)
   }
@@ -95,53 +121,72 @@ const FoundPetReportPage = ({
     return `${parts[0]}/upload/${transformationString}${parts[1]}`
   }
   return (
-    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
-      <div className="py-[60px]">
-        <div className="grid grid-cols-2">
-          {thisFoundPetReport ? (
-            <div>
-              <div className="flexx flex-start items-center gap-12">
-                <Image
-                  width={200}
-                  height={200}
-                  src={transformImage(thisFoundPetReport.imageUrl)}
-                  alt="Pet"
-                  className="w-full h-auto mb-5"
-                />
-                <h1 className="text-3xl font-semibold tracking-tight mb-4 flex">
-                  {thisFoundPetReport.petName}{" "}
-                </h1>
-                {thisFoundPetReport.userId ===  currUser?.id  && thisFoundPetReport.isActive && (<Button onClick={() => updateReport()}>Edit Report</Button>)}   
-                {thisFoundPetReport.userId === currUser?.id && (
-                  <Button onClick={() => deleteReport()}>Delete Report</Button>
-                )}
-                {thisFoundPetReport.userId === currUser?.id && thisFoundPetReport.isActive && (
-                  <Button onClick={() => updateStatus()}> Pet has been returned </Button>
-                )}
-                {thisFoundPetReport.isActive ? "Missing Pet " : "Pet has been returned"}
-              </div>
-              <div className="space-y-2">
-                <p>Pet Name: {thisFoundPetReport.petName}</p>
-                <p>Animal Type: {thisFoundPetReport.animalType}</p>
-                <p>Animal Breed: {thisFoundPetReport.animalBreed}</p>
-                <p>Contact Details: {thisFoundPetReport.contactDetails}</p>
-                <p>Last Seen Area: {thisFoundPetReport.foundArea}</p>
-                <p>
-                  Last Seen Date:
-                  {thisFoundPetReport.foundDate.toLocaleDateString()}
-                </p>
-                <p>
-                  Report Description: {thisFoundPetReport.reportDescription}
-                </p>
-                <p>Report Message: {thisFoundPetReport.reportMessage}</p>
-              </div>
+    <div className="container mx-auto w-full h-full">
+    <div className=" mt-5 flex items-center">
+      <h1 className="text-4xl font-bold">Found Pet Detail</h1>
+    </div>
+    <div className="py-[20px]">
+      <div className="bg-[#FFECE4] h-[250px] rounded-3xl px-28 py-6">
+        <div className="w-full h-full flex justify-between">
+          <div className="flex items-center space-x-10">
+            <Image src={transformImage(thisFoundPetReport!.imageUrl)}
+                    width={175}
+                    height={175}                   
+                    alt={`Lost pet named ${thisFoundPetReport!.petName}`} 
+                    className="rounded-full" />
+
+            <div className="space-y-2">
+              <p className="font-bold text-xl">{thisFoundPetReport!.petName}</p>
+              <p>{thisFoundPetReport!.animalBreed}</p>
             </div>
-          ) : (
-            "Report Not Available"
-          )}
+          </div>
+          <div className="flex flex-col items-center space-y-2 self-center">
+            {thisFoundPetReport!.userId === currUser?.id && thisFoundPetReport!.isActive && (
+              <Button className="w-full" onClick={() => updateReport()}>Edit Report</Button>
+            )} 
+            {thisFoundPetReport!.userId === currUser?.id && (
+              <Button className="w-full" onClick={() => deleteReport()}>Delete Report</Button>
+            )}
+            {thisFoundPetReport!.userId === currUser?.id && thisFoundPetReport!.isActive && (
+              <Button className="w-full" onClick={() => updateStatus()}>Pet has been returned</Button>
+            )}
+            {thisFoundPetReport!.userId === currUser?.id && !thisFoundPetReport!.isActive && (
+              <Button className="w-full" onClick={() => unupdateStatus()}>Pet has not been returned</Button>
+            )}            
+          </div>
         </div>
       </div>
+      <div className="mt-10">
+        <h1 className="text-center font-bold text-5xl">Details</h1>
+        <div className="w-full bg-white shadow-lg rounded-lg p-4 mt-6 flex flex-row">
+          <div className="w-1/2 space-y-8">
+            <CardItem title="Pet Name" content={thisFoundPetReport!.petName} />
+            <CardItem title="Sex" content={thisFoundPetReport!.petSex} />
+            <CardItem title="Message from Owner" content={thisFoundPetReport!.reportMessage} />
+            <CardItem title="Area Last Seen" content={thisFoundPetReport!.foundArea} />
+            <CardItem title="Contact Detail" content={thisFoundPetReport!.contactDetails} />
+          </div>
+          <div className="w-1/2 space-y-8">
+            <CardItem title="Status" content={thisFoundPetReport?.isActive ? "Found Pet " : "Pet has been returned"}/>
+            <CardItem title="Species" content={thisFoundPetReport!.animalBreed} />
+            <CardItem title="Description" content={thisFoundPetReport!.reportDescription} />
+            <CardItem title="Last Seen Date" content={formattedFoundDate} />
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
   )
 }
 export default FoundPetReportPage
+
+
+
+const CardItem = ({title, content}: {title: string, content: string}) => {
+  return (
+    <div>
+      <h1 className="font-bold"> • {title}:</h1>
+      <p className="ml-3">{content}</p>
+    </div>
+  )
+}

@@ -7,7 +7,13 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React from "react"
 import { useEffect, useState } from "react"
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/Select"
 import { SafeUser } from "../../types"
 import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
@@ -34,6 +40,8 @@ const Profile = ({
   const [reports, setReports] = useState<
     FoundPetReport[] | LostPetReport[] | null
   >(null)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [reportActivity, setReportActivity] = useState<null | boolean>(null)
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -83,6 +91,43 @@ const Profile = ({
       handleFoundPetReportClick(report.id)
     }
   }
+
+  const fetchReports = async (animalType: string) => {
+    const url1 = "/api/lostAndFound/getLostPetReports?type=".concat(animalType)
+    const url2 = "/api/lostAndFound/getFoundPetReports?type=".concat(animalType)
+
+    const response1 = await fetch(url1)
+    const response2 = await fetch(url2)
+    if (!response1.ok) {
+      throw new Error("Failed to fetch Lost Pet Reports")
+    }
+
+    if (!response2.ok) {
+      throw new Error("Failed to fetch Found Pet Reports")
+    }    
+
+    const data1 = await response1.json()
+
+    const data2 = await response2.json()
+
+    if (data1 == null && data2 != null) {
+      setReports(data2)
+    }
+
+    if (data1!= null && data2 == null) {
+      setReports(data1)
+    }
+
+    if (data1 !=null && data2 !=null) {
+      const returnedData = [...data1, ...data2]
+      setReports(returnedData)
+    }
+    
+    if (data1 == null && data2 == null) {
+      setReports(null)
+    }
+    // setLostPetReports(data)
+  }  
 
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
@@ -363,46 +408,103 @@ const Profile = ({
           <TabsContent value="about">Abount ??</TabsContent>
 
           <TabsContent value="reports" className="w-full h-full pt-16">
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+        <div className="flex flex-row space-x-4">
+
+        <div className="flex items-center">
+          <Select
+              onValueChange={(val) => {
+                setReportActivity(val === "Active" ? true : val === "Inactive" ? false : null)
+              }}              
+          >
+            <SelectTrigger className="w-[180px] px-4 py-2 h-[40px]">
+              <SelectValue placeholder="Filter Report Type" />
+            </SelectTrigger>
+            <SelectContent>
+            <SelectItem value="All">All</SelectItem>
+              <SelectItem value="Active">Active</SelectItem>
+              <SelectItem value="Inactive">Inactive</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex items-center">
+          <Select
+            onValueChange={(val) => {
+              const fetchData = async () => {
+                fetchReports(val)
+              }
+              fetchData()
+            }}            
+          >
+            <SelectTrigger className="w-[180px] px-4 py-2 h-[40px]">
+              <SelectValue placeholder="Filter Animal Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="All">All </SelectItem>
+              <SelectItem value="Dog">Dog</SelectItem>
+              <SelectItem value="Cat">Cat</SelectItem>
+              <SelectItem value="Bird">Bird</SelectItem>
+              <SelectItem value="Others">Others</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex items-center">
+            <input
+              type="text"
+              placeholder="Search reports..."
+              className="border px-4 py-2 w-[180px] h-[40px] rounded-md"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+        </div>
+            <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
               {reports == null
                 ? "No Reports Available"
-                : reports.map((report) => (
+                : reports.filter(report => {
+                  const matchesSearchTerm = report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    report.animalType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    report.animalBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    report.contactDetails.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    report.petSex.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    report.reportMessage.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    report.reportDescription.toLowerCase().includes(searchTerm.toLowerCase())
+            
+                  const matchesActivityStatus = reportActivity === null || report.isActive === reportActivity
+            
+                  return matchesSearchTerm && matchesActivityStatus
+                }).map((report) => (
                     <div
                       key={report.id}
-                      className={
-                        report.isActive
-                          ? "flex flex-col items-center mb-5 mr-12 cursor-pointer"
-                          : "flex flex-col items-center mb-5 mr-12 cursor-pointer  bg-gray-500"
-                      }
+                      className={report.isActive ? "flex items-center border p-4 rounded-xl bg-white h-full cursor-pointer" 
+                  : "flex items-center border border-white p-4 rounded-xl bg-gray-500/40 h-full  cursor-pointer"} 
+
                       onClick={() => handleReportClick(report)}
                     >
                       <Image
-                        className="object-cover w-20 h-20 rounded-md"
+                        className="w-24 h-24 rounded-full mr-4"
                         src={transformImage(report.imageUrl)}
                         width={80}
                         height={80}
                         alt="Bordered avatar"
                       />
-                      <div
-                        className={
-                          report.isActive
-                            ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer"
-                            : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"
-                        }
-                      >
-                        {report.isActive
-                          ? "Missing Pet "
-                          : "Pet has been found"}
-                      </div>
-                      <p className="mb-[10px]">
+                  <div>
+                    <h3 className="text-xl font-semibold mb-1">
+                      Name: {report.petName}
+                    </h3>
+                    <p className="text-sm mb-2 text-mainAccent">
+                      {report.animalType}
+                    </p>
+                    <p className="text-sm mb-2">
                         {"foundArea" in report
-                          ? "Found Pet Report"
-                          : "Missing Pet Report"}
-                      </p>
-
-                      <p className="mb-[10px]">{report.petName}</p>
-                      <p className="mb-[10px]">{report.animalType}</p>
-                      <p className="mb-[10px]"> {report.animalBreed} </p>
+                          ? "Report Type: Found Pet Report"
+                          : "Report Type: Missing Pet Report"}
+                      </p>                    
+                    <p className="text-sm mb-2">Description: {report.reportDescription}</p>
+                    <p className="text-sm mb-3 text-gray-500">Status: {report.isActive ? "Active" : "Inactive"}</p>
+                  </div>
                     </div>
                   ))}
             </div>

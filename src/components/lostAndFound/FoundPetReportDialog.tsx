@@ -24,6 +24,8 @@ import {
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
 import { DatePicker } from "../ui/DatePicker"
+import { revalPath } from "@/lib/revalidate"
+
 
 interface FoundPetReportDialogProps {
   isOpen: boolean
@@ -96,6 +98,7 @@ const FoundPetReportDialog = ({
           toast({
             description: "Found Pet Report has been successfully created.",
           })
+          revalPath("/lostAndFound/founds")
         }
       }
     } catch (error) {

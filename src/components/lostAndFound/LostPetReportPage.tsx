@@ -71,8 +71,8 @@ const LostPetReportPage = ({
         }
 
         alert("Report deleted successfully")
-        setThisLostPetReport(null)
         router.push("/lostAndFound")
+        // setThisLostPetReport(null)
       } catch (error) {
         console.error("Error deleting report:", error)
         alert("Failed to delete the report.")
@@ -83,7 +83,7 @@ const LostPetReportPage = ({
   const updateStatus = async () => {
     if (
       thisLostPetReport &&
-      confirm("Are you sure you pet has been returned to owner?")
+      confirm("Are you sure you have found your pet?")
     ) {
       try {
         const response = await fetch("/api/lostAndFound/updateLostPetReportStatus", {
@@ -106,62 +106,103 @@ const LostPetReportPage = ({
     }
   }    
 
+  const unupdateStatus = async () => {
+    if (
+      thisLostPetReport &&
+      confirm("Are you sure you have not found your pet?")
+    ) {
+      try {
+        const response = await fetch("/api/lostAndFound/unupdateLostPetReportStatus", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reportId: thisLostPetReport.id }),
+        })
+
+        if (!response.ok) {
+          throw new Error("Failed to update the report status.")
+        }
+
+        alert("Report status updated successfully")
+        setReportActive(true)
+        router.push("/lostAndFound")
+      } catch (error) {
+        console.error("Error updating report status:", error)
+        alert("Failed to update the report status.")
+      }
+    }
+  }      
+
   const updateReport= () => {
     router.push(`/lostAndFound/updateLostPetReportPage/${lostPetReport?.id}`)
   }  
   
   return (
-    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
-      <div className="py-[60px]">
-        <div className="grid grid-cols-6">
-          {thisLostPetReport ? (
-            <div>
-              <Image
-                src={transformImage(thisLostPetReport.imageUrl)}
-                width={200}
-                height={200}
-                alt="Pet"
-                className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-              />
+    <div className="container mx-auto w-full h-full">
+    <div className=" mt-5 flex items-center">
+      <h1 className="text-4xl font-bold">Lost Pet Detail</h1>
+    </div>
+    <div className="py-[20px]">
+      <div className="bg-[#FFECE4] h-[250px] rounded-3xl px-28 py-6">
+        <div className="w-full h-full flex justify-between">
+          <div className="flex items-center space-x-10">
+            <Image src={transformImage(thisLostPetReport!.imageUrl)}
+                  width={175}
+                  height={175} 
+                  alt={`Lost pet named ${thisLostPetReport!.petName}`} 
+                  className="rounded-full" />
 
-            <div className="col-span-5">
-            <div className="flex gap-8">
-              <HeaderTitle className="text-left">{thisLostPetReport.petName}</HeaderTitle>
+            <div className="space-y-2">
+              <p className="font-bold text-xl">{thisLostPetReport!.petName}</p>
+              <p>{thisLostPetReport!.animalBreed}</p>
             </div>
-            <div>
-            {thisLostPetReport.userId ===  currUser?.id  && thisLostPetReport.isActive && (<Button onClick={() => updateReport()}>Edit Report</Button>)}     
-            {thisLostPetReport.userId ===  currUser?.id  && (<Button onClick={() => deleteReport()}>Delete Report</Button>)}   
-            {thisLostPetReport.userId === currUser?.id && thisLostPetReport.isActive && (
-                  <Button onClick={() => updateStatus()}> Pet has been found </Button>
-                )}
-              {thisLostPetReport.isActive ? "Missing Pet " : "Pet has been found"}
-            </div>
-            </div>
-
-              <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
-                <div className="flex border p-4 rounded-xl bg-white h-full  cursor-pointer">
-                  <p className="mb-2">Pet Name: {thisLostPetReport.petName}</p>
-                </div>
-
-                <div className="space-y-2">
-                  <p>Animal Type: {thisLostPetReport.animalType}</p>
-                  <p>Animal Breed: {thisLostPetReport.animalBreed}</p>
-                  <p>Contact Details: {thisLostPetReport.contactDetails}</p>
-                  <p>Last Seen Area: {thisLostPetReport.lastSeenArea}</p>
-                  <p>Last Seen Date: {formattedLastSeenDate}</p>
-                  <p>
-                    Report Description: {thisLostPetReport.reportDescription}
-                  </p>
-                  <p>Report Message: {thisLostPetReport.reportMessage}</p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            "Report Not Available"
-          )}
+          </div>
+          <div className="flex flex-col items-center space-y-2 self-center">
+            {thisLostPetReport!.userId === currUser?.id && thisLostPetReport!.isActive && (
+              <Button className="w-full" onClick={() => updateReport()}>Edit Report</Button>
+            )} 
+            {thisLostPetReport!.userId === currUser?.id && (
+              <Button className="w-full" onClick={() => deleteReport()}>Delete Report</Button>
+            )}
+            {thisLostPetReport!.userId === currUser?.id && thisLostPetReport!.isActive && (
+              <Button className="w-full" onClick={() => updateStatus()}>Pet has been found</Button>
+            )}
+            {thisLostPetReport!.userId === currUser?.id && !thisLostPetReport!.isActive && (
+              <Button className="w-full" onClick={() => unupdateStatus()}>Pet has not been found</Button>
+            )}            
+          </div>
         </div>
       </div>
+
+      <div className="mt-10">
+        <h1 className="text-center font-bold text-5xl">Details</h1>
+        <div className="w-full bg-white shadow-lg rounded-lg p-4 mt-6 flex flex-row">
+          <div className="w-1/2 space-y-8">
+            <CardItem title="Pet Name" content={thisLostPetReport!.petName} />
+            <CardItem title="Sex" content={thisLostPetReport!.petSex} />
+            <CardItem title="Message from Owner" content={thisLostPetReport!.reportMessage} />
+            <CardItem title="Area Last Seen" content={thisLostPetReport!.lastSeenArea} />
+            <CardItem title="Contact Detail" content={thisLostPetReport!.contactDetails} />
+          </div>
+          <div className="w-1/2 space-y-8">
+            <CardItem title="Status" content={thisLostPetReport!.isActive ? "Missing" : "Pet has been found"}/>
+            <CardItem title="Species" content={thisLostPetReport!.animalBreed} />
+            <CardItem title="Description" content={thisLostPetReport!.reportDescription} />
+            <CardItem title="Last Seen Date" content={formattedLastSeenDate} />
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
   )
 }
 export default LostPetReportPage
+
+
+const CardItem = ({title, content}: {title: string, content: string}) => {
+  return (
+    <div>
+      <h1 className="font-bold"> • {title}:</h1>
+      <p className="ml-3">{content}</p>
+    </div>
+  )
+}

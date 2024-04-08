@@ -16,7 +16,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useRef } from "react"
+import { KeyedMutator } from "swr"
 
+import { ExtendedPost } from "../../lib/actions/post"
 import TimeStamp from "../TimeStamp"
 import { Button } from "../ui/Button"
 import {
@@ -35,28 +37,37 @@ import {
 } from "../ui/DropdownMenu"
 import { Input } from "../ui/Input"
 import { Textarea } from "../ui/TextArea"
+import CommentDialog from "./CommentDialog"
 import CommentItem from "./CommentItem"
+import LikeDialog from "./LikeDialog"
 
 const PostItem = ({
   post,
   isLiked,
   isOwnProfile,
   isCurrentFollowed,
+  mutate,
+  api,
 }: {
-  post: Post & {
-    user: User
-    likes: (Like & { user: SafeUser })[]
-    comments: (Comment & { user: User })[]
-  }
+  post: ExtendedPost
   isLiked: boolean
   isOwnProfile: boolean
   isCurrentFollowed: boolean
+  mutate: KeyedMutator<any>
+  api: string
 }) => {
   const { toast } = useToast()
   const [isImageLoading, setImageLoading] = useState(true)
 
   const [description, setDescription] = useState(post.description)
-  const [comment, setComment] = useState("")
+  const [like, setLike] = useState({
+    isLiked: isLiked,
+    likes_count: post.likes_count,
+  })
+  const [dialogState, setDialogState] = useState({
+    comment: false,
+    like: false,
+  })
 
   const [isCommenting, setIsCommenting] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
@@ -66,7 +77,6 @@ const PostItem = ({
 
   const containerRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
-  const dialogRef = useRef<HTMLDivElement>(null)
 
   const time = new Date(post.createdAt).toISOString()
 
@@ -95,7 +105,8 @@ const PostItem = ({
         username: username,
       }),
     })
-    revalPath("/explore")
+    // revalPath("/explore")
+    mutate()
   }
 
   const handleFollow = async (username?: string) => {
@@ -108,7 +119,8 @@ const PostItem = ({
         username: username,
       }),
     })
-    revalPath("/explore")
+    // revalPath("/explore")
+    mutate()
   }
 
   const handleUpdate = async () => {
@@ -182,7 +194,10 @@ const PostItem = ({
         description: msg.message,
       })
     } else {
-      revalPath("/explore")
+      setLike({
+        isLiked: true,
+        likes_count: like.likes_count + 1,
+      })
     }
   }
 
@@ -201,31 +216,10 @@ const PostItem = ({
         description: msg.message,
       })
     } else {
-      revalPath("/explore")
-    }
-  }
-
-  const handleComment = async () => {
-    setComment("")
-    const set = await fetch("/api/explore/post/comment", {
-      method: "POST",
-      body: JSON.stringify({
-        content: comment,
-        postId: post.id,
-      }),
-    })
-    const msg = await set.json()
-    if (!set.ok) {
-      toast({
-        variant: "destructive",
-        title: "Failed to comment",
-        description: msg.message,
+      setLike({
+        isLiked: false,
+        likes_count: like.likes_count - 1,
       })
-    } else {
-      revalPath("/explore")
-      if (dialogRef.current) {
-        dialogRef.current.scrollTo(0, 0)
-      }
     }
   }
 
@@ -319,7 +313,7 @@ const PostItem = ({
 
       <div className="flex flex-col px-6 py-6">
         <div className="flex flex-row items-center space-x-4 pb-2">
-          {!isLiked ? (
+          {!like.isLiked ? (
             <Heart
               className="w-6 h-6 bg-transparent hover:cursor-pointer transition-all ease-in-out hover:duration-200 hover:text-red-400 hover:fill-red-400"
               onClick={handleLike}
@@ -332,72 +326,22 @@ const PostItem = ({
           )}
           <MessageCircle
             className="w-6 h-6 hover:cursor-pointer hover:duration-300 ease-in-out transition-all hover:text-mainAccent"
-            onClick={() => setIsCommenting(!isCommenting)}
+            onClick={() =>
+              setDialogState((prev) => ({ ...prev, comment: !prev.comment }))
+            }
           />
         </div>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <div className="hover:cursor-pointer">
-              {post.likes.length > 0 &&
-                (post.likes.length === 1 ? (
-                  <p className="font-bold text-sm">{post.likes.length} Like</p>
-                ) : (
-                  <p className="font-bold text-sm">{post.likes.length} Likes</p>
-                ))}
-            </div>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogDescription>Liked by</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-1">
-              {post.likes.length > 0 ? (
-                post.likes.map((like) => (
-                  <Link
-                    href={`/profile/${like.user.username}`}
-                    key={like.user.username}
-                    className="flex items-center justify-between hover:bg-gray-200/20 p-2 rounded-lg transition-all duration-200"
-                  >
-                    <div className="flex items-center gap-4">
-                      <Image
-                        className="object-cover w-10 h-10 rounded-full"
-                        src={
-                          like.user.image ? like.user.image : "/../../icon.png"
-                        }
-                        width={40}
-                        height={40}
-                        alt="Bordered avatar"
-                      />
-                      <p>{like.user.username}</p>
-                    </div>
-                    {!isOwnProfile ? (
-                      !like.user.isCurrentFollowed ? (
-                        <Button
-                          variant="default"
-                          size="sm"
-                          onClick={() => handleFollow(like.user.username || "")}
-                        >
-                          Follow
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleFollow(like.user.username || "")}
-                        >
-                          Unfollow
-                        </Button>
-                      )
-                    ) : null}
-                  </Link>
-                ))
-              ) : (
-                <p className="text-center">No Likes</p>
-              )}
-            </div>
-          </DialogContent>
-        </Dialog>
+        <LikeDialog
+          post={post}
+          isOpen={dialogState.like}
+          setOpen={() => {
+            setDialogState((prev) => ({
+              ...prev,
+              like: !prev.like,
+            }))
+          }}
+        />
 
         <div className="py-2">
           {!isEdit ? (
@@ -448,61 +392,32 @@ const PostItem = ({
           </div>
         ) : (
           <>
-            {post.comments.length > 0 && (
+            {post.comments_count > 0 && (
               <>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <p className="text-sm text-gray-500 hover:text-mainAccent ease-in-out transition-all hover:cursor-pointer w-fit">
-                      View all comments
-                    </p>
-                  </DialogTrigger>
-                  <DialogContent
-                    className="sm:max-w-[700px] max-h-[70vh] overflow-y-auto pb-0"
-                    ref={dialogRef}
-                  >
-                    <DialogHeader>
-                      <DialogDescription>Comments</DialogDescription>
-                    </DialogHeader>
-
-                    {post.comments.length > 0 ? (
-                      post.comments.map((comment) => (
-                        <div className="w-full" key={comment.id}>
-                          <CommentItem comment={comment} />
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-center">No comments</p>
-                    )}
-                    <div className="sticky bottom-0 left-0 w-full px-4 py-4 bg-white">
-                      <Input
-                        placeholder="Add a comment..."
-                        className="pr-12"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                      />
-                      {comment !== "" && (
-                        <SendHorizonal
-                          className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 hover:cursor-pointer hover:duration-300 ease-in-out transition-all hover:text-mainAccent"
-                          onClick={handleComment}
-                        />
-                      )}
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <CommentDialog
+                  isOpen={dialogState.comment}
+                  setOpen={() => {
+                    setDialogState((prev) => ({
+                      ...prev,
+                      comment: !prev.comment,
+                    }))
+                  }}
+                  post={post}
+                />
 
                 <div className="items-center py-2">
-                  {post.comments.slice(0, 2).map((comment) => (
+                  {/* {post.comments.slice(0, 2).map((comment) => (
                     <div key={comment.id} className="text-sm flex flex-row">
                       <p className="font-semibold mr-1">
                         {comment.user.username}
                       </p>
                       <p className="line-clamp-1">{comment.content}</p>
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               </>
             )}
-            {isCommenting && (
+            {/* {isCommenting && (
               <div className="relative py-2">
                 <Input
                   placeholder="Add a comment..."
@@ -517,7 +432,7 @@ const PostItem = ({
                   />
                 )}
               </div>
-            )}
+            )} */}
           </>
         )}
       </div>

@@ -66,16 +66,26 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+type HighlightComment {
+  username1 String?
+  comment1  String?
+  username2 String?
+  comment2  String?
+}
+
 model Post {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  description String?
-  imageUrl    String
-  createdAt   DateTime  @default(now())
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String    @db.ObjectId
-  type        PostType
-  likes       Like[]
-  comments    Comment[]
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  description        String?
+  imageUrl           String
+  createdAt          DateTime          @default(now())
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String            @db.ObjectId
+  type               PostType
+  likes_count        Int               @default(0)
+  comments_count     Int               @default(0)
+  likes              Like[]
+  comments           Comment[]
+  hightlight_comment HighlightComment?
 }
 
 enum PostType {
@@ -103,9 +113,10 @@ model Comment {
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    String   @db.ObjectId
 
-  parentId String?   @db.ObjectId
-  parent   Comment?  @relation("ChildComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  children Comment[] @relation("ChildComment")
+  parentId         String?            @db.ObjectId
+  parent           Comment?           @relation("ChildComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children         Comment[]          @relation("ChildComment")
+  HighlightComment HighlightComment[]
 }
 
 model LostPetReport {

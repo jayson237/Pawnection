@@ -62,6 +62,10 @@ const PostItem = ({
 
   const [description, setDescription] = useState(post.description)
   const [comment, setComment] = useState("")
+  const [like, setLike] = useState({
+    isLiked: isLiked,
+    likes_count: post.likes_count,
+  })
 
   const [isCommenting, setIsCommenting] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
@@ -189,8 +193,10 @@ const PostItem = ({
         description: msg.message,
       })
     } else {
-      // revalPath("/explore")
-      mutate()
+      setLike({
+        isLiked: true,
+        likes_count: like.likes_count + 1,
+      })
     }
   }
 
@@ -209,8 +215,10 @@ const PostItem = ({
         description: msg.message,
       })
     } else {
-      // revalPath("/explore")
-      mutate()
+      setLike({
+        isLiked: false,
+        likes_count: like.likes_count - 1,
+      })
     }
   }
 
@@ -328,7 +336,7 @@ const PostItem = ({
 
       <div className="flex flex-col px-6 py-6">
         <div className="flex flex-row items-center space-x-4 pb-2">
-          {!isLiked ? (
+          {!like.isLiked ? (
             <Heart
               className="w-6 h-6 bg-transparent hover:cursor-pointer transition-all ease-in-out hover:duration-200 hover:text-red-400 hover:fill-red-400"
               onClick={handleLike}
@@ -348,11 +356,11 @@ const PostItem = ({
         <Dialog>
           <DialogTrigger asChild>
             <div className="hover:cursor-pointer">
-              {post.likes_count > 0 &&
-                (post.likes_count === 1 ? (
-                  <p className="font-bold text-sm">{post.likes_count} Like</p>
+              {like.likes_count > 0 &&
+                (like.likes_count === 1 ? (
+                  <p className="font-bold text-sm">{like.likes_count} Like</p>
                 ) : (
-                  <p className="font-bold text-sm">{post.likes_count} Likes</p>
+                  <p className="font-bold text-sm">{like.likes_count} Likes</p>
                 ))}
             </div>
           </DialogTrigger>
@@ -361,7 +369,7 @@ const PostItem = ({
               <DialogDescription>Liked by</DialogDescription>
             </DialogHeader>
             <div className="space-y-1">
-              {post.likes_count > 0 ? (
+              {like.likes_count > 0 ? (
                 post.likes.map((like) => (
                   <Link
                     href={`/profile/${like.user.username}`}

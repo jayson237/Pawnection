@@ -14,10 +14,10 @@ export default async function Adopt() {
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
-        <div className="mx-auto flex flex-col items-center">
+        <div className="mx-auto flex flex-col items-center justify-center">
           <HeaderTitle
             className="max-md:text-2xl lg:whitespace-nowrap lg:py-4"
-            descriptionClassName="max-md:text-lg  lg:whitespace-nowrap lg:py-3"
+            descriptionClassName="max-md:text-lg  lg:whitespace-nowrap lg:py-3 lg:ml-8"
             description="Browse through the profiles and find your new furry friend!"
           >
             Welcome to the Adoption Center
@@ -70,7 +70,6 @@ export default async function Adopt() {
             Disclaimer: The following steps are conducted between the adoptee
             and the adoption agency!
           </h3>
-
         </div>
 
         <div className="gap-10 grid sm:grid-cols-2 grid-cols-1 py-7 mt-6 px-4">

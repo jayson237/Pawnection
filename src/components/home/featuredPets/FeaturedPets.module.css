@@ -1,7 +1,7 @@
 .featured-pets {
   border-radius: 50px;
   background-color: #ffece4;
-  padding: 60px 80px 0;
+  padding: 80px 80px 0;
 }
 
 @media (max-width: 991px) {

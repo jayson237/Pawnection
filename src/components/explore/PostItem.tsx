@@ -37,8 +37,9 @@ import {
 } from "../ui/DropdownMenu"
 import { Input } from "../ui/Input"
 import { Textarea } from "../ui/TextArea"
-import CommentContainer from "./CommentContainer"
+import CommentDialog from "./CommentDialog"
 import CommentItem from "./CommentItem"
+import LikeDialog from "./LikeDialog"
 
 const PostItem = ({
   post,
@@ -59,13 +60,13 @@ const PostItem = ({
   const [isImageLoading, setImageLoading] = useState(true)
 
   const [description, setDescription] = useState(post.description)
-  const [comment, setComment] = useState("")
   const [like, setLike] = useState({
     isLiked: isLiked,
     likes_count: post.likes_count,
   })
   const [dialogState, setDialogState] = useState({
     comment: false,
+    like: false,
   })
 
   const [isCommenting, setIsCommenting] = useState(false)
@@ -76,7 +77,6 @@ const PostItem = ({
 
   const containerRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
-  const dialogRef = useRef<HTMLDivElement>(null)
 
   const time = new Date(post.createdAt).toISOString()
 
@@ -326,72 +326,22 @@ const PostItem = ({
           )}
           <MessageCircle
             className="w-6 h-6 hover:cursor-pointer hover:duration-300 ease-in-out transition-all hover:text-mainAccent"
-            onClick={() => setIsCommenting(!isCommenting)}
+            onClick={() =>
+              setDialogState((prev) => ({ ...prev, comment: !prev.comment }))
+            }
           />
         </div>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <div className="hover:cursor-pointer">
-              {like.likes_count > 0 &&
-                (like.likes_count === 1 ? (
-                  <p className="font-bold text-sm">{like.likes_count} Like</p>
-                ) : (
-                  <p className="font-bold text-sm">{like.likes_count} Likes</p>
-                ))}
-            </div>
-          </DialogTrigger>
-          {/* <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogDescription>Liked by</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-1">
-              {like.likes_count > 0 ? (
-                post.likes.map((like) => (
-                  <Link
-                    href={`/profile/${like.user.username}`}
-                    key={like.user.username}
-                    className="flex items-center justify-between hover:bg-gray-200/20 p-2 rounded-lg transition-all duration-200"
-                  >
-                    <div className="flex items-center gap-4">
-                      <Image
-                        className="object-cover w-10 h-10 rounded-full"
-                        src={
-                          like.user.image ? like.user.image : "/../../icon.png"
-                        }
-                        width={40}
-                        height={40}
-                        alt="Bordered avatar"
-                      />
-                      <p>{like.user.username}</p>
-                    </div>
-                    {!isOwnProfile ? (
-                      !like.user.isCurrentFollowed ? (
-                        <Button
-                          variant="default"
-                          size="sm"
-                          onClick={() => handleFollow(like.user.username || "")}
-                        >
-                          Follow
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleFollow(like.user.username || "")}
-                        >
-                          Unfollow
-                        </Button>
-                      )
-                    ) : null}
-                  </Link>
-                ))
-              ) : (
-                <p className="text-center">No Likes</p>
-              )}
-            </div>
-          </DialogContent> */}
-        </Dialog>
+        <LikeDialog
+          post={post}
+          isOpen={dialogState.like}
+          setOpen={() => {
+            setDialogState((prev) => ({
+              ...prev,
+              like: !prev.like,
+            }))
+          }}
+        />
 
         <div className="py-2">
           {!isEdit ? (
@@ -444,7 +394,7 @@ const PostItem = ({
           <>
             {post.comments_count > 0 && (
               <>
-                <CommentContainer
+                <CommentDialog
                   isOpen={dialogState.comment}
                   setOpen={() => {
                     setDialogState((prev) => ({

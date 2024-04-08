@@ -37,7 +37,7 @@ const PetInfo: React.FC<PetInfoProps> = ({ name, breed, age, imageUrl }) => {
   const router = useRouter()
   return (
     <div
-      className="flex items-center justify-center p-8 transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg hover:scale-105 hover:z-10"
+      className="flex items-center justify-center p-8 transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg hover:scale-90 hover:z-4"
       onClick={() => router.push("/adopt")}
     >
       <Image
@@ -58,7 +58,7 @@ const PetInfo: React.FC<PetInfoProps> = ({ name, breed, age, imageUrl }) => {
 
 const FeaturedPets: React.FC = () => {
   return (
-    <div className="py-20 px-5">
+    <div className="py-20 px-10">
       <section className={styles["featured-pets"]}>
         <div className={styles["pet-showcase"]}>
           <div className={styles["showcase-image"]}>
@@ -71,10 +71,10 @@ const FeaturedPets: React.FC = () => {
             />
           </div>
           <div className={styles["showcase-details"]}>
-            <h2 className="pb-5 font-bold text-5xl text-left ml-9">
+            <h2 className="pb-5 font-bold text-5xl text-left ml-7">
               Adoptable Pets
             </h2>
-            <div className="py-5  ml-[-10px]">
+            <div className="py-5  ml-[-15px]">
               {pets.map((pet) => (
                 // eslint-disable-next-line react/jsx-key
                 <PetInfo key={pet.name} {...pet} />

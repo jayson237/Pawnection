@@ -29,36 +29,46 @@ export async function POST(req: Request) {
       )
     }
 
-    const postExists = await prisma.post.findUnique({
-      where: { id: postId },
-    })
-    if (!postExists) {
-      return NextResponse.json({ message: "Post not found" }, { status: 400 })
-    }
-
-    if (parentId) {
-      const parentCommentExists = await prisma.comment.findUnique({
-        where: { id: parentId },
+    await prisma.$transaction(async (tx) => {
+      const addCommentCount = await tx.post.update({
+        data: {
+          comments_count: {
+            increment: 1,
+          },
+        },
+        where: { id: postId },
       })
-      if (!parentCommentExists) {
+      if (!addCommentCount) {
         return NextResponse.json(
-          { message: "Parent comment not found" },
+          { message: "Failed to add comment to post" },
           { status: 400 },
         )
       }
-    }
 
-    const comment = await prisma.comment.create({
-      data: {
-        content,
-        userId: currentUser.id,
-        postId,
-        ...(parentId && { parentId }),
-      },
+      if (parentId) {
+        const parentCommentExists = await tx.comment.findUnique({
+          where: { id: parentId },
+        })
+        if (!parentCommentExists) {
+          return NextResponse.json(
+            { message: "Parent comment not found" },
+            { status: 400 },
+          )
+        }
+      }
+
+      await tx.comment.create({
+        data: {
+          content,
+          userId: currentUser.id,
+          postId,
+          ...(parentId && { parentId }),
+        },
+      })
     })
 
     return NextResponse.json(
-      { message: "Comment created successfully", comment },
+      { message: "Comment created successfully" },
       { status: 200 },
     )
   } catch (error) {

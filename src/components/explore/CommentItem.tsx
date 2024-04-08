@@ -19,7 +19,13 @@ import {
 } from "../ui/DropdownMenu"
 import { Textarea } from "../ui/TextArea"
 
-const CommentItem = ({ comment }: { comment: Comment & { user: User } }) => {
+const CommentItem = ({
+  comment,
+  postId,
+}: {
+  comment: Comment & { user: Pick<User, "username" | "image"> }
+  postId: string
+}) => {
   const { toast } = useToast()
   const [isEdit, setIsEdit] = useState(false)
   const [editComment, setComment] = useState(comment.content)
@@ -51,6 +57,7 @@ const CommentItem = ({ comment }: { comment: Comment & { user: User } }) => {
       method: "POST",
       body: JSON.stringify({
         commentId: commentId,
+        postId: postId,
       }),
     })
     const msg = await set.json()

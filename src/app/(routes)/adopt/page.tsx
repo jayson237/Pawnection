@@ -14,18 +14,17 @@ export default async function Adopt() {
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
-        <div className="mx-auto flex flex-col items-center justify-center">
+        <div className="mx-auto flex flex-col items-center">
           <HeaderTitle
-            className="max-md:text-2xl lg:whitespace-nowrap lg:py-4"
-            descriptionClassName="max-md:text-lg  lg:whitespace-nowrap lg:py-3 lg:ml-8"
+            className="max-w-[fit-content] mx-auto text-center max-md:text-2xl lg:py-3"
+            descriptionClassName="max-md:text-lg "
             description="Browse through the profiles and find your new furry friend!"
           >
             Welcome to the Adoption Center
           </HeaderTitle>
-
           <Link
-            href="/adopt/requests"
-            className={cn(buttonVariants({ variant: "default" }), "mt-6")}
+            className={cn(buttonVariants({ variant: "default" }), "mt-4")}
+            href="/adoptionCenter/post"
           >
             View all your requests
           </Link>

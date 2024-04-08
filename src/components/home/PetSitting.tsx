@@ -15,7 +15,7 @@ const PetSitting = () => {
         height={396}
         src="/home/cat_pink.webp"
         alt="Pet sitting"
-        className="w-full sm:w-5/6"
+        className="w-full sm:w-5/6 md:mx-auto"
       />
       <div className="flex flex-col justify-center">
         <HeaderTitle className="text-5xl text-left max-md:mt-7">

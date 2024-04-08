@@ -119,9 +119,12 @@ const Feed = ({
   }, [searchParams])
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {}, {
-      rootMargin: "0px 0px 100px",
-    })
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) fetchContent()
+      },
+      { rootMargin: "0px 0px 100px" },
+    )
 
     if (loadMoreTriggerRef.current) observer.observe(loadMoreTriggerRef.current)
 

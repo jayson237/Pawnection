@@ -14,6 +14,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/RadioGroup"
 import { Textarea } from "@/components/ui/TextArea"
 import { useToast } from "@/hooks/useToast"
+import { revalPath } from "@/lib/revalidate"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Paperclip, Plus } from "lucide-react"
 import Image from "next/image"
@@ -35,6 +36,7 @@ const createPostSchema = z.object({
 const PostForm = () => {
   const { toast } = useToast()
   const router = useRouter()
+  const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
 
@@ -161,12 +163,15 @@ const PostForm = () => {
         title: "Post created successfully",
         description: "Successfully posted! Please wait...",
       })
+      setOpen(false)
       setLoading(false)
+      revalPath("/explore")
       router.push("/explore")
     }
   }
 
   const handleDialogClose = () => {
+    setOpen(!open)
     reset({
       description: "",
       imageUrl: "",
@@ -176,7 +181,7 @@ const PostForm = () => {
   }
 
   return (
-    <Dialog onOpenChange={handleDialogClose}>
+    <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogTrigger asChild>
         <Button className="h-9">
           <Plus className="w-4 h-4 mr-2" />

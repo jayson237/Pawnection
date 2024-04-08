@@ -17,7 +17,7 @@ export default async function AdoptionCenterPage() {
       <div className="py-[30px] px-[15px] sm:py-[50px]">
         <div className="mx-auto flex flex-col items-center">
           <HeaderTitle
-            className="max-md:text-2xl"
+            className="max-w-[fit-content] mx-auto text-center max-md:text-2xl"
             descriptionClassName="max-md:text-lg"
             description="Browse through the profiles and find your new furry friend!"
           >
@@ -25,7 +25,7 @@ export default async function AdoptionCenterPage() {
           </HeaderTitle>
           <Link
             className={cn(buttonVariants({ variant: "default" }), "mt-4")}
-            href="/adoption-center/post"
+            href="/adoptionCenter/post"
           >
             Post a Pet
           </Link>

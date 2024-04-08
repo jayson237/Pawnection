@@ -12,7 +12,7 @@ function OwnAdoptablePost() {
   const [data, setData] = useState<AdoptablePet[] | null>(null)
 
   useEffect(() => {
-    fetch("/api/adoption-center")
+    fetch("/api/adoptionCenter")
       .then((response) => response.json())
       .then((data) => setData(data.data))
       .catch((error) => console.error(error))
@@ -43,7 +43,7 @@ function OwnAdoptablePost() {
                     {item.type} | {item.gender} | {item.age} year old
                   </p>
                   <Link
-                    href={`/adoption-center/manage/${item.id}`}
+                    href={`/adoptionCenter/manage/${item.id}`}
                     className={cn(
                       buttonVariants({ variant: "default" }),
                       "mt-4 w-full",

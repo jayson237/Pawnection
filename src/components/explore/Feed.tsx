@@ -1,9 +1,9 @@
 "use client"
 
 import { SafeUser } from "@/types"
-import { Comment, Like, Post, User } from "@prisma/client"
+import { Post, User } from "@prisma/client"
 import { useCallback, useEffect, useRef, useState } from "react"
-import useSWR, { useSWRConfig } from "swr"
+import useSWR from "swr"
 
 import { ExtendedPost } from "../../lib/actions/post"
 import { fetcher } from "../../lib/utils"
@@ -27,7 +27,7 @@ const Feed = ({
   const { data, mutate } = useSWR(() => (api ? `${api}` : null), fetcher, {
     revalidateOnMount: true,
   })
-  // const { mutate } = useSWRConfig()
+
   const [content, setContent] = useState<{
     posts: ExtendedPost[]
     users: User[]
@@ -88,13 +88,11 @@ const Feed = ({
         setContent((prev) => {
           const mergedPosts = prev.posts
             .concat(data)
-            .reduce((acc: any, post) => {
-              const existingIndex = acc.findIndex((p: Post) => p.id === post.id) // Replace 'id' with your actual unique identifier
+            .reduce((acc: ExtendedPost[], post) => {
+              const existingIndex = acc.findIndex((p: Post) => p.id === post.id)
               if (existingIndex !== -1) {
-                // Replace existing post
                 acc[existingIndex] = post
               } else {
-                // Add post if not found in previous data
                 acc.push(post)
               }
               return acc

@@ -2,14 +2,12 @@
 
 import { useToast } from "@/hooks/useToast"
 import { revalPath } from "@/lib/revalidate"
-import { SafeUser } from "@/types"
-import { Comment, Like, Post, User } from "@prisma/client"
+import { Post } from "@prisma/client"
 import {
   Edit3,
   Heart,
   MessageCircle,
   MoreHorizontal,
-  SendHorizonal,
   Trash2,
 } from "lucide-react"
 import Image from "next/image"
@@ -22,23 +20,14 @@ import { ExtendedPost } from "../../lib/actions/post"
 import TimeStamp from "../TimeStamp"
 import { Button } from "../ui/Button"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTrigger,
-} from "../ui/Dialog"
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/DropdownMenu"
-import { Input } from "../ui/Input"
 import { Textarea } from "../ui/TextArea"
 import CommentDialog from "./CommentDialog"
-import CommentItem from "./CommentItem"
 import LikeDialog from "./LikeDialog"
 
 const PostItem = ({
@@ -105,7 +94,6 @@ const PostItem = ({
         username: username,
       }),
     })
-    // revalPath("/explore")
     mutate()
   }
 
@@ -119,7 +107,7 @@ const PostItem = ({
         username: username,
       }),
     })
-    // revalPath("/explore")
+
     mutate()
   }
 
@@ -146,7 +134,6 @@ const PostItem = ({
     } else {
       toast({
         title: "Successfully updated description",
-        description: "Please close this window",
       })
       revalPath("/explore")
     }

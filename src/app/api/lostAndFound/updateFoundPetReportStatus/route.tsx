@@ -3,17 +3,16 @@ import prisma from "@/lib/prismadb"
 import { NextResponse } from "next/server"
 
 export async function PUT(request: Request) {
-//   const currentUser = await getCurrentUser()
+  //   const currentUser = await getCurrentUser()
   try {
     const data = await request.json()
     const reportId = data.reportId
-    console.log(reportId)
     const updatedReport = await prisma.foundPetReport.update({
       where: {
-        id: reportId
+        id: reportId,
       },
       data: {
-        isActive: false
+        isActive: false,
       },
     })
 

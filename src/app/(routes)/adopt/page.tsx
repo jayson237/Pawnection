@@ -24,7 +24,7 @@ export default async function Adopt() {
           </HeaderTitle>
           <Link
             className={cn(buttonVariants({ variant: "default" }), "mt-4")}
-            href="/adoptionCenter/post"
+            href="/adopt/requests"
           >
             View all your requests
           </Link>

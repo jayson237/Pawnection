@@ -2,7 +2,7 @@
 
 import { Comment, User } from "@prisma/client"
 import { SendHorizonal } from "lucide-react"
-import React, { useRef, useState } from "react"
+import React, { Dispatch, SetStateAction, useRef, useState } from "react"
 import useSWR from "swr"
 
 import { toast } from "../../hooks/useToast"
@@ -24,10 +24,14 @@ function CommentDialog({
   post,
   isOpen,
   setOpen,
+  commentCount,
+  setCommentCount,
 }: {
   post: ExtendedPost
   isOpen: boolean
   setOpen: (open: boolean) => void
+  commentCount: number
+  setCommentCount: Dispatch<SetStateAction<number>>
 }) {
   const [comment, setComment] = useState("")
 
@@ -55,6 +59,7 @@ function CommentDialog({
     })
     const msg = await set.json()
     if (!set.ok) {
+      setCommentCount((prev) => prev + 1)
       toast({
         variant: "destructive",
         title: "Failed to comment",
@@ -72,9 +77,7 @@ function CommentDialog({
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <p className="text-sm text-gray-500 hover:text-mainAccent ease-in-out transition-all hover:cursor-pointer w-fit">
-          {post.comments_count > 0
-            ? `View all ${post.comments_count} comments`
-            : ""}
+          {post.comments_count > 0 ? `View all ${commentCount} comments` : ""}
         </p>
       </DialogTrigger>
       <DialogContent
@@ -92,7 +95,12 @@ function CommentDialog({
         ) : comments && comments.data.length > 0 ? (
           comments.data.map((comment) => (
             <div className="w-full" key={comment.id}>
-              <CommentItem comment={comment} postId={post.id} />
+              <CommentItem
+                comment={comment}
+                postId={post.id}
+                setCommentCount={setCommentCount}
+                mutate={mutate}
+              />
             </div>
           ))
         ) : (

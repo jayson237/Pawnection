@@ -6,7 +6,8 @@ import { Comment, User } from "@prisma/client"
 import { Edit3, MoreHorizontal, Trash2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
+import { KeyedMutator } from "swr"
 
 import TimeStamp from "../TimeStamp"
 import { Button } from "../ui/Button"
@@ -22,9 +23,18 @@ import { Textarea } from "../ui/TextArea"
 const CommentItem = ({
   comment,
   postId,
+  setCommentCount,
+  mutate,
 }: {
   comment: Comment & { user: Pick<User, "username" | "image"> }
   postId: string
+  setCommentCount: Dispatch<SetStateAction<number>>
+  mutate: KeyedMutator<{
+    data: (Comment & {
+      user: Pick<User, "username" | "image">
+    })[]
+    message: string
+  }>
 }) => {
   const { toast } = useToast()
   const [isEdit, setIsEdit] = useState(false)
@@ -48,7 +58,8 @@ const CommentItem = ({
         description: msg.message,
       })
     } else {
-      revalPath("/explore")
+      mutate()
+      // revalPath("/explore")
     }
   }
 
@@ -68,7 +79,9 @@ const CommentItem = ({
         description: msg.message,
       })
     } else {
-      revalPath("/explore")
+      mutate()
+      setCommentCount((prev) => prev - 1)
+      // revalPath("/explore")
     }
   }
 

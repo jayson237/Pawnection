@@ -7,6 +7,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React from "react"
 import { useEffect, useState } from "react"
+import { boolean } from "zod"
 
 import { SafeUser } from "../../types"
 import HeaderTitle from "../HeaderTitle"
@@ -35,6 +36,17 @@ const Profile = ({
   const [reports, setReports] = useState<
     FoundPetReport[] | LostPetReport[] | null
   >(null)
+
+  const [isCurrentFollowed, setIsCurrentFollowed] = useState<
+    boolean | null | undefined
+  >(user.isCurrentFollowed)
+  const [fo, setFo] = useState<{
+    followerCount: number | undefined
+    followingCount: number | undefined
+  }>({
+    followerCount: user.followers?.length,
+    followingCount: user.following?.length,
+  })
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -78,7 +90,7 @@ const Profile = ({
             <div className="flex gap-8">
               <HeaderTitle className="text-left">{user.username}</HeaderTitle>
               {!isProfileOwner ? (
-                !user.isCurrentFollowed ? (
+                !isCurrentFollowed ? (
                   <Button
                     onClick={async () => {
                       await fetch("/api/user/follow", {
@@ -87,6 +99,13 @@ const Profile = ({
                           "Content-Type": "application/json",
                         },
                         body: JSON.stringify({ username: user.username }),
+                      }).then(() => {
+                        setIsCurrentFollowed(true)
+                        setFo((prev) => ({
+                          ...prev,
+                          followerCount:
+                            prev.followerCount && prev.followerCount + 1,
+                        }))
                       })
                     }}
                   >
@@ -101,6 +120,13 @@ const Profile = ({
                           "Content-Type": "application/json",
                         },
                         body: JSON.stringify({ username: user.username }),
+                      }).then(() => {
+                        setIsCurrentFollowed(false)
+                        setFo((prev) => ({
+                          ...prev,
+                          followerCount:
+                            prev.followerCount && prev.followerCount - 1,
+                        }))
                       })
                     }}
                     variant="outline"
@@ -129,7 +155,7 @@ const Profile = ({
                   variant="ghost"
                   disabled={!currentUser}
                 >
-                  {user.following?.length} Following
+                  {fo.followingCount} Following
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
@@ -172,6 +198,14 @@ const Profile = ({
                                   body: JSON.stringify({
                                     username: following.username,
                                   }),
+                                }).then(() => {
+                                  setIsCurrentFollowed(true)
+                                  setFo((prev) => ({
+                                    ...prev,
+                                    followerCount:
+                                      prev.followerCount &&
+                                      prev.followerCount + 1,
+                                  }))
                                 })
                               }}
                             >
@@ -190,6 +224,14 @@ const Profile = ({
                                   body: JSON.stringify({
                                     username: following.username,
                                   }),
+                                }).then(() => {
+                                  setIsCurrentFollowed(false)
+                                  setFo((prev) => ({
+                                    ...prev,
+                                    followerCount:
+                                      prev.followerCount &&
+                                      prev.followerCount - 1,
+                                  }))
                                 })
                               }}
                             >
@@ -213,7 +255,7 @@ const Profile = ({
                   variant="ghost"
                   disabled={!currentUser}
                 >
-                  {user.followers?.length} Follower
+                  {fo.followerCount} Follower
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
@@ -256,6 +298,14 @@ const Profile = ({
                                   body: JSON.stringify({
                                     username: follower.username,
                                   }),
+                                }).then(() => {
+                                  setIsCurrentFollowed(true)
+                                  setFo((prev) => ({
+                                    ...prev,
+                                    followerCount:
+                                      prev.followerCount &&
+                                      prev.followerCount + 1,
+                                  }))
                                 })
                               }}
                             >
@@ -274,6 +324,14 @@ const Profile = ({
                                   body: JSON.stringify({
                                     username: follower.username,
                                   }),
+                                }).then(() => {
+                                  setIsCurrentFollowed(false)
+                                  setFo((prev) => ({
+                                    ...prev,
+                                    followerCount:
+                                      prev.followerCount &&
+                                      prev.followerCount - 1,
+                                  }))
                                 })
                               }}
                             >

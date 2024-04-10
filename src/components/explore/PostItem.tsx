@@ -205,6 +205,10 @@ const PostItem = ({
     }
   }
 
+  const [isCurrentFollowedState, setIsCurrentFollowedState] = useState<
+    boolean | null | undefined
+  >(isCurrentFollowed)
+
   return (
     <div className="rounded-xl border bg-white h-full max-w-xl">
       <div className="flex items-center px-6 py-4 justify-between">
@@ -237,22 +241,38 @@ const PostItem = ({
         </div>
 
         {!isOwnProfile ? (
-          isCurrentFollowed ? (
+          !isCurrentFollowed ? (
             <Button
-              variant="outline"
-              className="w-20"
-              size={"sm"}
-              onClick={() => handleUnfollow(post.user.username || "")}
+              onClick={async () => {
+                await fetch("/api/user/follow", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ username: post.user.username }),
+                }).then(() => {
+                  setIsCurrentFollowedState(true)
+                })
+              }}
             >
-              Unfollow
+              Follow
             </Button>
           ) : (
             <Button
-              className="w-20"
-              size={"sm"}
-              onClick={() => handleFollow(post.user.username || "")}
+              onClick={async () => {
+                await fetch("/api/user/unfollow", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ username: post.user.username }),
+                }).then(() => {
+                  setIsCurrentFollowedState(false)
+                })
+              }}
+              variant="outline"
             >
-              Follow
+              Unfollow
             </Button>
           )
         ) : (

@@ -20,10 +20,12 @@ function LikeDialog({
   post,
   isOpen,
   setOpen,
+  likes_count,
 }: {
   post: ExtendedPost
   isOpen: boolean
   setOpen: (open: boolean) => void
+  likes_count: number
 }) {
   const { data: likes, isLoading } = useSWR<{
     data: (Like & { user: Pick<User, "username" | "image"> })[]
@@ -36,11 +38,11 @@ function LikeDialog({
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div className="hover:cursor-pointer">
-          {post.likes_count > 0 &&
-            (post.likes_count === 1 ? (
-              <p className="font-bold text-sm">{post.likes_count} Like</p>
+          {likes_count > 0 &&
+            (likes_count === 1 ? (
+              <p className="font-bold text-sm">{likes_count} Like</p>
             ) : (
-              <p className="font-bold text-sm">{post.likes_count} Likes</p>
+              <p className="font-bold text-sm">{likes_count} Likes</p>
             ))}
         </div>
       </DialogTrigger>
@@ -49,7 +51,7 @@ function LikeDialog({
           <DialogDescription>Liked by</DialogDescription>
         </DialogHeader>
         <div className="space-y-1">
-          {post.likes_count > 0 ? (
+          {likes_count > 0 ? (
             likes?.data.map((like) => (
               <Link
                 href={`/profile/${like.user.username}`}

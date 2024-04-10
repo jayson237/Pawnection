@@ -373,21 +373,19 @@ const PostItem = ({
           </div>
         ) : (
           <>
-            {post.comments_count > 0 && (
-              <>
-                <CommentDialog
-                  isOpen={dialogState.comment}
-                  setOpen={() => {
-                    setDialogState((prev) => ({
-                      ...prev,
-                      comment: !prev.comment,
-                    }))
-                  }}
-                  post={post}
-                />
+            <CommentDialog
+              isOpen={dialogState.comment}
+              setOpen={() => {
+                setDialogState((prev) => ({
+                  ...prev,
+                  comment: !prev.comment,
+                }))
+              }}
+              post={post}
+            />
 
-                <div className="items-center py-2">
-                  {/* {post.comments.slice(0, 2).map((comment) => (
+            <div className="items-center py-2">
+              {/* {post.comments.slice(0, 2).map((comment) => (
                     <div key={comment.id} className="text-sm flex flex-row">
                       <p className="font-semibold mr-1">
                         {comment.user.username}
@@ -395,9 +393,7 @@ const PostItem = ({
                       <p className="line-clamp-1">{comment.content}</p>
                     </div>
                   ))} */}
-                </div>
-              </>
-            )}
+            </div>
             {/* {isCommenting && (
               <div className="relative py-2">
                 <Input

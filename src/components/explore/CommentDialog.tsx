@@ -33,7 +33,11 @@ function CommentDialog({
 
   const dialogRef = useRef<HTMLDivElement>(null)
 
-  const { data: comments, isLoading } = useSWR<{
+  const {
+    data: comments,
+    isLoading,
+    mutate,
+  } = useSWR<{
     data: (Comment & { user: Pick<User, "username" | "image"> })[]
     message: string
   }>(isOpen ? `/api/explore/post/${post.id}/comments` : null, fetcher, {
@@ -57,7 +61,7 @@ function CommentDialog({
         description: msg.message,
       })
     } else {
-      revalPath("/explore")
+      mutate()
       if (dialogRef.current) {
         dialogRef.current.scrollTo(0, 0)
       }
@@ -68,7 +72,9 @@ function CommentDialog({
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <p className="text-sm text-gray-500 hover:text-mainAccent ease-in-out transition-all hover:cursor-pointer w-fit">
-          View all {post.comments_count} comments
+          {post.comments_count > 0
+            ? `View all ${post.comments_count} comments`
+            : ""}
         </p>
       </DialogTrigger>
       <DialogContent

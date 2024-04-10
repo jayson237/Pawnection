@@ -35,15 +35,11 @@ const PostItem = ({
   isLiked,
   isOwnProfile,
   isCurrentFollowed,
-  mutate,
-  api,
 }: {
   post: ExtendedPost
   isLiked: boolean
   isOwnProfile: boolean
   isCurrentFollowed: boolean
-  mutate: KeyedMutator<any>
-  api: string
 }) => {
   const { toast } = useToast()
   const [isImageLoading, setImageLoading] = useState(true)
@@ -94,7 +90,6 @@ const PostItem = ({
         username: username,
       }),
     })
-    mutate()
   }
 
   const handleFollow = async (username?: string) => {
@@ -107,8 +102,6 @@ const PostItem = ({
         username: username,
       }),
     })
-
-    mutate()
   }
 
   const handleUpdate = async () => {

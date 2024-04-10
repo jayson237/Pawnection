@@ -1,6 +1,7 @@
 import prisma from "@/lib/prismadb"
 import { Like, Post, PostType, User } from "@prisma/client"
 
+import { SafeUser } from "../../types"
 import { getCurrentUser } from "./user"
 
 export type ExtendedPost = Post & {
@@ -106,6 +107,58 @@ export async function getAllPosts(
         isCurrentUserLike: x.likes.length > 0,
       }))
     }
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+export async function getAllProfilePosts(
+  cursorId: string | null,
+  searchTerm: string,
+  userId: string,
+  currentUser: SafeUser,
+): Promise<ExtendedPost[] | null> {
+  try {
+    let cursorCondition = {}
+    if (cursorId) {
+      cursorCondition = {
+        cursor: { id: cursorId },
+        skip: 1,
+      }
+    }
+
+    const posts = await prisma.post.findMany({
+      where: {
+        userId,
+        description: {
+          contains: searchTerm,
+        },
+      },
+      include: {
+        likes: {
+          where: {
+            userId: currentUser?.id,
+          },
+        },
+        user: {
+          select: {
+            username: true,
+            image: true,
+            id: true,
+          },
+        },
+      },
+      take: 20,
+      orderBy: {
+        createdAt: "desc",
+      },
+      ...cursorCondition,
+    })
+    return posts.map((x) => ({
+      ...x,
+      isCurrentUserLike: x.likes.length > 0,
+    }))
   } catch (error) {
     console.error(error)
     return null

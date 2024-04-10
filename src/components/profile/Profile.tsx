@@ -7,6 +7,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React from "react"
 import { useEffect, useState } from "react"
+import { boolean } from "zod"
 
 import { SafeUser } from "../../types"
 import HeaderTitle from "../HeaderTitle"
@@ -19,6 +20,7 @@ import {
   DialogTrigger,
 } from "../ui/Dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
+import ProfileTabs from "./tabs"
 
 type TabType = "posts" | "about" | "reports"
 
@@ -34,6 +36,17 @@ const Profile = ({
   const [reports, setReports] = useState<
     FoundPetReport[] | LostPetReport[] | null
   >(null)
+
+  const [isCurrentFollowed, setIsCurrentFollowed] = useState<
+    boolean | null | undefined
+  >(user.isCurrentFollowed)
+  const [fo, setFo] = useState<{
+    followerCount: number | undefined
+    followingCount: number | undefined
+  }>({
+    followerCount: user.followers?.length,
+    followingCount: user.following?.length,
+  })
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -61,29 +74,6 @@ const Profile = ({
     fetchReports()
   }, [])
 
-  const transformImage = (url: string) => {
-    const parts = url.split("/upload/")
-    const transformationString = "w_200,h_200,c_thumb,g_face,r_max,f_auto/"
-    return `${parts[0]}/upload/${transformationString}${parts[1]}`
-  }
-
-  const router = useRouter()
-
-  const handleLostPetReportClick = (reportId: string) => {
-    router.push(`/lostAndFound/losses/${reportId}`)
-  }
-
-  const handleFoundPetReportClick = (reportId: string) => {
-    router.push(`/lostAndFound/founds/${reportId}`)
-  }
-  const handleReportClick = (report: LostPetReport | FoundPetReport) => {
-    if ("lastSeenArea" in report) {
-      handleLostPetReportClick(report.id)
-    } else if ("foundArea" in report) {
-      handleFoundPetReportClick(report.id)
-    }
-  }
-
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">
@@ -100,7 +90,7 @@ const Profile = ({
             <div className="flex gap-8">
               <HeaderTitle className="text-left">{user.username}</HeaderTitle>
               {!isProfileOwner ? (
-                !user.isCurrentFollowed ? (
+                !isCurrentFollowed ? (
                   <Button
                     onClick={async () => {
                       await fetch("/api/user/follow", {
@@ -109,6 +99,13 @@ const Profile = ({
                           "Content-Type": "application/json",
                         },
                         body: JSON.stringify({ username: user.username }),
+                      }).then(() => {
+                        setIsCurrentFollowed(true)
+                        setFo((prev) => ({
+                          ...prev,
+                          followerCount:
+                            prev.followerCount && prev.followerCount + 1,
+                        }))
                       })
                     }}
                   >
@@ -123,6 +120,13 @@ const Profile = ({
                           "Content-Type": "application/json",
                         },
                         body: JSON.stringify({ username: user.username }),
+                      }).then(() => {
+                        setIsCurrentFollowed(false)
+                        setFo((prev) => ({
+                          ...prev,
+                          followerCount:
+                            prev.followerCount && prev.followerCount - 1,
+                        }))
                       })
                     }}
                     variant="outline"
@@ -151,7 +155,7 @@ const Profile = ({
                   variant="ghost"
                   disabled={!currentUser}
                 >
-                  {user.following?.length} Following
+                  {fo.followingCount} Following
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
@@ -194,6 +198,14 @@ const Profile = ({
                                   body: JSON.stringify({
                                     username: following.username,
                                   }),
+                                }).then(() => {
+                                  setIsCurrentFollowed(true)
+                                  setFo((prev) => ({
+                                    ...prev,
+                                    followerCount:
+                                      prev.followerCount &&
+                                      prev.followerCount + 1,
+                                  }))
                                 })
                               }}
                             >
@@ -212,6 +224,14 @@ const Profile = ({
                                   body: JSON.stringify({
                                     username: following.username,
                                   }),
+                                }).then(() => {
+                                  setIsCurrentFollowed(false)
+                                  setFo((prev) => ({
+                                    ...prev,
+                                    followerCount:
+                                      prev.followerCount &&
+                                      prev.followerCount - 1,
+                                  }))
                                 })
                               }}
                             >
@@ -235,7 +255,7 @@ const Profile = ({
                   variant="ghost"
                   disabled={!currentUser}
                 >
-                  {user.followers?.length} Follower
+                  {fo.followerCount} Follower
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px] max-h-[70vh] overflow-y-auto">
@@ -278,6 +298,14 @@ const Profile = ({
                                   body: JSON.stringify({
                                     username: follower.username,
                                   }),
+                                }).then(() => {
+                                  setIsCurrentFollowed(true)
+                                  setFo((prev) => ({
+                                    ...prev,
+                                    followerCount:
+                                      prev.followerCount &&
+                                      prev.followerCount + 1,
+                                  }))
                                 })
                               }}
                             >
@@ -296,6 +324,14 @@ const Profile = ({
                                   body: JSON.stringify({
                                     username: follower.username,
                                   }),
+                                }).then(() => {
+                                  setIsCurrentFollowed(false)
+                                  setFo((prev) => ({
+                                    ...prev,
+                                    followerCount:
+                                      prev.followerCount &&
+                                      prev.followerCount - 1,
+                                  }))
                                 })
                               }}
                             >
@@ -316,98 +352,7 @@ const Profile = ({
       </div>
 
       <div>
-        <Tabs defaultValue="posts" className="">
-          <TabsList className="bg-transparent w-full gap-8 h-18">
-            <TabsTrigger
-              value="posts"
-              className="text-base py-2 px-4 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-8 data-[state=active]:shadow-none"
-            >
-              Posts
-            </TabsTrigger>
-            <TabsTrigger
-              value="about"
-              className="text-base py-2 px-4 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-8 data-[state=active]:shadow-none"
-            >
-              About
-            </TabsTrigger>
-            <TabsTrigger
-              value="reports"
-              className="text-base py-2 px-4 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-8 data-[state=active]:shadow-none"
-            >
-              Reports
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="posts" className="w-full h-full pt-16">
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-              {Array.from({ length: 10 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="flex items-center space-x-4 bg-white rounded-xl p-2"
-                >
-                  <Image
-                    className="object-cover w-20 h-20 rounded-md"
-                    src={user?.image ? user.image : "/../../icon.png"}
-                    width={80}
-                    height={80}
-                    alt="Bordered avatar"
-                  />
-                  <div className="flex flex-col">
-                    <p className="text-lg font-semibold">Post title</p>
-                    <p className="text-sm text-gray-500">Post description</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-          <TabsContent value="about">Abount ??</TabsContent>
-
-          <TabsContent value="reports" className="w-full h-full pt-16">
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-              {reports == null
-                ? "No Reports Available"
-                : reports.map((report) => (
-                    <div
-                      key={report.id}
-                      className={
-                        report.isActive
-                          ? "flex flex-col items-center mb-5 mr-12 cursor-pointer"
-                          : "flex flex-col items-center mb-5 mr-12 cursor-pointer  bg-gray-500"
-                      }
-                      onClick={() => handleReportClick(report)}
-                    >
-                      <Image
-                        className="object-cover w-20 h-20 rounded-md"
-                        src={transformImage(report.imageUrl)}
-                        width={80}
-                        height={80}
-                        alt="Bordered avatar"
-                      />
-                      <div
-                        className={
-                          report.isActive
-                            ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer"
-                            : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"
-                        }
-                      >
-                        {report.isActive
-                          ? "Missing Pet "
-                          : "Pet has been found"}
-                      </div>
-                      <p className="mb-[10px]">
-                        {"foundArea" in report
-                          ? "Found Pet Report"
-                          : "Missing Pet Report"}
-                      </p>
-
-                      <p className="mb-[10px]">{report.petName}</p>
-                      <p className="mb-[10px]">{report.animalType}</p>
-                      <p className="mb-[10px]"> {report.animalBreed} </p>
-                    </div>
-                  ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+        <ProfileTabs reports={reports} user={user} />
       </div>
     </div>
   )

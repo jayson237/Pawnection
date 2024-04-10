@@ -54,6 +54,7 @@ export async function GET(req: Request) {
       type,
       seachTerm || "",
       following || "false",
+      currentUser,
     )
     return NextResponse.json(posts, { status: 200 })
   } catch (error) {

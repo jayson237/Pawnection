@@ -25,9 +25,9 @@ export async function getAllPosts(
   type: string | null,
   searchTerm: string,
   following: string,
+  currentUser: SafeUser,
 ): Promise<ExtendedPost[] | null> {
   try {
-    const currentUser = await getCurrentUser()
     let cursorCondition = {}
     if (cursorId) {
       cursorCondition = {

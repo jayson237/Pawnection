@@ -49,6 +49,8 @@ const PostItem = ({
     isLiked: isLiked,
     likes_count: post.likes_count,
   })
+  const [commentCount, setCommentCount] = useState(post.comments_count)
+
   const [dialogState, setDialogState] = useState({
     comment: false,
     like: false,
@@ -374,6 +376,8 @@ const PostItem = ({
         ) : (
           <>
             <CommentDialog
+              commentCount={commentCount}
+              setCommentCount={setCommentCount}
               isOpen={dialogState.comment}
               setOpen={() => {
                 setDialogState((prev) => ({

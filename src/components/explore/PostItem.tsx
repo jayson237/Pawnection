@@ -300,7 +300,7 @@ const PostItem = ({
             />
           ) : (
             <Heart
-              className="w-6 h-6 fill-red-400 text-red-400 hover:cursor-pointer"
+              className="w-6 h-6 fill-red-400 text-red-400 hover:cursor-pointer hover:fill-white"
               onClick={handleDislike}
             />
           )}
@@ -313,6 +313,7 @@ const PostItem = ({
         </div>
 
         <LikeDialog
+          likes_count={like.likes_count}
           post={post}
           isOpen={dialogState.like}
           setOpen={() => {

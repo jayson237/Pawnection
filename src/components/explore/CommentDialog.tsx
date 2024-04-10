@@ -59,13 +59,13 @@ function CommentDialog({
     })
     const msg = await set.json()
     if (!set.ok) {
-      setCommentCount((prev) => prev + 1)
       toast({
         variant: "destructive",
         title: "Failed to comment",
         description: msg.message,
       })
     } else {
+      setCommentCount((prev) => prev + 1)
       mutate()
       if (dialogRef.current) {
         dialogRef.current.scrollTo(0, 0)

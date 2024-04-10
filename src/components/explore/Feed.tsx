@@ -134,13 +134,6 @@ const Feed = ({
         <PostItem
           post={post}
           isLiked={isLiked}
-          mutate={mutate}
-          api={
-            searchParams.type === "users"
-              ? "/api/user"
-              : "/api/explore/post" +
-                (searchParams.q ? `?q=${searchParams.q}` : "")
-          }
           isOwnProfile={isOwnProfile}
           isCurrentFollowed={
             currentUser?.followingUsers?.some(

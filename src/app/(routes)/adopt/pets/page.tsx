@@ -6,6 +6,7 @@ import { notFound } from "next/navigation"
 import React from "react"
 
 import { Label } from "../../../../components/ui/Label"
+import { cn } from "../../../../lib/utils"
 
 export default async function AdoptViewAllPetsPage() {
   const adoptablePets = await getAllAdoptablePets()
@@ -25,7 +26,10 @@ export default async function AdoptViewAllPetsPage() {
           <Link
             href={"/adopt/process/" + pet.id}
             key={pet.id}
-            className="bg-white rounded-lg shadow-md"
+            className={cn(
+              "bg-white rounded-lg shadow-md",
+              pet.status === "Adopted" && "opacity-80",
+            )}
           >
             <Image
               width={200}

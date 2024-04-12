@@ -18,6 +18,9 @@ export const getAllAdoptablePets = async () => {
         },
         adoptionRequests: true,
       },
+      orderBy: {
+        status: "desc",
+      },
     })
     return adoptablePets
   } catch (error) {
@@ -67,6 +70,9 @@ export const getAllOwnAdpotRequests = async () => {
       },
       include: {
         adoptablePet: true,
+      },
+      orderBy: {
+        request_status: "desc",
       },
     })
 

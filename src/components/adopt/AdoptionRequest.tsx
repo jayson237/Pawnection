@@ -27,9 +27,11 @@ import { Textarea } from "../ui/TextArea"
 function AdoptPetForm({
   currentUser,
   adoptablePet,
+  isCurrentAdopt,
 }: {
   currentUser: SafeUser
   adoptablePet: AdoptablePet
+  isCurrentAdopt: boolean
 }) {
   const router = useRouter()
   const form = useForm<CreateAdoptRequestPayloadType>({
@@ -180,13 +182,14 @@ function AdoptPetForm({
           type="submit"
           className="w-full"
           disabled={
+            isCurrentAdopt ||
             form.formState.isLoading ||
             !form.formState.isDirty ||
             Object.values(form.formState.errors).filter((e) => e !== undefined)
               .length > 0
           }
         >
-          Send Request
+          {isCurrentAdopt ? "You have send request" : "Send request"}
         </Button>
       </form>
     </Form>

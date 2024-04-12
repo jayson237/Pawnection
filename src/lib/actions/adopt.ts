@@ -39,15 +39,20 @@ export const getOneAdoptablePets = async (id: string) => {
       where: {
         id: id,
       },
-      take: 20,
       include: {
         adoptionCentre: {
           select: {
             username: true,
           },
         },
+        adoptionRequests: {
+          where: {
+            userId: currentUser.id,
+          },
+        },
       },
     })
+
     return adoptablePet
   } catch (error) {
     console.log(error)

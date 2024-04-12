@@ -33,6 +33,20 @@ export const POST = async (
     if (find?.status == "Adopted") {
       throw new Error("Pet has been adopted.")
     }
+    const isCurrentAdopt = await prisma.adoptionRequest.findFirst({
+      where: {
+        id: params.id,
+        userId: currentUser.id,
+      },
+    })
+    if (isCurrentAdopt) {
+      return NextResponse.json(
+        {
+          message: "You have adopt this pet",
+        },
+        { status: 200 },
+      )
+    }
 
     await prisma.adoptionRequest.create({
       data: {

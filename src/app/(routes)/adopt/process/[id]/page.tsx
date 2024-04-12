@@ -16,7 +16,7 @@ export default async function AdoptProcessPage({
   const currentUser = await getCurrentUser()
   const adoptablePet = await getOneAdoptablePets(params.id)
 
-  if (!adoptablePet || !currentUser) {
+  if (!adoptablePet || !currentUser || adoptablePet.status === "Adopted") {
     return notFound()
   }
 

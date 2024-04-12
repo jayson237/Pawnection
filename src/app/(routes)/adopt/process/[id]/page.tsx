@@ -80,7 +80,7 @@ export default async function AdoptProcessPage({
             <AdoptPetForm
               currentUser={currentUser}
               adoptablePet={adoptablePet}
-              isCurrentAdopt={isCurrentAdopt}
+              isCurrentAdopt={isCurrentAdopt as boolean}
             />
           </div>
         </div>

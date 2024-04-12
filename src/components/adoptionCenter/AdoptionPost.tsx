@@ -9,6 +9,7 @@ import React, { useCallback, useState } from "react"
 import { FileRejection, useDropzone } from "react-dropzone"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
+import { cn } from "../../lib/utils"
 import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
@@ -41,8 +42,11 @@ function AdoptionPost() {
       age: parseInt("0"),
       gender: "",
       description: "",
+      imageUrl: "",
     },
   })
+
+  console.log(watch())
 
   const onSubmit: SubmitHandler<CreateAdoptablePetPayloadType> = async (
     data,
@@ -164,8 +168,8 @@ function AdoptionPost() {
                   // height={0}
                   // sizes="100vw"
                   // className="h-auto w-auto mx-auto mb-4"
-                  width={400} 
-                  height={400} 
+                  width={400}
+                  height={400}
                   className="mx-auto mb-4"
                 />
               ) : (
@@ -197,7 +201,13 @@ function AdoptionPost() {
                   ) : (
                     <div className="my-4 flex cursor-pointer flex-row items-center justify-center">
                       <Paperclip className="mr-1 mt-[1px] h-3 w-3" />
-                      <p className="text-decoration: text-xsm font-semibold underline underline-offset-2">
+                      <p
+                        className={cn(
+                          "text-decoration: text-xsm font-semibold underline underline-offset-2",
+                          "aria-[required]:after:ml-1 aria-[required]:after:content-['*'] aria-[required]:after:text-red-500",
+                        )}
+                        aria-required="true"
+                      >
                         Upload by clicking or dropping an image
                       </p>
                     </div>
@@ -218,7 +228,9 @@ function AdoptionPost() {
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="space-y-1 max-lg:space-y-0">
-                  <Label htmlFor="name">Pet Name</Label>
+                  <Label htmlFor="name" aria-required="true">
+                    Pet Name
+                  </Label>
                   <Input
                     id="name"
                     type="text"
@@ -230,7 +242,9 @@ function AdoptionPost() {
                 </div>
                 <div className="flex gap-6">
                   <div className="space-y-1 max-lg:space-y-0">
-                    <Label htmlFor="type">Pet Type</Label>
+                    <Label htmlFor="type" aria-required="true">
+                      Pet Type
+                    </Label>
                     <Select
                       onValueChange={(val) => {
                         setValue("type", val)
@@ -253,7 +267,9 @@ function AdoptionPost() {
                     </Select>
                   </div>
                   <div className="space-y-1 max-lg:space-y-0">
-                    <Label htmlFor="gender">Pet Gender</Label>
+                    <Label htmlFor="gender" aria-required="true">
+                      Pet Gender
+                    </Label>
                     <RadioGroup
                       onValueChange={(val) => {
                         setValue("gender", val)
@@ -272,18 +288,23 @@ function AdoptionPost() {
                   </div>
                 </div>
                 <div className="space-y-1 max-lg:space-y-0">
-                  <Label htmlFor="age">Age</Label>
+                  <Label htmlFor="age" aria-required="true">
+                    Age
+                  </Label>
                   <Input
                     id="age"
                     type="number"
                     disabled={isLoading}
+                    min={0}
                     {...register("age", { required: true })}
                     errors={errors}
                     placeholder="Enter pet's age"
                   />
                 </div>
                 <div className="space-y-1 max-lg:space-y-0">
-                  <Label htmlFor="breed">Breed</Label>
+                  <Label htmlFor="breed" aria-required="true">
+                    Breed
+                  </Label>
                   <Input
                     id="breed"
                     type="text"
@@ -294,7 +315,9 @@ function AdoptionPost() {
                   />
                 </div>
                 <div className="space-y-1 max-lg:space-y-0">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description" aria-required="true">
+                    Description
+                  </Label>
                   <Input
                     id="description"
                     type="text"
@@ -313,8 +336,7 @@ function AdoptionPost() {
                     !isValid ||
                     watch("imageUrl") === "" ||
                     Object.values(errors).filter((e) => e !== undefined)
-                      .length > 0 ||
-                    watch("imageUrl") === ""
+                      .length > 0
                   }
                 >
                   Submit

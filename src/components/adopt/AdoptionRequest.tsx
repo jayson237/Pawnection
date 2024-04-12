@@ -2,7 +2,11 @@
 
 import { toast } from "@/hooks/useToast"
 import { SafeUser } from "@/types"
-import { CreateAdoptRequestPayloadType } from "@/types/adopt"
+import {
+  CreateAdoptRequestPayloadType,
+  CreateAdoptRequestSchema,
+} from "@/types/adopt"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { AdoptablePet } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import React from "react"
@@ -29,6 +33,7 @@ function AdoptPetForm({
 }) {
   const router = useRouter()
   const form = useForm<CreateAdoptRequestPayloadType>({
+    resolver: zodResolver(CreateAdoptRequestSchema),
     defaultValues: {
       message: "",
       request_status: "",
@@ -74,6 +79,8 @@ function AdoptPetForm({
     }
   }
 
+  console.log(form.formState.errors)
+
   return (
     <Form {...form}>
       <form className="space-y-6 pt-6" onSubmit={form.handleSubmit(onSubmit)}>
@@ -82,9 +89,9 @@ function AdoptPetForm({
           name="full_name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel aria-required="true">Full Name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Enter your full name" />
+                <Input {...field} placeholder="Enter your full name" required />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -95,9 +102,14 @@ function AdoptPetForm({
           name="age"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Age</FormLabel>
+              <FormLabel aria-required="true">Age</FormLabel>
               <FormControl>
-                <Input {...field} type="number" placeholder="Enter your age" />
+                <Input
+                  {...field}
+                  type="number"
+                  placeholder="Enter your age"
+                  required
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -108,9 +120,13 @@ function AdoptPetForm({
           name="phone_number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Contact Information</FormLabel>
+              <FormLabel aria-required="true">Contact Information</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Enter your phone number" />
+                <Input
+                  {...field}
+                  placeholder="Enter your phone number"
+                  required
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -121,9 +137,9 @@ function AdoptPetForm({
           name="address"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Residential Address</FormLabel>
+              <FormLabel aria-required="true">Residential Address</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Enter your address" />
+                <Input {...field} placeholder="Enter your address" required />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -134,9 +150,9 @@ function AdoptPetForm({
           name="pet_experience"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Pet Experiences</FormLabel>
+              <FormLabel aria-required="true">Pet Experiences</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Pet experiences" />
+                <Input {...field} placeholder="Pet experiences" required />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -147,11 +163,12 @@ function AdoptPetForm({
           name="lifestyle_details"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Lifestyle Details</FormLabel>
+              <FormLabel aria-required="true">Lifestyle Details</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
                   placeholder="Describe your lifestyle details"
+                  required
                 />
               </FormControl>
               <FormMessage />
@@ -162,7 +179,12 @@ function AdoptPetForm({
         <Button
           type="submit"
           className="w-full"
-          disabled={form.formState.isLoading || !form.formState.isDirty}
+          disabled={
+            form.formState.isLoading ||
+            !form.formState.isDirty ||
+            Object.values(form.formState.errors).filter((e) => e !== undefined)
+              .length > 0
+          }
         >
           Send Request
         </Button>

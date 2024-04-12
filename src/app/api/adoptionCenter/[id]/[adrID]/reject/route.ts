@@ -49,7 +49,7 @@ export async function POST(
 
     const post = await rejectAdoptionRequest(params.id, params.adrID)
     return NextResponse.json(
-      { message: "Post created successfully", post },
+      { message: "Pet request has been rejected", post },
       { status: 200 },
     )
   } catch (error) {

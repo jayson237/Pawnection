@@ -59,13 +59,15 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 >
                   Lost & Found
                 </Link>
-                <Link
-                  prefetch={false}
-                  href="/adopt"
-                  className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
-                >
-                  Adopt
-                </Link>
+                {currentUser?.type !== "PetAdoptionCentre" && (
+                  <Link
+                    prefetch={false}
+                    href="/adopt"
+                    className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
+                  >
+                    Adopt
+                  </Link>
+                )}
                 <Link
                   prefetch={false}
                   href="/explore"
@@ -246,14 +248,15 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    prefetch={false}
-                    href="/adopt"
-                    onClick={toggleMenu}
-                    className="text-primary text-sm font-medium hover:bg-main/70 py-2 px-4 rounded-md ease-in-out duration-200"
-                  >
-                    Adopt
-                  </Link>
+                  {currentUser?.type !== "PetAdoptionCentre" && (
+                    <Link
+                      prefetch={false}
+                      href="/adopt"
+                      className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
+                    >
+                      Adopt
+                    </Link>
+                  )}
                 </li>
                 <li>
                   <Link

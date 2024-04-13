@@ -19,7 +19,12 @@ export default async function AdoptProcessPage({
   const isCurrentAdopt =
     adoptablePet && adoptablePet?.adoptionRequests.length > 0
 
-  if (!adoptablePet || !currentUser || adoptablePet.status === "Adopted") {
+  if (
+    !adoptablePet ||
+    !currentUser ||
+    adoptablePet.status === "Adopted" ||
+    currentUser.type === "PetAdoptionCentre"
+  ) {
     return notFound()
   }
 

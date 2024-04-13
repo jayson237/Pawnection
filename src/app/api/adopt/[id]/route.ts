@@ -13,7 +13,7 @@ export const POST = async (
 ) => {
   try {
     const currentUser = await getCurrentUser()
-    if (!currentUser) {
+    if (!currentUser || currentUser.type === "PetAdoptionCentre") {
       return NextResponse.json(
         {
           message: "Unauthorized",

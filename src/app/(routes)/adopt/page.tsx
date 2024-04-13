@@ -6,11 +6,16 @@ import { getCurrentUser } from "@/lib/actions/user"
 import { cn } from "@/lib/utils"
 import { PetGender } from "@/types"
 import Link from "next/link"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 
 export default async function Adopt() {
   const currentUser = await getCurrentUser()
-  if (!currentUser?.type) redirect("/auth/type")
+  if (!currentUser?.type) {
+    redirect("/auth/type")
+  }
+  if (currentUser?.type === "PetAdoptionCentre") {
+    redirect(notFound())
+  }
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">

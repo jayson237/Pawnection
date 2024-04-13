@@ -5,7 +5,7 @@ import { getCurrentUser } from "./user"
 export const getAllAdoptablePets = async () => {
   try {
     const currentUser = await getCurrentUser()
-    if (!currentUser) {
+    if (!currentUser || currentUser.type === "PetAdoptionCentre") {
       return null
     }
     const adoptablePets = await prisma.adoptablePet.findMany({
@@ -63,7 +63,7 @@ export const getOneAdoptablePets = async (id: string) => {
 export const getAllOwnAdpotRequests = async () => {
   try {
     const currentUser = await getCurrentUser()
-    if (!currentUser) {
+    if (!currentUser || currentUser.type === "PetAdoptionCentre") {
       return null
     }
 

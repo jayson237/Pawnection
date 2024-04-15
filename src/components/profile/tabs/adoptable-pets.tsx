@@ -1,13 +1,13 @@
 "use client"
 
+import { fetcher } from "@/lib/utils"
+import { SafeUser } from "@/types"
 import { AdoptablePet } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 import useSWR from "swr"
 
-import { fetcher } from "../../../lib/utils"
-import { SafeUser } from "../../../types"
 import Loading from "../../Loading"
 import { Label } from "../../ui/Label"
 import { TabsContent } from "../../ui/Tabs"
@@ -21,14 +21,24 @@ function ProfileAdoptablePetsTab({ user }: ProfileAdoptablePetsTabInterface) {
     `/api/adoptionCenter/by/${user.id}`,
     fetcher,
   )
-  console.log("udin")
+
+  if (isLoading) {
+    return (
+      <TabsContent value="adoptablepets">
+        <div className="flex justify-center py-4">
+          <Loading />
+        </div>
+      </TabsContent>
+    )
+  }
+
+  const pets = adoptablePets?.data ?? []
 
   return (
     <TabsContent value="adoptablepets">
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 w-full">
-        {adoptablePets &&
-          adoptablePets.data.length > 0 &&
-          adoptablePets.data.map((pet) => (
+        {pets.length > 0 ? (
+          pets.map((pet) => (
             <Link
               href={"/adopt/process/" + pet.id}
               key={pet.id}
@@ -52,18 +62,11 @@ function ProfileAdoptablePetsTab({ user }: ProfileAdoptablePetsTabInterface) {
                 )}
               </div>
             </Link>
-          ))}
-      </div>
-
-      {isLoading ? (
-        <div className="flex justify-center py-4">
-          <Loading />
-        </div>
-      ) : (
-        adoptablePets?.data.length === 0 && (
+          ))
+        ) : (
           <p className="py-4 text-center">No results found</p>
-        )
-      )}
+        )}
+      </div>
     </TabsContent>
   )
 }

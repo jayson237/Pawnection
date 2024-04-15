@@ -56,7 +56,17 @@ export async function GET(req: Request) {
       following || "false",
       currentUser,
     )
-    return NextResponse.json(posts, { status: 200 })
+    return NextResponse.json(
+      {
+        data: posts,
+        meta: {
+          hasMore:
+            posts && posts.length > 0 && posts[posts?.length - 1].id !== cursor,
+          cursor: posts && posts.length > 0 ? posts[posts?.length - 1].id : "",
+        },
+      },
+      { status: 200 },
+    )
   } catch (error) {
     console.log(error)
     return NextResponse.json({ message: "An error occurred" }, { status: 500 })

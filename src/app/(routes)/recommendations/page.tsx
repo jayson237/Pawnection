@@ -76,7 +76,7 @@ export default async function Recommendation() {
 
   return (
     <section>
-      <div className="pb-4 bg-gradient-to-b from-subAccent to-mainAccent ">
+      <div className="py-6 bg-gradient-to-b from-subAccent to-mainAccent ">
         <div className="space-y-6 flex flex-col items-center justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
           <div className="flex items-center justify-center">
             <Image

@@ -81,8 +81,6 @@ function AdoptPetForm({
     }
   }
 
-  console.log(form.formState.errors)
-
   return (
     <Form {...form}>
       <form className="space-y-6 pt-6" onSubmit={form.handleSubmit(onSubmit)}>

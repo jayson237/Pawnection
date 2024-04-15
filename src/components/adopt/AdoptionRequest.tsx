@@ -8,10 +8,11 @@ import {
 } from "@/types/adopt"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AdoptablePet } from "@prisma/client"
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import React from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 
+import { revalPath } from "../../lib/revalidate"
 import { Button } from "../ui/Button"
 import {
   Form,
@@ -77,6 +78,7 @@ function AdoptPetForm({
         title: "Adopt request sent!",
         description: "Adoption center will contact you soon!",
       })
+      await revalPath("/adopt/requests")
       router.push("/adopt/requests")
     }
   }

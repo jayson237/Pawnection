@@ -1,6 +1,6 @@
 "use client"
-import Image from 'next/image';
-import { useEffect } from "react"; //image preview
+import Image from "next/image"
+import { useEffect } from "react"
 import { useToast } from "@/hooks/useToast"
 import { FormEvent, useState } from "react"
 
@@ -35,27 +35,26 @@ const FoundPetReportDialog = ({
   isOpen,
   onClose,
 }: FoundPetReportDialogProps) => {
-  //pet image preview
-  const [petImagePreview, setPetImagePreview] = useState<string | null>(null);
+  const [petImagePreview, setPetImagePreview] = useState<string | null>(null)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-    setPetImage(file); // You are correctly setting the selected file here
+    const file = e.target.files ? e.target.files[0] : null
+    setPetImage(file)
     if (file) {
-        const previewUrl = URL.createObjectURL(file);
-        setPetImagePreview(previewUrl); // And correctly setting the preview URL here
+        const previewUrl = URL.createObjectURL(file)
+        setPetImagePreview(previewUrl) 
     } else {
-        setPetImagePreview(null); // Clearing the preview if no file is selected
+        setPetImagePreview(null)
     }
-};
+}
   
   useEffect(() => {
     // Clean up the URL object to avoid memory leaks
     return () => {
       if (petImagePreview) {
-        URL.revokeObjectURL(petImagePreview);
+        URL.revokeObjectURL(petImagePreview)
       }
-    };
-  }, [petImagePreview]);//end pet image preview
+    }
+  }, [petImagePreview])
   const [animalType, setAnimalType] = useState("")
   const [name, setName] = useState("")
   const [breed, setBreed] = useState("")
@@ -79,7 +78,7 @@ const FoundPetReportDialog = ({
     foundDate: "",
     contactDetails: "",
     petImage: ""
-  });
+  })
 
   const validateForm = () => {
     const newErrors = {
@@ -93,14 +92,14 @@ const FoundPetReportDialog = ({
       foundDate: !foundDate ? "Date found is required" : "",
       contactDetails: !contactDetails ? "Contact details are required" : "",
       petImage: !petImage ? "Pet image is required" : ""
-    };
-    setErrors(newErrors);
-    return Object.values(newErrors).every(error => !error);
-  };
+    }
+    setErrors(newErrors)
+    return Object.values(newErrors).every(error => !error)
+  }
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!validateForm()) return;
+    event.preventDefault()
+    if (!validateForm()) return
     setIsLoading(true)
     const sign = await fetch("/api/cloudinary/cdn-sign?type=post")
     const data = await sign.json()
@@ -154,7 +153,7 @@ const FoundPetReportDialog = ({
     }
   }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <Dialog open={isOpen} onOpenChange={(isOpen) => (isOpen ? null : onClose())}>
@@ -290,7 +289,7 @@ const FoundPetReportDialog = ({
         </DialogContent>
       </DialogPortal>
     </Dialog>
-  );  
+  )
 }
 
-export default FoundPetReportDialog;
+export default FoundPetReportDialog

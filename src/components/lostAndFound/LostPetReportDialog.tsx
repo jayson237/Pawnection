@@ -1,15 +1,15 @@
-import Image from 'next/image';
-import { useToast } from "@/hooks/useToast";
-import { FormEvent, useState, useEffect } from "react";
+import Image from "next/image"
+import { useToast } from "@/hooks/useToast"
+import { FormEvent, useState, useEffect } from "react"
 
-import { Button } from "../ui/Button";
-import { Dialog, DialogContent, DialogOverlay, DialogPortal, DialogTitle } from "../ui/Dialog";
-import { Input } from "../ui/Input";
-import { Label } from "../ui/Label";
-import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/Select";
-import { Textarea } from "../ui/TextArea";
-import { DatePicker } from "../ui/DatePicker";
+import { Button } from "../ui/Button"
+import { Dialog, DialogContent, DialogOverlay, DialogPortal, DialogTitle } from "../ui/Dialog"
+import { Input } from "../ui/Input"
+import { Label } from "../ui/Label"
+import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/Select"
+import { Textarea } from "../ui/TextArea"
+import { DatePicker } from "../ui/DatePicker"
 
 interface LostPetReportDialogProps {
   isOpen: boolean;
@@ -17,42 +17,42 @@ interface LostPetReportDialogProps {
 }
 
 const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
-  const [animalType, setAnimalType] = useState("");
-  const [name, setName] = useState("");
-  const [sex, setSex] = useState("");
-  const [breed, setBreed] = useState("");
-  const [message, setMessage] = useState("");
-  const [description, setDescription] = useState("");
-  const [lastSeenArea, setLastSeenArea] = useState("");
-  const [lastSeenDate, setLastSeenDate] = useState(new Date());
-  const [contactDetails, setContactDetails] = useState("");
-  const [petImage, setPetImage] = useState<File | null>(null);
-  const [petImagePreview, setPetImagePreview] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const [animalType, setAnimalType] = useState("")
+  const [name, setName] = useState("")
+  const [sex, setSex] = useState("")
+  const [breed, setBreed] = useState("")
+  const [message, setMessage] = useState("")
+  const [description, setDescription] = useState("")
+  const [lastSeenArea, setLastSeenArea] = useState("")
+  const [lastSeenDate, setLastSeenDate] = useState(new Date())
+  const [contactDetails, setContactDetails] = useState("")
+  const [petImage, setPetImage] = useState<File | null>(null)
+  const [petImagePreview, setPetImagePreview] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-    setPetImage(file);
+    const file = e.target.files ? e.target.files[0] : null
+    setPetImage(file)
     if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setPetImagePreview(previewUrl);
+      const previewUrl = URL.createObjectURL(file)
+      setPetImagePreview(previewUrl)
     } else {
-      setPetImagePreview(null);
+      setPetImagePreview(null)
     }
-  };
+  }
 
   useEffect(() => {
     return () => {
       if (petImagePreview) {
-        URL.revokeObjectURL(petImagePreview);
+        URL.revokeObjectURL(petImagePreview)
       }
-    };
-  }, [petImagePreview]);
+    }
+  }, [petImagePreview])
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsLoading(true);
+    event.preventDefault()
+    setIsLoading(true)
     const sign = await fetch("/api/cloudinary/cdn-sign?type=post")
     const data = await sign.json()
     const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${data.cloudname}/auto/upload`
@@ -91,7 +91,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
         })
 
         if (!response.ok) {
-          throw new Error("Failed to create Missing Pet Report. Please try again.");
+          throw new Error("Failed to create Missing Pet Report. Please try again.")
         } else {
           setIsLoading(false)
           toast({
@@ -104,7 +104,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
     }
   }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
   return (
     <Dialog open={isOpen} onOpenChange={(isOpen) => (isOpen ? null : onClose())}>
       <DialogPortal>
@@ -234,7 +234,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
               </Label>
 
               <div className="flex justify-center w-full">
-                <Button type="submit" className={isLoading ? 'loading' : ''}>
+                <Button type="submit" className={isLoading ? "loading" : ""}>
                   {isLoading ? "Loading..." : "Submit"}
                 </Button>
               </div>
@@ -243,7 +243,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
         </DialogContent>
       </DialogPortal>
     </Dialog>
-  );
+  )
 }
 
-export default LostPetReportDialog;
+export default LostPetReportDialog

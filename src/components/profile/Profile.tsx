@@ -24,6 +24,8 @@ import {
   DialogTrigger,
 } from "../ui/Dialog"
 import ProfileTabs from "./tabs/ProfileTab"
+import { useRouter } from "next/navigation"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
 
 const Profile = ({
   user,
@@ -39,7 +41,6 @@ const Profile = ({
   >(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [reportActivity, setReportActivity] = useState<null | boolean>(null)
-
   const [isCurrentFollowed, setIsCurrentFollowed] = useState<
     boolean | null | undefined
   >(user.isCurrentFollowed)

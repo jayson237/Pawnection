@@ -1,21 +1,13 @@
-import { getSpecifiedUser } from "@/lib/actions/user";
+import { getSpecifiedUser } from "@/lib/actions/user"
 import { NextResponse } from "next/server"
 import prisma from "@/lib/prismadb"
 
 
-export async function GET(request: Request) {
+export async function GET(request: Request){
 
     try {
       const { searchParams } = new URL(request.url)
-      const creatorId = searchParams.get("id") as string
-      console.log("creatorId at api: ", creatorId)
-      
-      // const url = new URL(request.url)
-      // const creatorId = url.searchParams.get("id");
-
-      //   const data = await request.json()
-
-        // const assuredId: string = creatorId!;
+      const creatorId = searchParams.get("id") as string      
 
         const user = await prisma.user.findUnique({
             where : {
@@ -24,7 +16,7 @@ export async function GET(request: Request) {
           })
         
         if (!user) {
-          return null
+          return NextResponse.json(null)
         }
 
         const { hashedPassword, ...rest } = user
@@ -38,7 +30,7 @@ export async function GET(request: Request) {
  
     } catch (error) {
       console.log("error at api: ", error)
-        return error;
+        return NextResponse.json(error)
     }
 } 
   

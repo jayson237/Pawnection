@@ -76,8 +76,8 @@ const Profile = ({
 
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
-      <div className="py-[60px]">
-        <div className="grid grid-cols-6">
+      <div className="flex flex-col items-center">
+        <div className="flex items-center gap-10 py-[60px]">
           <Image
             className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
             src={user?.image ? user.image : "/../../icon.png"}
@@ -136,7 +136,7 @@ const Profile = ({
                 )
               ) : null}
               {isProfileOwner && (
-                <Button>
+                <Button className="md:px-4 px-2">
                   <Link href="/settings">Edit profile</Link>
                 </Button>
               )}
@@ -349,10 +349,10 @@ const Profile = ({
             </Dialog>
           </div>
         </div>
-      </div>
 
-      <div>
-        <ProfileTabs reports={reports} user={user} />
+        <div>
+          <ProfileTabs reports={reports} user={user} />
+        </div>
       </div>
     </div>
   )

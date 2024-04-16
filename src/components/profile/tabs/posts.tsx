@@ -23,7 +23,7 @@ function ProfilePostsTab({ user }: ProfilePostsTabInterface) {
 
   return (
     <TabsContent value="posts" className="w-full h-full pt-16">
-      <div className="w-full max-w-xl mx-auto">
+      <div className="w-full max-w-xl mx-auto space-y-6">
         {posts && posts.data.length > 0
           ? posts?.data.map((post, i) => {
               return (

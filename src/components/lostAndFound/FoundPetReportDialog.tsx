@@ -6,6 +6,7 @@ import { FormEvent, useState } from "react"
 
 import { Button } from "../ui/Button"
 import { Calendar } from "../ui/Calendar"
+import { DatePicker } from "../ui/DatePicker"
 import {
   Dialog,
   DialogContent,
@@ -24,7 +25,6 @@ import {
   SelectValue,
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
-import { DatePicker } from "../ui/DatePicker"
 
 interface FoundPetReportDialogProps {
   isOpen: boolean
@@ -269,13 +269,6 @@ const FoundPetReportDialog = ({
   
             <div className=" ">
               <div> Found Date </div>
-              {/* <Calendar
-                mode="single"
-                selected={foundDate}
-                onSelect={setFoundDate}
-                className="rounded-md border shadow flex justify-center"
-                disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-              /> */}
               <DatePicker date={foundDate} setDate={setFoundDate} />
             </div>
   

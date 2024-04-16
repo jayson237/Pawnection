@@ -18,13 +18,23 @@ async function acceptAdoptionRequest(
     }
     await prisma.adoptablePet.update({
       data: {
-        status: AdoptablePetStatus.Adopting,
+        status: AdoptablePetStatus.Adopted,
       },
       where: {
         id: adoptablePetID,
       },
     })
-
+    await prisma.adoptionRequest.updateMany({
+      data: {
+        request_status: AdoptRequestStatus.Rejected,
+      },
+      where: {
+        adoptablePetId: adoptablePetID,
+        id: {
+          not: adoptionRequestID,
+        },
+      },
+    })
     await prisma.adoptionRequest.update({
       data: {
         request_status: AdoptRequestStatus.Approved,
@@ -57,7 +67,7 @@ export async function POST(
 
     const post = await acceptAdoptionRequest(params.id, params.adrID)
     return NextResponse.json(
-      { message: "Post created successfully", post },
+      { message: "Pet request has been accepted", post },
       { status: 200 },
     )
   } catch (error) {

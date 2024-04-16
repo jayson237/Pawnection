@@ -34,7 +34,7 @@ const WelcomeSection: React.FC = () => {
             height={400}
             src="/static/images/dog_left.webp"
             alt="Pawnection hero image"
-            className="w-full ml-2"
+            className="w-full"
           />
         </div>
       </div>

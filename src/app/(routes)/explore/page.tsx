@@ -1,28 +1,5 @@
-import Feed from "@/components/explore/Feed"
-import SearchBar from "@/components/explore/SearchBar"
-import { getCurrentUser } from "@/lib/actions/user"
 import { redirect } from "next/navigation"
 
-export default async function Explore({
-  searchParams,
-}: {
-  searchParams: {
-    q: string
-    type: "post" | "users" | "petSitting"
-    following: string
-  }
-}) {
-  const currUser = await getCurrentUser()
-  if (!currUser) redirect("/auth")
-
-  return (
-    <div className="flex justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
-      <div className="py-[40px]">
-        <div className="flex flex-col space-x-4 space-y-4">
-          <SearchBar />
-          <Feed currentUser={currUser} searchParams={searchParams} />
-        </div>
-      </div>
-    </div>
-  )
+export default async function Explore() {
+  redirect("/explore/post")
 }

@@ -16,7 +16,15 @@ export default async function AdoptProcessPage({
   const currentUser = await getCurrentUser()
   const adoptablePet = await getOneAdoptablePets(params.id)
 
-  if (!adoptablePet || !currentUser) {
+  const isCurrentAdopt =
+    adoptablePet && adoptablePet?.adoptionRequests.length > 0
+
+  if (
+    !adoptablePet ||
+    !currentUser ||
+    adoptablePet.status === "Adopted" ||
+    currentUser.type === "PetAdoptionCentre"
+  ) {
     return notFound()
   }
 
@@ -77,6 +85,7 @@ export default async function AdoptProcessPage({
             <AdoptPetForm
               currentUser={currentUser}
               adoptablePet={adoptablePet}
+              isCurrentAdopt={isCurrentAdopt as boolean}
             />
           </div>
         </div>

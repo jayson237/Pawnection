@@ -9,6 +9,7 @@ import React, { useCallback, useState } from "react"
 import { FileRejection, useDropzone } from "react-dropzone"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
+import { cn } from "../../lib/utils"
 import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
@@ -41,6 +42,7 @@ function AdoptionPost() {
       age: parseInt("0"),
       gender: "",
       description: "",
+      imageUrl: "",
     },
   })
 
@@ -151,57 +153,65 @@ function AdoptionPost() {
   }
 
   return (
-    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-7 flex flex-col max-sm:flex-col">
+    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-7 items-center">
       <div className="py-[60px]">
-        <div className="grid grid-cols-2">
-          <div className="place-content-end py-3">
-            {selectedImage ? (
-              <Image
-                src={`${URL.createObjectURL(selectedImage)}`}
-                alt=""
-                width={0}
-                height={0}
-                sizes="100vw"
-                className="h-auto w-auto mx-auto mb-4"
-              />
-            ) : (
-              <Image
-                src="/static/images/dog_left.webp"
-                alt="hura"
-                width={604}
-                height={400}
-              />
-            )}
+        <div className="md:grid grid-cols-1 md:grid-cols-3">
+          <div className="flex flex-col justify-end py-3 col-span-1 pr-3">
+            <div className="">
+              {selectedImage ? (
+                <Image
+                  src={`${URL.createObjectURL(selectedImage)}`}
+                  alt=""
+                  width={400}
+                  height={400}
+                  className="mx-auto mb-4"
+                />
+              ) : (
+                <Image
+                  src="/static/images/dog_left.webp"
+                  alt="hura"
+                  width={604}
+                  height={400}
+                  className="w-7/8 md:w-full justify-self-center mb-4"
+                />
+              )}
 
-            <div
-              className="cursor-pointer text-sm border rounded-lg border-dashed border-gray-600"
-              {...getRootProps()}
-            >
               <div
                 className="cursor-pointer text-sm border rounded-lg border-dashed border-gray-600"
                 {...getRootProps()}
               >
-                <input {...getInputProps()} />
-                {isDragActive ? (
-                  <div className="my-4 flex cursor-pointer flex-row items-center justify-center">
-                    <Paperclip className="mr-1 mt-[1px] h-3 w-3" />
-                    <p className="font-semiboldtext-decoration: text-sm underline underline-offset-2">
-                      Drop image here
-                    </p>
-                  </div>
-                ) : (
-                  <div className="my-4 flex cursor-pointer flex-row items-center justify-center">
-                    <Paperclip className="mr-1 mt-[1px] h-3 w-3" />
-                    <p className="text-decoration: text-xsm font-semibold underline underline-offset-2">
-                      Upload by clicking or dropping an image
-                    </p>
-                  </div>
-                )}
+                <div
+                  className="cursor-pointer text-sm border rounded-lg border-dashed border-gray-600"
+                  {...getRootProps()}
+                >
+                  <input {...getInputProps()} />
+                  {isDragActive ? (
+                    <div className="my-4 flex cursor-pointer flex-row items-center justify-center">
+                      <Paperclip className="mr-1 mt-[1px] h-3 w-3" />
+                      <p className="font-semiboldtext-decoration: text-sm underline underline-offset-2">
+                        Drop image here
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="my-4 flex cursor-pointer flex-row items-center justify-center">
+                      <Paperclip className="mr-1 mt-[1px] h-3 w-3" />
+                      <p
+                        className={cn(
+                          "text-decoration: text-xsm font-semibold underline underline-offset-2",
+                          "aria-[required]:after:ml-1 aria-[required]:after:content-['*'] aria-[required]:after:text-red-500",
+                        )}
+                        aria-required="true"
+                      >
+                        Upload by clicking or dropping an image
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="sm:col-span-2">
+          <div className="col-span-2">
             <div className="py-3 max-lg:py-0 rounded-lg px-6 w-full">
               <HeaderTitle className="max-w-full max-lg:text-2xl">
                 Pet Information Form
@@ -212,7 +222,9 @@ function AdoptionPost() {
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="space-y-1 max-lg:space-y-0">
-                  <Label htmlFor="name">Pet Name</Label>
+                  <Label htmlFor="name" aria-required="true">
+                    Pet Name
+                  </Label>
                   <Input
                     id="name"
                     type="text"
@@ -224,7 +236,9 @@ function AdoptionPost() {
                 </div>
                 <div className="flex gap-6">
                   <div className="space-y-1 max-lg:space-y-0">
-                    <Label htmlFor="type">Pet Type</Label>
+                    <Label htmlFor="type" aria-required="true">
+                      Pet Type
+                    </Label>
                     <Select
                       onValueChange={(val) => {
                         setValue("type", val)
@@ -247,7 +261,9 @@ function AdoptionPost() {
                     </Select>
                   </div>
                   <div className="space-y-1 max-lg:space-y-0">
-                    <Label htmlFor="gender">Pet Gender</Label>
+                    <Label htmlFor="gender" aria-required="true">
+                      Pet Gender
+                    </Label>
                     <RadioGroup
                       onValueChange={(val) => {
                         setValue("gender", val)
@@ -266,18 +282,23 @@ function AdoptionPost() {
                   </div>
                 </div>
                 <div className="space-y-1 max-lg:space-y-0">
-                  <Label htmlFor="age">Age</Label>
+                  <Label htmlFor="age" aria-required="true">
+                    Age
+                  </Label>
                   <Input
                     id="age"
                     type="number"
                     disabled={isLoading}
+                    min={0}
                     {...register("age", { required: true })}
                     errors={errors}
                     placeholder="Enter pet's age"
                   />
                 </div>
                 <div className="space-y-1 max-lg:space-y-0">
-                  <Label htmlFor="breed">Breed</Label>
+                  <Label htmlFor="breed" aria-required="true">
+                    Breed
+                  </Label>
                   <Input
                     id="breed"
                     type="text"
@@ -288,7 +309,9 @@ function AdoptionPost() {
                   />
                 </div>
                 <div className="space-y-1 max-lg:space-y-0">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description" aria-required="true">
+                    Description
+                  </Label>
                   <Input
                     id="description"
                     type="text"
@@ -307,8 +330,7 @@ function AdoptionPost() {
                     !isValid ||
                     watch("imageUrl") === "" ||
                     Object.values(errors).filter((e) => e !== undefined)
-                      .length > 0 ||
-                    watch("imageUrl") === ""
+                      .length > 0
                   }
                 >
                   Submit

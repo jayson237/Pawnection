@@ -29,7 +29,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
       }/image/upload/c_fill,h_160,w_160/${
         currentUser?.image?.split("/image/upload/")[1]
       }` ||
-      "/../icon.png",
+      "/icon.png",
   )
   const [bio, setBio] = useState(currentUser?.bio || "")
   const [isUsernameValid, setIsUsernameValid] = useState(true)
@@ -189,9 +189,10 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
         Profile Settings
       </h2>
       <div className="border  rounded-xl px-1.5 py-1 flex space-x-2 mt-1 items-center mx-auto text-sm w-fit">
-        <p className="text-center">Account type:</p>
         <p className="w-fit rounded-lg bg-orange-300 px-1 py-0.25 text-center">
-          {currentUser?.type}
+          {currentUser?.type === "PetAdoptionCentre"
+            ? "Adoption Centre"
+            : "Pet Lover"}
         </p>
       </div>
       <form className="space-y-5" onSubmit={submitHandler}>

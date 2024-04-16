@@ -53,24 +53,30 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
             <>
               <div className="flex items-center space-x-1 ">
                 <Link
+                  prefetch={false}
                   href="/lostAndFound"
                   className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                 >
                   Lost & Found
                 </Link>
+                {currentUser?.type !== "PetAdoptionCentre" && (
+                  <Link
+                    prefetch={false}
+                    href="/adopt"
+                    className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
+                  >
+                    Adopt
+                  </Link>
+                )}
                 <Link
-                  href="/adopt"
-                  className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
-                >
-                  Adopt
-                </Link>
-                <Link
+                  prefetch={false}
                   href="/explore"
                   className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                 >
                   Explore
                 </Link>
                 <Link
+                  prefetch={false}
                   href="/recommendations"
                   className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
                 >
@@ -78,6 +84,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 </Link>
                 {currentUser?.type === "PetAdoptionCentre" && (
                   <Link
+                    prefetch={false}
                     href="/adoptionCenter"
                     className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
                   >
@@ -98,7 +105,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                     className="rounded-full h-10 w-10 ring-1 ring-primary ring-offset-2 hover:opacity-80 ease-in-out duration-200 cursor-pointer"
                     src={
                       !currentUser?.image
-                        ? "/../icon.png"
+                        ? "/icon.png"
                         : currentUser?.image
                               .split("image/upload")[0]
                               .includes("cloudinary")
@@ -187,6 +194,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
               <ul className="space-y-5">
                 <li>
                   <Link
+                    prefetch={false}
                     href={`/profile/${currentUser?.username}`}
                     onClick={toggleMenu}
                   >
@@ -195,7 +203,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                         <Image
                           src={
                             !currentUser?.image
-                              ? "/../icon.png"
+                              ? "/icon.png"
                               : currentUser?.image
                                     .split("image/upload")[0]
                                     .includes("cloudinary")
@@ -231,6 +239,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
 
                 <li>
                   <Link
+                    prefetch={false}
                     href="/lost-and-found"
                     onClick={toggleMenu}
                     className="text-primary text-sm font-medium hover:bg-main/70 py-2 px-4 rounded-md ease-in-out duration-200"
@@ -239,16 +248,19 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/adopt"
-                    onClick={toggleMenu}
-                    className="text-primary text-sm font-medium hover:bg-main/70 py-2 px-4 rounded-md ease-in-out duration-200"
-                  >
-                    Adopt
-                  </Link>
+                  {currentUser?.type !== "PetAdoptionCentre" && (
+                    <Link
+                      prefetch={false}
+                      href="/adopt"
+                      className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
+                    >
+                      Adopt
+                    </Link>
+                  )}
                 </li>
                 <li>
                   <Link
+                    prefetch={false}
                     href="/community"
                     onClick={toggleMenu}
                     className="text-primary text-sm font-medium hover:bg-main/70 py-2 px-4 rounded-md ease-in-out duration-200"
@@ -258,6 +270,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 </li>
                 <li>
                   <Link
+                    prefetch={false}
                     href="/recommendations"
                     onClick={toggleMenu}
                     className="text-primary text-sm font-medium hover:bg-main/70 rounded-md ease-in-out duration-200 py-2 px-4"
@@ -268,6 +281,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 {currentUser?.type === "PetAdoptionCentre" && (
                   <li>
                     <Link
+                      prefetch={false}
                       href="/adoptionCenter"
                       onClick={toggleMenu}
                       className="text-primary text-sm font-medium hover:bg-main/70 rounded-md ease-in-out duration-200 py-2 px-4"
@@ -283,6 +297,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 </li>
                 <li>
                   <Link
+                    prefetch={false}
                     href="/settings"
                     onClick={toggleMenu}
                     className="text-primary text-sm font-medium hover:bg-main/70 py-2 px-4 rounded-md ease-in-out duration-200"

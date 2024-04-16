@@ -76,7 +76,7 @@ function PetTips() {
               loading="lazy"
               src="/static/images/dog_front.webp"
               alt="Pet Tips and Advice"
-              className="w-3/4"
+              className="w-1/2 md:w-3/4 mx-auto"
             />
           </div>
         </div>

@@ -5,7 +5,7 @@ import { getCurrentUser } from "./user"
 export const getAllAdoptablePets = async () => {
   try {
     const currentUser = await getCurrentUser()
-    if (!currentUser) {
+    if (!currentUser || currentUser.type === "PetAdoptionCentre") {
       return null
     }
     const adoptablePets = await prisma.adoptablePet.findMany({
@@ -17,6 +17,9 @@ export const getAllAdoptablePets = async () => {
           },
         },
         adoptionRequests: true,
+      },
+      orderBy: {
+        status: "desc",
       },
     })
     return adoptablePets
@@ -36,15 +39,20 @@ export const getOneAdoptablePets = async (id: string) => {
       where: {
         id: id,
       },
-      take: 20,
       include: {
         adoptionCentre: {
           select: {
             username: true,
           },
         },
+        adoptionRequests: {
+          where: {
+            userId: currentUser.id,
+          },
+        },
       },
     })
+
     return adoptablePet
   } catch (error) {
     console.log(error)
@@ -55,7 +63,7 @@ export const getOneAdoptablePets = async (id: string) => {
 export const getAllOwnAdpotRequests = async () => {
   try {
     const currentUser = await getCurrentUser()
-    if (!currentUser) {
+    if (!currentUser || currentUser.type === "PetAdoptionCentre") {
       return null
     }
 
@@ -67,6 +75,9 @@ export const getAllOwnAdpotRequests = async () => {
       },
       include: {
         adoptablePet: true,
+      },
+      orderBy: {
+        request_status: "desc",
       },
     })
 

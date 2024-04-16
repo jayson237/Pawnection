@@ -1,12 +1,12 @@
 "use client"
 
 import { useToast } from "@/hooks/useToast"
-import { revalPath } from "@/lib/revalidate"
 import { Comment, User } from "@prisma/client"
 import { Edit3, MoreHorizontal, Trash2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
+import { KeyedMutator } from "swr"
 
 import TimeStamp from "../TimeStamp"
 import { Button } from "../ui/Button"
@@ -19,7 +19,22 @@ import {
 } from "../ui/DropdownMenu"
 import { Textarea } from "../ui/TextArea"
 
-const CommentItem = ({ comment }: { comment: Comment & { user: User } }) => {
+const CommentItem = ({
+  comment,
+  postId,
+  setCommentCount,
+  mutate,
+}: {
+  comment: Comment & { user: Pick<User, "username" | "image"> }
+  postId: string
+  setCommentCount: Dispatch<SetStateAction<number>>
+  mutate: KeyedMutator<{
+    data: (Comment & {
+      user: Pick<User, "username" | "image">
+    })[]
+    message: string
+  }>
+}) => {
   const { toast } = useToast()
   const [isEdit, setIsEdit] = useState(false)
   const [editComment, setComment] = useState(comment.content)
@@ -42,7 +57,7 @@ const CommentItem = ({ comment }: { comment: Comment & { user: User } }) => {
         description: msg.message,
       })
     } else {
-      revalPath("/explore")
+      mutate()
     }
   }
 
@@ -51,6 +66,7 @@ const CommentItem = ({ comment }: { comment: Comment & { user: User } }) => {
       method: "POST",
       body: JSON.stringify({
         commentId: commentId,
+        postId: postId,
       }),
     })
     const msg = await set.json()
@@ -61,7 +77,8 @@ const CommentItem = ({ comment }: { comment: Comment & { user: User } }) => {
         description: msg.message,
       })
     } else {
-      revalPath("/explore")
+      mutate()
+      setCommentCount((prev) => prev - 1)
     }
   }
 
@@ -72,7 +89,7 @@ const CommentItem = ({ comment }: { comment: Comment & { user: User } }) => {
           <Image
             src={
               !comment.user?.image
-                ? "/../icon.png"
+                ? "/icon.png"
                 : comment.user?.image
                       .split("image/upload")[0]
                       .includes("cloudinary")

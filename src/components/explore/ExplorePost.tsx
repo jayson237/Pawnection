@@ -16,7 +16,7 @@ function ExplorePost({ currentUser }: { currentUser: SafeUser }) {
     defaultValue: "",
   })
   const [following, _setFollowing] = useQueryState("following", {
-    defaultValue: "false",
+    defaultValue: "",
   })
 
   const [items, setItems] = useState<ExtendedPost[]>([])
@@ -25,13 +25,23 @@ function ExplorePost({ currentUser }: { currentUser: SafeUser }) {
 
   const { data, isLoading } = useSWR(
     `/api/explore/post?type=post&q=${query}&following=${following}&cursor=${
-      hasMore ? cursor : ""
+      hasMore ? cursor : following ? "" : cursor
     }`,
     fetcher,
     {
       onSuccess: (data) => {
-        if (data.data && data.data.length) {
-          setItems([...items, ...data.data])
+        if (data.data) {
+          console.log(query, following)
+
+          if (query !== "" || following !== "") {
+            console.log("1")
+
+            setItems(data.data)
+          } else {
+            console.log("2")
+            setItems((prevItems) => [...prevItems, ...data.data])
+          }
+
           sethasMore(data.meta.hasMore)
         }
       },
@@ -40,7 +50,9 @@ function ExplorePost({ currentUser }: { currentUser: SafeUser }) {
 
   const loadMore = () => {
     if (!isLoading && hasMore) {
-      setCursor(data.meta.hasMore ? data.meta.cursor : cursor)
+      console.log("se")
+
+      // setCursor(data.meta.hasMore ? data.meta.cursor : cursor)
     }
   }
 

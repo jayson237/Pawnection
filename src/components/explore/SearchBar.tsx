@@ -26,7 +26,10 @@ const SearchBar = () => {
     throttleMs: 500,
   })
   const [following, setFollowing] = useQueryState("following", {
-    defaultValue: "false",
+    defaultValue: "",
+  })
+  const [cursor, setCursor] = useQueryState("cursor", {
+    defaultValue: "",
   })
   const [viewSearch, setViewSearch] = useState(query || "")
   const exploreType = pathname.split("/")[2]
@@ -44,10 +47,12 @@ const SearchBar = () => {
         q: query,
       }).toString()}`,
     )
+    setCursor("")
   }
 
   const clearSearch = () => {
     setViewSearch("")
+    setCursor("")
     setQuery("")
   }
 
@@ -98,7 +103,8 @@ const SearchBar = () => {
           <Switch
             checked={following === "true"}
             onCheckedChange={(value) => {
-              setFollowing(value ? "true" : "false")
+              setCursor("")
+              setFollowing(value ? "true" : "")
             }}
           />
           <p className="text-[11px]">See followings only</p>

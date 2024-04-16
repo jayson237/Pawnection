@@ -56,13 +56,21 @@ export async function GET(req: Request) {
       following || "false",
       currentUser,
     )
+
+    let hasMore = false
+    let nextCursor = ""
+
+    if (posts && posts.length > 0) {
+      hasMore = posts[posts.length - 1].id !== cursor
+      nextCursor = posts[posts.length - 1].id
+    }
+
     return NextResponse.json(
       {
         data: posts,
         meta: {
-          hasMore:
-            posts && posts.length > 0 && posts[posts?.length - 1].id !== cursor,
-          cursor: posts && posts.length > 0 ? posts[posts?.length - 1].id : "",
+          hasMore,
+          cursor: nextCursor,
         },
       },
       { status: 200 },

@@ -15,20 +15,30 @@ function ExplorePetSitting({ currentUser }: { currentUser: SafeUser }) {
   const [query, _setQuery] = useQueryState("q", {
     defaultValue: "",
   })
-  const [following, _setFollowing] = useQueryState("following")
+  const [following, _setFollowing] = useQueryState("")
 
   const [items, setItems] = useState<ExtendedPost[]>([])
   const [hasMore, sethasMore] = useState(false)
   const [cursor, setCursor] = useState("")
-  console.log(following)
 
   const { data, isLoading } = useSWR(
-    `/api/explore/post?type=pet-sitting&q=${query}&following=${following}&cursor=${hasMore ? cursor : ""}`,
+    `/api/explore/post?type=pet-sitting&q=${query}&following=${following}&cursor=${
+      hasMore ? cursor : following ? "" : cursor
+    }`,
     fetcher,
     {
       onSuccess: (data) => {
-        if (data.data && data.data.length) {
-          setItems([...items, ...data.data])
+        if (data.data) {
+          console.log(query, following)
+
+          if (query !== "" || following !== "") {
+            console.log("1")
+
+            setItems(data.data)
+          } else {
+            console.log("2")
+            setItems((prevItems) => [...prevItems, ...data.data])
+          }
 
           sethasMore(data.meta.hasMore)
         }
@@ -38,7 +48,7 @@ function ExplorePetSitting({ currentUser }: { currentUser: SafeUser }) {
 
   const loadMore = () => {
     if (!isLoading && hasMore) {
-      setCursor(data.meta.hasMore ? data.meta.cursor : cursor)
+      // setCursor(data.meta.hasMore ? data.meta.cursor : cursor)
     }
   }
 

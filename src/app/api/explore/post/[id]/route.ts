@@ -15,7 +15,6 @@ export async function GET(
   try {
     const { searchParams } = new URL(req.url)
     const cursor = searchParams.get("cursor")
-    const seachTerm = searchParams.get("q")
 
     const currentUser = await getCurrentUser()
     if (!currentUser) {
@@ -26,12 +25,7 @@ export async function GET(
         { status: 401 },
       )
     }
-    const posts = await getAllProfilePosts(
-      cursor,
-      seachTerm || "",
-      params.id,
-      currentUser,
-    )
+    const posts = await getAllProfilePosts(cursor, params.id, currentUser)
     return NextResponse.json(
       {
         data: posts,

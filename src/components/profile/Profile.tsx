@@ -26,7 +26,7 @@ const Profile = ({
 }: {
   user: SafeUser
   isProfileOwner: boolean
-  currentUser: SafeUser | null
+  currentUser: SafeUser
 }) => {
   const [reports, setReports] = useState<
     FoundPetReport[] | LostPetReport[] | null
@@ -347,7 +347,7 @@ const Profile = ({
       </div>
 
       <div>
-        <ProfileTabs reports={reports} user={user} />
+        <ProfileTabs reports={reports} user={user} currentUser={currentUser} />
       </div>
     </div>
   )

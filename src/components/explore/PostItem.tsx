@@ -61,6 +61,9 @@ const PostItem = ({
 
   const [expanded, setExpanded] = useState(false)
   const [expandable, setexpandable] = useState(false)
+  const [isCurrentFollowedState, setIsCurrentFollowedState] = useState<
+    boolean | null | undefined
+  >(isCurrentFollowed)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
@@ -182,10 +185,6 @@ const PostItem = ({
       })
     }
   }
-
-  const [isCurrentFollowedState, setIsCurrentFollowedState] = useState<
-    boolean | null | undefined
-  >(isCurrentFollowed)
 
   return (
     <div className="rounded-xl border bg-white h-full max-w-xl">

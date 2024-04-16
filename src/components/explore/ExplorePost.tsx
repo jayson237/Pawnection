@@ -86,6 +86,8 @@ function ExplorePost({ currentUser }: { currentUser: SafeUser }) {
           return (
             <div key={post.id}>
               <PostItem
+                content={content}
+                setContent={setContent}
                 post={post}
                 isLiked={isLiked}
                 isOwnProfile={isOwnProfile}

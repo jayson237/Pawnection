@@ -219,7 +219,7 @@ const PostItem = ({
         </div>
 
         {!isOwnProfile ? (
-          !isCurrentFollowed ? (
+          !isCurrentFollowedState ? (
             <Button
               onClick={async () => {
                 await fetch("/api/user/follow", {

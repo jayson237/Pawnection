@@ -35,12 +35,10 @@ function ProfilePostsTab({ user, currentUser }: ProfilePostsTabInterface) {
 
     const endpoint = `/api/explore/post/${user.id}`
     const url = `${endpoint}${queryString}`
-    console.log(url)
 
     try {
       const response = await fetch(url)
       const data = await response.json()
-      console.log(data)
       setContent((prev) => [...prev, ...data.data])
       setHasMore(data.data.length !== 0)
     } catch (error) {
@@ -65,40 +63,38 @@ function ProfilePostsTab({ user, currentUser }: ProfilePostsTabInterface) {
 
   return (
     <TabsContent value="posts" className="w-full h-full pt-16">
-      <div className="w-full max-w-xl mx-auto">
-        <div className="flex flex-col space-y-4">
-          {content &&
-            content?.map((post, i) => {
-              return (
-                <Fragment key={i}>
-                  <PostItem
-                    content={content}
-                    setContent={setContent}
-                    post={post}
-                    isLiked={post.isCurrentUserLike}
-                    isOwnProfile={currentUser.id === user.id}
-                    isCurrentFollowed={
-                      currentUser?.followingUsers?.some(
-                        (followingUsers) =>
-                          followingUsers?.followerId === user?.id,
-                      ) || false
-                    }
-                  />
-                </Fragment>
-              )
-            })}
-        </div>
-        {loading && (
-          <div className="flex justify-center items-center">
-            <Loading />
-          </div>
-        )}
-        {content?.length === 0 && !loading && (
-          <div className="flex justify-center items-center">
-            <p className="text-gray-500">No posts found</p>
-          </div>
-        )}
+      <div className="w-full max-w-xl mx-auto space-y-4">
+        {content &&
+          content?.map((post, i) => {
+            return (
+              <Fragment key={i}>
+                <PostItem
+                  content={content}
+                  setContent={setContent}
+                  post={post}
+                  isLiked={post.isCurrentUserLike}
+                  isOwnProfile={currentUser.id === user.id}
+                  isCurrentFollowed={
+                    currentUser?.followingUsers?.some(
+                      (followingUsers) =>
+                        followingUsers?.followerId === user?.id,
+                    ) || false
+                  }
+                />
+              </Fragment>
+            )
+          })}
       </div>
+      {loading && (
+        <div className="flex justify-center items-center">
+          <Loading />
+        </div>
+      )}
+      {content?.length === 0 && !loading && (
+        <div className="flex justify-center items-center">
+          <p className="text-gray-500">No posts found</p>
+        </div>
+      )}
       <div ref={loadMoreTriggerRef} className="mb-8" />
     </TabsContent>
   )

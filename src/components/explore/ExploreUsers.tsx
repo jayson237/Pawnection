@@ -65,7 +65,7 @@ function ExploreUsers({ currentUser }: { currentUser: SafeUser }) {
 
   return (
     <>
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col mx-auto space-y-4">
         {content.map((user: User) => {
           const isOwnProfile = currentUser?.username === user.username
           return (

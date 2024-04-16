@@ -89,7 +89,7 @@ const CommentItem = ({
           <Image
             src={
               !comment.user?.image
-                ? "/../icon.png"
+                ? "/icon.png"
                 : comment.user?.image
                       .split("image/upload")[0]
                       .includes("cloudinary")

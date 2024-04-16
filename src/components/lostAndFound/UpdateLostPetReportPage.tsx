@@ -33,7 +33,7 @@ const UpdateLostPetReportPage = ({
       }/image/upload/c_fill,h_160,w_160/${
         lostPetReport?.imageUrl?.split("/image/upload/")[1]
       }` ||
-      "/../icon.png",
+      "/icon.png",
   )
   const [isImageLoading, setIsImageLoading] = useState(false)
   const [isFormChanged, setIsFormChanged] = useState(false)

@@ -28,9 +28,6 @@ const SearchBar = () => {
   const [following, setFollowing] = useQueryState("following", {
     defaultValue: "",
   })
-  const [cursor, setCursor] = useQueryState("cursor", {
-    defaultValue: "",
-  })
   const [viewSearch, setViewSearch] = useState(query || "")
   const exploreType = pathname.split("/")[2]
 
@@ -42,17 +39,17 @@ const SearchBar = () => {
   )
 
   const handleFilterChange = (value: string) => {
+    console.log("udin")
+
     router.replace(
       `/explore/${value}?${new URLSearchParams({
         q: query,
       }).toString()}`,
     )
-    setCursor("")
   }
 
   const clearSearch = () => {
     setViewSearch("")
-    setCursor("")
     setQuery("")
   }
 
@@ -103,7 +100,6 @@ const SearchBar = () => {
           <Switch
             checked={following === "true"}
             onCheckedChange={(value) => {
-              setCursor("")
               setFollowing(value ? "true" : "")
             }}
           />

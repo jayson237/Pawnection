@@ -24,7 +24,7 @@ function ProfileAdoptablePetsTab({ user }: ProfileAdoptablePetsTabInterface) {
   console.log("udin")
 
   return (
-    <TabsContent value="adoptablepets">
+    <TabsContent value="adoptablepets" className="w-full h-full pt-16 px-8">
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 w-full">
         {adoptablePets &&
           adoptablePets.data.length > 0 &&

@@ -350,7 +350,7 @@ const PostItem = ({
           {!isEdit ? (
             <div ref={containerRef}>
               <p
-                className={`text-[14px] ${expanded || !expandable ? "" : "line-clamp-1"} `}
+                className={`text-[14px] whitespace-normal ${expanded || !expandable ? "" : "line-clamp-1 overflow-auto"} `}
                 ref={descriptionRef}
               >
                 {post?.description}

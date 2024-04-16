@@ -163,7 +163,7 @@ const Feed = ({
   }
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col mx-auto space-y-4">
       {searchParams.type !== "users"
         ? content.posts.map(renderPostItem)
         : content.users.map(renderUserItem)}

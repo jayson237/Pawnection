@@ -1,9 +1,9 @@
 "use client"
 
-import { revalPath } from "@/lib/revalidate"
 import { User } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
+import { useState } from "react"
 
 import { Button } from "../ui/Button"
 
@@ -16,6 +16,10 @@ const UserItem = ({
   isOwnProfile: boolean
   isCurrentFollowed: boolean
 }) => {
+  const [isCurrentFollowedState, setIsCurrentFollowedState] = useState<
+    boolean | null | undefined
+  >(isCurrentFollowed)
+
   const handleUnfollow = async () => {
     await fetch("/api/user/unfollow", {
       method: "POST",
@@ -26,7 +30,7 @@ const UserItem = ({
         username: user.username,
       }),
     })
-    revalPath("/explore")
+    setIsCurrentFollowedState(false)
   }
 
   const handleFollow = async () => {
@@ -39,7 +43,7 @@ const UserItem = ({
         username: user.username,
       }),
     })
-    revalPath("/explore")
+    setIsCurrentFollowedState(true)
   }
 
   return (
@@ -67,7 +71,7 @@ const UserItem = ({
         </div>
       </Link>
       {!isOwnProfile &&
-        (isCurrentFollowed ? (
+        (isCurrentFollowedState ? (
           <Button
             variant="outline"
             className="w-20"

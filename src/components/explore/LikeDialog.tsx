@@ -69,25 +69,6 @@ function LikeDialog({
                   />
                   <p>{like.user.username}</p>
                 </div>
-                {/* {!isOwnProfile ? (
-                  !like.user.isCurrentFollowed ? (
-                    <Button
-                      variant="default"
-                      size="sm"
-                      onClick={() => handleFollow(like.user.username || "")}
-                    >
-                      Follow
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleFollow(like.user.username || "")}
-                    >
-                      Unfollow
-                    </Button>
-                  )
-                ) : null} */}
               </Link>
             ))
           ) : (

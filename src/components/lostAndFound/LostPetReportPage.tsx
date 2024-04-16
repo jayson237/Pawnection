@@ -1,39 +1,37 @@
 "use client"
-
-
 import { SafeUser } from "@/types"
 import { LostPetReport } from "@prisma/client"
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Button } from "../ui/Button";
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { Button } from "../ui/Button"
 
 
 const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPetReport | null; currUser: SafeUser | null }) => {
- const [thisLostPetReport, setThisLostPetReport] = useState(lostPetReport);
- const [showButton, setShowButton] = useState(false);
- const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("");
- const [reportActive, setReportActive] = useState(true);
- const router = useRouter();
+ const [thisLostPetReport, setThisLostPetReport] = useState(lostPetReport)
+ const [showButton, setShowButton] = useState(false)
+ const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("")
+ const [reportActive, setReportActive] = useState(true)
+ const router = useRouter()
 
- const [creatorImage, setCreatorImage] = useState('/path/to/default/image');
- const [creatorName, setCreatorName] = useState('');
- const [creatorContactDetails, setCreatorContactDetails] = useState('');
+ const [creatorImage, setCreatorImage] = useState("/path/to/default/image")
+ const [creatorName, setCreatorName] = useState("")
+ const [creatorContactDetails, setCreatorContactDetails] = useState("")
 
  useEffect(() => {
   const fetchCreatorInfo = async (userId: string) => {
     try {
       console.log(userId)
-      const response = await fetch("/api/lostAndFound/getReportCreatorInfo?id=" + userId, { method: "GET" });
+      const response = await fetch("/api/lostAndFound/getReportCreatorInfo?id=" + userId, { method: "GET" })
       // console.log(response)
 
       if (!response.ok) {
-        throw new Error("Error loading reports");
+        throw new Error("Error loading reports")
       }
 
-      const data = await response.json();
-      const image = data.image;
-      setCreatorImage(image);
+      const data = await response.json()
+      const image = data.image
+      setCreatorImage(image)
 
       const name = data.name
       setCreatorName(name)
@@ -42,33 +40,33 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
       setCreatorContactDetails(contactDetails)
 
     } catch (error) {
-      console.error("Failed to fetch user profile picture: ", error);
+      console.error("Failed to fetch user profile picture: ", error)
     }
-  };
+  }
 
-  fetchCreatorInfo(thisLostPetReport!.userId);
-}, []); 
+  fetchCreatorInfo(thisLostPetReport!.userId)
+}, [])
 
  const transformImage = (url: string) => {
-   const parts = url.split("/upload/");
-   const transformationString = "w_500,h_500,c_thumb,g_face,f_auto/";
-   return `${parts[0]}/upload/${transformationString}${parts[1]}`;
- };
+   const parts = url.split("/upload/")
+   const transformationString = "w_500,h_500,c_thumb,g_face,f_auto/"
+   return `${parts[0]}/upload/${transformationString}${parts[1]}`
+ }
 
 
 
 
  useEffect(() => {
    if (thisLostPetReport?.lastSeenDate) {
-     const date = new Date(thisLostPetReport.lastSeenDate);
+     const date = new Date(thisLostPetReport.lastSeenDate)
      const formattedDate = date.toLocaleDateString("en-GB", {
        day: "2-digit",
        month: "2-digit",
        year: "numeric",
-     });
-     setFormattedLastSeenDate(formattedDate);
+     })
+     setFormattedLastSeenDate(formattedDate)
    }
- }, [thisLostPetReport?.lastSeenDate]);
+ }, [thisLostPetReport?.lastSeenDate])
 
 
  const deleteReport = async () => {
@@ -78,18 +76,18 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
          method: "POST",
          headers: { "Content-Type": "application/json" },
          body: JSON.stringify({ reportId: thisLostPetReport.id }),
-       });
+       })
        if (!response.ok) {
-         throw new Error("Failed to delete the report.");
+         throw new Error("Failed to delete the report.")
        }
-       alert("Report deleted successfully");
-       router.push("/lostAndFound");
+       alert("Report deleted successfully")
+       router.push("/lostAndFound")
      } catch (error) {
-       console.error("Error deleting report:", error);
-       alert("Failed to delete the report.");
+       console.error("Error deleting report:", error)
+       alert("Failed to delete the report.")
      }
    }
- };
+ }
 
 
  const updateStatus = async () => {
@@ -99,19 +97,19 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
          method: "PUT",
          headers: { "Content-Type": "application/json" },
          body: JSON.stringify({ reportId: thisLostPetReport.id }),
-       });
+       })
        if (!response.ok) {
-         throw new Error("Failed to update the report status.");
+         throw new Error("Failed to update the report status.")
        }
-       alert("Report status updated successfully");
-       setReportActive(false);
-       router.push("/lostAndFound");
+       alert("Report status updated successfully")
+       setReportActive(false)
+       router.push("/lostAndFound")
      } catch (error) {
-       console.error("Error updating report status:", error);
-       alert("Failed to update the report status.");
+       console.error("Error updating report status:", error)
+       alert("Failed to update the report status.")
      }
    }
- };
+ }
 
 
  const unupdateStatus = async () => {
@@ -121,19 +119,19 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
          method: "PUT",
          headers: { "Content-Type": "application/json" },
          body: JSON.stringify({ reportId: thisLostPetReport.id }),
-       });
+       })
        if (!response.ok) {
-         throw new Error("Failed to revert the report status.");
+         throw new Error("Failed to revert the report status.")
        }
-       alert("Report status reverted successfully");
-       setReportActive(true);
-       router.push("/lostAndFound");
+       alert("Report status reverted successfully")
+       setReportActive(true)
+       router.push("/lostAndFound")
      } catch (error) {
-       console.error("Error reverting report status:", error);
-       alert("Failed to revert the report status.");
+       console.error("Error reverting report status:", error)
+       alert("Failed to revert the report status.")
      }
    }
- };
+ }
 
 
  const updateReport = () => {
@@ -145,7 +143,7 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
    <div className="container mx-auto w-full h-full px-4 py-5">
      <div className="flex flex-row gap-x-8 mb-8">
        {/* Large Image Container */}
-       <div className="flex-shrink-0" style={{ width: '512px', height: '512px' }}>
+       <div className="flex-shrink-0" style={{ width: "512px", height: "512px" }}>
          <Image
            src={transformImage(thisLostPetReport!.imageUrl)}
            layout="responsive"
@@ -156,7 +154,7 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
          />
        </div>
   {/* Basic Info Section with Transparent Background */}
- <div style={{ width: '410px', height: '512px' }}>
+ <div style={{ width: "410px", height: "512px" }}>
    <div className="p-4 h-full overflow-auto">
      <h1 className="text-left font-bold text-3xl mb-4">Basic Info</h1>
      <hr className="mb-4 custom-divider" /> {/* Customized Divider */}
@@ -172,7 +170,7 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
    </div>
  </div>
   {/* Contact Details & Lost Info Section with Transparent Background */}
- <div style={{ width: '410px', height: '512px' }}>
+ <div style={{ width: "410px", height: "512px" }}>
    <div className="p-4 h-full overflow-auto">
      <h1 className="text-left font-bold text-3xl mb-4">Contact Details</h1>
      <hr className="mb-4 custom-divider" /> {/* Customized Divider */}
@@ -190,10 +188,11 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
        <div className="flex items-center space-x-10">
          <div className="w-32 h-32 relative overflow-hidden rounded-lg">
            <Image
-             src={thisLostPetReport!.userId === currUser?.id ? currUser?.image! : creatorImage!}
+             src={thisLostPetReport!.userId === currUser?.id ? currUser?.image || creatorImage : creatorImage || creatorImage}
+
              layout="fill"
              objectFit="cover"
-             alt={`Profile picture of ${creatorName|| 'user'}`}
+             alt={"Profile picture of ${creatorName|| 'user'}"}
              className="rounded-full"
            />
          </div>
@@ -218,7 +217,7 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
        </div>
      </div>
    </div>
- );
+ )
 }
 
 

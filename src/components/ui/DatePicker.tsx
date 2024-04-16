@@ -36,11 +36,11 @@ export function DatePicker({ date, setDate, handleDate }: DatePickerProps) {
           selected={date}
           onSelect={(selectedDate) => {
             if (selectedDate != null) {
-              setDate(selectedDate);
-              handleDate?.(selectedDate); // Safely call test if it's provided
+              setDate(selectedDate)
+              handleDate?.(selectedDate) // Safely call test if it's provided
             } else {
               // Handle the null case if necessary
-              handleDate?.(undefined);
+              handleDate?.(undefined)
             }
           }}
           disabled={(date) =>

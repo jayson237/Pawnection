@@ -21,25 +21,25 @@ const FoundPetReportPage = ({
  const [reportActive, setReportActive] = useState(true)
  const router = useRouter()
 
- const [creatorImage, setCreatorImage] = useState('');
- const [creatorName, setCreatorName] = useState('');
- const [creatorContactDetails, setCreatorContactDetails] = useState('');
+ const [creatorImage, setCreatorImage] = useState("/path/to/default/image")
+ const [creatorName, setCreatorName] = useState("")
+ const [creatorContactDetails, setCreatorContactDetails] = useState("")
 
 
  useEffect(() => {
   const fetchCreatorInfo = async (userId: string) => {
     try {
       console.log(userId)
-      const response = await fetch("/api/lostAndFound/getReportCreatorInfo?id=" + userId, { method: "GET" });
+      const response = await fetch("/api/lostAndFound/getReportCreatorInfo?id=" + userId, { method: "GET" })
       // console.log(response)
 
       if (!response.ok) {
-        throw new Error("Error loading reports");
+        throw new Error("Error loading reports")
       }
 
-      const data = await response.json();
-      const image = data.image;
-      setCreatorImage(image);
+      const data = await response.json()
+      const image = data.image
+      setCreatorImage(image)
 
       const name = data.name
       setCreatorName(name)
@@ -48,12 +48,12 @@ const FoundPetReportPage = ({
       setCreatorContactDetails(contactDetails)
 
     } catch (error) {
-      console.error("Failed to fetch user profile picture: ", error);
+      console.error("Failed to fetch user profile picture: ", error)
     }
-  };
+  }
 
-  fetchCreatorInfo(thisFoundPetReport!.userId);
-}, []); 
+  fetchCreatorInfo(thisFoundPetReport!.userId)
+}, [])
 
 
 
@@ -112,6 +112,31 @@ const FoundPetReportPage = ({
    }
  }
 
+ const unupdateStatus = async () => {
+  if (
+    thisFoundPetReport &&
+    confirm("Are you sure you pet has not been returned to owner?")
+  ) {
+    try {
+      const response = await fetch("/api/lostAndFound/unupdateFoundPetReportStatus", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reportId: thisFoundPetReport.id }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update the report status.")
+      }
+
+      alert("Report status updated successfully")
+      setReportActive(true)
+      router.push("/lostAndFound")
+    } catch (error) {
+      console.error("Error updating report status:", error)
+      alert("Failed to update the report status.")
+    }
+  }
+}        
 
  const updateReport= () => {
    router.push(`/lostAndFound/updateFoundPetReportPage/${foundPetReport?.id}`)
@@ -129,7 +154,7 @@ const FoundPetReportPage = ({
    <div className="container mx-auto px-4 py-5">
      <div className="flex flex-row gap-x-8 mb-8">
        {/* Large Image Container */}
-       <div className="flex-shrink-0" style={{ width: '512px', height: '512px' }}>
+       <div className= "flex-shrink-0" style={{ width: "512px" , height: "512px" }}>
          <Image
            src={transformImage(thisFoundPetReport!.imageUrl)}
            layout="responsive"
@@ -142,7 +167,7 @@ const FoundPetReportPage = ({
 
 
        {/* Basic Info Section */}
-       <div style={{ width: '410px', height: '512px' }}>
+       <div style={{ width: "410px", height: "512px"  }}>
          <div className="p-4 h-full overflow-auto">
            <h1 className="text-left font-bold text-3xl mb-4">Basic Info</h1>
            <hr className="mb-4 custom-divider" />
@@ -160,7 +185,7 @@ const FoundPetReportPage = ({
 
 
        {/* Contact Details & Lost Info Section */}
-       <div style={{ width: '410px', height: '512px' }}>
+       <div style={{ width: "410px", height: "512px"  }}>
          <div className="p-4 h-full overflow-auto">
            <h1 className="text-left font-bold text-3xl mb-4">Contact Details</h1>
            <hr className="mb-4 custom-divider" />
@@ -178,10 +203,11 @@ const FoundPetReportPage = ({
        <div className="flex items-center space-x-10">
          <div className="w-32 h-32 relative overflow-hidden rounded-lg">
            <Image
-      src={thisFoundPetReport!.userId === currUser?.id ? currUser?.image! : creatorImage!}
+      src={thisFoundPetReport!.userId === currUser?.id ? currUser?.image || creatorImage : creatorImage || creatorImage}
+
       layout="fill"
              objectFit="cover"
-             alt={`Profile picture of ${creatorName|| 'user'}`}
+             alt={"Profile picture of ${creatorName|| 'user'}"}
              className="rounded-full"
            />
          </div>
@@ -200,6 +226,9 @@ const FoundPetReportPage = ({
          {thisFoundPetReport!.userId === currUser?.id && thisFoundPetReport!.isActive && (
            <Button className="w-full" onClick={updateStatus}>Pet has been returned</Button>
          )}
+         {thisFoundPetReport!.userId === currUser?.id && !thisFoundPetReport!.isActive && (
+           <Button className="w-full" onClick={unupdateStatus}>Pet has not been returned</Button>
+         )}         
        </div>
      </div>
    </div>

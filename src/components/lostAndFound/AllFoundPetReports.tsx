@@ -1,59 +1,57 @@
 "use client"
-
-
-import { FoundPetReport } from "@prisma/client";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Button } from "../ui/Button";
-import HeaderTitle from "../HeaderTitle";
-import { Label } from "../ui/Label";
+import { FoundPetReport } from "@prisma/client"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { Button } from "../ui/Button"
+import HeaderTitle from "../HeaderTitle"
+import { Label } from "../ui/Label"
 import {
  Select,
  SelectContent,
  SelectItem,
  SelectTrigger,
  SelectValue,
-} from "../ui/Select";
-import FoundPetReportDialog from "./FoundPetReportDialog";
+} from "../ui/Select"
+import FoundPetReportDialog from "./FoundPetReportDialog"
 
 
 const AllFoundPetReports = ({
  allFoundPetReports,
 }: {
- allFoundPetReports: FoundPetReport[] | null;
+ allFoundPetReports: FoundPetReport[] | null
 }) => {
- const [foundPetReports, setFoundPetReports] = useState(allFoundPetReports);
- const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] = useState(false);
- const [searchTerm, setSearchTerm] = useState("");
+ const [foundPetReports, setFoundPetReports] = useState(allFoundPetReports)
+ const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] = useState(false)
+ const [searchTerm, setSearchTerm] = useState("")
 
 
  const transformImage = (url: string) => {
-   const parts = url.split("/upload/");
-   const transformationString = "w_500,h_500,c_thumb,g_face,f_auto/";
-   return `${parts[0]}/upload/${transformationString}${parts[1]}`;
- };
+   const parts = url.split("/upload/")
+   const transformationString = "w_500,h_500,c_thumb,g_face,f_auto/"
+   return `${parts[0]}/upload/${transformationString}${parts[1]}`
+ }
 
 
- const router = useRouter();
+ const router = useRouter()
 
 
  const handleFoundPetReportClick = (reportId: string) => {
-   router.push(`/lostAndFound/founds/${reportId}`);
- };
+   router.push(`/lostAndFound/founds/${reportId}`)
+ }
 
 
  const fetchReports = async (animalType: string) => {
-   const url = `/api/lostAndFound/getFoundPetReports?type=${animalType}`;
-   const response = await fetch(url);
+   const url = `/api/lostAndFound/getFoundPetReports?type=${animalType}`
+   const response = await fetch(url)
    if (!response.ok) {
-     throw new Error("Failed to fetch reports");
+     throw new Error("Failed to fetch reports")
    }
 
 
-   const data = await response.json();
-   setFoundPetReports(data);
- };
+   const data = await response.json()
+   setFoundPetReports(data)
+ }
 
 
  return (
@@ -160,4 +158,4 @@ const AllFoundPetReports = ({
 }
 
 
-export default AllFoundPetReports;
+export default AllFoundPetReports

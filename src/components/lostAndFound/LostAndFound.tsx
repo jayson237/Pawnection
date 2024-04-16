@@ -151,7 +151,7 @@ const LostAndFound = ({
       </div>
     </div>
   </main>
-);
+)
 
 }
 

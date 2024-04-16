@@ -229,14 +229,14 @@ const UpdateLostPetReportPage = ({
       
       const handleLastSeenDateChange = (value: Date | undefined) => {
         if (value) {
-          setLastSeenDate(value); // Set the date only if it's not undefined
+          setLastSeenDate(value) // Set the date only if it's not undefined
         } else {
           // Handle the undefined case explicitly, e.g., reset to a default value or keep the previous state
-          setLastSeenDate(new Date()); // Example: reset to current date
+          setLastSeenDate(new Date()) // Example: reset to current date
         }
-        setIsFormValid(true);
-        setIsFormChanged(true);
-      };
+        setIsFormValid(true)
+        setIsFormChanged(true)
+      }
                
 
   const handleReportDescriptionChange = (

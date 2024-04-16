@@ -12,9 +12,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover"
 interface DatePickerProps {
   date: Date | undefined
   setDate: React.Dispatch<React.SetStateAction<Date>>
+  handleDate?: (date: Date | undefined) => void;
 }
 
-export function DatePicker({ date, setDate }: DatePickerProps) {
+export function DatePicker({ date, setDate, handleDate }: DatePickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -33,9 +34,15 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={(selectedDate) =>
-            selectedDate == null ? null : setDate(selectedDate)
-          }
+          onSelect={(selectedDate) => {
+            if (selectedDate != null) {
+              setDate(selectedDate);
+              handleDate?.(selectedDate); // Safely call test if it's provided
+            } else {
+              // Handle the null case if necessary
+              handleDate?.(undefined);
+            }
+          }}
           disabled={(date) =>
             date > new Date() || date < new Date("1900-01-01")
           }

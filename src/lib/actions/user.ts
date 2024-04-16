@@ -196,3 +196,30 @@ export async function unfollowUser(
     return false
   }
 }
+
+
+export async function getSpecifiedUser ( userId: string ):  Promise<SafeUser | null> {
+  try {
+    const user = await prisma.user.findUnique({
+          where : {
+            id : userId
+          }
+        })
+      
+      if (!user) {
+        return null
+      }
+
+      const { hashedPassword, ...rest } = user
+      
+      return {
+        ...rest,
+        emailVerified: rest.emailVerified?.toISOString(),
+        createdAt: rest.createdAt.toISOString(),
+        updatedAt: rest.updatedAt.toISOString(),
+      }
+
+  } catch (error) {
+    return null
+  }
+}

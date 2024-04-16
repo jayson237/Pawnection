@@ -210,11 +210,17 @@ const UpdateLostPetReportPage = ({
         setIsFormChanged(true)
       }          
       
-      const handleLastSeenDateChange = (value : Date | undefined) => {
-        // setLastSeenDate(value)
-        setIsFormValid(true)
-        setIsFormChanged(true)
-      }           
+      const handleLastSeenDateChange = (value: Date | undefined) => {
+        if (value) {
+          setLastSeenDate(value); // Set the date only if it's not undefined
+        } else {
+          // Handle the undefined case explicitly, e.g., reset to a default value or keep the previous state
+          setLastSeenDate(new Date()); // Example: reset to current date
+        }
+        setIsFormValid(true);
+        setIsFormChanged(true);
+      };
+               
 
     const handleReportDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = e.target.value
@@ -310,9 +316,8 @@ const UpdateLostPetReportPage = ({
                         type="animalType"
                         id="animalType"
                         required
-                        defaultValue={foundPetReport?.animalType || ""}
-                        onChange={handleAnimalTypeChange}
-                    /> */}
+                        defaultValue={lostPetReport?.animalType || ""}
+                        onChange={handleAnimalTypeChange} /> */}
                     </div>
                 </div>
 
@@ -383,7 +388,7 @@ const UpdateLostPetReportPage = ({
                         className="rounded-md border shadow flex justify-center "
                         disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
                     /> */}
-                    <DatePicker date={lastSeenDate} setDate={setLastSeenDate} />                    
+                    <DatePicker date={lastSeenDate} setDate={setLastSeenDate} handleDate= {handleLastSeenDateChange}/>                    
                 </div>                
 
                 <div className="mb-2 sm:mb-6">

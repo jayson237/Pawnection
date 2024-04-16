@@ -210,13 +210,17 @@ const UpdateFoundPetReportPage = ({
         setIsFormChanged(true)
       }          
       
-      // const handleFoundDateChange = (value : Date | undefined) => {
-      //   // const value = (e.target as HTMLInputElement).value
-      //   // setFoundDate(value)
-      //   setFoundDate(value)
-      //   setIsFormValid(true)
-      //   setIsFormChanged(true)
-      // }           
+      const handleFoundDateChange = (value : Date | undefined) => {
+        
+        if (value) {
+          setFoundDate(value)
+        } else {
+          setFoundDate(new Date())
+        }
+         setIsFormValid(true)
+        setIsFormChanged(true)
+      }           
+
     const handleReportDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = e.target.value
         setReportDescription(value)
@@ -384,7 +388,7 @@ const UpdateFoundPetReportPage = ({
                         className="rounded-md border shadow flex justify-center "
                         disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
                     /> */}
-                    <DatePicker date={foundDate} setDate={setFoundDate} />    
+                    <DatePicker date={foundDate} setDate={setFoundDate} handleDate= {handleFoundDateChange}/>    
                 </div>                
 
                 <div className="mb-2 sm:mb-6">

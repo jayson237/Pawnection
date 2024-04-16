@@ -1,8 +1,5 @@
 import { getAllProfilePosts } from "@/lib/actions/post"
 import { getCurrentUser } from "@/lib/actions/user"
-import prisma from "@/lib/prismadb"
-import { PostData } from "@/types"
-import { PostType } from "@prisma/client"
 import { NextResponse } from "next/server"
 
 export async function GET(

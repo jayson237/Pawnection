@@ -1,14 +1,13 @@
 "use client"
 
+import { SafeUser } from "@/types"
 import { FoundPetReport, LostPetReport, UserType } from "@prisma/client"
-import Image from "next/image"
 import React from "react"
 
-import { SafeUser } from "../../../types"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/Tabs"
+import { Tabs, TabsList, TabsTrigger } from "../../ui/Tabs"
+import ProfileAdoptablePetsTab from "./AdoptablePets"
+import ProfilePostsTab from "./Posts"
 import ProfileReportsTab from "./Reports"
-import ProfileAdoptablePetsTab from "./adoptable-pets"
-import ProfilePostsTab from "./posts"
 
 interface ProfileTabsInterface {
   reports: FoundPetReport[] | LostPetReport[] | null

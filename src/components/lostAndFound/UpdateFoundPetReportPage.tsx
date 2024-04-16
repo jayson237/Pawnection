@@ -307,13 +307,7 @@ const UpdateFoundPetReportPage = ({
                         <SelectItem value="Others">Others</SelectItem>
                     </SelectContent>
                     </Select>                    
-                    {/* <Input
-                        type="animalType"
-                        id="animalType"
-                        required
-                        defaultValue={foundPetReport?.animalType || ""}
-                        onChange={handleAnimalTypeChange}
-                    /> */}
+                   
                     </div>
                 </div>
 
@@ -328,18 +322,12 @@ const UpdateFoundPetReportPage = ({
                     <Input
                         type="animalBreed"
                         id="animalBreed"
-                        // placeholder="Your username"
                         defaultValue={foundPetReport?.animalBreed || ""}
                         onChange={handleAnimalBreedChange}
                         maxLength={20}
                         required
                     />
-                    {/* {!isUsernameValid && (
-                        <p className="text-sm text-red-500 mt-2">
-                        Please provide a minimum of 4 characters without any special
-                        characters
-                        </p>
-                    )} */}
+                   
                     </div>
                 </div>
 
@@ -365,7 +353,6 @@ const UpdateFoundPetReportPage = ({
                     <Input
                     type="foundArea"
                     id="foundArea"
-                    // placeholder="Your contact number"
                     defaultValue={foundPetReport?.foundArea || ""}
                     onChange={handleFoundAreaChange}
                     required
@@ -376,14 +363,7 @@ const UpdateFoundPetReportPage = ({
                     <Label htmlFor="foundDate" className="block mb-2 text-sm font-medium">
                     Found Date
                     </Label>
-                    {/* <Calendar
-                      id="foundDate"
-                        mode="single"
-                        selected={foundDate}
-                        onSelect={handleFoundDateChange}
-                        className="rounded-md border shadow flex justify-center "
-                        disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-                    /> */}
+                 
                     <DatePicker date={foundDate} setDate={setFoundDate} />    
                 </div>                
 

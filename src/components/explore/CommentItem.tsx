@@ -1,7 +1,6 @@
 "use client"
 
 import { useToast } from "@/hooks/useToast"
-import { revalPath } from "@/lib/revalidate"
 import { Comment, User } from "@prisma/client"
 import { Edit3, MoreHorizontal, Trash2 } from "lucide-react"
 import Image from "next/image"
@@ -59,7 +58,6 @@ const CommentItem = ({
       })
     } else {
       mutate()
-      // revalPath("/explore")
     }
   }
 
@@ -81,7 +79,6 @@ const CommentItem = ({
     } else {
       mutate()
       setCommentCount((prev) => prev - 1)
-      // revalPath("/explore")
     }
   }
 

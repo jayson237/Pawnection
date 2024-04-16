@@ -5,22 +5,21 @@ import { NextResponse } from "next/server"
 export async function GET(request: Request) {
   const currentUser = await getCurrentUser()
   try {
-    // const data = await request.json()
     const userId = currentUser?.id
     const foundPetReports = await prisma.foundPetReport.findMany({
-        where: {
-          userId: userId
-        },
-      })
+      where: {
+        userId: userId,
+      },
+    })
 
     const lostPetReports = await prisma.lostPetReport.findMany({
-        where: {
-        userId: userId
-        },
+      where: {
+        userId: userId,
+      },
     })
 
     const combinedReports = [...foundPetReports, ...lostPetReports]
-    
+
     return NextResponse.json(combinedReports)
   } catch (error) {
     console.log("Update error:", error)

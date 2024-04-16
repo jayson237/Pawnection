@@ -71,19 +71,26 @@ const Profile = ({
 
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
-      <div className="py-[60px]">
-        <div className="grid grid-cols-6">
-          <Image
-            className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-            src={user?.image ? user.image : "/../../icon.png"}
-            width={160}
-            height={160}
-            alt="Bordered avatar"
-          />
+      <div className="flex flex-col items-center">
+        <div className="flex items-center gap-8 py-[60px]">
+          <div className="flex flex-col items-center space-y-4">
+            <Image
+              className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
+              src={user?.image ? user.image : "/../icon.png"}
+              width={160}
+              height={160}
+              alt="Bordered avatar"
+            />
+            <div className="border rounded-xl px-1.5 py-1 text-sm w-fit ">
+              {user?.type === "PetAdoptionCentre" && "Adoption Centre"}
+            </div>
+          </div>
 
           <div className="col-span-5">
-            <div className="flex gap-8">
-              <HeaderTitle className="text-left">{user.username}</HeaderTitle>
+            <div className="flex gap-8 mb-2 items-center">
+              <HeaderTitle className="break-words text-left ml-4 w-[230px] ">
+                {user.username}
+              </HeaderTitle>
               {!isProfileOwner ? (
                 !isCurrentFollowed ? (
                   <Button
@@ -131,22 +138,16 @@ const Profile = ({
                 )
               ) : null}
               {isProfileOwner && (
-                <Button>
+                <Button className="md:px-4 px-2">
                   <Link href="/settings">Edit profile</Link>
                 </Button>
               )}
-            </div>
-            <div className="flex flex-col space-x-2">
-              <div className="my-2 border rounded-xl px-1.5 py-1 text-sm w-fit">
-                {user?.type}
-              </div>
-              <p className="mb-2 text-sm">{currentUser?.bio}</p>
             </div>
 
             <Dialog>
               <DialogTrigger asChild>
                 <Button
-                  className="hover:bg-submain"
+                  className="hover:bg-transparent"
                   variant="ghost"
                   disabled={!currentUser}
                 >
@@ -169,9 +170,7 @@ const Profile = ({
                           <Image
                             className="object-cover w-10 h-10 rounded-full"
                             src={
-                              following.image
-                                ? following.image
-                                : "/../../icon.png"
+                              following.image ? following.image : "/../icon.png"
                             }
                             width={40}
                             height={40}
@@ -246,7 +245,7 @@ const Profile = ({
             <Dialog>
               <DialogTrigger asChild>
                 <Button
-                  className="hover:bg-submain"
+                  className="hover:bg-transparent"
                   variant="ghost"
                   disabled={!currentUser}
                 >
@@ -269,9 +268,7 @@ const Profile = ({
                           <Image
                             className="object-cover w-10 h-10 rounded-full"
                             src={
-                              follower.image
-                                ? follower.image
-                                : "/../../icon.png"
+                              follower.image ? follower.image : "/../icon.png"
                             }
                             width={40}
                             height={40}
@@ -342,6 +339,8 @@ const Profile = ({
                 </div>
               </DialogContent>
             </Dialog>
+
+            <p className="ml-4 text-sm py-2">{currentUser?.bio}</p>
           </div>
         </div>
       </div>

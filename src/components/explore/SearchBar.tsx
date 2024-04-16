@@ -52,7 +52,7 @@ const SearchBar = () => {
   }
 
   return (
-    <div className="flex flex-row space-x-2 px-4 items-center">
+    <div className="flex flex-row space-x-2 items-center">
       <div className="flex flex-row items-center">
         <div className="relative flex grow items-center bg-white rounded-md">
           <Input
@@ -101,7 +101,7 @@ const SearchBar = () => {
               setFollowing(value ? "true" : "")
             }}
           />
-          <p className="text-[11px]">See followings only</p>
+          <p className="text-[11px] whitespace-nowrap">See followings only</p>
         </>
       )}
     </div>

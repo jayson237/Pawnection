@@ -35,7 +35,7 @@ function ProfileAdoptablePetsTab({ user }: ProfileAdoptablePetsTabInterface) {
   const pets = adoptablePets?.data ?? []
 
   return (
-    <TabsContent value="adoptablepets">
+    <TabsContent value="adoptablepets" className="w-full h-full pt-16 px-8">
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 w-full">
         {pets.length > 0 ? (
           pets.map((pet) => (

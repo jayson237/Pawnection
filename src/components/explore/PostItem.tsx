@@ -196,7 +196,7 @@ const PostItem = ({
               <Image
                 src={
                   !post.user?.image
-                    ? "/../icon.png"
+                    ? "/icon.png"
                     : post.user?.image
                           .split("image/upload")[0]
                           .includes("cloudinary")
@@ -328,7 +328,7 @@ const PostItem = ({
           {!isEdit ? (
             <div ref={containerRef}>
               <p
-                className={`text-[14px] ${expanded || !expandable ? "" : "line-clamp-1"} `}
+                className={`text-[14px] whitespace-normal overflow-y-hidden ${expanded || !expandable ? "" : "line-clamp-1 overflow-auto"} `}
                 ref={descriptionRef}
               >
                 {post?.description}
@@ -337,7 +337,7 @@ const PostItem = ({
                 {expandable && (
                   <div
                     onClick={() => setExpanded(!expanded)}
-                    className=" text-gray-500 transition-all ease-in-out hover:underline hover:duration-300"
+                    className=" text-gray-500 transition-all ease-in-out hover:underline hover:duration-300 cursor-pointer"
                   >
                     {!expanded ? "See more..." : "See less"}
                   </div>

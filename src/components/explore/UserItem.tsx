@@ -49,7 +49,7 @@ const UserItem = ({
           <Image
             src={
               !user?.image
-                ? "/../icon.png"
+                ? "/icon.png"
                 : user?.image.split("image/upload")[0].includes("cloudinary")
                   ? `${
                       user?.image?.split("/image/upload/")[0]

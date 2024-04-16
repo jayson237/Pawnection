@@ -70,7 +70,7 @@ function ExplorePetSitting({ currentUser }: { currentUser: SafeUser }) {
 
   return (
     <>
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col mx-auto space-y-4">
         {content?.map((post: ExtendedPost) => {
           const isOwnProfile = currentUser?.username === post.user?.username
           const isLiked = post.isCurrentUserLike

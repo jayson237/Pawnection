@@ -105,7 +105,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                     className="rounded-full h-10 w-10 ring-1 ring-primary ring-offset-2 hover:opacity-80 ease-in-out duration-200 cursor-pointer"
                     src={
                       !currentUser?.image
-                        ? "/../icon.png"
+                        ? "/icon.png"
                         : currentUser?.image
                               .split("image/upload")[0]
                               .includes("cloudinary")
@@ -203,7 +203,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                         <Image
                           src={
                             !currentUser?.image
-                              ? "/../icon.png"
+                              ? "/icon.png"
                               : currentUser?.image
                                     .split("image/upload")[0]
                                     .includes("cloudinary")

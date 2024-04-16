@@ -76,7 +76,6 @@ const FeaturedPets: React.FC = () => {
             </h2>
             <div className="py-5  ml-[-15px]">
               {pets.map((pet) => (
-                // eslint-disable-next-line react/jsx-key
                 <PetInfo key={pet.name} {...pet} />
               ))}
             </div>

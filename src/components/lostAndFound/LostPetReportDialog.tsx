@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react"
 
 import { Button } from "../ui/Button"
 import { Calendar } from "../ui/Calendar"
+import { DatePicker } from "../ui/DatePicker"
 import {
   Dialog,
   DialogContent,
@@ -21,7 +22,6 @@ import {
   SelectValue,
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
-import { DatePicker } from "../ui/DatePicker"
 
 interface LostPetReportDialogProps {
   isOpen: boolean
@@ -114,13 +114,14 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
             <div className="flex gap-4">
               <div className="mb-5">
                 <Label>Pet Type</Label>
-                <Select required = {true}
+                <Select
+                  required={true}
                   onValueChange={(val) => {
                     setAnimalType(val)
                   }}
                 >
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select Animal Type"/>
+                    <SelectValue placeholder="Select Animal Type" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Dog">Dog</SelectItem>
@@ -138,7 +139,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
                     name="Pet Breed"
                     className="border border-black rounded-md h-10 w-full px-2.5"
                     onChange={(e) => setBreed(e.currentTarget.value)}
-                    required = {true}
+                    required={true}
                   ></Input>
                 </Label>
               </div>
@@ -150,7 +151,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
                     name="Pet Name"
                     className="border border-black rounded-md h-10 w-full px-2.5"
                     onChange={(e) => setName(e.currentTarget.value)}
-                    required = {true}
+                    required={true}
                   ></Input>
                 </Label>
               </div>
@@ -158,7 +159,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
 
             <div className="mb-5">
               <Label> Gender </Label>
-              <RadioGroup onValueChange={setSex} required = {true}>
+              <RadioGroup onValueChange={setSex} required={true}>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="Male" id="r1" />
                   <Label htmlFor="r1">Male</Label>
@@ -205,15 +206,8 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
 
             <div className=" mb-5">
               <div> Last Seen Date </div>
-              {/* <Calendar
-                mode="single"
-                selected={lastSeenDate}
-                onSelect={setLastSeenDate}
-                className="rounded-md border shadow flex justify-center "
-                disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-              /> */}
-                <DatePicker date={lastSeenDate} setDate={setLastSeenDate} />
-              </div>
+              <DatePicker date={lastSeenDate} setDate={setLastSeenDate} />
+            </div>
 
             <div className="w-[180px] mb-5">
               <Label>
@@ -222,7 +216,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
                   name="Contact Details"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setContactDetails(e.currentTarget.value)}
-                  required = {true}
+                  required={true}
                 ></Input>
               </Label>
             </div>

@@ -16,7 +16,7 @@ async function ExploreTypePage({
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
   const exploreType = params.exploreType
-  console.log(exploreType)
+
   if (
     exploreType !== "post" &&
     exploreType !== "users" &&

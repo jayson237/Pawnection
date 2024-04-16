@@ -1,14 +1,13 @@
 "use client"
 
+import { toast } from "@/hooks/useToast"
+import { ExtendedPost } from "@/lib/actions/post"
+import { fetcher } from "@/lib/utils"
 import { Comment, User } from "@prisma/client"
 import { SendHorizonal } from "lucide-react"
 import React, { Dispatch, SetStateAction, useRef, useState } from "react"
 import useSWR from "swr"
 
-import { toast } from "../../hooks/useToast"
-import { ExtendedPost } from "../../lib/actions/post"
-import { revalPath } from "../../lib/revalidate"
-import { fetcher } from "../../lib/utils"
 import Loading from "../Loading"
 import {
   Dialog,

@@ -1,13 +1,13 @@
 "use client"
 
+import { ExtendedPost } from "@/lib/actions/post"
+import { fetcher } from "@/lib/utils"
 import { Like, User } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 import useSWR from "swr"
 
-import { ExtendedPost } from "../../lib/actions/post"
-import { fetcher } from "../../lib/utils"
 import {
   Dialog,
   DialogContent,

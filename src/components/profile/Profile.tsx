@@ -4,10 +4,8 @@ import { LostPetReport } from "@prisma/client"
 import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import React from "react"
 import { useEffect, useState } from "react"
-import { boolean } from "zod"
 
 import { SafeUser } from "../../types"
 import HeaderTitle from "../HeaderTitle"
@@ -19,10 +17,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../ui/Dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
-import ProfileTabs from "./tabs"
-
-type TabType = "posts" | "about" | "reports"
+import ProfileTabs from "./tabs/ProfileTab"
 
 const Profile = ({
   user,

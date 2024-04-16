@@ -1,55 +1,58 @@
-import { useToast } from "@/hooks/useToast"
-import { FormEvent, useState } from "react"
-import { useRouter } from "next/navigation"
+import Image from 'next/image';
+import { useToast } from "@/hooks/useToast";
+import { FormEvent, useState, useEffect } from "react";
 
-import { Button } from "../ui/Button"
-import { Calendar } from "../ui/Calendar"
-import {
-  Dialog,
-  DialogContent,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle,
-} from "../ui/Dialog"
-import { Input } from "../ui/Input"
-import { Label } from "../ui/Label"
-import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/Select"
-import { Textarea } from "../ui/TextArea"
-import { DatePicker } from "../ui/DatePicker"
-import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
-import { revalPath } from "@/lib/revalidate"
+import { Button } from "../ui/Button";
+import { Dialog, DialogContent, DialogOverlay, DialogPortal, DialogTitle } from "../ui/Dialog";
+import { Input } from "../ui/Input";
+import { Label } from "../ui/Label";
+import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/Select";
+import { Textarea } from "../ui/TextArea";
+import { DatePicker } from "../ui/DatePicker";
 
 interface LostPetReportDialogProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
-  const [animalType, setAnimalType] = useState("")
-  const [name, setName] = useState("")
-  const [sex, setSex] = useState("")
-  const [breed, setBreed] = useState("")
-  const [message, setMessage] = useState("")
-  const [description, setDescription] = useState("")
-  const [lastSeenArea, setLastSeenArea] = useState("")
-  const [lastSeenDate, setLastSeenDate] = useState(new Date())
-  const [contactDetails, setContactDetails] = useState("")
-  const [petImage, setPetImage] = useState<File | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
-  const router = useRouter()
+  const [animalType, setAnimalType] = useState("");
+  const [name, setName] = useState("");
+  const [sex, setSex] = useState("");
+  const [breed, setBreed] = useState("");
+  const [message, setMessage] = useState("");
+  const [description, setDescription] = useState("");
+  const [lastSeenArea, setLastSeenArea] = useState("");
+  const [lastSeenDate, setLastSeenDate] = useState(new Date());
+  const [contactDetails, setContactDetails] = useState("");
+  const [petImage, setPetImage] = useState<File | null>(null);
+  const [petImagePreview, setPetImagePreview] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setPetImage(file);
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setPetImagePreview(previewUrl);
+    } else {
+      setPetImagePreview(null);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (petImagePreview) {
+        URL.revokeObjectURL(petImagePreview);
+      }
+    };
+  }, [petImagePreview]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setIsLoading(true)
+    event.preventDefault();
+    setIsLoading(true);
     const sign = await fetch("/api/cloudinary/cdn-sign?type=post")
     const data = await sign.json()
     const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${data.cloudname}/auto/upload`
@@ -88,16 +91,12 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
         })
 
         if (!response.ok) {
-          throw new Error(
-            "Failed to create Missing Pet Report. Please try again.",
-          )
+          throw new Error("Failed to create Missing Pet Report. Please try again.");
         } else {
           setIsLoading(false)
           toast({
             description: "Missing Pet Report has been successfully created.",
           })
-          // location.reload()
-          revalPath("/lostAndFound/losses")
         }
       }
     } catch (error) {
@@ -105,154 +104,146 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
     }
   }
 
-  if (!isOpen) return null
-
+  if (!isOpen) return null;
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(isOpen) => (isOpen ? null : onClose())}
-    >
+    <Dialog open={isOpen} onOpenChange={(isOpen) => (isOpen ? null : onClose())}>
       <DialogPortal>
         <DialogOverlay className="DialogOverlay" />
-        <DialogContent className="DialogContent overflow-y-auto">
+        <DialogContent className="DialogContent overflow-y-auto max-h-[80vh]">
           <DialogTitle className="DialogTitle">Report Missing Pet</DialogTitle>
-
-          <form onSubmit={onSubmit}>
-            <div className="flex gap-4">
-              <div className="mb-5">
-                <Label>Pet Type</Label>
-                <Select required = {true}
-                  onValueChange={(val) => {
-                    setAnimalType(val)
-                  }}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select Animal Type"/>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Dog">Dog</SelectItem>
-                    <SelectItem value="Cat">Cat</SelectItem>
-                    <SelectItem value="Bird">Bird</SelectItem>
-                    <SelectItem value="Others">Others</SelectItem>
-                  </SelectContent>
-                </Select>
+          <form onSubmit={onSubmit} className="flex gap-10">
+            {/* Adjusted Left column for image upload to be top aligned */}
+            <div className="w-1/3 flex flex-col items-center justify-start">
+              <Label htmlFor="petImage" className="mb-2">Pet Image</Label>
+              <div className="w-48 h-48 border border-black rounded-md overflow-hidden flex items-center justify-center relative">
+                <div className="absolute inset-0">
+                  {petImagePreview && (
+                    <Image src={petImagePreview} alt="Uploaded Pet" layout="fill" objectFit="cover" /> // This is new
+                  )}
+                </div>
+                {!petImagePreview && (
+                  <div className="absolute z-10 flex flex-col items-center justify-center text-center pointer-events-none">
+                    <p>Upload Image</p>
+                    <p className="text-xs">(Click to select)</p>
+                  </div>
+                )}
+                <Input
+                  id="petImage"
+                  type="file"
+                  accept="image/*"
+                  required={true}
+                  className="opacity-0 w-full h-full position-absolute cursor-pointer"
+                  onChange={handleImageChange} // Ensure this is linked to your handleImageChange function
+                />
               </div>
+            </div>
 
-              <div className="w-[180px] mb-5">
-                <Label>
-                  Pet Breed
-                  <Input
-                    name="Pet Breed"
-                    className="border border-black rounded-md h-10 w-full px-2.5"
-                    onChange={(e) => setBreed(e.currentTarget.value)}
-                    required = {true}
-                  ></Input>
+            {/* Right column for other inputs */}
+            <div className="flex-1 flex flex-col gap-5">
+              <div className="flex gap-4 ">
+                <Label className="flex-1">
+                  Pet Type
+                  <Select required={true} onValueChange={setAnimalType}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Animal Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Dog">Dog</SelectItem>
+                      <SelectItem value="Cat">Cat</SelectItem>
+                      <SelectItem value="Bird">Bird</SelectItem>
+                      <SelectItem value="Others">Others</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </Label>
-              </div>
-
-              <div className="w-[180px] mb-5">
-                <Label>
+                
+                <Label className="flex-1">
                   Pet Name
                   <Input
-                    name="Pet Name"
                     className="border border-black rounded-md h-10 w-full px-2.5"
+                    required={true}
                     onChange={(e) => setName(e.currentTarget.value)}
-                    required = {true}
-                  ></Input>
+                  />
                 </Label>
               </div>
-            </div>
-
-            <div className="mb-5">
-              <Label> Gender </Label>
-              <RadioGroup onValueChange={setSex} required = {true}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Male" id="r1" />
-                  <Label htmlFor="r1">Male</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Female" id="r2" />
-                  <Label htmlFor="r2">Female</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Unsure" id="r3" />
-                  <Label htmlFor="r3">Unsure</Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            <div className=" mb-5">
-              <div> Message From Owner </div>
-              <Textarea
-                name="reportMessage"
-                required={true}
-                onChange={(e) => setMessage(e.currentTarget.value)}
-              />
-            </div>
-
-            <div className=" mb-5">
-              <div> Description </div>
-              <Textarea
-                name="reportDescription"
-                required={true}
-                onChange={(e) => setDescription(e.currentTarget.value)}
-              />
-            </div>
-
-            <div className="w-[180px] mb-5">
-              <Label>
-                Area Last Seen
+  
+              <Label className="">
+                Pet Breed
                 <Input
-                  name="Area Found"
                   className="border border-black rounded-md h-10 w-full px-2.5"
-                  onChange={(e) => setLastSeenArea(e.currentTarget.value)}
-                ></Input>
+                  required={true}
+                  onChange={(e) => setBreed(e.currentTarget.value)}
+                />
               </Label>
-            </div>
-
-            <div className=" mb-5">
-              <div> Last Seen Date </div>
-              {/* <Calendar
-                mode="single"
-                selected={lastSeenDate}
-                onSelect={setLastSeenDate}
-                className="rounded-md border shadow flex justify-center "
-                disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-              /> */}
-                <DatePicker date={lastSeenDate} setDate={setLastSeenDate} />
+              <div className="">
+                <Label>Gender</Label>
+                <RadioGroup onValueChange={setSex} required={true} className="flex gap-2">
+                  <Label htmlFor="male" className="flex items-center gap-2 cursor-pointer">
+                    <RadioGroupItem value="Male" id="male" className="cursor-pointer" />
+                    Male
+                  </Label>
+                  <Label htmlFor="female" className="flex items-center gap-2 cursor-pointer">
+                    <RadioGroupItem value="Female" id="female" className="cursor-pointer" />
+                    Female
+                  </Label>
+                  <Label htmlFor="unsure" className="flex items-center gap-2 cursor-pointer">
+                    <RadioGroupItem value="Unsure" id="unsure" className="cursor-pointer" />
+                    Unsure
+                  </Label>
+                </RadioGroup>
               </div>
 
-            <div className="w-[180px] mb-5">
-              <Label>
+              <Label className="block">
+                Message From Owner
+                <Textarea
+                  className="mt-1"
+                  required={true}
+                  onChange={(e) => setMessage(e.currentTarget.value)}
+                />
+              </Label>
+
+              <Label className="block">
+                Description
+                <Textarea
+                  className="mt-1"
+                  required={true}
+                  onChange={(e) => setDescription(e.currentTarget.value)}
+                />
+              </Label>
+
+              <Label className="block">
+                Area Last Seen
+                <Input
+                  className="mt-1 border border-black rounded-md h-10 w-full px-2.5"
+                  required={true}
+                  onChange={(e) => setLastSeenArea(e.currentTarget.value)}
+                />
+              </Label>
+
+              <Label className="block">
+                Last Seen Date
+                <DatePicker date={lastSeenDate} setDate={setLastSeenDate} />
+              </Label>
+
+              <Label className="block">
                 Contact Details
                 <Input
-                  name="Contact Details"
-                  className="border border-black rounded-md h-10 w-full px-2.5"
+                  className="mt-1 border border-black rounded-md h-10 w-full px-2.5"
+                  required={true}
                   onChange={(e) => setContactDetails(e.currentTarget.value)}
-                  required = {true}
-                ></Input>
+                />
               </Label>
-            </div>
 
-            <Input
-              type="file"
-              accept="image/*"
-              required={true}
-              onChange={(e) =>
-                setPetImage(e.target.files ? e.target.files[0] : null)
-              }
-            />
-
-            <div className="flex justify-center">
-              <Button className="w-1/6 mt-10 justify-center" type="submit">
-                {isLoading ? "Loading..." : "Submit"}
-              </Button>
+              <div className="flex justify-center w-full">
+                <Button type="submit" className={isLoading ? 'loading' : ''}>
+                  {isLoading ? "Loading..." : "Submit"}
+                </Button>
+              </div>
             </div>
           </form>
         </DialogContent>
       </DialogPortal>
     </Dialog>
-  )
+  );
 }
 
-export default LostPetReportDialog
+export default LostPetReportDialog;

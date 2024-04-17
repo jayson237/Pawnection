@@ -1,7 +1,6 @@
 "use client"
 
 import { TabsContent } from "@radix-ui/react-tabs"
-import Image from "next/image"
 import React, { Fragment } from "react"
 import useSWR from "swr"
 

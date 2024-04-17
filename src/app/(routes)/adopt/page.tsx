@@ -4,7 +4,7 @@ import HowtoCard from "@/components/adopt/HowToCard"
 import { Button, buttonVariants } from "@/components/ui/Button"
 import { getCurrentUser } from "@/lib/actions/user"
 import { cn } from "@/lib/utils"
-import { PetGender } from "@/types/pet"
+import { PetGender } from "@/types"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 

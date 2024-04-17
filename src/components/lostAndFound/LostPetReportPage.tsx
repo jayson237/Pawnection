@@ -5,163 +5,211 @@ import { LostPetReport } from "@prisma/client"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-
-import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 
-const LostPetReportPage = ({
-  lostPetReport,
-  currUser,
-}: {
-  lostPetReport: LostPetReport | null
-  currUser: SafeUser | null
-}) => {
-  const [thisLostPetReport, setThisLostPetReport] = useState(lostPetReport)
-  const [showButton, setShowButton] = useState(false)
-  const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("")
-  const [reportActive, setReportActive] = useState(true)
 
-  const router = useRouter()
+const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPetReport | null; currUser: SafeUser | null }) => {
+ const [thisLostPetReport, setThisLostPetReport] = useState(lostPetReport)
+ const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("")
+ const [reportActive, setReportActive] = useState(true)
+ const router = useRouter()
 
-  const transformImage = (url: string) => {
-    const parts = url.split("/upload/")
-    const transformationString = "w_500,h_500,c_thumb,g_face,r_max,f_auto/"
-    return `${parts[0]}/upload/${transformationString}${parts[1]}`
-  }
+ const [creatorImage, setCreatorImage] = useState("")
+ const [creatorName, setCreatorName] = useState("")
+ const [creatorContactDetails, setCreatorContactDetails] = useState("")
 
-  const checkShowButtonOrNot = async () => {
+ useEffect(() => {
+  const fetchCreatorInfo = async (userId: string) => {
     try {
-      const userId = currUser?.id
-      const reportId = thisLostPetReport?.userId
-      if (userId?.trim() == reportId?.trim()) {
-        setShowButton(true)
+      const response = await fetch("/api/lostAndFound/getReportCreatorInfo?id=" + userId, { method: "GET" })
+
+      if (!response.ok) {
+        throw new Error("Error loading reports")
       }
+
+      const data = await response.json()
+      const image = data.image
+      setCreatorImage(image)
+
+      const name = data.name
+      setCreatorName(name)
+
+      const contactDetails = data.email
+      setCreatorContactDetails(contactDetails)
+
     } catch (error) {
-      console.error(error)
+      console.error("Failed to fetch user profile picture: ", error)
     }
   }
 
-  useEffect(() => {
-    if (thisLostPetReport?.lastSeenDate) {
-      const date = new Date(thisLostPetReport.lastSeenDate)
-      const formattedDate = date.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      setFormattedLastSeenDate(formattedDate)
-    }
-  }, [thisLostPetReport?.lastSeenDate])
+  fetchCreatorInfo(thisLostPetReport!.userId)
+}, [])
+
+ const transformImage = (url: string) => {
+   const parts = url.split("/upload/")
+   const transformationString = "w_500,h_500,c_thumb,g_face,f_auto/"
+   return `${parts[0]}/upload/${transformationString}${parts[1]}`
+ }
 
 
-  const deleteReport = async () => {
-    if (
-      thisLostPetReport &&
-      confirm("Are you sure you want to delete this report?")
-    ) {
-      try {
-        const response = await fetch("/api/lostAndFound/deleteLostPetReport", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reportId: thisLostPetReport.id }),
-        })
 
-        if (!response.ok) {
-          throw new Error("Failed to delete the report.")
-        }
 
-        alert("Report deleted successfully")
-        setThisLostPetReport(null)
-        router.push("/lostAndFound")
-      } catch (error) {
-        console.error("Error deleting report:", error)
-        alert("Failed to delete the report.")
-      }
-    }
-  }
+ useEffect(() => {
+   if (thisLostPetReport?.lastSeenDate) {
+     const date = new Date(thisLostPetReport.lastSeenDate)
+     const formattedDate = date.toLocaleDateString("en-GB", {
+       day: "2-digit",
+       month: "2-digit",
+       year: "numeric",
+     })
+     setFormattedLastSeenDate(formattedDate)
+   }
+ }, [thisLostPetReport?.lastSeenDate])
 
-  const updateStatus = async () => {
-    if (
-      thisLostPetReport &&
-      confirm("Are you sure you pet has been returned to owner?")
-    ) {
-      try {
-        const response = await fetch("/api/lostAndFound/updateLostPetReportStatus", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reportId: thisLostPetReport.id }),
-        })
 
-        if (!response.ok) {
-          throw new Error("Failed to update the report status.")
-        }
+ const deleteReport = async () => {
+   if (thisLostPetReport && confirm("Are you sure you want to delete this report?")) {
+     try {
+       const response = await fetch("/api/lostAndFound/deleteLostPetReport", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ reportId: thisLostPetReport.id }),
+       })
+       if (!response.ok) {
+         throw new Error("Failed to delete the report.")
+       }
+       alert("Report deleted successfully")
+       router.push("/lostAndFound")
+     } catch (error) {
+       console.error("Error deleting report:", error)
+       alert("Failed to delete the report.")
+     }
+   }
+ }
 
-        alert("Report status updated successfully")
-        setReportActive(false)
-        router.push("/lostAndFound")
-      } catch (error) {
-        console.error("Error updating report status:", error)
-        alert("Failed to update the report status.")
-      }
-    }
-  }    
 
-  const updateReport= () => {
-    router.push(`/lostAndFound/updateLostPetReportPage/${lostPetReport?.id}`)
-  }  
-  
-  return (
-    <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
-      <div className="py-[60px]">
-        <div className="grid grid-cols-6">
-          {thisLostPetReport ? (
-            <div>
-              <Image
-                src={transformImage(thisLostPetReport.imageUrl)}
-                width={200}
-                height={200}
-                alt="Pet"
-                className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-              />
+ const updateStatus = async () => {
+   if (thisLostPetReport && confirm("Are you sure you pet has been returned to owner?")) {
+     try {
+       const response = await fetch("/api/lostAndFound/updateLostPetReportStatus", {
+         method: "PUT",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ reportId: thisLostPetReport.id }),
+       })
+       if (!response.ok) {
+         throw new Error("Failed to update the report status.")
+       }
+       alert("Report status updated successfully")
+       setReportActive(false)
+       router.push("/lostAndFound")
+     } catch (error) {
+       console.error("Error updating report status:", error)
+       alert("Failed to update the report status.")
+     }
+   }
+ }
 
-            <div className="col-span-5">
-            <div className="flex gap-8">
-              <HeaderTitle className="text-left">{thisLostPetReport.petName}</HeaderTitle>
-            </div>
-            <div>
-            {thisLostPetReport.userId ===  currUser?.id  && thisLostPetReport.isActive && (<Button onClick={() => updateReport()}>Edit Report</Button>)}     
-            {thisLostPetReport.userId ===  currUser?.id  && (<Button onClick={() => deleteReport()}>Delete Report</Button>)}   
-            {thisLostPetReport.userId === currUser?.id && thisLostPetReport.isActive && (
-                  <Button onClick={() => updateStatus()}> Pet has been found </Button>
-                )}
-              {thisLostPetReport.isActive ? "Missing Pet " : "Pet has been found"}
-            </div>
-            </div>
 
-              <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
-                <div className="flex border p-4 rounded-xl bg-white h-full  cursor-pointer">
-                  <p className="mb-2">Pet Name: {thisLostPetReport.petName}</p>
-                </div>
+ const unupdateStatus = async () => {
+   if (thisLostPetReport && confirm("Are you sure your pet has not been found?")) {
+     try {
+       const response = await fetch("/api/lostAndFound/unupdateLostPetReportStatus", {
+         method: "PUT",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ reportId: thisLostPetReport.id }),
+       })
+       if (!response.ok) {
+         throw new Error("Failed to revert the report status.")
+       }
+       alert("Report status reverted successfully")
+       setReportActive(true)
+       router.push("/lostAndFound")
+     } catch (error) {
+       console.error("Error reverting report status:", error)
+       alert("Failed to revert the report status.")
+     }
+   }
+ }
 
-                <div className="space-y-2">
-                  <p>Animal Type: {thisLostPetReport.animalType}</p>
-                  <p>Animal Breed: {thisLostPetReport.animalBreed}</p>
-                  <p>Contact Details: {thisLostPetReport.contactDetails}</p>
-                  <p>Last Seen Area: {thisLostPetReport.lastSeenArea}</p>
-                  <p>Last Seen Date: {formattedLastSeenDate}</p>
-                  <p>
-                    Report Description: {thisLostPetReport.reportDescription}
-                  </p>
-                  <p>Report Message: {thisLostPetReport.reportMessage}</p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            "Report Not Available"
-          )}
-        </div>
+
+ const updateReport = () => {
+   router.push(`/lostAndFound/updateLostPetReportPage/${lostPetReport?.id}`)
+ }
+
+
+ return (
+   <div className="container mx-auto w-full h-full px-4 py-5">
+     <div className="flex flex-row gap-x-8 mb-8">
+       <div className="flex-shrink-0" style={{ width: "512px", height: "512px" }}>
+         <Image
+           src={transformImage(thisLostPetReport!.imageUrl)}
+           layout="responsive"
+           width={512}
+           height={512}
+           objectFit="cover"
+           alt={`Lost pet named ${thisLostPetReport!.petName}`}
+         />
+       </div>
+ <div style={{ width: "410px", height: "512px" }}>
+   <div className="p-4 h-full overflow-auto">
+     <h1 className="text-left font-bold text-3xl mb-4">Basic Info</h1>
+     <hr className="mb-4 custom-divider" />
+     <div className="space-y-6">
+       <p className="text-lg"><span className="font-bold">Pet Name:</span> {thisLostPetReport!.petName}</p>
+       <p className="text-lg"><span className="font-bold">Sex:</span> {thisLostPetReport!.petSex}</p>
+       <p className="text-lg"><span className="font-bold">Species:</span> {thisLostPetReport!.animalBreed}</p>
+       <p className="text-lg"><span className="font-bold">Description:</span> {thisLostPetReport!.reportDescription}</p>
+       <p className="text-lg"><span className="font-bold">Area Last Seen:</span> {thisLostPetReport!.lastSeenArea}</p>
+       <p className="text-lg"><span className="font-bold">Last Seen Date:</span> {formattedLastSeenDate}</p>
+       <p className="text-lg"><span className="font-bold">Status:</span> {thisLostPetReport!.isActive ? "Missing" : "Pet has been found"}</p>
       </div>
-    </div>
-  )
+   </div>
+ </div>
+ <div style={{ width: "410px", height: "512px" }}>
+   <div className="p-4 h-full overflow-auto">
+     <h1 className="text-left font-bold text-3xl mb-4">Contact Details</h1>
+     <hr className="mb-4 custom-divider" /> 
+     <div className="space-y-6">
+       <p className="text-lg"><span className="font-bold">Message from Owner:</span> {thisLostPetReport!.reportMessage}</p>
+       <p className="text-lg"><span className="font-bold">Contact Detail:</span> {thisLostPetReport!.contactDetails}</p>
+     </div>
+   </div>
+ </div>
+      </div>
+     <div className="bg-[#FFECE4] h-[250px] rounded-3xl px-28 py-6 flex justify-between">
+       <div className="flex items-center space-x-10">
+         <div className="w-32 h-32 relative overflow-hidden rounded-lg">
+           <Image
+             src={creatorImage || "/icon.png"}
+             layout="fill"
+             objectFit="cover"
+             alt={`Profile picture of ${creatorName|| "user"}`}
+             className="rounded-full"
+           />
+         </div>
+         <div className="space-y-2">
+         <p className="font-bold text-xl">{creatorName}</p>
+         <p>{creatorContactDetails}</p>
+         </div>
+       </div>
+       <div className="flex flex-col items-center space-y-2 self-center">
+         {thisLostPetReport!.userId === currUser?.id && thisLostPetReport!.isActive && (
+           <Button className="w-full" onClick={updateReport}>Edit Report</Button>
+         )}
+         {thisLostPetReport!.userId === currUser?.id && (
+           <Button className="w-full" onClick={deleteReport}>Delete Report</Button>
+         )}
+         {thisLostPetReport!.userId === currUser?.id && thisLostPetReport!.isActive && (
+           <Button className="w-full" onClick={updateStatus}>Pet has been found</Button>
+         )}
+         {thisLostPetReport!.userId === currUser?.id && !thisLostPetReport!.isActive && (
+           <Button className="w-full" onClick={unupdateStatus}>Pet has not been found</Button>
+         )}
+       </div>
+     </div>
+   </div>
+ )
 }
+
+
 export default LostPetReportPage

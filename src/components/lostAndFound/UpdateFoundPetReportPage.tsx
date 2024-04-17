@@ -1,14 +1,12 @@
 "use client"
 
 import { useToast } from "@/hooks/useToast"
-import { SafeUser } from "@/types"
 import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
 import { FormEvent, useState } from "react"
 
 import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
-import { Calendar } from "../ui/Calendar"
 import { DatePicker } from "../ui/DatePicker"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
@@ -108,7 +106,6 @@ const UpdateFoundPetReportPage = ({
           title: "Successful!",
           description: "Profile updated successfully",
         })
-        // window.location.reload()
       }
 
       const result = await updateResponse.json()
@@ -176,7 +173,6 @@ const UpdateFoundPetReportPage = ({
             title: "Successful!",
             description: "Profile picture updated successfully",
           })
-          // window.location.reload()
         } else {
           toast({
             variant: "destructive",
@@ -209,35 +205,37 @@ const UpdateFoundPetReportPage = ({
     setIsFormChanged(true)
   }
 
-  const handleContactChange = (e: FormEvent<HTMLInputElement>) => {
-    const value = (e.target as HTMLInputElement).value
-    setContactDetails(value)
-    setIsFormValid(true)
-    setIsFormChanged(true)
-  }
+      const handleContactChange = (e: FormEvent<HTMLInputElement>) => {
+        const value = (e.target as HTMLInputElement).value
+        setContactDetails(value)
+        setIsFormValid(true)
+        setIsFormChanged(true)
+      }       
+      
+      const handleFoundAreaChange = (e: FormEvent<HTMLInputElement>) => {
+        const value = (e.target as HTMLInputElement).value
+        setFoundArea(value)
+        setIsFormValid(true)
+        setIsFormChanged(true)
+      }          
+      
+      const handleFoundDateChange = (value : Date | undefined) => {
+        
+        if (value) {
+          setFoundDate(value)
+        } else {
+          setFoundDate(new Date())
+        }
+         setIsFormValid(true)
+        setIsFormChanged(true)
+      }           
 
-  const handleFoundAreaChange = (e: FormEvent<HTMLInputElement>) => {
-    const value = (e.target as HTMLInputElement).value
-    setFoundArea(value)
-    setIsFormValid(true)
-    setIsFormChanged(true)
-  }
-
-  // const handleFoundDateChange = (value : Date | undefined) => {
-  //   // const value = (e.target as HTMLInputElement).value
-  //   // setFoundDate(value)
-  //   setFoundDate(value)
-  //   setIsFormValid(true)
-  //   setIsFormChanged(true)
-  // }
-  const handleReportDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
-    const value = e.target.value
-    setReportDescription(value)
-    setIsFormValid(true)
-    setIsFormChanged(true)
-  }
+    const handleReportDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const value = e.target.value
+        setReportDescription(value)
+        setIsFormValid(true)
+        setIsFormChanged(true)
+      }
 
   const handleReportMessageChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -295,7 +293,6 @@ const UpdateFoundPetReportPage = ({
                     id="petName"
                     defaultValue={foundPetReport?.petName || ""}
                     required
-                    // disabled
                     onChange={handlePetNameChange}
                   />
                 </div>
@@ -353,7 +350,6 @@ const UpdateFoundPetReportPage = ({
               <Input
                 type="contactDetails"
                 id="contactDetails"
-                // placeholder="Your contact number"
                 defaultValue={foundPetReport?.contactDetails || ""}
                 onChange={handleContactChange}
                 required
@@ -376,16 +372,12 @@ const UpdateFoundPetReportPage = ({
               />
             </div>
 
-            <div className="mb-2 sm:mb-6">
-              <Label
-                htmlFor="foundDate"
-                className="block mb-2 text-sm font-medium"
-              >
-                Found Date
-              </Label>
-
-              <DatePicker date={foundDate} setDate={setFoundDate} />
-            </div>
+                <div className="mb-2 sm:mb-6">
+                    <Label htmlFor="foundDate" className="block mb-2 text-sm font-medium">
+                    Found Date
+                    </Label>
+                    <DatePicker date={foundDate} setDate={setFoundDate} handleDate= {handleFoundDateChange}/>    
+                </div>                
 
             <div className="mb-2 sm:mb-6">
               <Label
@@ -396,7 +388,6 @@ const UpdateFoundPetReportPage = ({
               </Label>
               <Textarea
                 id="reportDescription"
-                // placeholder="Your bio"
                 defaultValue={foundPetReport?.reportDescription || ""}
                 required
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -414,7 +405,6 @@ const UpdateFoundPetReportPage = ({
               </Label>
               <Textarea
                 id="reportMessage"
-                // placeholder="Your bio"
                 defaultValue={foundPetReport?.reportMessage || ""}
                 required
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -443,5 +433,4 @@ const UpdateFoundPetReportPage = ({
     </div>
   )
 }
-
 export default UpdateFoundPetReportPage

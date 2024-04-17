@@ -23,7 +23,6 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../ui/Dialog"
-import ProfileTabs from "./tabs/ProfileTab"
 import { useRouter } from "next/navigation"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
 
@@ -135,7 +134,6 @@ const Profile = ({
     if (data1 == null && data2 == null) {
       setReports(null)
     }
-    // setLostPetReports(data)
   }  
 
   return (

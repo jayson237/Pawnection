@@ -2,14 +2,11 @@
 "use client"
 
 import { FoundPetReport, LostPetReport } from "@prisma/client"
-import { Move, MoveRight } from "lucide-react"
+import { MoveRight } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-import { Button } from "../ui/Button"
-import FoundPetReportDialog from "./FoundPetReportDialog"
-import LostPetReportDialog from "./LostPetReportDialog"
 import Link from "next/link"
 import { Card } from "../ui/Card"
 
@@ -20,8 +17,6 @@ const LostAndFound = ({
  allLostPetReports: LostPetReport[] | null
  allFoundPetReports: FoundPetReport[] | null
 }) => {
- const [isLostPetReportDialogOpen, setIsLostPetReportDialogOpen] = useState(false)
- const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] = useState(false)
  const [lostPetReports, setLostPetReports] = useState(allLostPetReports)
  const [foundPetReports, setFoundPetReports] = useState(allFoundPetReports)
 
@@ -57,17 +52,6 @@ const LostAndFound = ({
    router.push(`/lostAndFound/founds/${reportId}`)
  }
 
-
- const handleViewMoreLostPetReports = () => {
-   router.push("/lostAndFound/losses")
- }
-
-
- const handleViewMoreFoundPetReports = () => {
-   router.push("/lostAndFound/founds")
- }
-
-
  return (
   <main className="flex min-h-screen flex-col items-center divide-gray-100 w-full h-full">
     <div className="flex flex-col pb-4 w-full h-1/4 px-4 items-center mt-10">
@@ -92,7 +76,7 @@ const LostAndFound = ({
           : lostPetReports.slice(-5).map((report: LostPetReport) => (
             <Card
               key={report.id}
-              className="flex flex-col items-center cursor-pointer py-6 shadow-lg w-1/3" // Adapt width as needed
+              className="flex flex-col items-center cursor-pointer py-6 shadow-lg w-1/3"
               onClick={() => handleLostPetReportClick(report.id)}
             >
               <div className="w-48 h-48 relative"> 
@@ -129,7 +113,7 @@ const LostAndFound = ({
           : foundPetReports.slice(-5).map((report: FoundPetReport) => (
             <Card
               key={report.id}
-              className="flex flex-col items-center cursor-pointer py-6 shadow-lg w-1/3" // Consistent styling with the lost pet cards
+              className="flex flex-col items-center cursor-pointer py-6 shadow-lg w-1/3"
               onClick={() => handleFoundPetReportClick(report.id)}
             >
               <div className="w-48 h-48 relative"> 

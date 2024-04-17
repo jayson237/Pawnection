@@ -1,14 +1,12 @@
 "use client"
 
 import { useToast } from "@/hooks/useToast"
-import { SafeUser } from "@/types"
 import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
 import { FormEvent, useState } from "react"
 
 import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
-import { Calendar } from "../ui/Calendar"
 import { DatePicker } from "../ui/DatePicker"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
@@ -108,7 +106,6 @@ const UpdateFoundPetReportPage = ({
           title: "Successful!",
           description: "Profile updated successfully",
         })
-        // window.location.reload()
       }
 
       const result = await updateResponse.json()
@@ -176,7 +173,6 @@ const UpdateFoundPetReportPage = ({
             title: "Successful!",
             description: "Profile picture updated successfully",
           })
-          // window.location.reload()
         } else {
           toast({
             variant: "destructive",
@@ -297,7 +293,6 @@ const UpdateFoundPetReportPage = ({
                     id="petName"
                     defaultValue={foundPetReport?.petName || ""}
                     required
-                    // disabled
                     onChange={handlePetNameChange}
                   />
                 </div>
@@ -355,7 +350,6 @@ const UpdateFoundPetReportPage = ({
               <Input
                 type="contactDetails"
                 id="contactDetails"
-                // placeholder="Your contact number"
                 defaultValue={foundPetReport?.contactDetails || ""}
                 onChange={handleContactChange}
                 required
@@ -382,14 +376,6 @@ const UpdateFoundPetReportPage = ({
                     <Label htmlFor="foundDate" className="block mb-2 text-sm font-medium">
                     Found Date
                     </Label>
-                    {/* <Calendar
-                      id="foundDate"
-                        mode="single"
-                        selected={foundDate}
-                        onSelect={handleFoundDateChange}
-                        className="rounded-md border shadow flex justify-center "
-                        disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-                    /> */}
                     <DatePicker date={foundDate} setDate={setFoundDate} handleDate= {handleFoundDateChange}/>    
                 </div>                
 
@@ -402,7 +388,6 @@ const UpdateFoundPetReportPage = ({
               </Label>
               <Textarea
                 id="reportDescription"
-                // placeholder="Your bio"
                 defaultValue={foundPetReport?.reportDescription || ""}
                 required
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -420,7 +405,6 @@ const UpdateFoundPetReportPage = ({
               </Label>
               <Textarea
                 id="reportMessage"
-                // placeholder="Your bio"
                 defaultValue={foundPetReport?.reportMessage || ""}
                 required
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>

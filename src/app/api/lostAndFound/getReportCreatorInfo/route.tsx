@@ -1,10 +1,7 @@
-import { getSpecifiedUser } from "@/lib/actions/user"
 import { NextResponse } from "next/server"
 import prisma from "@/lib/prismadb"
 
-
 export async function GET(request: Request){
-
     try {
       const { searchParams } = new URL(request.url)
       const creatorId = searchParams.get("id") as string      

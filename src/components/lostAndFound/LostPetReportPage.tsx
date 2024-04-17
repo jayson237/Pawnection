@@ -1,4 +1,5 @@
 "use client"
+
 import { SafeUser } from "@/types"
 import { LostPetReport } from "@prisma/client"
 import Image from "next/image"
@@ -9,21 +10,18 @@ import { Button } from "../ui/Button"
 
 const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPetReport | null; currUser: SafeUser | null }) => {
  const [thisLostPetReport, setThisLostPetReport] = useState(lostPetReport)
- const [showButton, setShowButton] = useState(false)
  const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("")
  const [reportActive, setReportActive] = useState(true)
  const router = useRouter()
 
- const [creatorImage, setCreatorImage] = useState("/path/to/default/image")
+ const [creatorImage, setCreatorImage] = useState("")
  const [creatorName, setCreatorName] = useState("")
  const [creatorContactDetails, setCreatorContactDetails] = useState("")
 
  useEffect(() => {
   const fetchCreatorInfo = async (userId: string) => {
     try {
-      console.log(userId)
       const response = await fetch("/api/lostAndFound/getReportCreatorInfo?id=" + userId, { method: "GET" })
-      // console.log(response)
 
       if (!response.ok) {
         throw new Error("Error loading reports")
@@ -142,7 +140,6 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
  return (
    <div className="container mx-auto w-full h-full px-4 py-5">
      <div className="flex flex-row gap-x-8 mb-8">
-       {/* Large Image Container */}
        <div className="flex-shrink-0" style={{ width: "512px", height: "512px" }}>
          <Image
            src={transformImage(thisLostPetReport!.imageUrl)}
@@ -153,11 +150,10 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
            alt={`Lost pet named ${thisLostPetReport!.petName}`}
          />
        </div>
-  {/* Basic Info Section with Transparent Background */}
  <div style={{ width: "410px", height: "512px" }}>
    <div className="p-4 h-full overflow-auto">
      <h1 className="text-left font-bold text-3xl mb-4">Basic Info</h1>
-     <hr className="mb-4 custom-divider" /> {/* Customized Divider */}
+     <hr className="mb-4 custom-divider" />
      <div className="space-y-6">
        <p className="text-lg"><span className="font-bold">Pet Name:</span> {thisLostPetReport!.petName}</p>
        <p className="text-lg"><span className="font-bold">Sex:</span> {thisLostPetReport!.petSex}</p>
@@ -169,11 +165,10 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
       </div>
    </div>
  </div>
-  {/* Contact Details & Lost Info Section with Transparent Background */}
  <div style={{ width: "410px", height: "512px" }}>
    <div className="p-4 h-full overflow-auto">
      <h1 className="text-left font-bold text-3xl mb-4">Contact Details</h1>
-     <hr className="mb-4 custom-divider" /> {/* Customized Divider */}
+     <hr className="mb-4 custom-divider" /> 
      <div className="space-y-6">
        <p className="text-lg"><span className="font-bold">Message from Owner:</span> {thisLostPetReport!.reportMessage}</p>
        <p className="text-lg"><span className="font-bold">Contact Detail:</span> {thisLostPetReport!.contactDetails}</p>
@@ -181,9 +176,6 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
    </div>
  </div>
       </div>
-
-
-     {/* Button Section */}
      <div className="bg-[#FFECE4] h-[250px] rounded-3xl px-28 py-6 flex justify-between">
        <div className="flex items-center space-x-10">
          <div className="w-32 h-32 relative overflow-hidden rounded-lg">
@@ -191,7 +183,7 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
              src={creatorImage || "/icon.png"}
              layout="fill"
              objectFit="cover"
-             alt={"Profile picture of ${creatorName|| 'user'}"}
+             alt={`Profile picture of ${creatorName|| "user"}`}
              className="rounded-full"
            />
          </div>
@@ -221,13 +213,3 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
 
 
 export default LostPetReportPage
-
-
-const CardItem = ({title, content}: {title: string, content: string}) => {
- return (
-   <div>
-     <h1 className="font-bold"> • {title}:</h1>
-     <p className="ml-3">{content}</p>
-   </div>
- )
-}

@@ -37,9 +37,8 @@ export function DatePicker({ date, setDate, handleDate }: DatePickerProps) {
           onSelect={(selectedDate) => {
             if (selectedDate != null) {
               setDate(selectedDate)
-              handleDate?.(selectedDate) // Safely call test if it's provided
+              handleDate?.(selectedDate)
             } else {
-              // Handle the null case if necessary
               handleDate?.(undefined)
             }
           }}

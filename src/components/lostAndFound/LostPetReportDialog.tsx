@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 import { useToast } from "@/hooks/useToast"
 import { FormEvent, useState, useEffect } from "react"
@@ -112,13 +114,12 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
         <DialogContent className="DialogContent overflow-y-auto max-h-[80vh]">
           <DialogTitle className="DialogTitle">Report Missing Pet</DialogTitle>
           <form onSubmit={onSubmit} className="flex gap-10">
-            {/* Adjusted Left column for image upload to be top aligned */}
             <div className="w-1/3 flex flex-col items-center justify-start">
               <Label htmlFor="petImage" className="mb-2">Pet Image</Label>
               <div className="w-48 h-48 border border-black rounded-md overflow-hidden flex items-center justify-center relative">
                 <div className="absolute inset-0">
                   {petImagePreview && (
-                    <Image src={petImagePreview} alt="Uploaded Pet" layout="fill" objectFit="cover" /> // This is new
+                    <Image src={petImagePreview} alt="Uploaded Pet" layout="fill" objectFit="cover" />
                   )}
                 </div>
                 {!petImagePreview && (
@@ -133,12 +134,10 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
                   accept="image/*"
                   required={true}
                   className="opacity-0 w-full h-full position-absolute cursor-pointer"
-                  onChange={handleImageChange} // Ensure this is linked to your handleImageChange function
+                  onChange={handleImageChange} 
                 />
               </div>
             </div>
-
-            {/* Right column for other inputs */}
             <div className="flex-1 flex flex-col gap-5">
               <div className="flex gap-4 ">
                 <Label className="flex-1">

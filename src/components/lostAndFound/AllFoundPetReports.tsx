@@ -1,4 +1,5 @@
 "use client"
+
 import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -25,16 +26,13 @@ const AllFoundPetReports = ({
  const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] = useState(false)
  const [searchTerm, setSearchTerm] = useState("")
 
-
  const transformImage = (url: string) => {
    const parts = url.split("/upload/")
    const transformationString = "w_500,h_500,c_thumb,g_face,f_auto/"
    return `${parts[0]}/upload/${transformationString}${parts[1]}`
  }
 
-
  const router = useRouter()
-
 
  const handleFoundPetReportClick = (reportId: string) => {
    router.push(`/lostAndFound/founds/${reportId}`)

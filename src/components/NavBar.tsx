@@ -69,12 +69,13 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                   </Link>
                 ) : (
                   <Link
-                  prefetch={false}
-                  href="/adoptionCenter"
-                  className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
-                >
-                  Adoption Management
-                </Link>)}
+                    prefetch={false}
+                    href="/adoptionCenter"
+                    className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
+                  >
+                    Adoption Management
+                  </Link>
+                )}
                 <Link
                   prefetch={false}
                   href="/explore"
@@ -246,13 +247,22 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                   </Link>
                 </li>
                 <li>
-                  {currentUser?.type !== "PetAdoptionCentre" && (
+                  {currentUser?.type !== "PetAdoptionCentre" ? (
                     <Link
                       prefetch={false}
                       href="/adopt"
                       className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                     >
                       Adopt
+                    </Link>
+                  ) : (
+                    <Link
+                      prefetch={false}
+                      href="/adoptionCenter"
+                      onClick={toggleMenu}
+                      className="text-primary text-sm font-medium hover:bg-main/70 rounded-md ease-in-out duration-200 py-2 px-4"
+                    >
+                      Adoption Management
                     </Link>
                   )}
                 </li>
@@ -276,18 +286,6 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                     Recommendations
                   </Link>
                 </li>
-                {currentUser?.type === "PetAdoptionCentre" && (
-                  <li>
-                    <Link
-                      prefetch={false}
-                      href="/adoptionCenter"
-                      onClick={toggleMenu}
-                      className="text-primary text-sm font-medium hover:bg-main/70 rounded-md ease-in-out duration-200 py-2 px-4"
-                    >
-                      Adoption Management
-                    </Link>
-                  </li>
-                )}
                 <li>
                   <div className="ml-3">
                     <PostForm />

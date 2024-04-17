@@ -1,8 +1,8 @@
 "use client"
 
+import { useToast } from "@/hooks/useToast"
 import Image from "next/image"
 import { useEffect } from "react"
-import { useToast } from "@/hooks/useToast"
 import { FormEvent, useState } from "react"
 
 import { Button } from "../ui/Button"
@@ -29,24 +29,27 @@ import { Textarea } from "../ui/TextArea"
 interface FoundPetReportDialogProps {
   isOpen: boolean
   onClose: () => void
+  onReportCreated: () => void;
+
 }
 
 const FoundPetReportDialog = ({
   isOpen,
   onClose,
+  onReportCreated
 }: FoundPetReportDialogProps) => {
   const [petImagePreview, setPetImagePreview] = useState<string | null>(null)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null
     setPetImage(file)
     if (file) {
-        const previewUrl = URL.createObjectURL(file)
-        setPetImagePreview(previewUrl) 
+      const previewUrl = URL.createObjectURL(file)
+      setPetImagePreview(previewUrl)
     } else {
-        setPetImagePreview(null)
+      setPetImagePreview(null)
     }
-}
-  
+  }
+
   useEffect(() => {
     return () => {
       if (petImagePreview) {
@@ -76,7 +79,7 @@ const FoundPetReportDialog = ({
     foundArea: "",
     foundDate: "",
     contactDetails: "",
-    petImage: ""
+    petImage: "",
   })
 
   const validateForm = () => {
@@ -90,10 +93,10 @@ const FoundPetReportDialog = ({
       foundArea: !foundArea ? "Area found is required" : "",
       foundDate: !foundDate ? "Date found is required" : "",
       contactDetails: !contactDetails ? "Contact details are required" : "",
-      petImage: !petImage ? "Pet image is required" : ""
+      petImage: !petImage ? "Pet image is required" : "",
     }
     setErrors(newErrors)
-    return Object.values(newErrors).every(error => !error)
+    return Object.values(newErrors).every((error) => !error)
   }
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -145,6 +148,8 @@ const FoundPetReportDialog = ({
           toast({
             description: "Found Pet Report has been successfully created.",
           })
+          onReportCreated()
+          onClose()
         }
       }
     } catch (error) {
@@ -155,37 +160,44 @@ const FoundPetReportDialog = ({
   if (!isOpen) return null
 
   return (
-    <Dialog open={isOpen} onOpenChange={(isOpen) => (isOpen ? null : onClose())}>
-    <DialogPortal>
-      <DialogOverlay className="DialogOverlay" />
-      <DialogContent className="DialogContent overflow-y-auto max-h-[80vh]">
-        <DialogTitle className="DialogTitle">Report Found Pet</DialogTitle>
-        <form onSubmit={onSubmit} className="flex gap-10">
-                  <div className="w-1/3 flex flex-col items-center justify-start">
-          <Label htmlFor="petImage" className="mb-2">Pet Image</Label>
-          <div className="w-48 h-48 border border-black rounded-md overflow-hidden flex items-center justify-center relative">
-            <div className="absolute inset-0">
-              {petImagePreview && (
-                <Image src={petImagePreview} alt="Uploaded Pet" layout="fill" objectFit="cover" />
-              )}
-            </div>
-            {!petImagePreview && (
-              <div className="absolute z-10 flex flex-col items-center justify-center text-center pointer-events-none">
-                <p>Upload Image</p>
-                <p className="text-xs">(Click to select)</p>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(isOpen) => (isOpen ? null : onClose())}
+    >
+      <DialogPortal>
+        <DialogOverlay className="DialogOverlay" />
+        <DialogContent className="DialogContent overflow-y-auto max-h-[80vh]">
+          <DialogTitle className="DialogTitle">Report Found Pet</DialogTitle>
+          <form onSubmit={onSubmit} className="flex gap-10">
+            <div className="w-1/3 flex flex-col items-center justify-start">
+              <div className="w-48 h-48 border rounded-md overflow-hidden flex items-center justify-center relative">
+                <div className="absolute inset-0">
+                  {petImagePreview && (
+                    <Image
+                      src={petImagePreview}
+                      alt="Uploaded Pet"
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  )}
+                </div>
+                {!petImagePreview && (
+                  <div className="absolute z-10 flex flex-col items-center justify-center text-center pointer-events-none">
+                    <p>Upload Image</p>
+                    <p className="text-xs">(Click to select)</p>
+                  </div>
+                )}
+                <Input
+                  id="petImage"
+                  type="file"
+                  accept="image/*"
+                  required={true}
+                  className="opacity-0 w-full h-full position-absolute cursor-pointer"
+                  onChange={handleImageChange}
+                />
               </div>
-            )}
-            <Input
-              id="petImage"
-              type="file"
-              accept="image/*"
-              required={true}
-              className="opacity-0 w-full h-full position-absolute cursor-pointer"
-              onChange={handleImageChange} 
-            />
-          </div>
-        </div>
-        <div className="flex-1 flex flex-col gap-5">
+            </div>
+            <div className="flex-1 flex flex-col gap-5">
               <div className="flex gap-4 ">
                 <Label className="flex-1">
                   Pet Type
@@ -201,82 +213,108 @@ const FoundPetReportDialog = ({
                     </SelectContent>
                   </Select>
                 </Label>
-                
+
                 <Label className="flex-1">
                   Pet Name
                   <Input
-                    className="border border-black rounded-md h-10 w-full px-2.5"
+                    className="border rounded-md h-10 w-full px-2.5"
                     required={true}
                     onChange={(e) => setName(e.currentTarget.value)}
                   />
                 </Label>
               </div>
-  
+
               <Label className="">
                 Pet Breed
                 <Input
-                  className="border border-black rounded-md h-10 w-full px-2.5"
+                  className="border rounded-md h-10 w-full px-2.5"
                   required={true}
                   onChange={(e) => setBreed(e.currentTarget.value)}
                 />
               </Label>
-  
+
               <div className="">
                 <Label>Gender</Label>
-                <RadioGroup onValueChange={setSex} required={true} className="flex gap-2">
-                  <Label htmlFor="male" className="flex items-center gap-2 cursor-pointer">
-                    <RadioGroupItem value="Male" id="male" className="cursor-pointer" />
+                <RadioGroup
+                  onValueChange={setSex}
+                  required={true}
+                  className="flex gap-2"
+                >
+                  <Label
+                    htmlFor="male"
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <RadioGroupItem
+                      value="Male"
+                      id="male"
+                      className="cursor-pointer"
+                    />
                     Male
                   </Label>
-                  <Label htmlFor="female" className="flex items-center gap-2 cursor-pointer">
-                    <RadioGroupItem value="Female" id="female" className="cursor-pointer" />
+                  <Label
+                    htmlFor="female"
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <RadioGroupItem
+                      value="Female"
+                      id="female"
+                      className="cursor-pointer"
+                    />
                     Female
                   </Label>
-                  <Label htmlFor="unsure" className="flex items-center gap-2 cursor-pointer">
-                    <RadioGroupItem value="Unsure" id="unsure" className="cursor-pointer" />
+                  <Label
+                    htmlFor="unsure"
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <RadioGroupItem
+                      value="Unsure"
+                      id="unsure"
+                      className="cursor-pointer"
+                    />
                     Unsure
                   </Label>
                 </RadioGroup>
               </div>
-  
+
               <Label className="">
-                Message From Owner
-                <Textarea
-                  required={true}
-                  onChange={(e) => setMessage(e.currentTarget.value)}
-                />
-              </Label>
-  
-              <Label className="">
-                Description
+                Pet Description
                 <Textarea
                   required={true}
                   onChange={(e) => setDescription(e.currentTarget.value)}
                 />
               </Label>
-  
+
               <Label className="w-full ">
                 Area Found
                 <Input
-                  className="border border-black rounded-md h-10 w-full px-2.5"
+                  className="border rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setFoundArea(e.currentTarget.value)}
                 />
               </Label>
-  
-            <div className=" ">
-              <div> Found Date </div>
-              <DatePicker date={foundDate} setDate={setFoundDate} />
-            </div>
-  
+
+              <div className=" ">
+                <div> Found Date </div>
+                <DatePicker date={foundDate} setDate={setFoundDate} />
+              </div>
+
               <Label className="w-full ">
                 Contact Details
                 <Input
-                  className="border border-black rounded-md h-10 w-full px-2.5"
+                  className="border rounded-md h-10 w-full px-2.5"
                   required={true}
                   onChange={(e) => setContactDetails(e.currentTarget.value)}
                 />
               </Label>
-              <div className="flex justify-center w-full">
+
+              <Label className="">
+                Message From Founder
+                <Textarea
+                  required={true}
+                  onChange={(e) => setMessage(e.currentTarget.value)}
+                />
+              </Label>
+
+              <div className="flex justify-end w-full">
                 <Button type="submit">
                   {isLoading ? "Loading..." : "Submit"}
                 </Button>

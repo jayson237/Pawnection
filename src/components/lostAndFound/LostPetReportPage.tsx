@@ -189,8 +189,6 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
          <div className="w-32 h-32 relative overflow-hidden rounded-lg">
            <Image
              src={creatorImage || "/icon.png"}
-
-
              layout="fill"
              objectFit="cover"
              alt={"Profile picture of ${creatorName|| 'user'}"}

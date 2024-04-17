@@ -12,7 +12,7 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useRef } from "react"
 import { KeyedMutator } from "swr"
 
@@ -35,11 +35,15 @@ const PostItem = ({
   isLiked,
   isOwnProfile,
   isCurrentFollowed,
+  content,
+  setContent,
 }: {
   post: ExtendedPost
   isLiked: boolean
   isOwnProfile: boolean
   isCurrentFollowed: boolean
+  content: ExtendedPost[]
+  setContent: Dispatch<SetStateAction<ExtendedPost[]>>
 }) => {
   const { toast } = useToast()
   const [isImageLoading, setImageLoading] = useState(true)
@@ -130,7 +134,10 @@ const PostItem = ({
       toast({
         title: "Successfully updated description",
       })
-      revalPath("/explore")
+      setContent((prev) =>
+        prev.map((x) => (x.id === post.id ? { ...x, description } : x)),
+      )
+      // revalPath("/explore")
     }
   }
 
@@ -157,7 +164,8 @@ const PostItem = ({
         title: "Successfully deleted post",
         description: "Please close this window",
       })
-      revalPath("/explore")
+      setContent(content.filter((x) => x.id !== post.id))
+      // revalPath("/explore")
     }
   }
 

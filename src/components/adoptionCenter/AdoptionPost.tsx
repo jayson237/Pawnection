@@ -46,8 +46,6 @@ function AdoptionPost() {
     },
   })
 
-  console.log(watch())
-
   const onSubmit: SubmitHandler<CreateAdoptablePetPayloadType> = async (
     data,
   ) => {

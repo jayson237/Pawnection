@@ -8,7 +8,7 @@ export default async function AuthType() {
   if (currentUser.type) redirect("/")
 
   return (
-    <div className="h-full w-full flex flex-col place-content-center place-items-center">
+    <div className="h-screen w-full flex flex-col items-center justify-center pb-24 ">
       <TypeForm />
     </div>
   )

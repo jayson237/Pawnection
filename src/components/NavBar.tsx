@@ -59,7 +59,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 >
                   Lost & Found
                 </Link>
-                {currentUser?.type !== "PetAdoptionCentre" && (
+                {currentUser?.type !== "PetAdoptionCentre" ? (
                   <Link
                     prefetch={false}
                     href="/adopt"
@@ -67,7 +67,14 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                   >
                     Adopt
                   </Link>
-                )}
+                ) : (
+                  <Link
+                  prefetch={false}
+                  href="/adoptionCenter"
+                  className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
+                >
+                  Adoption Management
+                </Link>)}
                 <Link
                   prefetch={false}
                   href="/explore"
@@ -82,15 +89,6 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 >
                   Recommendations
                 </Link>
-                {currentUser?.type === "PetAdoptionCentre" && (
-                  <Link
-                    prefetch={false}
-                    href="/adoptionCenter"
-                    className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
-                  >
-                    Adoption Management
-                  </Link>
-                )}
               </div>
             </>
           )}

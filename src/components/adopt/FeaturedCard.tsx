@@ -1,6 +1,6 @@
 "use client"
 
-import { PetGender } from "@/types"
+import { PetGender } from "@/types/pet"
 import Image from "next/image"
 
 function FeaturedCard({
@@ -27,7 +27,7 @@ function FeaturedCard({
       <div className="p-3 space-y-1">
         <h4 className="">{petName}</h4>
         <p className="text-xl">
-          {petGender}, {petAge} {Number.parseInt(petAge) > 1 ? "years" : "year"}{" "}
+          {petGender}, {petAge} {Number.parseInt(petAge) > 1 ? "years" : "year"}
           old
         </p>
       </div>

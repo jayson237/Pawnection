@@ -29,3 +29,8 @@ export type SafeUser = Omit<
   }[]
   isCurrentFollowed?: boolean
 }
+
+export enum PetGender {
+  male = "Male",
+  female = "Female",
+}

@@ -16,6 +16,23 @@ export async function POST(req: Request) {
       },
     )
 
+  const findUsername = await prisma.user.findFirst({
+    where: {
+      username: username,
+    },
+  })
+
+  if (findUsername && findUsername?.id !== currentUser?.id) {
+    return NextResponse.json(
+      {
+        message: "Username already exists",
+      },
+      {
+        status: 400,
+      },
+    )
+  }
+
   const set = await prisma.user.update({
     where: {
       email: currentUser?.email,

@@ -91,7 +91,7 @@ export async function getOneUser(username: string): Promise<SafeUser | null> {
   try {
     const currentUser = await getCurrentUser()
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         username: username,
       },
@@ -197,28 +197,28 @@ export async function unfollowUser(
   }
 }
 
-
-export async function getSpecifiedUser ( userId: string ):  Promise<SafeUser | null> {
+export async function getSpecifiedUser(
+  userId: string,
+): Promise<SafeUser | null> {
   try {
     const user = await prisma.user.findUnique({
-          where : {
-            id : userId
-          }
-        })
-      
-      if (!user) {
-        return null
-      }
+      where: {
+        id: userId,
+      },
+    })
 
-      const { hashedPassword, ...rest } = user
-      
-      return {
-        ...rest,
-        emailVerified: rest.emailVerified?.toISOString(),
-        createdAt: rest.createdAt.toISOString(),
-        updatedAt: rest.updatedAt.toISOString(),
-      }
+    if (!user) {
+      return null
+    }
 
+    const { hashedPassword, ...rest } = user
+
+    return {
+      ...rest,
+      emailVerified: rest.emailVerified?.toISOString(),
+      createdAt: rest.createdAt.toISOString(),
+      updatedAt: rest.updatedAt.toISOString(),
+    }
   } catch (error) {
     return null
   }

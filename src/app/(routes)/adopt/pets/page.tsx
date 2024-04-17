@@ -1,4 +1,5 @@
 import HeaderTitle from "@/components/HeaderTitle"
+import { Badge } from "@/components/ui/Badge"
 import { Label } from "@/components/ui/Label"
 import { getAllAdoptablePets } from "@/lib/actions/adopt"
 import { cn } from "@/lib/utils"
@@ -23,7 +24,7 @@ export default async function AdoptViewAllPetsPage() {
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 w-full">
         {adoptablePets.map((pet) => (
           <Link
-            href={pet.status === "Adopted" ? "#" : `/adopt/process/${pet.id}`}
+            href={pet.status === "Adopted" ? "#" : `/adopt/requests/${pet.id}`}
             key={pet.id}
             className={cn(
               "bg-white rounded-lg shadow-md",
@@ -41,11 +42,14 @@ export default async function AdoptViewAllPetsPage() {
               <h2 className="text-xl font-bold">{pet.name}</h2>
               <p className="text-gray-500">{pet.breed}</p>
               <p className="text-gray-500">{pet.age} years old</p>
-              {pet.status === "Adopted" ? (
-                <Label className="text-red-500">Adopted</Label>
-              ) : (
-                <Label>Available</Label>
-              )}
+              <div className="space-x-2">
+                {pet.status === "Adopted" ? (
+                  <Label className="text-red-500">Adopted</Label>
+                ) : (
+                  <Label>Available</Label>
+                )}
+                {pet.adoptionRequests.length > 0 && <Badge>Requested</Badge>}
+              </div>
             </div>
           </Link>
         ))}

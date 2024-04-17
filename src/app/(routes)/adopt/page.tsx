@@ -10,12 +10,10 @@ import { notFound, redirect } from "next/navigation"
 
 export default async function Adopt() {
   const currentUser = await getCurrentUser()
-  if (!currentUser?.type) {
-    redirect("/auth/type")
-  }
-  if (currentUser?.type === "PetAdoptionCentre") {
-    redirect(notFound())
-  }
+  if (!currentUser) redirect("/auth")
+  if (!currentUser?.type) redirect("/auth/type")
+  if (currentUser?.type !== "PetLover") redirect("/adoptionCenter")
+
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="py-[60px]">

@@ -30,33 +30,7 @@ export type SafeUser = Omit<
   isCurrentFollowed?: boolean
 }
 
-export type FollowType =
-  | {
-      username: string | null
-      image: string | null
-      isCurrentFollowed?: boolean
-    }[]
-  | undefined
-
-export type FollowItemType = {
-  username: string | null
-  image: string | null
-  isCurrentFollowed?: boolean
-}
-
 export enum PetGender {
   male = "Male",
   female = "Female",
-}
-
-export enum FolderType {
-  adoptable = "adoptable",
-  post = "post",
-  avatar = "avatar",
-}
-
-export interface PostData {
-  imageUrl: string
-  description?: string
-  type: string
 }

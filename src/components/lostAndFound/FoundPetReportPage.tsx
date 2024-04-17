@@ -1,13 +1,11 @@
 "use client"
 
-
 import { SafeUser } from "@/types"
 import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "../ui/Button"
-import { getSpecifiedUser } from "@/lib/actions/user"
 
 const FoundPetReportPage = ({
  foundPetReport,
@@ -21,7 +19,7 @@ const FoundPetReportPage = ({
  const [reportActive, setReportActive] = useState(true)
  const router = useRouter()
 
- const [creatorImage, setCreatorImage] = useState("/icon.png")
+ const [creatorImage, setCreatorImage] = useState("")
  const [creatorName, setCreatorName] = useState("")
  const [creatorContactDetails, setCreatorContactDetails] = useState("")
 
@@ -29,9 +27,7 @@ const FoundPetReportPage = ({
  useEffect(() => {
   const fetchCreatorInfo = async (userId: string) => {
     try {
-      console.log(userId)
       const response = await fetch("/api/lostAndFound/getReportCreatorInfo?id=" + userId, { method: "GET" })
-      // console.log(response)
 
       if (!response.ok) {
         throw new Error("Error loading reports")
@@ -153,7 +149,6 @@ const FoundPetReportPage = ({
  return (
    <div className="container mx-auto px-4 py-5">
      <div className="flex flex-row gap-x-8 mb-8">
-       {/* Large Image Container */}
        <div className= "flex-shrink-0" style={{ width: "512px" , height: "512px" }}>
          <Image
            src={transformImage(thisFoundPetReport!.imageUrl)}
@@ -165,8 +160,6 @@ const FoundPetReportPage = ({
          />
        </div>
 
-
-       {/* Basic Info Section */}
        <div style={{ width: "410px", height: "512px"  }}>
          <div className="p-4 h-full overflow-auto">
            <h1 className="text-left font-bold text-3xl mb-4">Basic Info</h1>
@@ -182,9 +175,6 @@ const FoundPetReportPage = ({
            </div>
          </div>
        </div>
-
-
-       {/* Contact Details & Lost Info Section */}
        <div style={{ width: "410px", height: "512px"  }}>
          <div className="p-4 h-full overflow-auto">
            <h1 className="text-left font-bold text-3xl mb-4">Contact Details</h1>
@@ -197,8 +187,6 @@ const FoundPetReportPage = ({
        </div>
      </div>
 
-
-     {/* Button Section */}
      <div className="bg-[#FFECE4] h-[250px] rounded-3xl px-28 py-6 flex justify-between">
        <div className="flex items-center space-x-10">
          <div className="w-32 h-32 relative overflow-hidden rounded-lg">

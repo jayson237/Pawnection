@@ -1,14 +1,12 @@
 "use client"
 
 import { useToast } from "@/hooks/useToast"
-import { SafeUser } from "@/types"
 import { LostPetReport } from "@prisma/client"
 import Image from "next/image"
 import { FormEvent, useState } from "react"
 
 import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
-import { Calendar } from "../ui/Calendar"
 import { DatePicker } from "../ui/DatePicker"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
@@ -112,7 +110,6 @@ const UpdateLostPetReportPage = ({
           title: "Successful!",
           description: "Profile updated successfully",
         })
-        // window.location.reload()
       }
 
       const result = await updateResponse.json()
@@ -180,7 +177,6 @@ const UpdateLostPetReportPage = ({
             title: "Successful!",
             description: "Profile picture updated successfully",
           })
-          // window.location.reload()
         } else {
           toast({
             variant: "destructive",
@@ -229,10 +225,9 @@ const UpdateLostPetReportPage = ({
       
       const handleLastSeenDateChange = (value: Date | undefined) => {
         if (value) {
-          setLastSeenDate(value) // Set the date only if it's not undefined
+          setLastSeenDate(value) 
         } else {
-          // Handle the undefined case explicitly, e.g., reset to a default value or keep the previous state
-          setLastSeenDate(new Date()) // Example: reset to current date
+          setLastSeenDate(new Date()) 
         }
         setIsFormValid(true)
         setIsFormChanged(true)
@@ -304,7 +299,6 @@ const UpdateLostPetReportPage = ({
                         id="petName"
                         defaultValue={lostPetReport?.petName|| ""}
                         required
-                        // disabled
                         onChange={handlePetNameChange}
                         />
                     </div>
@@ -330,12 +324,6 @@ const UpdateLostPetReportPage = ({
                         <SelectItem value="Others">Others</SelectItem>
                     </SelectContent>
                     </Select>                    
-                    {/* <Input
-                        type="animalType"
-                        id="animalType"
-                        required
-                        defaultValue={lostPetReport?.animalType || ""}
-                        onChange={handleAnimalTypeChange} /> */}
                     </div>
                 </div>
 
@@ -350,7 +338,6 @@ const UpdateLostPetReportPage = ({
                 <Input
                   type="animalBreed"
                   id="animalBreed"
-                  // placeholder="Your username"
                   defaultValue={lostPetReport?.animalBreed || ""}
                   onChange={handleAnimalBreedChange}
                   maxLength={20}
@@ -369,7 +356,6 @@ const UpdateLostPetReportPage = ({
               <Input
                 type="contactDetails"
                 id="contactDetails"
-                // placeholder="Your contact number"
                 defaultValue={lostPetReport?.contactDetails || ""}
                 onChange={handleContactChange}
                 required
@@ -386,7 +372,6 @@ const UpdateLostPetReportPage = ({
               <Input
                 type="foundArea"
                 id="foundArea"
-                // placeholder="Your contact number"
                 defaultValue={lostPetReport?.lastSeenArea || ""}
                 onChange={handleLastSeenAreaChange}
                 required
@@ -397,14 +382,6 @@ const UpdateLostPetReportPage = ({
                     <Label htmlFor="foundDate" className="block mb-2 text-sm font-medium">
                     Found Date
                     </Label>
-                    {/* <Calendar
-                      id="foundDate"
-                        mode="single"
-                        selected={lastSeenDate}
-                        onSelect={handleLastSeenDateChange}
-                        className="rounded-md border shadow flex justify-center "
-                        disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-                    /> */}
                     <DatePicker date={lastSeenDate} setDate={setLastSeenDate} handleDate= {handleLastSeenDateChange}/>                    
                 </div>                
 
@@ -417,7 +394,6 @@ const UpdateLostPetReportPage = ({
               </Label>
               <Textarea
                 id="reportDescription"
-                // placeholder="Your bio"
                 defaultValue={lostPetReport?.reportDescription || ""}
                 required
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -435,7 +411,6 @@ const UpdateLostPetReportPage = ({
               </Label>
               <Textarea
                 id="reportMessage"
-                // placeholder="Your bio"
                 defaultValue={lostPetReport?.reportMessage || ""}
                 required
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>

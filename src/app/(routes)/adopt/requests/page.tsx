@@ -21,7 +21,7 @@ export default async function AdoptPetRequests() {
         {ownrequests?.length > 0 ? (
           ownrequests.map((request) => (
             <Link
-              href={"/adopt/process/" + request.adoptablePet.id}
+              href={"/adopt/requests/" + request.adoptablePet.id}
               key={request.id}
               className="bg-white rounded-lg shadow-md"
             >

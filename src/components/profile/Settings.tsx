@@ -3,7 +3,8 @@
 import { useToast } from "@/hooks/useToast"
 import { SafeUser } from "@/types"
 import Image from "next/image"
-import { FormEvent, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
+import { set } from "zod"
 
 import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
@@ -32,7 +33,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
       "/icon.png",
   )
   const [bio, setBio] = useState(currentUser?.bio || "")
-  const [isUsernameValid, setIsUsernameValid] = useState(true)
+  const [isUsernameValid, setIsUsernameValid] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
   const [isFormChanged, setIsFormChanged] = useState(false)
 
@@ -40,40 +41,34 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
     setIsLoading(true)
     event.preventDefault()
 
-    try {
-      const updateResponse = await fetch("/api/user/updateProfile", {
-        method: "PUT",
-        body: JSON.stringify({
-          name,
-          username,
-          phone,
-          bio,
-        }),
-      })
+    const updateResponse = await fetch("/api/user/updateProfile", {
+      method: "PUT",
+      body: JSON.stringify({
+        name,
+        username,
+        phone,
+        bio,
+      }),
+    })
 
-      if (!updateResponse.ok) {
-        toast({
-          variant: "destructive",
-          title: "Profile update failed",
-          description: "Please try again",
-        })
-      } else {
-        setIsLoading(false)
-        setIsFormChanged(false)
-        toast({
-          title: "Successful!",
-          description: "Profile updated successfully",
-        })
-        window.location.reload()
-      }
+    const data = await updateResponse.json()
+    console.log(data)
 
-      const result = await updateResponse.json()
-    } catch (error) {
+    if (!updateResponse.ok) {
+      setIsLoading(false)
       toast({
         variant: "destructive",
         title: "Profile update failed",
-        description: "Please try again",
+        description: data.message,
       })
+    } else {
+      setIsLoading(false)
+      setIsFormChanged(false)
+      toast({
+        title: "Successful!",
+        description: "Profile updated successfully",
+      })
+      window.location.reload()
     }
   }
 
@@ -133,7 +128,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
           toast({
             variant: "destructive",
             title: "Profile picture update failed",
-            description: "Please try again",
+            description: data.message,
           })
         }
       }
@@ -153,13 +148,16 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
     return `${src}?w=${width}&q=${quality || 75}`
   }
 
+  useEffect(() => {
+    const isValid = username !== "" && /^[a-zA-Z0-9]{4,}$/.test(username)
+    setIsUsernameValid(isValid)
+  }, [username])
+
   const handleUsernameChange = (e: React.FormEvent<HTMLInputElement>) => {
     const value = (e.target as HTMLInputElement).value
     setUsername(value)
-    const isUsernameValid = /^[a-zA-Z0-9]{4,}$/.test(value)
-    setIsUsernameValid(isUsernameValid)
-    setIsFormValid(true)
     setIsFormChanged(true)
+    setIsFormValid(true)
   }
 
   const handleNameChange = (e: FormEvent<HTMLInputElement>) => {
@@ -262,7 +260,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
                   type="text"
                   id="username"
                   placeholder="Your username"
-                  defaultValue={currentUser?.username || ""}
+                  defaultValue={username}
                   onChange={handleUsernameChange}
                   pattern="[a-zA-Z0-9]{4,}"
                   maxLength={20}
@@ -306,9 +304,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
 
             <Button
               type="submit"
-              className={`w-full transition-opacity duration-500 ${
-                isFormValid && isFormChanged ? "opacity-100" : "opacity-50"
-              }`}
+              className="w-full transition-opacity duration-500"
               disabled={!isFormValid || !isFormChanged}
             >
               {isLoading ? (

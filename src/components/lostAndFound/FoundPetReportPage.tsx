@@ -21,7 +21,7 @@ const FoundPetReportPage = ({
  const [reportActive, setReportActive] = useState(true)
  const router = useRouter()
 
- const [creatorImage, setCreatorImage] = useState("/path/to/default/image")
+ const [creatorImage, setCreatorImage] = useState("/icon.png")
  const [creatorName, setCreatorName] = useState("")
  const [creatorContactDetails, setCreatorContactDetails] = useState("")
 
@@ -203,11 +203,12 @@ const FoundPetReportPage = ({
        <div className="flex items-center space-x-10">
          <div className="w-32 h-32 relative overflow-hidden rounded-lg">
            <Image
-      src={thisFoundPetReport!.userId === currUser?.id ? currUser?.image || creatorImage : creatorImage || creatorImage}
+      src={creatorImage || "/icon.png"}
+    
 
       layout="fill"
              objectFit="cover"
-             alt={"Profile picture of ${creatorName|| 'user'}"}
+             alt={`Profile picture of ${creatorName|| "user"}`}
              className="rounded-full"
            />
          </div>

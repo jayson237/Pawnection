@@ -188,7 +188,8 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
        <div className="flex items-center space-x-10">
          <div className="w-32 h-32 relative overflow-hidden rounded-lg">
            <Image
-             src={thisLostPetReport!.userId === currUser?.id ? currUser?.image || creatorImage : creatorImage || creatorImage}
+             src={creatorImage || "/icon.png"}
+
 
              layout="fill"
              objectFit="cover"

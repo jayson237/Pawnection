@@ -35,7 +35,7 @@ const TypeForm = () => {
         description: "Please try again",
       })
     } else {
-      router.refresh()
+      window.location.reload()
       router.push("/auth/type/username")
       return toast({
         title: `${msg.message}`,

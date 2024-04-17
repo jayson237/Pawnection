@@ -146,3 +146,10 @@ body {
     }
   }
 }
+
+/* LostPetReportPage.module.css */
+.custom-divider {
+  height: 4px;
+  background-color: #FFA992;
+  border: none;
+}

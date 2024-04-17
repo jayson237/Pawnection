@@ -188,13 +188,6 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
       <h2 className="text-2xl font-bold sm:text-xl text-center">
         Profile Settings
       </h2>
-      <div className="border  rounded-xl px-1.5 py-1 flex space-x-2 mt-1 items-center mx-auto text-sm w-fit">
-        <p className="w-fit rounded-lg bg-orange-300 px-1 py-0.25 text-center">
-          {currentUser?.type === "PetAdoptionCentre"
-            ? "Adoption Centre"
-            : "Pet Lover"}
-        </p>
-      </div>
       <form className="space-y-5" onSubmit={submitHandler}>
         <div className="grid max-w-2xl mx-auto mt-6">
           <div className="flex flex-col items-center space-y-5 mx-auto">

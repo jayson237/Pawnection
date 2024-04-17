@@ -78,7 +78,7 @@ const FoundPetReportPage = ({
          throw new Error("Failed to delete the report.")
        }
        alert("Report deleted successfully")
-       router.push("/lostAndFound")
+       router.push("/lostAndFound/founds")
      } catch (error) {
        console.error("Error deleting report:", error)
        alert("Failed to delete the report.")
@@ -100,7 +100,8 @@ const FoundPetReportPage = ({
        }
        alert("Report status updated successfully")
        setReportActive(false)
-       router.push("/lostAndFound")
+      //  router.push("/lostAndFound")
+      await fetchReportData()
      } catch (error) {
        console.error("Error updating report status:", error)
        alert("Failed to update the report status.")
@@ -126,7 +127,8 @@ const FoundPetReportPage = ({
 
       alert("Report status updated successfully")
       setReportActive(true)
-      router.push("/lostAndFound")
+      // router.push("/lostAndFound")
+      await fetchReportData()
     } catch (error) {
       console.error("Error updating report status:", error)
       alert("Failed to update the report status.")
@@ -145,6 +147,23 @@ const FoundPetReportPage = ({
    return `${parts[0]}/upload/${transformationString}${parts[1]}`
  }
 
+ const fetchReportData = async () => {
+  if (!foundPetReport?.id) return
+
+  try {
+    const response = await fetch(`/api/lostAndFound/getFoundPetReportById?id=${foundPetReport?.id}`)
+    if (!response.ok) {
+      throw new Error("Failed to fetch report data")
+    }
+    const data = await response.json()
+    setThisFoundPetReport(data)
+  } catch (error) {
+    console.error("Failed to fetch report:", error)
+  }
+}
+useEffect(() => {
+  fetchReportData()
+}, [foundPetReport?.id])
 
  return (
    <div className="container mx-auto px-4 py-5">

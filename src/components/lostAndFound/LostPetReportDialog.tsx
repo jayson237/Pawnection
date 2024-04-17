@@ -1,24 +1,37 @@
 "use client"
 
-import Image from "next/image"
 import { useToast } from "@/hooks/useToast"
-import { FormEvent, useState, useEffect } from "react"
+import Image from "next/image"
+import { FormEvent, useEffect, useState } from "react"
 
 import { Button } from "../ui/Button"
-import { Dialog, DialogContent, DialogOverlay, DialogPortal, DialogTitle } from "../ui/Dialog"
+import { DatePicker } from "../ui/DatePicker"
+import {
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+} from "../ui/Dialog"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
 import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/Select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
-import { DatePicker } from "../ui/DatePicker"
 
 interface LostPetReportDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
+  onReportCreated: () => void;
 }
 
-const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
+const LostPetReportDialog = ({ isOpen, onClose, onReportCreated }: LostPetReportDialogProps) => {
   const [animalType, setAnimalType] = useState("")
   const [name, setName] = useState("")
   const [sex, setSex] = useState("")
@@ -93,12 +106,16 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
         })
 
         if (!response.ok) {
-          throw new Error("Failed to create Missing Pet Report. Please try again.")
+          throw new Error(
+            "Failed to create Missing Pet Report. Please try again.",
+          )
         } else {
           setIsLoading(false)
           toast({
             description: "Missing Pet Report has been successfully created.",
           })
+          onReportCreated()
+          onClose()
         }
       }
     } catch (error) {
@@ -108,18 +125,25 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
 
   if (!isOpen) return null
   return (
-    <Dialog open={isOpen} onOpenChange={(isOpen) => (isOpen ? null : onClose())}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(isOpen) => (isOpen ? null : onClose())}
+    >
       <DialogPortal>
         <DialogOverlay className="DialogOverlay" />
         <DialogContent className="DialogContent overflow-y-auto max-h-[80vh]">
           <DialogTitle className="DialogTitle">Report Missing Pet</DialogTitle>
           <form onSubmit={onSubmit} className="flex gap-10">
             <div className="w-1/3 flex flex-col items-center justify-start">
-              <Label htmlFor="petImage" className="mb-2">Pet Image</Label>
-              <div className="w-48 h-48 border border-black rounded-md overflow-hidden flex items-center justify-center relative">
+              <div className="w-48 h-48 border rounded-md overflow-hidden flex items-center justify-center relative">
                 <div className="absolute inset-0">
                   {petImagePreview && (
-                    <Image src={petImagePreview} alt="Uploaded Pet" layout="fill" objectFit="cover" />
+                    <Image
+                      src={petImagePreview}
+                      alt="Uploaded Pet"
+                      layout="fill"
+                      objectFit="cover"
+                    />
                   )}
                 </div>
                 {!petImagePreview && (
@@ -134,7 +158,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
                   accept="image/*"
                   required={true}
                   className="opacity-0 w-full h-full position-absolute cursor-pointer"
-                  onChange={handleImageChange} 
+                  onChange={handleImageChange}
                 />
               </div>
             </div>
@@ -154,54 +178,70 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
                     </SelectContent>
                   </Select>
                 </Label>
-                
+
                 <Label className="flex-1">
                   Pet Name
                   <Input
-                    className="border border-black rounded-md h-10 w-full px-2.5"
+                    className="border rounded-md h-10 w-full px-2.5"
                     required={true}
                     onChange={(e) => setName(e.currentTarget.value)}
                   />
                 </Label>
               </div>
-  
+
               <Label className="">
                 Pet Breed
                 <Input
-                  className="border border-black rounded-md h-10 w-full px-2.5"
+                  className="border rounded-md h-10 w-full px-2.5"
                   required={true}
                   onChange={(e) => setBreed(e.currentTarget.value)}
                 />
               </Label>
               <div className="">
                 <Label>Gender</Label>
-                <RadioGroup onValueChange={setSex} required={true} className="flex gap-2">
-                  <Label htmlFor="male" className="flex items-center gap-2 cursor-pointer">
-                    <RadioGroupItem value="Male" id="male" className="cursor-pointer" />
+                <RadioGroup
+                  onValueChange={setSex}
+                  required={true}
+                  className="flex gap-2"
+                >
+                  <Label
+                    htmlFor="male"
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <RadioGroupItem
+                      value="Male"
+                      id="male"
+                      className="cursor-pointer"
+                    />
                     Male
                   </Label>
-                  <Label htmlFor="female" className="flex items-center gap-2 cursor-pointer">
-                    <RadioGroupItem value="Female" id="female" className="cursor-pointer" />
+                  <Label
+                    htmlFor="female"
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <RadioGroupItem
+                      value="Female"
+                      id="female"
+                      className="cursor-pointer"
+                    />
                     Female
                   </Label>
-                  <Label htmlFor="unsure" className="flex items-center gap-2 cursor-pointer">
-                    <RadioGroupItem value="Unsure" id="unsure" className="cursor-pointer" />
+                  <Label
+                    htmlFor="unsure"
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <RadioGroupItem
+                      value="Unsure"
+                      id="unsure"
+                      className="cursor-pointer"
+                    />
                     Unsure
                   </Label>
                 </RadioGroup>
               </div>
 
               <Label className="block">
-                Message From Owner
-                <Textarea
-                  className="mt-1"
-                  required={true}
-                  onChange={(e) => setMessage(e.currentTarget.value)}
-                />
-              </Label>
-
-              <Label className="block">
-                Description
+                Pet Description
                 <Textarea
                   className="mt-1"
                   required={true}
@@ -212,7 +252,7 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
               <Label className="block">
                 Area Last Seen
                 <Input
-                  className="mt-1 border border-black rounded-md h-10 w-full px-2.5"
+                  className="mt-1 border rounded-md h-10 w-full px-2.5"
                   required={true}
                   onChange={(e) => setLastSeenArea(e.currentTarget.value)}
                 />
@@ -226,13 +266,22 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
               <Label className="block">
                 Contact Details
                 <Input
-                  className="mt-1 border border-black rounded-md h-10 w-full px-2.5"
+                  className="mt-1 border rounded-md h-10 w-full px-2.5"
                   required={true}
                   onChange={(e) => setContactDetails(e.currentTarget.value)}
                 />
               </Label>
 
-              <div className="flex justify-center w-full">
+              <Label className="block">
+                Message From Owner
+                <Textarea
+                  className="mt-1"
+                  required={true}
+                  onChange={(e) => setMessage(e.currentTarget.value)}
+                />
+              </Label>
+
+              <div className="flex justify-end w-full">
                 <Button type="submit" className={isLoading ? "loading" : ""}>
                   {isLoading ? "Loading..." : "Submit"}
                 </Button>

@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover"
 interface DatePickerProps {
   date: Date | undefined
   setDate: React.Dispatch<React.SetStateAction<Date>>
-  handleDate?: (date: Date | undefined) => void;
+  handleDate?: (date: Date | undefined) => void
 }
 
 export function DatePicker({ date, setDate, handleDate }: DatePickerProps) {
@@ -22,7 +22,7 @@ export function DatePicker({ date, setDate, handleDate }: DatePickerProps) {
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start text-left font-normal",
+            "justify-start text-left font-normal flex-grow flex w-full ",
             !date && "text-muted-foreground",
           )}
         >

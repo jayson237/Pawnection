@@ -1,8 +1,14 @@
 import { getCurrentUser } from "@/lib/actions/user"
 import { cdn } from "@/lib/cloudinary"
-import { FolderType } from "@/types"
 import cloudinary from "cloudinary"
 import { NextResponse } from "next/server"
+
+enum FolderType {
+  adoptable = "adoptable",
+  post = "post",
+  avatar = "avatar",
+  lostAndFound = "lostAndFound",
+}
 
 cdn
 const signUploadForm = (type: FolderType) => {

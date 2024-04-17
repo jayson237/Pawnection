@@ -62,6 +62,9 @@ const AllLostPetReports = ({
    <div className="container mx-auto">
      <div className="py-[60px]">
        <HeaderTitle className="max-w-full">Lost Pet Reports</HeaderTitle>
+       <div className="flex flex-row space-x-4 mt-5">
+
+      <div className="flex items-center">       
        <Button
            variant="outline"
            className="mr-8 w-60 mb-5 bg-black text-white"
@@ -110,6 +113,8 @@ const AllLostPetReports = ({
              <SelectItem value="Others">Others</SelectItem>
            </SelectContent>
          </Select>
+       </div>
+       </div>
        </div>
 
 

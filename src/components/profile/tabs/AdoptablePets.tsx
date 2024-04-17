@@ -40,7 +40,7 @@ function ProfileAdoptablePetsTab({ user }: ProfileAdoptablePetsTabInterface) {
         {pets.length > 0 ? (
           pets.map((pet) => (
             <Link
-              href={"/adopt/process/" + pet.id}
+              href={"/adopt/requests/" + pet.id}
               key={pet.id}
               className="bg-white rounded-lg shadow-md"
             >

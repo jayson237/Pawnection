@@ -63,7 +63,6 @@ const UpdateLostPetReportPage = ({
   const [reportMessage, setReportMessage] = useState(
     lostPetReport?.reportMessage || "",
   )
-  const [reportId, setReportId] = useState(lostPetReport?.id)
   const [isFormValid, setIsFormValid] = useState(false)
 
   const imageLoader = ({
@@ -88,7 +87,7 @@ const UpdateLostPetReportPage = ({
         {
           method: "PUT",
           body: JSON.stringify({
-            reportId,
+            reportId: lostPetReport?.id,
             petName,
             animalType,
             animalBreed,

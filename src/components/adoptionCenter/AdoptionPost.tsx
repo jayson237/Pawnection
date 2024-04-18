@@ -162,10 +162,6 @@ function AdoptionPost() {
                 <Image
                   src={`${URL.createObjectURL(selectedImage)}`}
                   alt=""
-                  // width={0}
-                  // height={0}
-                  // sizes="100vw"
-                  // className="h-auto w-auto mx-auto mb-4"
                   width={400}
                   height={400}
                   className="mx-auto mb-4"

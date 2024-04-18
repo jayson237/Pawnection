@@ -1,10 +1,10 @@
 "use client"
 
+import { SafeUser } from "@/types"
 import { User } from "@prisma/client"
 import { useQueryState } from "nuqs"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 
-import { SafeUser } from "../../types"
 import Loading from "../Loading"
 import UserItem from "./UserItem"
 
@@ -63,10 +63,9 @@ function ExploreUsers({ currentUser }: { currentUser: SafeUser }) {
     return () => observer.disconnect()
   }, [fetchContent])
 
-  // to-do: implement seperate component because it was implemented in three different components
   return (
     <>
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col mx-auto space-y-4">
         {content.map((user: User) => {
           const isOwnProfile = currentUser?.username === user.username
           return (

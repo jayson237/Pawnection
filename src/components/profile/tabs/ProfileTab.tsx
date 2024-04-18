@@ -1,23 +1,23 @@
 "use client"
 
+import { SafeUser } from "@/types"
 import { FoundPetReport, LostPetReport, UserType } from "@prisma/client"
-import Image from "next/image"
 import React from "react"
 
-import { SafeUser } from "../../../types"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/Tabs"
+import { Tabs, TabsList, TabsTrigger } from "../../ui/Tabs"
+import ProfileAdoptablePetsTab from "./AdoptablePets"
+import ProfilePostsTab from "./ProfilePosts"
 import ProfileReportsTab from "./Reports"
-import ProfileAdoptablePetsTab from "./adoptable-pets"
-import ProfilePostsTab from "./posts"
 
 interface ProfileTabsInterface {
   reports: FoundPetReport[] | LostPetReport[] | null
   user: SafeUser
+  currentUser: SafeUser
 }
 
-function ProfileTabs({ reports, user }: ProfileTabsInterface) {
+function ProfileTabs({ reports, user, currentUser }: ProfileTabsInterface) {
   return (
-    <Tabs defaultValue="posts" className="">
+    <Tabs defaultValue="posts">
       <TabsList className="bg-transparent w-full gap-8 h-18">
         <TabsTrigger
           value="posts"
@@ -41,7 +41,7 @@ function ProfileTabs({ reports, user }: ProfileTabsInterface) {
         </TabsTrigger>
       </TabsList>
 
-      <ProfilePostsTab user={user} />
+      <ProfilePostsTab user={user} currentUser={currentUser} />
 
       <ProfileAdoptablePetsTab user={user} />
 

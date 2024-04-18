@@ -59,13 +59,21 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 >
                   Lost & Found
                 </Link>
-                {currentUser?.type !== "PetAdoptionCentre" && (
+                {currentUser?.type !== "PetAdoptionCentre" ? (
                   <Link
                     prefetch={false}
                     href="/adopt"
                     className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                   >
                     Adopt
+                  </Link>
+                ) : (
+                  <Link
+                    prefetch={false}
+                    href="/adoptionCenter"
+                    className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
+                  >
+                    Adoption Management
                   </Link>
                 )}
                 <Link
@@ -82,15 +90,6 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                 >
                   Recommendations
                 </Link>
-                {currentUser?.type === "PetAdoptionCentre" && (
-                  <Link
-                    prefetch={false}
-                    href="/adoptionCenter"
-                    className="text-primary text-sm font-medium hover:bg-submain rounded-md ease-in-out duration-200 py-2 px-4"
-                  >
-                    Adoption Management
-                  </Link>
-                )}
               </div>
             </>
           )}
@@ -105,7 +104,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                     className="rounded-full h-10 w-10 ring-1 ring-primary ring-offset-2 hover:opacity-80 ease-in-out duration-200 cursor-pointer"
                     src={
                       !currentUser?.image
-                        ? "/../icon.png"
+                        ? "/icon.png"
                         : currentUser?.image
                               .split("image/upload")[0]
                               .includes("cloudinary")
@@ -203,7 +202,7 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                         <Image
                           src={
                             !currentUser?.image
-                              ? "/../icon.png"
+                              ? "/icon.png"
                               : currentUser?.image
                                     .split("image/upload")[0]
                                     .includes("cloudinary")
@@ -248,13 +247,22 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                   </Link>
                 </li>
                 <li>
-                  {currentUser?.type !== "PetAdoptionCentre" && (
+                  {currentUser?.type !== "PetAdoptionCentre" ? (
                     <Link
                       prefetch={false}
                       href="/adopt"
                       className="text-primary text-sm font-medium hover:bg-submain py-2 px-4 rounded-md ease-in-out duration-200"
                     >
                       Adopt
+                    </Link>
+                  ) : (
+                    <Link
+                      prefetch={false}
+                      href="/adoptionCenter"
+                      onClick={toggleMenu}
+                      className="text-primary text-sm font-medium hover:bg-main/70 rounded-md ease-in-out duration-200 py-2 px-4"
+                    >
+                      Adoption Management
                     </Link>
                   )}
                 </li>
@@ -278,18 +286,6 @@ function NavBar({ currentUser }: { currentUser?: SafeUser | null }) {
                     Recommendations
                   </Link>
                 </li>
-                {currentUser?.type === "PetAdoptionCentre" && (
-                  <li>
-                    <Link
-                      prefetch={false}
-                      href="/adoptionCenter"
-                      onClick={toggleMenu}
-                      className="text-primary text-sm font-medium hover:bg-main/70 rounded-md ease-in-out duration-200 py-2 px-4"
-                    >
-                      Adoption Management
-                    </Link>
-                  </li>
-                )}
                 <li>
                   <div className="ml-3">
                     <PostForm />

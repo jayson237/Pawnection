@@ -11,6 +11,7 @@ import React from "react"
 export default async function AdoptionCenterPage() {
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
+  if (!currUser?.type) redirect("/auth/type")
   if (currUser.type !== UserType.PetAdoptionCentre) redirect("/adopt")
   return (
     <div className="w-full max-w-[1240px] mx-auto sm:px-8 px-8">

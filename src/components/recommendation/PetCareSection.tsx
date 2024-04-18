@@ -38,7 +38,7 @@ const PetCareTips = () => {
 
   return (
     <div className="mx-auto w-full max-w-[1480px] px-8">
-      <div className="py-[60px] bg-submain rounded-[50px]">
+      <div className="py-[60px] bg-submain rounded-[50px] rounded-t-lg">
         <HeaderTitle className="max-w-full text-3xl md:text-4xl">
           Pet Care Tips
         </HeaderTitle>

@@ -131,11 +131,8 @@ const AllLostPetReports = ({
                     width={60}
                     height={60}
                     className="w-24 h-24 object-cover rounded-lg mr-4"
-                  />
-                  {/* <div className={report.isActive ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer" 
-                  : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"} > */}
-                    {report.isActive ? "Missing Pet " : "Pet has been found"}   
-                    {/* </div>                */}
+                  />                 
+                    {report.isActive ? "Missing Pet " : "Pet has been found"}                     
                   <div>
                     <h3 className="text-xl font-semibold mb-1">
                       {report.petName}

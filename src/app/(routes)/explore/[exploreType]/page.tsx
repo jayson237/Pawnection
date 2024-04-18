@@ -16,7 +16,7 @@ async function ExploreTypePage({
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
   const exploreType = params.exploreType
-  console.log(exploreType)
+
   if (
     exploreType !== "post" &&
     exploreType !== "users" &&
@@ -25,9 +25,9 @@ async function ExploreTypePage({
     redirect("/explore")
 
   return (
-    <div className="flex justify-center w-full max-w-[1240px] mx-auto md:px-0 px-4">
+    <div className="flex justify-center w-full max-w-[1240px] mx-auto md:px-0 px-6">
       <div className="py-[40px]">
-        <div className="flex flex-col space-x-4 space-y-4">
+        <div className="flex flex-col mx-auto space-y-4">
           <SearchBar />
           {exploreType === "post" && <ExplorePost currentUser={currUser} />}
           {exploreType === "pet-sitting" && (

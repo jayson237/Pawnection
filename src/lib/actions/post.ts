@@ -2,22 +2,11 @@ import prisma from "@/lib/prismadb"
 import { Like, Post, PostType, User } from "@prisma/client"
 
 import { SafeUser } from "../../types"
-import { getCurrentUser } from "./user"
 
 export type ExtendedPost = Post & {
   likes: Like[]
   user: Pick<User, "username" | "image" | "id">
   isCurrentUserLike: boolean
-}
-
-const transformUserToSafeUser = (user: User) => {
-  const { hashedPassword, ...rest } = user
-  return {
-    ...rest,
-    emailVerified: rest.emailVerified?.toISOString(),
-    createdAt: rest.createdAt.toISOString(),
-    updatedAt: rest.updatedAt.toISOString(),
-  }
 }
 
 export async function getAllPosts(
@@ -115,7 +104,6 @@ export async function getAllPosts(
 
 export async function getAllProfilePosts(
   cursorId: string | null,
-  searchTerm: string,
   userId: string,
   currentUser: SafeUser,
 ): Promise<ExtendedPost[] | null> {
@@ -131,9 +119,6 @@ export async function getAllProfilePosts(
     const posts = await prisma.post.findMany({
       where: {
         userId,
-        description: {
-          contains: searchTerm,
-        },
       },
       include: {
         likes: {
@@ -149,7 +134,7 @@ export async function getAllProfilePosts(
           },
         },
       },
-      take: 20,
+      take: 2,
       orderBy: {
         createdAt: "desc",
       },
@@ -161,38 +146,6 @@ export async function getAllProfilePosts(
     }))
   } catch (error) {
     console.error(error)
-    return null
-  }
-}
-
-export async function getOnePost(id: string) {
-  try {
-    const currentUser = await getCurrentUser()
-    if (!currentUser) {
-      return null
-    }
-    const post = await prisma.post.findFirst({
-      where: {
-        id: id,
-      },
-      include: {
-        likes: true,
-        comments: {
-          include: {
-            user: true,
-          },
-        },
-        user: {
-          select: {
-            username: true,
-            image: true,
-          },
-        },
-      },
-    })
-    return post
-  } catch (error) {
-    console.log(error)
     return null
   }
 }

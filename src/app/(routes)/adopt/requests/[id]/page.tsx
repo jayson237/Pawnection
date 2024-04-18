@@ -53,7 +53,7 @@ export default async function AdoptProcessPage({
       </div>
 
       <div className="relative grid sm:grid-cols-1 md:grid-cols-3 gap-8 px-4">
-        <div className="sticky top-28 rounded-xl border border-gray-400 h-fit md:col-span-1">
+        <div className="sticky top-28 rounded-xl bg-white h-fit md:col-span-1 shadow-lg">
           <div>
             <Image
               src={adoptablePet.imageUrl}
@@ -63,7 +63,7 @@ export default async function AdoptProcessPage({
               className="rounded-t-xl h-full bg-cover bg-center w-full object-cover max-h-[440px]"
             />
           </div>
-          <div className="px-3.5 py-4 space-y-2">
+          <div className="px-8 py-6 space-y-4">
             <div>
               <h4 className="font-bold">Name</h4>
               <p>{adoptablePet.name}</p>

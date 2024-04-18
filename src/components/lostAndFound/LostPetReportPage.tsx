@@ -3,7 +3,7 @@
 import { useToast } from "@/hooks/useToast"
 import { SafeUser } from "@/types"
 import { LostPetReport } from "@prisma/client"
-import Image from "next/image"
+import Image from "next/legacy/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 

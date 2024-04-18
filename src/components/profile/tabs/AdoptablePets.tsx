@@ -58,7 +58,7 @@ function ProfileAdoptablePetsTab({ user }: ProfileAdoptablePetsTabInterface) {
                 {pet.status === "Adopted" ? (
                   <Label className="text-red-500">Adopted</Label>
                 ) : (
-                  <Label>Available</Label>
+                  <Label className="text-green-500">Available</Label>
                 )}
               </div>
             </Link>

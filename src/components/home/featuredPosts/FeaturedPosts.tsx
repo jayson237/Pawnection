@@ -122,7 +122,6 @@ const FeaturedPosts: React.FC = () => {
       </p>
       <div className={styles["stories-container"]}>
         {postDatas.map((post) => (
-          // eslint-disable-next-line react/jsx-key
           <Post key={post.user.username} {...post} />
         ))}
       </div>

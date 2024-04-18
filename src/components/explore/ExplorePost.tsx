@@ -1,10 +1,10 @@
 "use client"
 
+import { ExtendedPost } from "@/lib/actions/post"
+import { SafeUser } from "@/types"
 import { useQueryState } from "nuqs"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 
-import { ExtendedPost } from "../../lib/actions/post"
-import { SafeUser } from "../../types"
 import Loading from "../Loading"
 import PostItem from "./PostItem"
 
@@ -75,10 +75,9 @@ function ExplorePost({ currentUser }: { currentUser: SafeUser }) {
     return () => observer.disconnect()
   }, [fetchContent])
 
-  // to-do: implement seperate component because it was implemented in three different components
   return (
     <>
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col mx-auto space-y-4">
         {content?.map((post: ExtendedPost) => {
           const isOwnProfile = currentUser?.username === post.user?.username
           const isLiked = post.isCurrentUserLike

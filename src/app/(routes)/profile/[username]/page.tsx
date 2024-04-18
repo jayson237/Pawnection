@@ -12,6 +12,7 @@ export default async function UserProfile({
   const username = params.username
   const currentUser = await getCurrentUser()
   if (!currentUser) redirect("/auth")
+  if (!currentUser.username) redirect("/settings")
   const user = await getOneUser(username)
 
   const isProfileOwner = currentUser?.username === username

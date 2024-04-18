@@ -1,8 +1,5 @@
 import { getAllProfilePosts } from "@/lib/actions/post"
 import { getCurrentUser } from "@/lib/actions/user"
-import prisma from "@/lib/prismadb"
-import { PostData } from "@/types"
-import { PostType } from "@prisma/client"
 import { NextResponse } from "next/server"
 
 export async function GET(
@@ -18,7 +15,6 @@ export async function GET(
   try {
     const { searchParams } = new URL(req.url)
     const cursor = searchParams.get("cursor")
-    const seachTerm = searchParams.get("q")
 
     const currentUser = await getCurrentUser()
     if (!currentUser) {
@@ -29,12 +25,7 @@ export async function GET(
         { status: 401 },
       )
     }
-    const posts = await getAllProfilePosts(
-      cursor,
-      seachTerm || "",
-      params.id,
-      currentUser,
-    )
+    const posts = await getAllProfilePosts(cursor, params.id, currentUser)
     return NextResponse.json(
       {
         data: posts,

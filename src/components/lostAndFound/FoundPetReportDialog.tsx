@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react"
 
 import { Button } from "../ui/Button"
 import { Calendar } from "../ui/Calendar"
+import { DatePicker } from "../ui/DatePicker"
 import {
   Dialog,
   DialogContent,
@@ -23,7 +24,6 @@ import {
   SelectValue,
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
-import { DatePicker } from "../ui/DatePicker"
 
 interface FoundPetReportDialogProps {
   isOpen: boolean
@@ -122,7 +122,8 @@ const FoundPetReportDialog = ({
               <div className="mb-5">
                 <Label>Pet Type</Label>
 
-                <Select required = {true}
+                <Select
+                  required={true}
                   onValueChange={(val) => {
                     setAnimalType(val)
                   }}
@@ -142,7 +143,8 @@ const FoundPetReportDialog = ({
               <div className="w-[180px] mb-5">
                 <Label>
                   Pet Breed
-                  <Input required = {true}
+                  <Input
+                    required={true}
                     name="Pet Breed"
                     className="border border-black rounded-md h-10 w-full px-2.5"
                     onChange={(e) => setBreed(e.currentTarget.value)}
@@ -152,7 +154,8 @@ const FoundPetReportDialog = ({
 
               <div className="w-[180px] mb-5">
                 <Label>Pet Name</Label>
-                <Input required = {true}
+                <Input
+                  required={true}
                   name="Pet Name"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setName(e.currentTarget.value)}
@@ -163,7 +166,7 @@ const FoundPetReportDialog = ({
             <div className="mb-5">
               <div>
                 <Label> Gender </Label>
-                <RadioGroup required = {true} onValueChange={setSex}>
+                <RadioGroup required={true} onValueChange={setSex}>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="Male" id="r1" />
                     <Label htmlFor="r1">Male</Label>
@@ -205,20 +208,13 @@ const FoundPetReportDialog = ({
                   name="Area Found"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setFoundArea(e.currentTarget.value)}
-                  required = {true}
+                  required={true}
                 ></Input>
               </Label>
             </div>
 
             <div className=" mb-5">
               <div> Found Date </div>
-              {/* <Calendar
-                mode="single"
-                selected={foundDate}
-                onSelect={setFoundDate}
-                className="rounded-md border shadow flex justify-center"
-                disabled={(date) => date > new Date() || date < new Date("1900-01-01") }
-              /> */}
               <DatePicker date={foundDate} setDate={setFoundDate} />
             </div>
 
@@ -229,7 +225,7 @@ const FoundPetReportDialog = ({
                   name="Contact Details"
                   className="border border-black rounded-md h-10 w-full px-2.5"
                   onChange={(e) => setContactDetails(e.currentTarget.value)}
-                  required = {true}
+                  required={true}
                 ></Input>
               </Label>
             </div>

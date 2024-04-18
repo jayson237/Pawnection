@@ -1,8 +1,7 @@
 "use client"
 
 import { useToast } from "@/hooks/useToast"
-import { revalPath } from "@/lib/revalidate"
-import { Post } from "@prisma/client"
+import { ExtendedPost } from "@/lib/actions/post"
 import {
   Edit3,
   Heart,
@@ -14,9 +13,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useRef } from "react"
-import { KeyedMutator } from "swr"
 
-import { ExtendedPost } from "../../lib/actions/post"
 import TimeStamp from "../TimeStamp"
 import { Button } from "../ui/Button"
 import {
@@ -60,11 +57,13 @@ const PostItem = ({
     like: false,
   })
 
-  const [isCommenting, setIsCommenting] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
 
   const [expanded, setExpanded] = useState(false)
   const [expandable, setexpandable] = useState(false)
+  const [isCurrentFollowedState, setIsCurrentFollowedState] = useState<
+    boolean | null | undefined
+  >(isCurrentFollowed)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
@@ -85,30 +84,6 @@ const PostItem = ({
   useEffect(() => {
     isExpandable() === true ? setexpandable(true) : setexpandable(false)
   }, [])
-
-  const handleUnfollow = async (username?: string) => {
-    await fetch("/api/user/unfollow", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-      }),
-    })
-  }
-
-  const handleFollow = async (username?: string) => {
-    await fetch("/api/user/follow", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-      }),
-    })
-  }
 
   const handleUpdate = async () => {
     setIsEdit(!isEdit)
@@ -137,7 +112,6 @@ const PostItem = ({
       setContent((prev) =>
         prev.map((x) => (x.id === post.id ? { ...x, description } : x)),
       )
-      // revalPath("/explore")
     }
   }
 
@@ -165,7 +139,6 @@ const PostItem = ({
         description: "Please close this window",
       })
       setContent(content.filter((x) => x.id !== post.id))
-      // revalPath("/explore")
     }
   }
 
@@ -213,12 +186,8 @@ const PostItem = ({
     }
   }
 
-  const [isCurrentFollowedState, setIsCurrentFollowedState] = useState<
-    boolean | null | undefined
-  >(isCurrentFollowed)
-
   return (
-    <div className="rounded-xl border bg-white h-full max-w-xl">
+    <div className="rounded-xl border bg-white h-full max-w-[598px]">
       <div className="flex items-center px-6 py-4 justify-between">
         <div className="transition-all duration-300 ease-in-out hover:cursor-pointer ">
           <Link href={`/profile/${post.user.username}`} target="_blank">
@@ -226,7 +195,7 @@ const PostItem = ({
               <Image
                 src={
                   !post.user?.image
-                    ? "/../icon.png"
+                    ? "/icon.png"
                     : post.user?.image
                           .split("image/upload")[0]
                           .includes("cloudinary")
@@ -249,7 +218,7 @@ const PostItem = ({
         </div>
 
         {!isOwnProfile ? (
-          !isCurrentFollowed ? (
+          !isCurrentFollowedState ? (
             <Button
               onClick={async () => {
                 await fetch("/api/user/follow", {
@@ -358,7 +327,7 @@ const PostItem = ({
           {!isEdit ? (
             <div ref={containerRef}>
               <p
-                className={`text-[14px] whitespace-normal ${expanded || !expandable ? "" : "line-clamp-1 overflow-auto"} `}
+                className={`text-[14px] whitespace-normal overflow-y-hidden ${expanded || !expandable ? "" : "line-clamp-1 overflow-auto"} `}
                 ref={descriptionRef}
               >
                 {post?.description}
@@ -367,7 +336,7 @@ const PostItem = ({
                 {expandable && (
                   <div
                     onClick={() => setExpanded(!expanded)}
-                    className=" text-gray-500 transition-all ease-in-out hover:underline hover:duration-300"
+                    className=" text-gray-500 transition-all ease-in-out hover:underline hover:duration-300 cursor-pointer"
                   >
                     {!expanded ? "See more..." : "See less"}
                   </div>
@@ -415,33 +384,6 @@ const PostItem = ({
               }}
               post={post}
             />
-
-            <div className="items-center py-2">
-              {/* {post.comments.slice(0, 2).map((comment) => (
-                    <div key={comment.id} className="text-sm flex flex-row">
-                      <p className="font-semibold mr-1">
-                        {comment.user.username}
-                      </p>
-                      <p className="line-clamp-1">{comment.content}</p>
-                    </div>
-                  ))} */}
-            </div>
-            {/* {isCommenting && (
-              <div className="relative py-2">
-                <Input
-                  placeholder="Add a comment..."
-                  className="pr-12"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                />
-                {comment !== "" && (
-                  <SendHorizonal
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 hover:cursor-pointer hover:duration-300 ease-in-out transition-all hover:text-mainAccent"
-                    onClick={handleComment}
-                  />
-                )}
-              </div>
-            )} */}
           </>
         )}
       </div>

@@ -1,13 +1,13 @@
 "use client"
 
+import { ExtendedPost } from "@/lib/actions/post"
+import { fetcher } from "@/lib/utils"
 import { Like, User } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 import useSWR from "swr"
 
-import { ExtendedPost } from "../../lib/actions/post"
-import { fetcher } from "../../lib/utils"
 import {
   Dialog,
   DialogContent,
@@ -62,7 +62,7 @@ function LikeDialog({
                 <div className="flex items-center gap-4">
                   <Image
                     className="object-cover w-10 h-10 rounded-full"
-                    src={like.user.image ? like.user.image : "/../../icon.png"}
+                    src={like.user.image ? like.user.image : "/../icon.png"}
                     width={40}
                     height={40}
                     alt="Bordered avatar"

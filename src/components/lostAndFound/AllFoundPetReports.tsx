@@ -142,43 +142,6 @@ const AllFoundPetReports = ({
                   </div>
                 </div>
               ))}
-        {/* <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
-          {foundPetReports == null
-            ? "No Found Pet Reports"
-            : foundPetReports.filter((report) => {
-              return (
-                report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                report.animalBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                report.contactDetails.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                report.foundArea.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                report.petSex.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                report.reportMessage.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                report.reportDescription.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-            }).map((report, index) => (
-                <div
-                  key={index}
-                  className="flex border p-4 rounded-xl bg-white h-full  cursor-pointer"
-                  onClick={() => handleFoundPetReportClick(report.id)}
-                >
-                  <Image
-                    src={transformImage(report.imageUrl)}
-                    alt="None"
-                    width={60}
-                    height={60}
-                    className="w-24 h-24 object-cover rounded-lg mr-4"
-                  />
-                  <div>
-                    <h3 className="text-xl font-semibold mb-1">
-                      {report.petName}
-                    </h3>
-                    <p className="text-sm mb-2 text-mainAccent">
-                      {report.animalType}
-                    </p>
-                    <p className="text-sm mb-3">{report.reportDescription}</p>
-                  </div>
-                </div>
-              ))} */}
         </div>
       </div>
     </div>

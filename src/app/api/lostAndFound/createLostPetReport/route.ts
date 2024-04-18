@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         lastSeenArea: data.lastSeenArea,
         lastSeenDate: data.lastSeenDate,
         contactDetails: data.contactDetails,
-        imageUrl : data.petImage,
+        imageUrl: data.petImage,
       },
     })
 

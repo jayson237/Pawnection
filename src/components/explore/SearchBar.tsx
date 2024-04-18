@@ -39,8 +39,6 @@ const SearchBar = () => {
   )
 
   const handleFilterChange = (value: string) => {
-    console.log("udin")
-
     router.replace(
       `/explore/${value}?${new URLSearchParams({
         q: query,

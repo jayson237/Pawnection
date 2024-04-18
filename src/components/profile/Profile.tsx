@@ -4,10 +4,8 @@ import { LostPetReport } from "@prisma/client"
 import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import React from "react"
 import { useEffect, useState } from "react"
-import { boolean } from "zod"
 
 import { SafeUser } from "../../types"
 import HeaderTitle from "../HeaderTitle"
@@ -19,10 +17,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../ui/Dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
-import ProfileTabs from "./tabs"
-
-type TabType = "posts" | "about" | "reports"
+import ProfileTabs from "./tabs/ProfileTab"
 
 const Profile = ({
   user,
@@ -31,7 +26,7 @@ const Profile = ({
 }: {
   user: SafeUser
   isProfileOwner: boolean
-  currentUser: SafeUser | null
+  currentUser: SafeUser
 }) => {
   const [reports, setReports] = useState<
     FoundPetReport[] | LostPetReport[] | null
@@ -77,18 +72,25 @@ const Profile = ({
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
       <div className="flex flex-col items-center">
-        <div className="flex items-center gap-10 py-[60px]">
-          <Image
-            className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-            src={user?.image ? user.image : "/../../icon.png"}
-            width={160}
-            height={160}
-            alt="Bordered avatar"
-          />
+        <div className="flex items-center gap-8 py-[60px]">
+          <div className="flex flex-col items-center space-y-4">
+            <Image
+              className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
+              src={user?.image ? user.image : "/../icon.png"}
+              width={160}
+              height={160}
+              alt="Bordered avatar"
+            />
+            <div className="border rounded-xl px-1.5 py-1 text-sm w-fit ">
+              {user?.type === "PetAdoptionCentre" && "Adoption Centre"}
+            </div>
+          </div>
 
           <div className="col-span-5">
-            <div className="flex gap-8">
-              <HeaderTitle className="text-left">{user.username}</HeaderTitle>
+            <div className="flex gap-8 mb-2 items-center">
+              <HeaderTitle className="break-words text-left ml-4 w-[230px] ">
+                {user.username}
+              </HeaderTitle>
               {!isProfileOwner ? (
                 !isCurrentFollowed ? (
                   <Button
@@ -141,17 +143,11 @@ const Profile = ({
                 </Button>
               )}
             </div>
-            <div className="flex flex-col space-x-2">
-              <div className="my-2 border rounded-xl px-1.5 py-1 text-sm w-fit">
-                {user?.type}
-              </div>
-              <p className="mb-2 text-sm">{currentUser?.bio}</p>
-            </div>
 
             <Dialog>
               <DialogTrigger asChild>
                 <Button
-                  className="hover:bg-submain"
+                  className="hover:bg-transparent"
                   variant="ghost"
                   disabled={!currentUser}
                 >
@@ -174,9 +170,7 @@ const Profile = ({
                           <Image
                             className="object-cover w-10 h-10 rounded-full"
                             src={
-                              following.image
-                                ? following.image
-                                : "/../../icon.png"
+                              following.image ? following.image : "/../icon.png"
                             }
                             width={40}
                             height={40}
@@ -251,7 +245,7 @@ const Profile = ({
             <Dialog>
               <DialogTrigger asChild>
                 <Button
-                  className="hover:bg-submain"
+                  className="hover:bg-transparent"
                   variant="ghost"
                   disabled={!currentUser}
                 >
@@ -274,9 +268,7 @@ const Profile = ({
                           <Image
                             className="object-cover w-10 h-10 rounded-full"
                             src={
-                              follower.image
-                                ? follower.image
-                                : "/../../icon.png"
+                              follower.image ? follower.image : "/../icon.png"
                             }
                             width={40}
                             height={40}
@@ -347,12 +339,14 @@ const Profile = ({
                 </div>
               </DialogContent>
             </Dialog>
+
+            <p className="ml-4 text-sm py-2">{currentUser?.bio}</p>
           </div>
         </div>
+      </div>
 
-        <div>
-          <ProfileTabs reports={reports} user={user} />
-        </div>
+      <div>
+        <ProfileTabs reports={reports} user={user} currentUser={currentUser} />
       </div>
     </div>
   )

@@ -122,7 +122,7 @@ const AuthForm = () => {
           }
 
           if (callback?.ok) {
-            window.location.href = "/"
+            router.push("/")
           }
         })
         .finally(() => setIsLoading(false))
@@ -162,9 +162,13 @@ const AuthForm = () => {
 
       <div className="flex flex-col justify-between overflow-y-auto py-3 md:py-2 rounded-lg px-6 md:px-4 w-full md:w-3/4">
         {variant === "REGISTER" ? (
-          <HeaderTitle className="max-w-full max-lg:text-2xl">Sign Up</HeaderTitle>
+          <HeaderTitle className="max-w-full max-lg:text-2xl">
+            Sign Up
+          </HeaderTitle>
         ) : (
-          <HeaderTitle className="max-w-full max-lg:text-2xl">Sign in</HeaderTitle>
+          <HeaderTitle className="max-w-full max-lg:text-2xl">
+            Sign in
+          </HeaderTitle>
         )}
 
         <form

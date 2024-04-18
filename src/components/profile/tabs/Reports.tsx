@@ -39,7 +39,7 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
   return (
     <TabsContent value="reports" className="w-full h-full pt-16">
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-        {reports == null
+        {reports == null || reports.length === 0
           ? "No Reports Available"
           : reports.map((report) => (
               <div

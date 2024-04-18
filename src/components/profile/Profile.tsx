@@ -55,6 +55,7 @@ const Profile = ({
         }
 
         const data = await response.json()
+
         const typedReports = data.map(
           (report: LostPetReport | FoundPetReport) => ({
             ...report,

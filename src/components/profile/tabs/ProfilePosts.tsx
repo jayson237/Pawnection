@@ -69,6 +69,7 @@ function ProfilePostsTab({ user, currentUser }: ProfilePostsTabInterface) {
             return (
               <Fragment key={i}>
                 <PostItem
+                  currUsername={currentUser.username || ""}
                   content={content}
                   setContent={setContent}
                   post={post}

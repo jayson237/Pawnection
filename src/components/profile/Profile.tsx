@@ -350,7 +350,7 @@ const Profile = ({
       </div>
 
       <div>
-        <ProfileTabs reports={reports} user={user} currentUser={currentUser} />
+        <ProfileTabs reports={reports} user={user} currentUser={currentUser} isProfileOwner={isProfileOwner}/>
       </div>
     </div>
   )

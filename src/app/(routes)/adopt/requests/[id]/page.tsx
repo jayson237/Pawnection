@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/Button"
 import { getOneAdoptablePets } from "@/lib/actions/adopt"
 import { getCurrentUser } from "@/lib/actions/user"
 import { cn } from "@/lib/utils"
+import { ArrowLeft } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -39,9 +40,9 @@ export default async function AdoptProcessPage({
         <div className="flex">
           <Link
             className={cn(buttonVariants({ variant: "outline" }), "ml-5")}
-            href="/adopt/pets"
+            href="/adopt"
           >
-            Back
+            <ArrowLeft />
           </Link>
 
           <div className="mx-auto flex flex-col items-center">

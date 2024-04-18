@@ -22,11 +22,13 @@ import CommentItem from "./CommentItem"
 function CommentDialog({
   post,
   isOpen,
+  currUsername,
   setOpen,
   commentCount,
   setCommentCount,
 }: {
   post: ExtendedPost
+  currUsername: string
   isOpen: boolean
   setOpen: (open: boolean) => void
   commentCount: number
@@ -92,16 +94,20 @@ function CommentDialog({
             <Loading />
           </div>
         ) : comments && comments.data.length > 0 ? (
-          comments.data.map((comment) => (
-            <div className="w-full" key={comment.id}>
-              <CommentItem
-                comment={comment}
-                postId={post.id}
-                setCommentCount={setCommentCount}
-                mutate={mutate}
-              />
-            </div>
-          ))
+          comments.data.map((comment) => {
+            const isOwnComment = currUsername === comment.user.username
+            return (
+              <div className="w-full" key={comment.id}>
+                <CommentItem
+                  isOwnComment={isOwnComment}
+                  comment={comment}
+                  postId={post.id}
+                  setCommentCount={setCommentCount}
+                  mutate={mutate}
+                />
+              </div>
+            )
+          })
         ) : (
           <p className="text-center">No comments</p>
         )}

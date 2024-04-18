@@ -29,6 +29,7 @@ import LikeDialog from "./LikeDialog"
 
 const PostItem = ({
   post,
+  currUsername,
   isLiked,
   isOwnProfile,
   isCurrentFollowed,
@@ -36,6 +37,7 @@ const PostItem = ({
   setContent,
 }: {
   post: ExtendedPost
+  currUsername: string
   isLiked: boolean
   isOwnProfile: boolean
   isCurrentFollowed: boolean
@@ -375,6 +377,7 @@ const PostItem = ({
             <CommentDialog
               commentCount={commentCount}
               setCommentCount={setCommentCount}
+              currUsername={currUsername}
               isOpen={dialogState.comment}
               setOpen={() => {
                 setDialogState((prev) => ({

@@ -2,7 +2,7 @@ import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
 import { NextResponse } from "next/server"
 
-export async function GET(request: Request) {
+export async function GET() {
   const currentUser = await getCurrentUser()
   try {
     const userId = currentUser?.id

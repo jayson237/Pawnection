@@ -48,7 +48,9 @@ const Profile = ({
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch("/api/user/reports", { method: "GET" })
+        const response = await fetch("/api/user/reports/by/" + user.id, {
+          method: "GET",
+        })
 
         if (!response.ok) {
           throw new Error("Error loading reports")

@@ -2,9 +2,12 @@
 
 import { FoundPetReport, LostPetReport } from "@prisma/client"
 import Image from "next/image"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React from "react"
 
+import { Badge } from "../../ui/Badge"
+import { Label } from "../../ui/Label"
 import { TabsContent } from "../../ui/Tabs"
 
 interface ProfileReportsTabInterface {
@@ -43,39 +46,34 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
           ? "No Reports Available"
           : reports.map((report) => (
               <div
-                key={report.id}
-                className={
-                  report.isActive
-                    ? "flex flex-col items-center mb-5 mr-12 cursor-pointer"
-                    : "flex flex-col items-center mb-5 mr-12 cursor-pointer  bg-gray-500"
-                }
                 onClick={() => handleReportClick(report)}
+                key={report.id}
+                className="bg-white"
               >
                 <Image
-                  className="object-cover w-20 h-20 rounded-md"
-                  src={transformImage(report.imageUrl)}
-                  width={80}
-                  height={80}
-                  alt="Bordered avatar"
+                  width={200}
+                  height={200}
+                  src={report.imageUrl}
+                  alt={report.petName}
+                  className="w-full h-[200px] object-cover rounded-t-lg"
                 />
-                <div
-                  className={
-                    report.isActive
-                      ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer"
-                      : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"
-                  }
-                >
-                  {report.isActive ? "Missing Pet " : "Pet has been found"}
+                <div className="p-4">
+                  <h2 className="text-xl font-bold">{report.petName}</h2>
+                  <p className="text-gray-500">{report.animalBreed}</p>
+                  <p className="text-gray-500">Type: {report.animalType}</p>
+                  <div className="space-x-2">
+                    {"foundArea" in report ? (
+                      <Label className="text-red-500">Found Pet Report</Label>
+                    ) : (
+                      <Label>Missing Pet Report</Label>
+                    )}
+                    {report.isActive ? (
+                      <Badge>Missing Pet</Badge>
+                    ) : (
+                      <Badge>Pet has been found</Badge>
+                    )}
+                  </div>
                 </div>
-                <p className="mb-[10px]">
-                  {"foundArea" in report
-                    ? "Found Pet Report"
-                    : "Missing Pet Report"}
-                </p>
-
-                <p className="mb-[10px]">{report.petName}</p>
-                <p className="mb-[10px]">{report.animalType}</p>
-                <p className="mb-[10px]"> {report.animalBreed} </p>
               </div>
             ))}
       </div>

@@ -31,8 +31,6 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
     router.push(`/lostAndFound/founds/${reportId}`)
   }
 
-  console.log(reports)
-
   return (
     <TabsContent value="reports" className="w-full h-full pt-16">
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">

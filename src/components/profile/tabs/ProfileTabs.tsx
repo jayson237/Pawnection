@@ -45,8 +45,9 @@ function ProfileTabs({ reports, user, currentUser }: ProfileTabsInterface) {
       </TabsList>
 
       <ProfilePostsTab user={user} currentUser={currentUser} />
-
-      <ProfileAdoptablePetsTab user={user} />
+      {user.type === UserType.PetAdoptionCentre && (
+        <ProfileAdoptablePetsTab user={user} />
+      )}
 
       <ProfileReportsTab reports={reports} />
     </Tabs>

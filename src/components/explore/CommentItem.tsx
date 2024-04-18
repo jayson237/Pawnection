@@ -20,11 +20,13 @@ import {
 import { Textarea } from "../ui/TextArea"
 
 const CommentItem = ({
+  isOwnComment,
   comment,
   postId,
   setCommentCount,
   mutate,
 }: {
+  isOwnComment: boolean
   comment: Comment & { user: Pick<User, "username" | "image"> }
   postId: string
   setCommentCount: Dispatch<SetStateAction<number>>
@@ -113,31 +115,32 @@ const CommentItem = ({
             </Link>
             <TimeStamp datetimeISO={commentTime} />
           </div>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <MoreHorizontal className="w-4 h-4 hover:cursor-pointer hover:text-mainAccent " />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-fit bg-white">
-              <DropdownMenuGroup>
-                <DropdownMenuItem
-                  className="focus:bg-accent"
-                  onClick={() => setIsEdit(true)}
-                >
-                  <Edit3 className="mr-2 h-4 w-4" />
-                  <span>Edit</span>
-                </DropdownMenuItem>
+          {isOwnComment && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <MoreHorizontal className="w-4 h-4 hover:cursor-pointer hover:text-mainAccent " />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-fit bg-white">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem
+                    className="focus:bg-accent"
+                    onClick={() => setIsEdit(true)}
+                  >
+                    <Edit3 className="mr-2 h-4 w-4" />
+                    <span>Edit</span>
+                  </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  className="focus:bg-accent"
-                  onClick={() => handleDeleteComment(comment.id)}
-                >
-                  <Trash2 className="mr-2 h-4 w-4 text-red-700" />
-                  <span className="text-red-700">Delete</span>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  <DropdownMenuItem
+                    className="focus:bg-accent"
+                    onClick={() => handleDeleteComment(comment.id)}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4 text-red-700" />
+                    <span className="text-red-700">Delete</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
         {!isEdit ? (
           <span className="text-sm">{comment.content}</span>

@@ -88,6 +88,7 @@ function ExplorePost({ currentUser }: { currentUser: SafeUser }) {
                 content={content}
                 setContent={setContent}
                 post={post}
+                currUsername={currentUser?.username || ""}
                 isLiked={isLiked}
                 isOwnProfile={isOwnProfile}
                 isCurrentFollowed={

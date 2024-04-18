@@ -8,7 +8,10 @@ import React from "react"
 import { TabsContent } from "../../ui/Tabs"
 
 interface ProfileReportsTabInterface {
-  reports: FoundPetReport[] | LostPetReport[] | null
+  reports:
+    | (FoundPetReport & { type: string })[]
+    | (LostPetReport & { type: string })[]
+    | null
 }
 
 function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
@@ -28,6 +31,8 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
     router.push(`/lostAndFound/founds/${reportId}`)
   }
 
+  console.log(reports)
+
   return (
     <TabsContent value="reports" className="w-full h-full pt-16">
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
@@ -37,7 +42,11 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
               <div
                 key={index}
                 className={`cursor-pointer ${!report.isActive ? "opacity-50" : ""}`}
-                onClick={() => handleLostPetReportClick(report.id)}
+                onClick={() => {
+                  if (report.type === "FoundPetReport")
+                    handleFoundPetReportClick(report.id)
+                  else handleLostPetReportClick(report.id)
+                }}
               >
                 <div className="w-full h-48 relative">
                   <Image
@@ -60,11 +69,11 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
                   </p>
                   <div className="mt-auto">
                     <div className="border rounded-xl px-1.5 py-1 flex items-center text-sm w-fit">
-                      {report.isActive ? (
+                      {report.type === "LostPetReport" ? (
                         <p className="text-red-500 font-semibold">Lost Pet</p>
                       ) : (
-                        <p className="text-mainAccent font-semibold">
-                          Pet has been found
+                        <p className="text-green-500 font-semibold">
+                          Found Pet
                         </p>
                       )}
                     </div>

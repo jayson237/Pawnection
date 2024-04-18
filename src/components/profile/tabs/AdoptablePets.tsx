@@ -66,7 +66,7 @@ function ProfileAdoptablePetsTab({ user }: ProfileAdoptablePetsTabInterface) {
         </div>
       ) : (
         <div className="flex justify-center items-center">
-          <p className="text-gray-500">No result found</p>
+          <p>No result found</p>
         </div>
       )}
     </TabsContent>

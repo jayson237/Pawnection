@@ -3,7 +3,9 @@
 import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
 import { AdoptablePet, AdoptionRequest } from "@prisma/client"
-import Image from "next/image"
+import { Arrow } from "@radix-ui/react-dropdown-menu"
+import { ArrowLeft } from "lucide-react"
+import Image from "next/legacy/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -82,10 +84,15 @@ export default function AdoptionCenterManager({
       <div className="flex justify-between">
         <div className="flex gap-12">
           <Link
-            className={cn(buttonVariants({ variant: "outline" }))}
+            className={cn(
+              buttonVariants({
+                variant: "outline",
+                className: "border-none",
+              }),
+            )}
             href="/adoptionCenter"
           >
-            Back
+            <ArrowLeft className="w-6 h-6" />
           </Link>
           <HeaderTitle>Edit Pet Details</HeaderTitle>
         </div>
@@ -99,8 +106,8 @@ export default function AdoptionCenterManager({
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete you
-                  pet posting.
+                  This action cannot be undone. This will permanently delete
+                  this adoption listing
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -118,43 +125,44 @@ export default function AdoptionCenterManager({
                     if (!set.ok) {
                       toast({
                         variant: "destructive",
-                        title: "Failed to delete post",
+                        title: "Failed to delete",
                         description: msg.message,
                       })
                     } else {
                       toast({
-                        title: "Post deleted successfully",
+                        title: "Deleted successfully",
                         description: "Successfully deleted! Please wait...",
                       })
                       router.push("/adoptionCenter")
                     }
                   }}
                 >
-                  Continue
+                  Delete
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
         </div>
       </div>
-      <div className="grid grid-cols-3 max-md:grid-cols-1 gap-12 mt-8 max-md:w-3/4 mx-auto p-4">
-        <div className="rounded-xl border border-gray-400 h-full col-span-1">
+      <div className="grid grid-cols-3 max-md:grid-cols-1 gap-12 mt-12 max-md:w-3/4 mx-auto">
+        <div className="rounded-xl bg-white h-full col-span-1 shadow-lg">
           <div>
             <Image
               src={data.imageUrl}
               alt={data.name}
+              priority
               width={1000}
               height={1000}
-              className="rounded-xl h-full bg-cover bg-center w-full object-cover max-h-[440px]"
+              className="rounded-t-xl h-full bg-cover bg-center w-full object-cover max-h-[440px]"
             />
           </div>
-          <div className="px-3.5 py-4">
+          <div className="px-8 pb-6">
             <AdoptionCenterManagerForm data={data} />
           </div>
         </div>
 
         <div className="h-full col-span-2">
-          <HeaderTitle className="text-left">Your Pet Requests</HeaderTitle>
+          <HeaderTitle className="text-left text-2xl">Requests</HeaderTitle>
 
           <div className="mt-6">
             {data.adoptionRequests.length === 0 ? (
@@ -165,7 +173,7 @@ export default function AdoptionCenterManager({
                   <div
                     key={request.id}
                     className={cn(
-                      "rounded-xl border border-gray-400 p-4",
+                      "rounded-xl bg-white p-4",
                       "flex justify-between items-center",
                     )}
                   >

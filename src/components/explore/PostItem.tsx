@@ -187,7 +187,7 @@ const PostItem = ({
   }
 
   return (
-    <div className="rounded-xl border bg-white h-full min-w-[598px]">
+    <div className="rounded-xl border bg-white h-full w-[598px]">
       <div className="flex items-center px-6 py-4 justify-between">
         <div className="transition-all duration-300 ease-in-out hover:cursor-pointer ">
           <Link href={`/profile/${post.user.username}`} target="_blank">

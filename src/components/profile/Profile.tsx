@@ -29,7 +29,9 @@ const Profile = ({
   currentUser: SafeUser
 }) => {
   const [reports, setReports] = useState<
-    FoundPetReport[] | LostPetReport[] | null
+    | (FoundPetReport & { type: string })[]
+    | (LostPetReport & { type: string })[]
+    | null
   >(null)
   const [isCurrentFollowed, setIsCurrentFollowed] = useState<
     boolean | null | undefined

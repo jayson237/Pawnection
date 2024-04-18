@@ -10,7 +10,10 @@ import ProfilePostsTab from "./ProfilePosts"
 import ProfileReportsTab from "./Reports"
 
 interface ProfileTabsInterface {
-  reports: FoundPetReport[] | LostPetReport[] | null
+  reports:
+    | (FoundPetReport & { type: string })[]
+    | (LostPetReport & { type: string })[]
+    | null
   user: SafeUser
   currentUser: SafeUser
 }

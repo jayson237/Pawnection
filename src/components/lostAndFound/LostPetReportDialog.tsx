@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/useToast"
 import Image from "next/image"
 import { FormEvent, useEffect, useState } from "react"
 
+import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
 import { DatePicker } from "../ui/DatePicker"
 import {
@@ -28,10 +29,14 @@ import { Textarea } from "../ui/TextArea"
 interface LostPetReportDialogProps {
   isOpen: boolean
   onClose: () => void
-  onReportCreated: () => void;
+  onReportCreated: () => void
 }
 
-const LostPetReportDialog = ({ isOpen, onClose, onReportCreated }: LostPetReportDialogProps) => {
+const LostPetReportDialog = ({
+  isOpen,
+  onClose,
+  onReportCreated,
+}: LostPetReportDialogProps) => {
   const [animalType, setAnimalType] = useState("")
   const [name, setName] = useState("")
   const [sex, setSex] = useState("")
@@ -282,8 +287,14 @@ const LostPetReportDialog = ({ isOpen, onClose, onReportCreated }: LostPetReport
               </Label>
 
               <div className="flex justify-end w-full">
-                <Button type="submit" className={isLoading ? "loading" : ""}>
-                  {isLoading ? "Loading..." : "Submit"}
+                <Button type="submit" className="w-20">
+                  {isLoading ? (
+                    <>
+                      <LoadingDots color="#FAFAFA" />
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
                 </Button>
               </div>
             </div>

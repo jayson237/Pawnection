@@ -4,6 +4,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
+import { ArrowLeft } from "lucide-react"
+import { Button, buttonVariants } from "@/components/ui/Button"
+import { cn } from "@/lib/utils"
 
 export default async function AdoptPetRequests() {
   const ownrequests = await getAllOwnAdpotRequests()
@@ -13,15 +16,28 @@ export default async function AdoptPetRequests() {
   }
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-8">
-      <div className="py-[60px]">
-        <HeaderTitle className="max-w-full">Your Adoption Requests</HeaderTitle>
+      <div className="py-[60px] w-full">
+        <div className="flex">
+          <Link
+            className={cn(buttonVariants({ variant: "outline" }), "ml-5")}
+            href="/adopt"
+          >
+            <ArrowLeft/>
+          </Link>
+
+          <div className="mx-auto flex flex-col items-center">
+            <HeaderTitle className="max-w-full max-md:text-3xl">
+             Your Adoption Requests
+            </HeaderTitle>
+          </div>
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 w-full">
         {ownrequests?.length > 0 ? (
           ownrequests.map((request) => (
             <Link
-              href={"/adopt/process/" + request.adoptablePet.id}
+              href={"/adopt/requests/" + request.adoptablePet.id}
               key={request.id}
               className="bg-white rounded-lg shadow-md"
             >
@@ -42,7 +58,7 @@ export default async function AdoptPetRequests() {
             </Link>
           ))
         ) : (
-          <div className="text-center">
+          <div className="col-span-full flex justify-center items-center text-center">
             <p>You have not made any adoption requests</p>
           </div>
         )}

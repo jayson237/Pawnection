@@ -100,7 +100,7 @@ function ExplorePetSitting({ currentUser }: { currentUser: SafeUser }) {
         )}
         {content?.length === 0 && !loading && (
           <div className="flex justify-center items-center">
-            <p className="text-gray-500">No posts found</p>
+            <p>No posts found</p>
           </div>
         )}
       </div>

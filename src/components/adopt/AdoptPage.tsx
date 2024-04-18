@@ -1,16 +1,13 @@
 "use client"
 
 import HeaderTitle from "@/components/HeaderTitle"
-import AdoptSearchBar from "@/components/adopt/AdoptSearchBar"
-import InformationIcon from "@/components/adopt/InformationIcon"
+import HowToAdopt from "@/components/adopt/HowToAdopt"
 import { buttonVariants } from "@/components/ui/Button"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Label } from "@/components/ui/Label"
-import { getAllAdoptablePets } from "@/lib/actions/adopt"
 import { cn } from "@/lib/utils"
 import { AdoptablePet } from "@prisma/client"
-import { Info } from "lucide-react"
 import { Search, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -106,7 +103,7 @@ const AdoptPage = ({
             View all your requests
           </Link>
 
-          <InformationIcon />
+          <HowToAdopt />
         </div>
       </div>
 

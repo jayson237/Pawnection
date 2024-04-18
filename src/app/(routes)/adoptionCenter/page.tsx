@@ -1,5 +1,5 @@
 import HeaderTitle from "@/components/HeaderTitle"
-import OwnAdoptablePost from "@/components/adoptionCenter/OwnAdoptablePost"
+import AdoptionCenter from "@/components/adoptionCenter/AdoptionCenterPage"
 import { buttonVariants } from "@/components/ui/Button"
 import { getCurrentUser } from "@/lib/actions/user"
 import { cn } from "@/lib/utils"
@@ -35,7 +35,7 @@ export default async function AdoptionCenterPage() {
               Create adoption listing
             </Link>
           </div>
-          <OwnAdoptablePost />
+          <AdoptionCenter />
         </div>
       </div>
     </div>

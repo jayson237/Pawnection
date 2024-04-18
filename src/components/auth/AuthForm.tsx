@@ -53,7 +53,6 @@ const AuthForm = () => {
     register,
     handleSubmit,
     formState: { errors, isValid },
-    watch,
   } = useForm<FieldValues>({
     defaultValues: {
       username: "",

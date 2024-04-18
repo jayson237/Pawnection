@@ -27,7 +27,7 @@ function LikeDialog({
   setOpen: (open: boolean) => void
   likes_count: number
 }) {
-  const { data: likes, isLoading } = useSWR<{
+  const { data: likes } = useSWR<{
     data: (Like & { user: Pick<User, "username" | "image"> })[]
     message: string
   }>(isOpen ? `/api/explore/post/${post.id}/likes` : null, fetcher, {

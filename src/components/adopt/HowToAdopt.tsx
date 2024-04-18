@@ -1,9 +1,10 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Info, Search, X } from "lucide-react"
-import { ChangeEvent, useState } from "react"
+import { Info } from "lucide-react"
+import { useState } from "react"
 
+import HeaderTitle from "../HeaderTitle"
 import { Button, buttonVariants } from "../ui/Button"
 import {
   Dialog,
@@ -12,18 +13,9 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../ui/Dialog"
-import { Input } from "../ui/Input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/Select"
 import HowtoCard from "./HowToCard"
-import HeaderTitle from "../HeaderTitle"
 
-const InformationIcon = () => {
+const HowToAdopt = () => {
   const [showDialog, setShowDialog] = useState(false)
 
   const openDialog = () => setShowDialog(true)
@@ -86,4 +78,4 @@ const InformationIcon = () => {
   )
 }
 
-export default InformationIcon
+export default HowToAdopt

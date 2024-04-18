@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
-import { AdoptRequestStatus, AdoptablePetStatus } from "@prisma/client"
+import { AdoptRequestStatus } from "@prisma/client"
 import { NextResponse } from "next/server"
 
 async function rejectAdoptionRequest(

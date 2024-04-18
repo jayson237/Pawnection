@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react"
 import Loading from "../Loading"
 import { buttonVariants } from "../ui/Button"
 
-function OwnAdoptablePost() {
+function AdoptionCenter() {
   const [data, setData] = useState<AdoptablePet[] | null>(null)
 
   useEffect(() => {
@@ -69,4 +69,4 @@ function OwnAdoptablePost() {
   )
 }
 
-export default OwnAdoptablePost
+export default AdoptionCenter

@@ -1,7 +1,7 @@
+import AdoptPost from "@/components/adopt/AdoptPost"
 import { getAllAdoptablePets } from "@/lib/actions/adopt"
 import { notFound } from "next/navigation"
 import React from "react"
-import AdoptPage from "@/components/adopt/AdoptPage"
 
 export default async function AdoptViewAllPetsPage() {
   const adoptablePets = await getAllAdoptablePets()
@@ -10,7 +10,5 @@ export default async function AdoptViewAllPetsPage() {
     return notFound()
   }
 
-  return (
-    <AdoptPage adoptablePets={adoptablePets} />
-  )
+  return <AdoptPost adoptablePets={adoptablePets} />
 }

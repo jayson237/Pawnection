@@ -69,18 +69,6 @@ const FoundPetReportDialog = ({
   const [petImage, setPetImage] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
-  const [errors, setErrors] = useState({
-    animalType: "",
-    name: "",
-    breed: "",
-    sex: "",
-    message: "",
-    description: "",
-    foundArea: "",
-    foundDate: "",
-    contactDetails: "",
-    petImage: "",
-  })
 
   const [isFormComplete, setIsFormComplete] = useState(false)
 
@@ -114,26 +102,8 @@ const FoundPetReportDialog = ({
     petImage,
   ])
 
-  const validateForm = () => {
-    const newErrors = {
-      animalType: !animalType ? "Animal type is required" : "",
-      name: !name ? "Name is required" : "",
-      breed: !breed ? "Breed is required" : "",
-      sex: !sex ? "Gender is required" : "",
-      message: !message ? "Message is required" : "",
-      description: !description ? "Description is required" : "",
-      foundArea: !foundArea ? "Area found is required" : "",
-      foundDate: !foundDate ? "Date found is required" : "",
-      contactDetails: !contactDetails ? "Contact details are required" : "",
-      petImage: !petImage ? "Pet image is required" : "",
-    }
-    setErrors(newErrors)
-    return Object.values(newErrors).every((error) => !error)
-  }
-
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!validateForm()) return
     setIsLoading(true)
     const sign = await fetch("/api/cloudinary/cdn-sign?type=post")
     const data = await sign.json()

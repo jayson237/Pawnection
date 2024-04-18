@@ -30,7 +30,6 @@ const FoundPetReportPage = ({
   const { toast } = useToast()
   const [thisFoundPetReport, setThisFoundPetReport] = useState(foundPetReport)
   const [formattedFoundDate, setFormattedFoundDate] = useState("")
-  const [reportActive, setReportActive] = useState(true)
   const router = useRouter()
 
   const [creatorImage, setCreatorImage] = useState("")
@@ -118,7 +117,6 @@ const FoundPetReportPage = ({
         })
       }
       toast({ title: "Report status updated successfully" })
-      setReportActive(false)
       await fetchReportData()
     }
   }
@@ -145,7 +143,6 @@ const FoundPetReportPage = ({
         }
       }
       toast({ title: "Report status reverted successfully" })
-      setReportActive(true)
       await fetchReportData()
     }
   }

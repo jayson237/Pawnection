@@ -29,11 +29,14 @@ import { Textarea } from "../ui/TextArea"
 interface FoundPetReportDialogProps {
   isOpen: boolean
   onClose: () => void
+  onReportCreated: () => void;
+
 }
 
 const FoundPetReportDialog = ({
   isOpen,
   onClose,
+  onReportCreated
 }: FoundPetReportDialogProps) => {
   const [petImagePreview, setPetImagePreview] = useState<string | null>(null)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -145,6 +148,8 @@ const FoundPetReportDialog = ({
           toast({
             description: "Found Pet Report has been successfully created.",
           })
+          onReportCreated()
+          onClose()
         }
       }
     } catch (error) {
@@ -302,7 +307,7 @@ const FoundPetReportDialog = ({
               </Label>
 
               <Label className="">
-                Message From Supawhero
+                Message From Founder
                 <Textarea
                   required={true}
                   onChange={(e) => setMessage(e.currentTarget.value)}

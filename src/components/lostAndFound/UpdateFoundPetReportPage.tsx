@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
+import { useRouter } from "next/navigation"
 
 const UpdateFoundPetReportPage = ({
   foundPetReport,
@@ -57,6 +58,7 @@ const UpdateFoundPetReportPage = ({
   )
   const [reportId, setReportId] = useState(foundPetReport?.id)
   const [isFormValid, setIsFormValid] = useState(false)
+  const router = useRouter()
 
   const imageLoader = ({
     src,
@@ -96,7 +98,7 @@ const UpdateFoundPetReportPage = ({
       if (!updateResponse.ok) {
         toast({
           variant: "destructive",
-          title: "Profile update failed",
+          title: "Report update failed",
           description: "Please try again",
         })
       } else {
@@ -104,15 +106,17 @@ const UpdateFoundPetReportPage = ({
         setIsFormChanged(false)
         toast({
           title: "Successful!",
-          description: "Profile updated successfully",
+          description: "Report updated successfully",
         })
+        router.push(`/lostAndFound/founds/${foundPetReport?.id}`)
+
       }
 
       const result = await updateResponse.json()
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Profile update failed",
+        title: "Report update failed",
         description: "Please try again",
       })
     }

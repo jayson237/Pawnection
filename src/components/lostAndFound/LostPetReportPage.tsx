@@ -13,7 +13,6 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
  const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("")
  const [reportActive, setReportActive] = useState(true)
  const router = useRouter()
-
  const [creatorImage, setCreatorImage] = useState("")
  const [creatorName, setCreatorName] = useState("")
  const [creatorContactDetails, setCreatorContactDetails] = useState("")
@@ -52,8 +51,6 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
  }
 
 
-
-
  useEffect(() => {
    if (thisLostPetReport?.lastSeenDate) {
      const date = new Date(thisLostPetReport.lastSeenDate)
@@ -79,14 +76,13 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
          throw new Error("Failed to delete the report.")
        }
        alert("Report deleted successfully")
-       router.push("/lostAndFound")
+       router.push("/lostAndFound/losses")
      } catch (error) {
        console.error("Error deleting report:", error)
        alert("Failed to delete the report.")
      }
    }
  }
-
 
  const updateStatus = async () => {
    if (thisLostPetReport && confirm("Are you sure you pet has been returned to owner?")) {
@@ -100,8 +96,9 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
          throw new Error("Failed to update the report status.")
        }
        alert("Report status updated successfully")
-       setReportActive(false)
-       router.push("/lostAndFound")
+      //  setReportActive(false)
+      //  router.push(`/lostAndFound/losses/${thisLostPetReport.id}`)
+      await fetchReportData()
      } catch (error) {
        console.error("Error updating report status:", error)
        alert("Failed to update the report status.")
@@ -123,7 +120,8 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
        }
        alert("Report status reverted successfully")
        setReportActive(true)
-       router.push("/lostAndFound")
+      //  router.push(`/lostAndFound/losses/${thisLostPetReport.id}`)
+      await fetchReportData()
      } catch (error) {
        console.error("Error reverting report status:", error)
        alert("Failed to revert the report status.")
@@ -136,6 +134,25 @@ const LostPetReportPage = ({ lostPetReport, currUser }: { lostPetReport: LostPet
    router.push(`/lostAndFound/updateLostPetReportPage/${lostPetReport?.id}`)
  }
 
+
+ const fetchReportData = async () => {
+  if (!lostPetReport?.id) return
+
+  try {
+    const response = await fetch(`/api/lostAndFound/getLostPetReportById?id=${lostPetReport?.id}`)
+    if (!response.ok) {
+      throw new Error("Failed to fetch report data")
+    }
+    const data = await response.json()
+    setThisLostPetReport(data)
+  } catch (error) {
+    console.error("Failed to fetch report:", error)
+  }
+}
+
+useEffect(() => {
+  fetchReportData()
+}, [lostPetReport?.id])
 
  return (
    <div className="container mx-auto w-full h-full px-4 py-5">

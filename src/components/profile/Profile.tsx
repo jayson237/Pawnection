@@ -4,15 +4,10 @@ import { LostPetReport } from "@prisma/client"
 import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import React from "react"
 import { useEffect, useState } from "react"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/Select"
+
 import { SafeUser } from "../../types"
 import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
@@ -23,8 +18,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../ui/Dialog"
-import { useRouter } from "next/navigation"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
+import ProfileTabs from "./tabs/ProfileTabs"
 
 const Profile = ({
   user,
@@ -112,7 +106,7 @@ const Profile = ({
 
     if (!response2.ok) {
       throw new Error("Failed to fetch Found Pet Reports")
-    }    
+    }
 
     const data1 = await response1.json()
 
@@ -122,19 +116,19 @@ const Profile = ({
       setReports(data2)
     }
 
-    if (data1!= null && data2 == null) {
+    if (data1 != null && data2 == null) {
       setReports(data1)
     }
 
-    if (data1 !=null && data2 !=null) {
+    if (data1 != null && data2 != null) {
       const returnedData = [...data1, ...data2]
       setReports(returnedData)
     }
-    
+
     if (data1 == null && data2 == null) {
       setReports(null)
     }
-  }  
+  }
 
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
@@ -413,159 +407,7 @@ const Profile = ({
       </div>
 
       <div>
-        <Tabs defaultValue="posts" className="">
-          <TabsList className="bg-transparent w-full gap-8 h-18">
-            <TabsTrigger
-              value="posts"
-              className="text-base py-2 px-4 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-8 data-[state=active]:shadow-none"
-            >
-              Posts
-            </TabsTrigger>
-            <TabsTrigger
-              value="about"
-              className="text-base py-2 px-4 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-8 data-[state=active]:shadow-none"
-            >
-              About
-            </TabsTrigger>
-            <TabsTrigger
-              value="reports"
-              className="text-base py-2 px-4 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=active]:underline data-[state=active]:underline-offset-8 data-[state=active]:shadow-none"
-            >
-              Reports
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="posts" className="w-full h-full pt-16">
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-              {Array.from({ length: 10 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="flex items-center space-x-4 bg-white rounded-xl p-2"
-                >
-                  <Image
-                    className="object-cover w-20 h-20 rounded-md"
-                    src={user?.image ? user.image : "/../../icon.png"}
-                    width={80}
-                    height={80}
-                    alt="Bordered avatar"
-                  />
-                  <div className="flex flex-col">
-                    <p className="text-lg font-semibold">Post title</p>
-                    <p className="text-sm text-gray-500">Post description</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-          <TabsContent value="about">Abount ??</TabsContent>
-
-          <TabsContent value="reports" className="w-full h-full pt-16">
-        <div className="flex flex-row space-x-4">
-
-        <div className="flex items-center">
-          <Select
-              onValueChange={(val) => {
-                setReportActivity(val === "Active" ? true : val === "Inactive" ? false : null)
-              }}              
-          >
-            <SelectTrigger className="w-[180px] px-4 py-2 h-[40px]">
-              <SelectValue placeholder="Filter Report Type" />
-            </SelectTrigger>
-            <SelectContent>
-            <SelectItem value="All">All</SelectItem>
-              <SelectItem value="Active">Active</SelectItem>
-              <SelectItem value="Inactive">Inactive</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-center">
-          <Select
-            onValueChange={(val) => {
-              const fetchData = async () => {
-                fetchReports(val)
-              }
-              fetchData()
-            }}            
-          >
-            <SelectTrigger className="w-[180px] px-4 py-2 h-[40px]">
-              <SelectValue placeholder="Filter Animal Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="All">All </SelectItem>
-              <SelectItem value="Dog">Dog</SelectItem>
-              <SelectItem value="Cat">Cat</SelectItem>
-              <SelectItem value="Bird">Bird</SelectItem>
-              <SelectItem value="Others">Others</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-center">
-            <input
-              type="text"
-              placeholder="Search reports..."
-              className="border px-4 py-2 w-[180px] h-[40px] rounded-md"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-
-        </div>
-            <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
-              {reports == null
-                ? "No Reports Available"
-                : reports.filter(report => {
-                  const commonMatches = report.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    report.animalType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    report.animalBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    report.contactDetails.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    report.petSex.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    report.reportMessage.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    report.reportDescription.toLowerCase().includes(searchTerm.toLowerCase())
-                
-                  const areaMatches = "foundArea" in report ?
-                    report.foundArea.toLowerCase().includes(searchTerm.toLowerCase()) :
-                    report.lastSeenArea.toLowerCase().includes(searchTerm.toLowerCase())
-                
-                  const matchesActivityStatus = reportActivity === null || report.isActive === reportActivity
-                
-                  return commonMatches && areaMatches && matchesActivityStatus
-                }).map((report) => (
-                    <div
-                      key={report.id}
-                      className={report.isActive ? "flex items-center border p-4 rounded-xl bg-white h-full cursor-pointer" 
-                  : "flex items-center border border-white p-4 rounded-xl bg-gray-500/40 h-full  cursor-pointer"} 
-
-                      onClick={() => handleReportClick(report)}
-                    >
-                      <Image
-                        className="w-24 h-24 rounded-full mr-4"
-                        src={transformImage(report.imageUrl)}
-                        width={80}
-                        height={80}
-                        alt="Bordered avatar"
-                      />
-                  <div>
-                    <h3 className="text-xl font-semibold mb-1">
-                      Name: {report.petName}
-                    </h3>
-                    <p className="text-sm mb-2 text-mainAccent">
-                      {report.animalType}
-                    </p>
-                    <p className="text-sm mb-2">
-                        {"foundArea" in report
-                          ? "Report Type: Found Pet Report"
-                          : "Report Type: Missing Pet Report"}
-                      </p>                    
-                    <p className="text-sm mb-2">Description: {report.reportDescription}</p>
-                    <p className="text-sm mb-3 text-gray-500">Status: {report.isActive ? "Active" : "Inactive"}</p>
-                  </div>
-                    </div>
-                  ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+        <ProfileTabs reports={reports} user={user} currentUser={currentUser} />
       </div>
     </div>
   )

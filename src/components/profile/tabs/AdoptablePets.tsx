@@ -36,9 +36,9 @@ function ProfileAdoptablePetsTab({ user }: ProfileAdoptablePetsTabInterface) {
 
   return (
     <TabsContent value="adoptablepets" className="w-full h-full pt-16 px-8">
-      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 w-full">
-        {pets.length > 0 ? (
-          pets.map((pet) => (
+      {pets.length > 0 ? (
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 w-full">
+          {pets.map((pet) => (
             <Link
               href={"/adopt/requests/" + pet.id}
               key={pet.id}
@@ -62,11 +62,13 @@ function ProfileAdoptablePetsTab({ user }: ProfileAdoptablePetsTabInterface) {
                 )}
               </div>
             </Link>
-          ))
-        ) : (
-          <p className="py-4 text-center">No results found</p>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex justify-center items-center">
+          <p className="text-gray-500">No result found</p>
+        </div>
+      )}
     </TabsContent>
   )
 }

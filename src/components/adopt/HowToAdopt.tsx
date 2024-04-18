@@ -1,11 +1,8 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 import { Info } from "lucide-react"
-import { useState } from "react"
 
 import HeaderTitle from "../HeaderTitle"
-import { Button, buttonVariants } from "../ui/Button"
 import {
   Dialog,
   DialogContent,
@@ -16,24 +13,16 @@ import {
 import HowtoCard from "./HowToCard"
 
 const HowToAdopt = () => {
-  const [showDialog, setShowDialog] = useState(false)
-
-  const openDialog = () => setShowDialog(true)
-  const closeDialog = () => setShowDialog(false)
-
   return (
     <>
-      <Dialog onOpenChange={closeDialog}>
+      <Dialog>
         <DialogTrigger asChild>
-          <Button
-            onClick={openDialog}
-            className={cn(
-              buttonVariants({ variant: "ghost" }),
-              "px-4 py-2 ml-1 sm:ml-6",
-            )}
-          >
-            <Info className="w-6 h-6" />
-          </Button>
+          <div className="flex items-center space-x-2 flex-row cursor-pointer">
+            <Info className="w-4 h-4 text-orange-500" />
+            <p className="text-md text-orange-500 font-semibold">
+              How to Adopt
+            </p>
+          </div>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[900px] max-h-[70vh] overflow-y-auto">
           <DialogHeader>

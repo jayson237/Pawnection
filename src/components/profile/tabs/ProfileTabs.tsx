@@ -16,9 +16,15 @@ interface ProfileTabsInterface {
     | null
   user: SafeUser
   currentUser: SafeUser
+  isProfileOwner: boolean
 }
 
-function ProfileTabs({ reports, user, currentUser }: ProfileTabsInterface) {
+function ProfileTabs({
+  reports,
+  user,
+  currentUser,
+  isProfileOwner,
+}: ProfileTabsInterface) {
   return (
     <Tabs defaultValue="posts">
       <TabsList className="bg-transparent w-full gap-8 h-18">
@@ -45,8 +51,9 @@ function ProfileTabs({ reports, user, currentUser }: ProfileTabsInterface) {
       </TabsList>
 
       <ProfilePostsTab user={user} currentUser={currentUser} />
+
       {user.type === UserType.PetAdoptionCentre && (
-        <ProfileAdoptablePetsTab user={user} />
+        <ProfileAdoptablePetsTab user={user} isProfileOwner={isProfileOwner} />
       )}
 
       <ProfileReportsTab reports={reports} />

@@ -56,7 +56,6 @@ const UpdateFoundPetReportPage = ({
   const [reportMessage, setReportMessage] = useState(
     foundPetReport?.reportMessage || "",
   )
-  const [reportId, setReportId] = useState(foundPetReport?.id)
   const [isFormValid, setIsFormValid] = useState(false)
   const router = useRouter()
 
@@ -82,7 +81,7 @@ const UpdateFoundPetReportPage = ({
         {
           method: "PUT",
           body: JSON.stringify({
-            reportId,
+            reportId: foundPetReport?.id,
             petName,
             animalType,
             animalBreed,

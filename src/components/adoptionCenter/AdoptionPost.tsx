@@ -169,7 +169,7 @@ function AdoptionPost() {
               ) : (
                 <Image
                   src="/static/images/dog_left.webp"
-                  alt="hura"
+                  alt=""
                   width={604}
                   height={400}
                   className="w-7/8 md:w-full justify-self-center mb-4"
@@ -214,7 +214,7 @@ function AdoptionPost() {
           <div className="col-span-2">
             <div className="py-3 max-lg:py-0 rounded-lg px-6 w-full">
               <HeaderTitle className="max-w-full max-lg:text-2xl">
-                Pet Information Form
+                Create pet adoption
               </HeaderTitle>
 
               <form
@@ -249,14 +249,10 @@ function AdoptionPost() {
                         <SelectValue placeholder="Select Pet Type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="bird">Bird</SelectItem>
-                        <SelectItem value="cat">Cat</SelectItem>
                         <SelectItem value="dog">Dog</SelectItem>
-                        <SelectItem value="fish">Fish</SelectItem>
-                        <SelectItem value="hamster">Hamster</SelectItem>
-                        <SelectItem value="lizard">Lizard</SelectItem>
-                        <SelectItem value="rabbit">Rabbit</SelectItem>
-                        <SelectItem value="turtle">Turtle</SelectItem>
+                        <SelectItem value="cat">Cat</SelectItem>
+                        <SelectItem value="bird">Bird</SelectItem>
+                        <SelectItem value="others">Others</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

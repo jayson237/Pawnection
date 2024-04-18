@@ -5,6 +5,7 @@ import Image from "next/image"
 import { useEffect } from "react"
 import { FormEvent, useState } from "react"
 
+import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
 import { DatePicker } from "../ui/DatePicker"
 import {
@@ -29,14 +30,13 @@ import { Textarea } from "../ui/TextArea"
 interface FoundPetReportDialogProps {
   isOpen: boolean
   onClose: () => void
-  onReportCreated: () => void;
-
+  onReportCreated: () => void
 }
 
 const FoundPetReportDialog = ({
   isOpen,
   onClose,
-  onReportCreated
+  onReportCreated,
 }: FoundPetReportDialogProps) => {
   const [petImagePreview, setPetImagePreview] = useState<string | null>(null)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -315,8 +315,14 @@ const FoundPetReportDialog = ({
               </Label>
 
               <div className="flex justify-end w-full">
-                <Button type="submit">
-                  {isLoading ? "Loading..." : "Submit"}
+                <Button type="submit" className="w-20">
+                  {isLoading ? (
+                    <>
+                      <LoadingDots color="#FAFAFA" />
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
                 </Button>
               </div>
             </div>

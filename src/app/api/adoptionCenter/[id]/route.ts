@@ -110,7 +110,7 @@ export async function PUT(
   }
 }
 
-async function dateleAdopablePet(currentUser: SafeUser, id: string) {
+async function deleteAdoptablePet(currentUser: SafeUser, id: string) {
   try {
     const findOne = await prisma.adoptablePet.findFirst({
       where: {
@@ -148,16 +148,22 @@ export async function DELETE(
       )
     }
 
-    const dlt = await dateleAdopablePet(currentUser, params.id)
+    const dlt = await deleteAdoptablePet(currentUser, params.id)
     if (!dlt) {
       return NextResponse.json({ message: "Failed to delete" }, { status: 400 })
     }
     return NextResponse.json(
-      { message: "Pet deleted successfully" },
+      { message: "Adoption listing deleted successfully" },
       { status: 200 },
     )
   } catch (error) {
     console.log(error)
-    return NextResponse.json({ message: "An error occurred" }, { status: 500 })
+    return NextResponse.json(
+      {
+        message:
+          "Only listings without requests can be removed. Otherwise, please try again",
+      },
+      { status: 500 },
+    )
   }
 }

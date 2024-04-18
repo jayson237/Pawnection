@@ -45,21 +45,23 @@ function ProfileAdoptablePetsTab({ user }: ProfileAdoptablePetsTabInterface) {
               className="bg-white rounded-lg shadow-md"
             >
               <Image
-                width={200}
-                height={200}
+                width={400}
+                height={400}
                 src={pet.imageUrl}
                 alt={pet.name}
                 className="w-full h-[200px] object-cover rounded-t-lg"
               />
               <div className="p-4">
                 <h2 className="text-xl font-bold">{pet.name}</h2>
-                <p className="text-gray-500">{pet.breed}</p>
+                <p className="text-orange-500 capitalize">{pet.type}</p>
                 <p className="text-gray-500">{pet.age} years old</p>
-                {pet.status === "Adopted" ? (
-                  <Label className="text-red-500">Adopted</Label>
-                ) : (
-                  <Label className="text-green-500">Available</Label>
-                )}
+                <div className="mt-4 border rounded-xl px-1.5 py-1 flex items-center text-sm w-fit">
+                  {pet.status === "Adopted" ? (
+                    <p className="text-red-500 font-semibold">Adopted</p>
+                  ) : (
+                    <p className="text-green-500 font-semibold">Available</p>
+                  )}
+                </div>
               </div>
             </Link>
           ))}

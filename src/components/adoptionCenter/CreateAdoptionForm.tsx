@@ -163,7 +163,7 @@ function CreateAdoptionForm() {
                   alt=""
                   width={400}
                   height={400}
-                  className="mx-auto mb-4"
+                  className="mx-auto mb-4 w-auto h-auto"
                 />
               ) : (
                 <Image

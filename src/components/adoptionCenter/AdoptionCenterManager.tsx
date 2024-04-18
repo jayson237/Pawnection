@@ -3,7 +3,6 @@
 import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
 import { AdoptablePet, AdoptionRequest } from "@prisma/client"
-import { Arrow } from "@radix-ui/react-dropdown-menu"
 import { ArrowLeft } from "lucide-react"
 import Image from "next/legacy/image"
 import Link from "next/link"

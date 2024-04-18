@@ -1,7 +1,7 @@
 "use client"
 
 import { useToast } from "@/hooks/useToast"
-import Image from "next/image"
+import Image from "next/legacy/image"
 import { FormEvent, useEffect, useState } from "react"
 
 import LoadingDots from "../LoadingDots"
@@ -50,6 +50,38 @@ const LostPetReportDialog = ({
   const [petImagePreview, setPetImagePreview] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
+
+  const [isFormComplete, setIsFormComplete] = useState(false)
+
+  const checkFormCompletion = () => {
+    return !!(
+      animalType &&
+      name &&
+      breed &&
+      sex &&
+      description &&
+      lastSeenArea &&
+      lastSeenDate &&
+      contactDetails &&
+      message &&
+      petImage
+    )
+  }
+
+  useEffect(() => {
+    setIsFormComplete(checkFormCompletion())
+  }, [
+    animalType,
+    name,
+    breed,
+    sex,
+    description,
+    lastSeenArea,
+    lastSeenDate,
+    contactDetails,
+    message,
+    petImage,
+  ])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null
@@ -168,9 +200,11 @@ const LostPetReportDialog = ({
               </div>
             </div>
             <div className="flex-1 flex flex-col gap-5">
-              <div className="flex gap-4 ">
-                <Label className="flex-1">
-                  Pet Type
+              <div className="flex flex-row gap-4 ">
+                <div className="flex flex-col space-y-1">
+                  <Label className="flex-1" aria-required="true">
+                    Pet Type
+                  </Label>
                   <Select required={true} onValueChange={setAnimalType}>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Animal Type" />
@@ -182,28 +216,30 @@ const LostPetReportDialog = ({
                       <SelectItem value="Others">Others</SelectItem>
                     </SelectContent>
                   </Select>
-                </Label>
+                </div>
 
-                <Label className="flex-1">
-                  Pet Name
+                <div className="flex flex-col space-y-1">
+                  <Label className="flex-1" aria-required="true">
+                    Pet Name
+                  </Label>
                   <Input
                     className="border rounded-md h-10 w-full px-2.5"
                     required={true}
                     onChange={(e) => setName(e.currentTarget.value)}
                   />
-                </Label>
+                </div>
               </div>
 
-              <Label className="">
-                Pet Breed
+              <div className="flex flex-col space-y-1">
+                <Label aria-required="true">Pet Breed</Label>
                 <Input
                   className="border rounded-md h-10 w-full px-2.5"
                   required={true}
                   onChange={(e) => setBreed(e.currentTarget.value)}
                 />
-              </Label>
-              <div className="">
-                <Label>Gender</Label>
+              </div>
+              <div className="flex flex-col space-y-1">
+                <Label aria-required="true">Gender</Label>
                 <RadioGroup
                   onValueChange={setSex}
                   required={true}
@@ -245,49 +281,63 @@ const LostPetReportDialog = ({
                 </RadioGroup>
               </div>
 
-              <Label className="block">
-                Pet Description
+              <div>
+                <Label className="block" aria-required="true">
+                  Pet Description
+                </Label>
                 <Textarea
                   className="mt-1"
                   required={true}
                   onChange={(e) => setDescription(e.currentTarget.value)}
                 />
-              </Label>
+              </div>
 
-              <Label className="block">
-                Area Last Seen
+              <div className="flex flex-col space-y-1">
+                <Label className="block" aria-required="true">
+                  Area Last Seen
+                </Label>
                 <Input
                   className="mt-1 border rounded-md h-10 w-full px-2.5"
                   required={true}
                   onChange={(e) => setLastSeenArea(e.currentTarget.value)}
                 />
-              </Label>
+              </div>
 
-              <Label className="block">
-                Last Seen Date
+              <div className="flex flex-col space-y-1">
+                <Label className="block" aria-required="true">
+                  Last Seen Date
+                </Label>
                 <DatePicker date={lastSeenDate} setDate={setLastSeenDate} />
-              </Label>
+              </div>
 
-              <Label className="block">
-                Contact Details
+              <div className="flex flex-col space-y-1">
+                <Label className="block" aria-required="true">
+                  Contact Details
+                </Label>
                 <Input
                   className="mt-1 border rounded-md h-10 w-full px-2.5"
                   required={true}
                   onChange={(e) => setContactDetails(e.currentTarget.value)}
                 />
-              </Label>
+              </div>
 
-              <Label className="block">
-                Message From Owner
+              <div className="flex flex-col space-y-1">
+                <Label className="block" aria-required="true">
+                  Message From Owner
+                </Label>
                 <Textarea
                   className="mt-1"
                   required={true}
                   onChange={(e) => setMessage(e.currentTarget.value)}
                 />
-              </Label>
+              </div>
 
               <div className="flex justify-end w-full">
-                <Button type="submit" className="w-20">
+                <Button
+                  type="submit"
+                  className="w-20"
+                  disabled={!isFormComplete || isLoading}
+                >
                   {isLoading ? (
                     <>
                       <LoadingDots color="#FAFAFA" />

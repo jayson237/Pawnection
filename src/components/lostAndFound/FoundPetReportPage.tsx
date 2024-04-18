@@ -1,11 +1,23 @@
 "use client"
 
+import { useToast } from "@/hooks/useToast"
 import { SafeUser } from "@/types"
 import { FoundPetReport } from "@prisma/client"
 import Image from "next/legacy/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/AlertDialog"
 import { Button } from "../ui/Button"
 
 const FoundPetReportPage = ({
@@ -15,6 +27,7 @@ const FoundPetReportPage = ({
   foundPetReport: FoundPetReport | null
   currUser: SafeUser | null
 }) => {
+  const { toast } = useToast()
   const [thisFoundPetReport, setThisFoundPetReport] = useState(foundPetReport)
   const [formattedFoundDate, setFormattedFoundDate] = useState("")
   const [reportActive, setReportActive] = useState(true)
@@ -66,83 +79,74 @@ const FoundPetReportPage = ({
   }, [thisFoundPetReport?.foundDate])
 
   const deleteReport = async () => {
-    if (
-      thisFoundPetReport &&
-      confirm("Are you sure you want to delete this report?")
-    ) {
-      try {
-        const response = await fetch("/api/lostAndFound/deleteFoundPetReport", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reportId: thisFoundPetReport.id }),
+    if (thisFoundPetReport) {
+      const response = await fetch("/api/lostAndFound/deleteFoundPetReport", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reportId: thisFoundPetReport.id }),
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        toast({
+          variant: "destructive",
+          title: "Failed to delete report",
+          description: data.message,
         })
-        if (!response.ok) {
-          throw new Error("Failed to delete the report.")
-        }
-        alert("Report deleted successfully")
-        router.push("/lostAndFound/founds")
-      } catch (error) {
-        console.error("Error deleting report:", error)
-        alert("Failed to delete the report.")
       }
+      toast({ title: "Report deleted successfully" })
+      router.push("/lostAndFound/founds")
     }
   }
 
   const updateStatus = async () => {
-    if (
-      thisFoundPetReport &&
-      confirm("Are you sure you pet has been returned to owner?")
-    ) {
-      try {
-        const response = await fetch(
-          "/api/lostAndFound/updateFoundPetReportStatus",
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ reportId: thisFoundPetReport.id }),
-          },
-        )
-        if (!response.ok) {
-          throw new Error("Failed to update the report status.")
-        }
-        alert("Report status updated successfully")
-        setReportActive(false)
-        //  router.push("/lostAndFound")
-        await fetchReportData()
-      } catch (error) {
-        console.error("Error updating report status:", error)
-        alert("Failed to update the report status.")
+    if (thisFoundPetReport) {
+      const response = await fetch(
+        "/api/lostAndFound/updateFoundPetReportStatus",
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reportId: thisFoundPetReport.id }),
+        },
+      )
+      const data = await response.json()
+      if (!response.ok) {
+        toast({
+          variant: "destructive",
+          title: "Failed to update report status",
+          description: data.message,
+        })
       }
+      toast({ title: "Report status updated successfully" })
+      setReportActive(false)
+      await fetchReportData()
     }
   }
 
-  const unupdateStatus = async () => {
-    if (
-      thisFoundPetReport &&
-      confirm("Are you sure you pet has not been returned to owner?")
-    ) {
-      try {
-        const response = await fetch(
-          "/api/lostAndFound/unupdateFoundPetReportStatus",
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ reportId: thisFoundPetReport.id }),
-          },
-        )
+  const revertStatus = async () => {
+    if (thisFoundPetReport) {
+      const response = await fetch(
+        "/api/lostAndFound/unupdateFoundPetReportStatus",
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reportId: thisFoundPetReport.id }),
+        },
+      )
 
+      const data = await response.json()
+      if (!response.ok) {
         if (!response.ok) {
-          throw new Error("Failed to update the report status.")
+          toast({
+            variant: "destructive",
+            title: "Failed to revert report status",
+            description: data.message,
+          })
         }
-
-        alert("Report status updated successfully")
-        setReportActive(true)
-        // router.push("/lostAndFound")
-        await fetchReportData()
-      } catch (error) {
-        console.error("Error updating report status:", error)
-        alert("Failed to update the report status.")
       }
+      toast({ title: "Report status reverted successfully" })
+      setReportActive(true)
+      await fetchReportData()
     }
   }
 
@@ -179,10 +183,7 @@ const FoundPetReportPage = ({
   return (
     <div className="container mx-auto px-4 py-5">
       <div className="flex flex-row gap-x-8 mb-8">
-        <div
-          className="flex-shrink-0"
-          style={{ width: "512px", height: "512px" }}
-        >
+        <div className="flex-shrink-0 w-[512px] h-[512px]">
           <Image
             src={transformImage(thisFoundPetReport!.imageUrl)}
             layout="responsive"
@@ -193,7 +194,7 @@ const FoundPetReportPage = ({
           />
         </div>
 
-        <div style={{ width: "410px", height: "512px" }}>
+        <div className="w-[410px] h-[512px]">
           <div className="p-4 h-full overflow-auto">
             <h1 className="text-left font-bold text-3xl mb-4">Basic Info</h1>
             <hr className="mb-4 custom-divider" />
@@ -229,7 +230,7 @@ const FoundPetReportPage = ({
             </div>
           </div>
         </div>
-        <div style={{ width: "410px", height: "512px" }}>
+        <div className="w-[410px] h-[512px]">
           <div className="p-4 h-full overflow-auto">
             <h1 className="text-left font-bold text-3xl mb-4">
               Contact Details
@@ -273,22 +274,83 @@ const FoundPetReportPage = ({
               </Button>
             )}
           {thisFoundPetReport!.userId === currUser?.id && (
-            <Button className="w-full" onClick={deleteReport}>
-              Delete Report
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="w-full" variant="destructive">
+                  Delete Report
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    this report
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={deleteReport}>
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
           {thisFoundPetReport!.userId === currUser?.id &&
-            thisFoundPetReport!.isActive && (
-              <Button className="w-full" onClick={updateStatus}>
-                Pet has been returned
-              </Button>
-            )}
-          {thisFoundPetReport!.userId === currUser?.id &&
-            !thisFoundPetReport!.isActive && (
-              <Button className="w-full" onClick={unupdateStatus}>
-                Pet has not been returned
-              </Button>
-            )}
+          thisFoundPetReport!.isActive ? (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="w-full bg-mainAccent hover:bg-mainAccent/90">
+                  Pet has been returned
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to dismiss this report?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    You are going to dismiss this report once you click
+                    &quot;Yes&quot;
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-primary"
+                    onClick={updateStatus}
+                  >
+                    Yes
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="w-full bg-mainAccent hover:bg-mainAccent/90">
+                  Revert report
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to revert this report?
+                  </AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-primary"
+                    onClick={revertStatus}
+                  >
+                    Yes
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </div>
       </div>
     </div>

@@ -18,12 +18,17 @@ import {
   SelectValue,
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
+import { useRouter } from "next/navigation"
+
+interface LostPetReportDialogProps {
+  lostPetReport: LostPetReport | null
+}
 
 const UpdateLostPetReportPage = ({
   lostPetReport,
-}: {
-  lostPetReport: LostPetReport | null
-}) => {
+}: 
+  LostPetReportDialogProps
+) => {
   const [image, setImage] = useState(
     lostPetReport?.imageUrl ||
       `${
@@ -39,6 +44,7 @@ const UpdateLostPetReportPage = ({
   const [isLoading, setIsLoading] = useState(false)
   const [petName, setPetName] = useState(lostPetReport?.petName || "")
   const [animalType, setAnimalType] = useState(lostPetReport?.animalType || "")
+  const router = useRouter()
   const [animalBreed, setAnimalBreed] = useState(
     lostPetReport?.animalBreed || "",
   )
@@ -100,7 +106,7 @@ const UpdateLostPetReportPage = ({
       if (!updateResponse.ok) {
         toast({
           variant: "destructive",
-          title: "Profile update failed",
+          title: "Report update failed",
           description: "Please try again",
         })
       } else {
@@ -108,8 +114,9 @@ const UpdateLostPetReportPage = ({
         setIsFormChanged(false)
         toast({
           title: "Successful!",
-          description: "Profile updated successfully",
+          description: "Report updated successfully",
         })
+        router.push(`/lostAndFound/losses/${lostPetReport?.id}`)
       }
 
       const result = await updateResponse.json()
@@ -119,6 +126,7 @@ const UpdateLostPetReportPage = ({
         title: "Profile update failed",
         description: "Please try again",
       })
+
     }
   }
 
@@ -175,12 +183,12 @@ const UpdateLostPetReportPage = ({
           setIsImageLoading(false)
           toast({
             title: "Successful!",
-            description: "Profile picture updated successfully",
+            description: "Report picture updated successfully",
           })
         } else {
           toast({
             variant: "destructive",
-            title: "Profile picture update failed",
+            title: "Report picture update failed",
             description: "Please try again",
           })
         }
@@ -255,7 +263,7 @@ const UpdateLostPetReportPage = ({
   return (
     <div className="w-full px-8 sm:max-w-xl sm:rounded-lg mx-auto mt-12">
       <h2 className="text-2xl font-bold sm:text-xl text-center">
-        Found Pet Report
+        Lost Pet Report
       </h2>
       <form className="space-y-5" onSubmit={submitHandler}>
         <div className="grid max-w-2xl mx-auto mt-6">

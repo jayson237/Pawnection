@@ -26,7 +26,6 @@ export default async function AdoptionCenterPage() {
               className={cn(
                 buttonVariants({
                   variant: "default",
-
                   className: "w-fit px-8 bg-mainAccent hover:bg-mainAccent/90",
                 }),
               )}

@@ -3,6 +3,7 @@
 import { useToast } from "@/hooks/useToast"
 import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { FormEvent, useState } from "react"
 
 import LoadingDots from "../LoadingDots"
@@ -18,7 +19,6 @@ import {
   SelectValue,
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
-import { useRouter } from "next/navigation"
 
 const UpdateFoundPetReportPage = ({
   foundPetReport,
@@ -109,10 +109,7 @@ const UpdateFoundPetReportPage = ({
           description: "Report updated successfully",
         })
         router.push(`/lostAndFound/founds/${foundPetReport?.id}`)
-
       }
-
-      const result = await updateResponse.json()
     } catch (error) {
       toast({
         variant: "destructive",
@@ -169,9 +166,8 @@ const UpdateFoundPetReportPage = ({
             }),
           },
         )
-
+        const msg = await response.json()
         if (response.ok) {
-          const data = await response.json()
           setIsImageLoading(false)
           toast({
             title: "Successful!",
@@ -181,7 +177,7 @@ const UpdateFoundPetReportPage = ({
           toast({
             variant: "destructive",
             title: "Profile picture update failed",
-            description: "Please try again",
+            description: msg.message,
           })
         }
       }
@@ -209,37 +205,38 @@ const UpdateFoundPetReportPage = ({
     setIsFormChanged(true)
   }
 
-      const handleContactChange = (e: FormEvent<HTMLInputElement>) => {
-        const value = (e.target as HTMLInputElement).value
-        setContactDetails(value)
-        setIsFormValid(true)
-        setIsFormChanged(true)
-      }       
-      
-      const handleFoundAreaChange = (e: FormEvent<HTMLInputElement>) => {
-        const value = (e.target as HTMLInputElement).value
-        setFoundArea(value)
-        setIsFormValid(true)
-        setIsFormChanged(true)
-      }          
-      
-      const handleFoundDateChange = (value : Date | undefined) => {
-        
-        if (value) {
-          setFoundDate(value)
-        } else {
-          setFoundDate(new Date())
-        }
-         setIsFormValid(true)
-        setIsFormChanged(true)
-      }           
+  const handleContactChange = (e: FormEvent<HTMLInputElement>) => {
+    const value = (e.target as HTMLInputElement).value
+    setContactDetails(value)
+    setIsFormValid(true)
+    setIsFormChanged(true)
+  }
 
-    const handleReportDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const value = e.target.value
-        setReportDescription(value)
-        setIsFormValid(true)
-        setIsFormChanged(true)
-      }
+  const handleFoundAreaChange = (e: FormEvent<HTMLInputElement>) => {
+    const value = (e.target as HTMLInputElement).value
+    setFoundArea(value)
+    setIsFormValid(true)
+    setIsFormChanged(true)
+  }
+
+  const handleFoundDateChange = (value: Date | undefined) => {
+    if (value) {
+      setFoundDate(value)
+    } else {
+      setFoundDate(new Date())
+    }
+    setIsFormValid(true)
+    setIsFormChanged(true)
+  }
+
+  const handleReportDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    const value = e.target.value
+    setReportDescription(value)
+    setIsFormValid(true)
+    setIsFormChanged(true)
+  }
 
   const handleReportMessageChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -376,12 +373,19 @@ const UpdateFoundPetReportPage = ({
               />
             </div>
 
-                <div className="mb-2 sm:mb-6">
-                    <Label htmlFor="foundDate" className="block mb-2 text-sm font-medium">
-                    Found Date
-                    </Label>
-                    <DatePicker date={foundDate} setDate={setFoundDate} handleDate= {handleFoundDateChange}/>    
-                </div>                
+            <div className="mb-2 sm:mb-6">
+              <Label
+                htmlFor="foundDate"
+                className="block mb-2 text-sm font-medium"
+              >
+                Found Date
+              </Label>
+              <DatePicker
+                date={foundDate}
+                setDate={setFoundDate}
+                handleDate={handleFoundDateChange}
+              />
+            </div>
 
             <div className="mb-2 sm:mb-6">
               <Label

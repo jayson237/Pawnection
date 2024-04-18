@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "../ui/Select"
 
-function AdoptionPost() {
+function CreateAdoptionForm() {
   const router = useRouter()
   const [selectedImage, setSelectedImage] = useState<File>()
 
@@ -32,7 +32,6 @@ function AdoptionPost() {
     handleSubmit,
     formState: { errors, isValid, isLoading },
     setValue,
-    getValues,
     watch,
   } = useForm<CreateAdoptablePetPayloadType>({
     defaultValues: {
@@ -340,4 +339,4 @@ function AdoptionPost() {
   )
 }
 
-export default AdoptionPost
+export default CreateAdoptionForm

@@ -46,7 +46,7 @@ const PostForm = () => {
     reset,
     watch,
     setValue,
-    formState: { errors, isLoading, isValid },
+    formState: { errors, isLoading },
   } = useForm<z.infer<typeof createPostSchema>>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {

@@ -4,7 +4,6 @@ import { useToast } from "@/hooks/useToast"
 import { SafeUser } from "@/types"
 import Image from "next/image"
 import { FormEvent, useEffect, useState } from "react"
-import { set } from "zod"
 
 import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
@@ -115,9 +114,8 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
             image: resultImage.secure_url,
           }),
         })
-
+        const msg = await response.json()
         if (response.ok) {
-          const data = await response.json()
           setIsImageLoading(false)
           toast({
             title: "Successful!",
@@ -128,7 +126,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
           toast({
             variant: "destructive",
             title: "Profile picture update failed",
-            description: data.message,
+            description: msg.message,
           })
         }
       }

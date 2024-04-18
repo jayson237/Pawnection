@@ -250,7 +250,7 @@ const FoundPetReportPage = ({
         </div>
       </div>
 
-      <div className="bg-[#FFECE4] h-[250px] rounded-3xl px-28 py-6 flex justify-between">
+      <div className="bg-submain h-[250px] rounded-3xl px-28 py-6 flex justify-between">
         <div className="flex items-center space-x-10">
           <div className="w-32 h-32 relative overflow-hidden rounded-lg">
             <Image

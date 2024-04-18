@@ -1,4 +1,3 @@
-import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
 import { NextResponse } from "next/server"
 
@@ -12,7 +11,6 @@ export async function GET(
     }
   },
 ) {
-  const currentUser = await getCurrentUser()
   try {
     const userId = params.userID
     const foundPetReports = await prisma.foundPetReport.findMany({

@@ -8,7 +8,7 @@ import {
 } from "@/types/adopt"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AdoptablePet } from "@prisma/client"
-import { redirect, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import React from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 

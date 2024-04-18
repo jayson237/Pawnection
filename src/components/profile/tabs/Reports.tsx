@@ -2,12 +2,9 @@
 
 import { FoundPetReport, LostPetReport } from "@prisma/client"
 import Image from "next/image"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React from "react"
 
-import { Badge } from "../../ui/Badge"
-import { Label } from "../../ui/Label"
 import { TabsContent } from "../../ui/Tabs"
 
 interface ProfileReportsTabInterface {
@@ -29,14 +26,6 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
 
   const handleFoundPetReportClick = (reportId: string) => {
     router.push(`/lostAndFound/founds/${reportId}`)
-  }
-
-  const handleReportClick = (report: LostPetReport | FoundPetReport) => {
-    if ("lastSeenArea" in report) {
-      handleLostPetReportClick(report.id)
-    } else if ("foundArea" in report) {
-      handleFoundPetReportClick(report.id)
-    }
   }
 
   return (

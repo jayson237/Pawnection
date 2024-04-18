@@ -28,9 +28,10 @@ import { Textarea } from "../ui/TextArea"
 interface LostPetReportDialogProps {
   isOpen: boolean
   onClose: () => void
+  onReportCreated: () => void;
 }
 
-const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
+const LostPetReportDialog = ({ isOpen, onClose, onReportCreated }: LostPetReportDialogProps) => {
   const [animalType, setAnimalType] = useState("")
   const [name, setName] = useState("")
   const [sex, setSex] = useState("")
@@ -113,6 +114,8 @@ const LostPetReportDialog = ({ isOpen, onClose }: LostPetReportDialogProps) => {
           toast({
             description: "Missing Pet Report has been successfully created.",
           })
+          onReportCreated()
+          onClose()
         }
       }
     } catch (error) {

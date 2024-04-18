@@ -1,5 +1,6 @@
 "use client"
 
+import { toast } from "@/hooks/useToast"
 import { EditAdoptablePetPayloadType } from "@/types/adoptionCenter"
 import {
   AdoptablePet,
@@ -9,8 +10,6 @@ import {
 import React from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 
-import AdoptPetRequests from "../../app/(routes)/adopt/requests/page"
-import { toast } from "../../hooks/useToast"
 import { Button } from "../ui/Button"
 import {
   Form,
@@ -108,14 +107,10 @@ function AdoptionCenterManagerForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="bird">Bird</SelectItem>
-                  <SelectItem value="cat">Cat</SelectItem>
                   <SelectItem value="dog">Dog</SelectItem>
-                  <SelectItem value="fish">Fish</SelectItem>
-                  <SelectItem value="hamster">Hamster</SelectItem>
-                  <SelectItem value="lizard">Lizard</SelectItem>
-                  <SelectItem value="rabbit">Rabbit</SelectItem>
-                  <SelectItem value="turtle">Turtle</SelectItem>
+                  <SelectItem value="cat">Cat</SelectItem>
+                  <SelectItem value="bird">Bird</SelectItem>
+                  <SelectItem value="Others">Others</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -226,7 +221,7 @@ function AdoptionCenterManagerForm({
           className="w-full"
           disabled={form.formState.isLoading || !form.formState.isDirty}
         >
-          Edit
+          Save
         </Button>
       </form>
     </Form>

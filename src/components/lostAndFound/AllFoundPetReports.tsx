@@ -1,12 +1,13 @@
 "use client"
 
 import { FoundPetReport } from "@prisma/client"
-import { PawPrint } from "lucide-react"
+import { PawPrint, Search, X } from "lucide-react"
 import Image from "next/legacy/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import HeaderTitle from "../HeaderTitle"
+import Loading from "../Loading"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import {
@@ -18,12 +19,10 @@ import {
 } from "../ui/Select"
 import FoundPetReportDialog from "./FoundPetReportDialog"
 
-const AllFoundPetReports = ({
-  allFoundPetReports,
-}: {
-  allFoundPetReports: FoundPetReport[] | null
-}) => {
-  const [foundPetReports, setFoundPetReports] = useState(allFoundPetReports)
+const AllFoundPetReports = () => {
+  const [foundPetReports, setFoundPetReports] = useState<
+    FoundPetReport[] | null
+  >(null)
   const [isFoundPetReportDialogOpen, setIsFoundPetReportDialogOpen] =
     useState(false)
   const [searchTerm, setSearchTerm] = useState("")
@@ -35,6 +34,10 @@ const AllFoundPetReports = ({
   }
 
   const router = useRouter()
+
+  const clearSearch = () => {
+    setSearchTerm("")
+  }
 
   const handleFoundPetReportClick = (reportId: string) => {
     router.push(`/lostAndFound/founds/${reportId}`)
@@ -58,6 +61,14 @@ const AllFoundPetReports = ({
   useEffect(() => {
     fetchReports("All")
   }, [])
+
+  useEffect(() => {
+    fetch("/api/lostAndFound/found")
+      .then((response) => response.json())
+      .then((data) => setFoundPetReports(data.data))
+      .catch((error) => console.error(error))
+  }, [])
+
   return (
     <div className="container">
       <div className="py-[60px]">
@@ -73,7 +84,7 @@ const AllFoundPetReports = ({
           </HeaderTitle>
         </div>
 
-        <div className="flex flex-row space-x-2">
+        <div className="flex flex-row space-x-2 justify-center items-center">
           <Select
             onValueChange={(val) => {
               const fetchData = async () => {
@@ -100,126 +111,131 @@ const AllFoundPetReports = ({
             onReportCreated={() => fetchReports("All")}
           />
 
-          <Input
-            type="text"
-            placeholder="Search reports..."
-            className="px-4 py-2 w-64"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <div className="flex flex-row items-center">
+            <div className="relative flex grow items-center bg-white rounded-md">
+              <Input
+                type="text"
+                placeholder="Search..."
+                className="pr-24 py-2 grow bg-white outline-none rounded-md"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm.length !== 0 && (
+                <Button
+                  onClick={clearSearch}
+                  className="absolute right-8"
+                  variant="search"
+                >
+                  <X className="text-gray-500 hover:text-primary duration-300 ease-in-out transition-all w-5 h-5" />
+                </Button>
+              )}
+              <Button className="absolute right-2 pr-2" variant="search">
+                <Search className="text-gray-500 w-5 h-5" />
+              </Button>
+            </div>
+          </div>
 
           <Button
             className="w-48"
             onClick={() => setIsFoundPetReportDialogOpen(true)}
           >
             <PawPrint className="w-4 h-4 text-white mr-2" />
-            Report A Found Pet
+            Report found pet
           </Button>
         </div>
-
-        <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-8 mt-6">
-          {foundPetReports == null ? (
-            <div className="col-span-full text-center">No reports found</div>
-          ) : (
-            foundPetReports
-              .filter((report) => {
-                return (
-                  report.petName
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  report.animalType
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  report.animalBreed
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  report.contactDetails
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  report.foundArea
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  report.petSex
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  report.reportMessage
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  report.reportDescription
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase())
+        {foundPetReports ? (
+          foundPetReports.length > 0 ? (
+            (() => {
+              const filteredReports = foundPetReports
+                .filter(
+                  (report) =>
+                    report.petName
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    report.animalType
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    report.animalBreed
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    report.contactDetails
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    report.foundArea
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    report.petSex
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    report.reportMessage
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    report.reportDescription
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()),
                 )
-              })
-              .sort((a, b) => (b.isActive ? 1 : 0) - (a.isActive ? 1 : 0))
-              .map((report, index) => (
-                <div
-                  key={index}
-                  className={!report.isActive ? "opacity-50" : ""}
-                  onClick={() => handleFoundPetReportClick(report.id)}
-                >
-                  <div className="w-full h-48 relative">
-                    <Image
-                      src={transformImage(report.imageUrl)}
-                      layout="fill"
-                      objectFit="cover"
-                      alt="Found Pet"
-                      className="rounded-t-xl"
-                    />
-                  </div>
-                  <div className="flex flex-col p-4 rounded-b-xl bg-white cursor-pointer shadow-lg min-h-[170px]">
-                    <h3 className="text-xl font-semibold mb-1">
-                      {report.petName}
-                    </h3>
-                    <p className="text-sm mb-2 text-mainAccent">
-                      {report.animalType}
-                    </p>
-                    <p className="text-sm line-clamp-2">
-                      {report.reportDescription}
-                    </p>
-                    <div className="border rounded-xl px-1.5 py-1 flex items-center text-sm w-fit mt-auto">
-                      <p className="text-smtext-gray-500">
-                        {report.isActive
-                          ? "Found Pet"
-                          : "Pet has been returned"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))
-          )}
+                .sort((a, b) => (b.isActive ? 1 : 0) - (a.isActive ? 1 : 0))
 
-          {foundPetReports !== null &&
-            foundPetReports.filter((report) => {
-              return (
-                report.petName
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-                report.animalType
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-                report.animalBreed
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-                report.contactDetails
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-                report.foundArea
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-                report.petSex
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-                report.reportMessage
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-                report.reportDescription
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
+              return filteredReports.length > 0 ? (
+                <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-8 mt-6">
+                  {filteredReports.map((report, index) => (
+                    <div
+                      key={index}
+                      className={`cursor-pointer ${!report.isActive ? "opacity-50" : ""}`}
+                      onClick={() => handleFoundPetReportClick(report.id)}
+                    >
+                      <div className="w-full h-48 relative">
+                        <Image
+                          src={transformImage(report.imageUrl)}
+                          layout="fill"
+                          objectFit="cover"
+                          alt="Found Pet"
+                          className="rounded-t-xl"
+                        />
+                      </div>
+                      <div className="flex flex-col p-4 rounded-b-xl bg-white cursor-pointer shadow-lg min-h-[170px]">
+                        <h3 className="text-xl font-semibold mb-1">
+                          {report.petName}
+                        </h3>
+                        <p className="text-sm mb-2 text-mainAccent">
+                          {report.animalType}
+                        </p>
+                        <p className="text-sm line-clamp-2">
+                          {report.reportDescription}
+                        </p>
+                        <div className="mt-auto">
+                          <div className="border rounded-xl px-1.5 py-1 flex items-center text-sm w-fit">
+                            {report.isActive ? (
+                              <p className="text-green-500 font-semibold">
+                                Found Pet
+                              </p>
+                            ) : (
+                              <p className="text-mainAccent font-semibold">
+                                Pet has been returned
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="col-span-full text-center mt-4">
+                  No reports found
+                </div>
               )
-            }).length === 0 && (
-              <div className="col-span-full text-center">No reports found</div>
-            )}
-        </div>
+            })()
+          ) : (
+            <div className="col-span-full text-center mt-4">
+              No reports found
+            </div>
+          )
+        ) : (
+          <div className="flex justify-center items-center">
+            <Loading />
+          </div>
+        )}
       </div>
     </div>
   )

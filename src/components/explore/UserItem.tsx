@@ -67,7 +67,14 @@ const UserItem = ({
             alt={user.username || "User image"}
             className="rounded-full h-10 w-10 mr-3"
           />
-          <span className="font-bold">{user.username}</span>
+          <div className="flex flex-col space-y-1">
+            <span className="font-bold">{user.username}</span>
+            {user?.type === "PetAdoptionCentre" && (
+              <div className="border rounded-xl px-1.5 py-1 text-sm w-fit ">
+                Adoption Centre
+              </div>
+            )}
+          </div>
         </div>
       </Link>
       {!isOwnProfile &&

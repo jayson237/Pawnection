@@ -2,10 +2,11 @@
 
 import { cn } from "@/lib/utils"
 import { AdoptablePet } from "@prisma/client"
-import Image from "next/image"
+import Image from "next/legacy/image"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 
+import Loading from "../Loading"
 import { buttonVariants } from "../ui/Button"
 
 function OwnAdoptablePost() {
@@ -26,7 +27,7 @@ function OwnAdoptablePost() {
             {data.map((item) => (
               <div
                 key={item.id}
-                className="rounded-xl border border-gray-400 flex flex-col"
+                className="rounded-xl bg-white flex flex-col shadow-lg"
               >
                 <div className="w-full relative" style={{ paddingTop: "70%" }}>
                   <Image
@@ -34,13 +35,14 @@ function OwnAdoptablePost() {
                     alt={item.name}
                     layout="fill"
                     objectFit="cover"
-                    className="rounded-xl"
+                    className="rounded-t-xl"
                   />
                 </div>
                 <div className="px-3.5 py-4">
                   <h4 className="font-bold text-lg">{item.name}</h4>
                   <p>
-                    {item.type} | {item.gender} | {item.age} year old
+                    {item.type.charAt(0).toUpperCase() + item.type.slice(1)} |{" "}
+                    {item.gender} | {item.age} y.o.
                   </p>
                   <Link
                     href={`/adoptionCenter/manage/${item.id}`}
@@ -56,10 +58,12 @@ function OwnAdoptablePost() {
             ))}
           </div>
         ) : (
-          <p>No data</p>
+          <p>No results yet</p>
         )
       ) : (
-        <p>Loading...</p>
+        <div className="flex justify-center items-center">
+          <Loading />
+        </div>
       )}
     </>
   )

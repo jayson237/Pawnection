@@ -17,7 +17,7 @@ interface ProfileReportsTabInterface {
 function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
   const transformImage = (url: string) => {
     const parts = url.split("/upload/")
-    const transformationString = "w_200,h_200,c_thumb,g_face,r_max,f_auto/"
+    const transformationString = "w_500,h_500,c_thumb,g_face,f_auto/"
     return `${parts[0]}/upload/${transformationString}${parts[1]}`
   }
 
@@ -44,34 +44,41 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
         {reports == null || reports.length === 0
           ? "No Reports Available"
-          : reports.map((report) => (
+          : reports.map((report, index) => (
               <div
-                onClick={() => handleReportClick(report)}
-                key={report.id}
-                className="bg-white"
+                key={index}
+                className={`cursor-pointer ${!report.isActive ? "opacity-50" : ""}`}
+                onClick={() => handleLostPetReportClick(report.id)}
               >
-                <Image
-                  width={200}
-                  height={200}
-                  src={report.imageUrl}
-                  alt={report.petName}
-                  className="w-full h-[200px] object-cover rounded-t-lg"
-                />
-                <div className="p-4">
-                  <h2 className="text-xl font-bold">{report.petName}</h2>
-                  <p className="text-gray-500">{report.animalBreed}</p>
-                  <p className="text-gray-500">Type: {report.animalType}</p>
-                  <div className="space-x-2">
-                    {"foundArea" in report ? (
-                      <Label className="text-red-500">Found Pet Report</Label>
-                    ) : (
-                      <Label>Missing Pet Report</Label>
-                    )}
-                    {report.isActive ? (
-                      <Badge>Missing Pet</Badge>
-                    ) : (
-                      <Badge>Pet has been found</Badge>
-                    )}
+                <div className="w-full h-48 relative">
+                  <Image
+                    src={transformImage(report.imageUrl)}
+                    layout="fill"
+                    objectFit="cover"
+                    alt="Lost Pet"
+                    className="rounded-t-xl"
+                  />
+                </div>
+                <div className="flex flex-col p-4 rounded-b-xl bg-white cursor-pointer shadow-lg min-h-[170px]">
+                  <h3 className="text-xl font-semibold mb-1">
+                    {report.petName}
+                  </h3>
+                  <p className="text-sm mb-2 text-mainAccent">
+                    {report.animalType}
+                  </p>
+                  <p className="text-sm line-clamp-2">
+                    {report.reportDescription}
+                  </p>
+                  <div className="mt-auto">
+                    <div className="border rounded-xl px-1.5 py-1 flex items-center text-sm w-fit">
+                      {report.isActive ? (
+                        <p className="text-red-500 font-semibold">Lost Pet</p>
+                      ) : (
+                        <p className="text-mainAccent font-semibold">
+                          Pet has been found
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

@@ -16,7 +16,15 @@ export const getAllAdoptablePets = async () => {
             username: true,
           },
         },
-        adoptionRequests: true,
+        adoptionRequests: {
+          include: {
+            user: {
+              select: {
+                username: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
         status: "desc",
@@ -54,6 +62,29 @@ export const getOneAdoptablePets = async (id: string) => {
     })
 
     return adoptablePet
+  } catch (error) {
+    console.log(error)
+    return null
+  }
+}
+
+export const getOneOwnAdoptRequestForUser = async (requestId: string) => {
+  try {
+    const currentUser = await getCurrentUser()
+    if (!currentUser || currentUser.type === "PetAdoptionCentre") {
+      return null
+    }
+
+    const ownrequests = await prisma.adoptionRequest.findFirst({
+      where: {
+        user: {
+          id: currentUser.id,
+        },
+        id: requestId,
+      },
+    })
+
+    return ownrequests
   } catch (error) {
     console.log(error)
     return null

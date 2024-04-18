@@ -1,14 +1,17 @@
 import HeaderTitle from "@/components/HeaderTitle"
 import AdoptPetForm from "@/components/adopt/AdoptionRequest"
 import { Button, buttonVariants } from "@/components/ui/Button"
-import { getOneAdoptablePets } from "@/lib/actions/adopt"
+import {
+  getOneAdoptablePets,
+  getOneOwnAdoptRequestForUser,
+} from "@/lib/actions/adopt"
 import { getCurrentUser } from "@/lib/actions/user"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import React from "react"
-
+import { ArrowLeft } from "lucide-react"
 
 export default async function AdoptProcessPage({
   params,
@@ -32,15 +35,17 @@ export default async function AdoptProcessPage({
     return notFound()
   }
 
+  const adoptionRequestInfo = adoptablePet.adoptionRequests[0]
+
   return (
     <div className="w-full max-w-[1240px] mx-auto px-4">
       <div className="py-[60px] w-full">
         <div className="flex">
           <Link
             className={cn(buttonVariants({ variant: "outline" }), "ml-5")}
-            href="/adopt/pets"
+            href="/adopt"
           >
-            Back
+            <ArrowLeft/>
           </Link>
 
           <div className="mx-auto flex flex-col items-center">
@@ -93,15 +98,64 @@ export default async function AdoptProcessPage({
         </div>
         <div className="h-full md:col-span-2 px-4">
           <HeaderTitle className="max-w-full mt-4 max-md:text-3xl">
-            Fill in your personal information
+            {isCurrentAdopt
+              ? "Adoption Request Information"
+              : "Adoption Request Form"}
           </HeaderTitle>
 
           <div className="mt-6">
-            <AdoptPetForm
-              currentUser={currentUser}
-              adoptablePet={adoptablePet}
-              isCurrentAdopt={isCurrentAdopt as boolean}
-            />
+            {isCurrentAdopt ? (
+              <div className="space-y-4">
+                <div className="space-y-0.5">
+                  <p className="font-bold">Full Name</p>
+                  <p>{adoptionRequestInfo?.full_name || "-"}</p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="font-bold">Age</p>
+                  <p>{adoptionRequestInfo?.age || "-"}</p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="font-bold">Phone Number</p>
+                  <p>{adoptionRequestInfo?.phone_number || "-"}</p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="font-bold">Address</p>
+                  <p>{adoptionRequestInfo?.address || "-"}</p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="font-bold">Type Desired</p>
+                  <p>{adoptionRequestInfo?.type_desired || "-"}</p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="font-bold">Breed Desired</p>
+                  <p>{adoptionRequestInfo?.breed_desired || "-"}</p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="font-bold">Work Details</p>
+                  <p>{adoptionRequestInfo?.work_details || "-"}</p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="font-bold">Lifestyle Details</p>
+                  <p>{adoptionRequestInfo?.lifestyle_details || "-"}</p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="font-bold">Status</p>
+                  <p>
+                    {adoptionRequestInfo?.request_status === "Pending" ? (
+                      <span className="text-yellow-500">Pending</span>
+                    ) : (
+                      <span className="text-green-500">Approved</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <AdoptPetForm
+                currentUser={currentUser}
+                adoptablePet={adoptablePet}
+                isCurrentAdopt={isCurrentAdopt as boolean}
+              />
+            )}
           </div>
         </div>
       </div>

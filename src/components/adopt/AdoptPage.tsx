@@ -55,11 +55,15 @@ const AdoptPage = ({
 
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-8">
-      <div className="py-[45px] w-full">
+      <div className="flex flex-col items-center py-[45px] space-y-2 w-full">
         <HeaderTitle className="max-w-full">Adoptable Pets</HeaderTitle>
+        <div className="flex items-center justify-center space-x-2 mb-6 mr-6">
+          <InformationIcon />
+          <p className="text-md">How to Adopt</p>
+        </div>
       </div>
 
-      <div className="flex-row justify-center  space-x-2 my-3 mb-8 px-4 sm:px-0">
+      <div className="flex-row justify-center space-y-4 space-x-2 mb-8 px-4 sm:px-0">
         <div className="flex flex-row space-x-2 justify-center">
           <Select onValueChange={handleFilterChange} defaultValue="All">
             <SelectTrigger className="w-[120px]">
@@ -105,8 +109,6 @@ const AdoptPage = ({
           >
             View all your requests
           </Link>
-
-          <InformationIcon />
         </div>
       </div>
 

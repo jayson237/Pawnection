@@ -1,14 +1,12 @@
 "use client"
 
 import { useToast } from "@/hooks/useToast"
-import { SafeUser } from "@/types"
 import { LostPetReport } from "@prisma/client"
 import Image from "next/image"
 import { FormEvent, useState } from "react"
 
 import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
-import { Calendar } from "../ui/Calendar"
 import { DatePicker } from "../ui/DatePicker"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
@@ -20,12 +18,17 @@ import {
   SelectValue,
 } from "../ui/Select"
 import { Textarea } from "../ui/TextArea"
+import { useRouter } from "next/navigation"
+
+interface LostPetReportDialogProps {
+  lostPetReport: LostPetReport | null
+}
 
 const UpdateLostPetReportPage = ({
   lostPetReport,
-}: {
-  lostPetReport: LostPetReport | null
-}) => {
+}: 
+  LostPetReportDialogProps
+) => {
   const [image, setImage] = useState(
     lostPetReport?.imageUrl ||
       `${
@@ -41,6 +44,7 @@ const UpdateLostPetReportPage = ({
   const [isLoading, setIsLoading] = useState(false)
   const [petName, setPetName] = useState(lostPetReport?.petName || "")
   const [animalType, setAnimalType] = useState(lostPetReport?.animalType || "")
+  const router = useRouter()
   const [animalBreed, setAnimalBreed] = useState(
     lostPetReport?.animalBreed || "",
   )
@@ -102,7 +106,7 @@ const UpdateLostPetReportPage = ({
       if (!updateResponse.ok) {
         toast({
           variant: "destructive",
-          title: "Profile update failed",
+          title: "Report update failed",
           description: "Please try again",
         })
       } else {
@@ -110,9 +114,9 @@ const UpdateLostPetReportPage = ({
         setIsFormChanged(false)
         toast({
           title: "Successful!",
-          description: "Profile updated successfully",
+          description: "Report updated successfully",
         })
-        // window.location.reload()
+        router.push(`/lostAndFound/losses/${lostPetReport?.id}`)
       }
 
       const result = await updateResponse.json()
@@ -122,6 +126,7 @@ const UpdateLostPetReportPage = ({
         title: "Profile update failed",
         description: "Please try again",
       })
+
     }
   }
 
@@ -178,13 +183,12 @@ const UpdateLostPetReportPage = ({
           setIsImageLoading(false)
           toast({
             title: "Successful!",
-            description: "Profile picture updated successfully",
+            description: "Report picture updated successfully",
           })
-          // window.location.reload()
         } else {
           toast({
             variant: "destructive",
-            title: "Profile picture update failed",
+            title: "Report picture update failed",
             description: "Please try again",
           })
         }
@@ -213,25 +217,30 @@ const UpdateLostPetReportPage = ({
     setIsFormChanged(true)
   }
 
-  const handleContactChange = (e: FormEvent<HTMLInputElement>) => {
-    const value = (e.target as HTMLInputElement).value
-    setContactDetails(value)
-    setIsFormValid(true)
-    setIsFormChanged(true)
-  }
-
-  const handleLastSeenAreaChange = (e: FormEvent<HTMLInputElement>) => {
-    const value = (e.target as HTMLInputElement).value
-    setLastSeenArea(value)
-    setIsFormValid(true)
-    setIsFormChanged(true)
-  }
-
-  const handleLastSeenDateChange = (value: Date | undefined) => {
-    // setLastSeenDate(value)
-    setIsFormValid(true)
-    setIsFormChanged(true)
-  }
+      const handleContactChange = (e: FormEvent<HTMLInputElement>) => {
+        const value = (e.target as HTMLInputElement).value
+        setContactDetails(value)
+        setIsFormValid(true)
+        setIsFormChanged(true)
+      }       
+      
+      const handleLastSeenAreaChange = (e: FormEvent<HTMLInputElement>) => {
+        const value = (e.target as HTMLInputElement).value
+        setLastSeenArea(value)
+        setIsFormValid(true)
+        setIsFormChanged(true)
+      }          
+      
+      const handleLastSeenDateChange = (value: Date | undefined) => {
+        if (value) {
+          setLastSeenDate(value) 
+        } else {
+          setLastSeenDate(new Date()) 
+        }
+        setIsFormValid(true)
+        setIsFormChanged(true)
+      }
+               
 
   const handleReportDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -254,7 +263,7 @@ const UpdateLostPetReportPage = ({
   return (
     <div className="w-full px-8 sm:max-w-xl sm:rounded-lg mx-auto mt-12">
       <h2 className="text-2xl font-bold sm:text-xl text-center">
-        Found Pet Report
+        Lost Pet Report
       </h2>
       <form className="space-y-5" onSubmit={submitHandler}>
         <div className="grid max-w-2xl mx-auto mt-6">
@@ -283,49 +292,48 @@ const UpdateLostPetReportPage = ({
             </Button>
           </div>
 
-          <div className="items-center mt-8">
-            <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
-              <div className="w-full">
-                <div className="mb-2 sm:mb-6">
-                  <Label
-                    htmlFor="petName"
-                    className="block mb-2 text-sm font-medium "
-                  >
-                    Pet Name
-                  </Label>
-                  <Input
-                    type="petName"
-                    id="petName"
-                    defaultValue={lostPetReport?.petName || ""}
-                    required
-                    // disabled
-                    onChange={handlePetNameChange}
-                  />
+                <div className="items-center mt-8">
+                <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
+                    <div className="w-full">
+                    <div className="mb-2 sm:mb-6">
+                        <Label
+                        htmlFor="petName"
+                        className="block mb-2 text-sm font-medium "
+                        >
+                        Pet Name
+                        </Label>
+                        <Input
+                        type="petName"
+                        id="petName"
+                        defaultValue={lostPetReport?.petName|| ""}
+                        required
+                        onChange={handlePetNameChange}
+                        />
+                    </div>
+                    <Label
+                        htmlFor="animalType"
+                        className="block mb-2 text-sm font-medium"
+                    >
+                        Animal Type
+                    </Label>
+                    <Select
+                        onValueChange={(val) => {
+                            handleAnimalTypeChange(val)
+                        }}
+                        defaultValue={lostPetReport?.animalType}
+                        >
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select Animal Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Dog">Dog</SelectItem>
+                        <SelectItem value="Cat">Cat</SelectItem>
+                        <SelectItem value="Bird">Bird</SelectItem>
+                        <SelectItem value="Others">Others</SelectItem>
+                    </SelectContent>
+                    </Select>                    
+                    </div>
                 </div>
-                <Label
-                  htmlFor="animalType"
-                  className="block mb-2 text-sm font-medium"
-                >
-                  Animal Type
-                </Label>
-                <Select
-                  onValueChange={(val) => {
-                    handleAnimalTypeChange(val)
-                  }}
-                  defaultValue={lostPetReport?.animalType}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select Animal Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Dog">Dog</SelectItem>
-                    <SelectItem value="Cat">Cat</SelectItem>
-                    <SelectItem value="Bird">Bird</SelectItem>
-                    <SelectItem value="Others">Others</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
 
             <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
               <div className="w-full">
@@ -338,7 +346,6 @@ const UpdateLostPetReportPage = ({
                 <Input
                   type="animalBreed"
                   id="animalBreed"
-                  // placeholder="Your username"
                   defaultValue={lostPetReport?.animalBreed || ""}
                   onChange={handleAnimalBreedChange}
                   maxLength={20}
@@ -357,7 +364,6 @@ const UpdateLostPetReportPage = ({
               <Input
                 type="contactDetails"
                 id="contactDetails"
-                // placeholder="Your contact number"
                 defaultValue={lostPetReport?.contactDetails || ""}
                 onChange={handleContactChange}
                 required
@@ -374,22 +380,18 @@ const UpdateLostPetReportPage = ({
               <Input
                 type="foundArea"
                 id="foundArea"
-                // placeholder="Your contact number"
                 defaultValue={lostPetReport?.lastSeenArea || ""}
                 onChange={handleLastSeenAreaChange}
                 required
               />
             </div>
 
-            <div className="mb-2 sm:mb-6">
-              <Label
-                htmlFor="foundDate"
-                className="block mb-2 text-sm font-medium"
-              >
-                Found Date
-              </Label>
-              <DatePicker date={lastSeenDate} setDate={setLastSeenDate} />
-            </div>
+                <div className="mb-2 sm:mb-6">
+                    <Label htmlFor="foundDate" className="block mb-2 text-sm font-medium">
+                    Found Date
+                    </Label>
+                    <DatePicker date={lastSeenDate} setDate={setLastSeenDate} handleDate= {handleLastSeenDateChange}/>                    
+                </div>                
 
             <div className="mb-2 sm:mb-6">
               <Label
@@ -400,7 +402,6 @@ const UpdateLostPetReportPage = ({
               </Label>
               <Textarea
                 id="reportDescription"
-                // placeholder="Your bio"
                 defaultValue={lostPetReport?.reportDescription || ""}
                 required
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -418,7 +419,6 @@ const UpdateLostPetReportPage = ({
               </Label>
               <Textarea
                 id="reportMessage"
-                // placeholder="Your bio"
                 defaultValue={lostPetReport?.reportMessage || ""}
                 required
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -447,5 +447,4 @@ const UpdateLostPetReportPage = ({
     </div>
   )
 }
-
 export default UpdateLostPetReportPage

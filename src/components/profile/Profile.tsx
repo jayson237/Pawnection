@@ -4,6 +4,7 @@ import { LostPetReport } from "@prisma/client"
 import { FoundPetReport } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import React from "react"
 import { useEffect, useState } from "react"
 
@@ -17,7 +18,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../ui/Dialog"
-import ProfileTabs from "./tabs/ProfileTab"
+import ProfileTabs from "./tabs/ProfileTabs"
 
 const Profile = ({
   user,
@@ -31,7 +32,8 @@ const Profile = ({
   const [reports, setReports] = useState<
     FoundPetReport[] | LostPetReport[] | null
   >(null)
-
+  const [searchTerm, setSearchTerm] = useState("")
+  const [reportActivity, setReportActivity] = useState<null | boolean>(null)
   const [isCurrentFollowed, setIsCurrentFollowed] = useState<
     boolean | null | undefined
   >(user.isCurrentFollowed)
@@ -68,6 +70,65 @@ const Profile = ({
 
     fetchReports()
   }, [])
+
+  const transformImage = (url: string) => {
+    const parts = url.split("/upload/")
+    const transformationString = "w_200,h_200,c_thumb,g_face,r_max,f_auto/"
+    return `${parts[0]}/upload/${transformationString}${parts[1]}`
+  }
+
+  const router = useRouter()
+
+  const handleLostPetReportClick = (reportId: string) => {
+    router.push(`/lostAndFound/losses/${reportId}`)
+  }
+
+  const handleFoundPetReportClick = (reportId: string) => {
+    router.push(`/lostAndFound/founds/${reportId}`)
+  }
+  const handleReportClick = (report: LostPetReport | FoundPetReport) => {
+    if ("lastSeenArea" in report) {
+      handleLostPetReportClick(report.id)
+    } else if ("foundArea" in report) {
+      handleFoundPetReportClick(report.id)
+    }
+  }
+
+  const fetchReports = async (animalType: string) => {
+    const url1 = "/api/lostAndFound/getLostPetReports?type=".concat(animalType)
+    const url2 = "/api/lostAndFound/getFoundPetReports?type=".concat(animalType)
+
+    const response1 = await fetch(url1)
+    const response2 = await fetch(url2)
+    if (!response1.ok) {
+      throw new Error("Failed to fetch Lost Pet Reports")
+    }
+
+    if (!response2.ok) {
+      throw new Error("Failed to fetch Found Pet Reports")
+    }
+
+    const data1 = await response1.json()
+
+    const data2 = await response2.json()
+
+    if (data1 == null && data2 != null) {
+      setReports(data2)
+    }
+
+    if (data1 != null && data2 == null) {
+      setReports(data1)
+    }
+
+    if (data1 != null && data2 != null) {
+      const returnedData = [...data1, ...data2]
+      setReports(returnedData)
+    }
+
+    if (data1 == null && data2 == null) {
+      setReports(null)
+    }
+  }
 
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-4">
@@ -346,7 +407,7 @@ const Profile = ({
       </div>
 
       <div>
-        <ProfileTabs reports={reports} user={user} currentUser={currentUser} />
+        <ProfileTabs reports={reports} user={user} currentUser={currentUser} isProfileOwner={isProfileOwner}/>
       </div>
     </div>
   )

@@ -39,45 +39,49 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
   return (
     <TabsContent value="reports" className="w-full h-full pt-16">
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-        {reports == null
-          ? "No Reports Available"
-          : reports.map((report) => (
+        {reports == null ? (
+          <div className="col-span-full flex justify-center items-center text-center">
+            No Reports Available
+          </div>
+        ) : (
+          reports.map((report) => (
+            <div
+              key={report.id}
+              className={
+                report.isActive
+                  ? "flex flex-col items-center mb-5 mr-12 cursor-pointer"
+                  : "flex flex-col items-center mb-5 mr-12 cursor-pointer  bg-gray-500"
+              }
+              onClick={() => handleReportClick(report)}
+            >
+              <Image
+                className="object-cover w-20 h-20 rounded-md"
+                src={transformImage(report.imageUrl)}
+                width={80}
+                height={80}
+                alt="Bordered avatar"
+              />
               <div
-                key={report.id}
                 className={
                   report.isActive
-                    ? "flex flex-col items-center mb-5 mr-12 cursor-pointer"
-                    : "flex flex-col items-center mb-5 mr-12 cursor-pointer  bg-gray-500"
+                    ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer"
+                    : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"
                 }
-                onClick={() => handleReportClick(report)}
               >
-                <Image
-                  className="object-cover w-20 h-20 rounded-md"
-                  src={transformImage(report.imageUrl)}
-                  width={80}
-                  height={80}
-                  alt="Bordered avatar"
-                />
-                <div
-                  className={
-                    report.isActive
-                      ? "flex border p-4 rounded-xl bg-white h-full  cursor-pointer"
-                      : "flex border p-4 rounded-xl bg-gray-500 h-full  cursor-pointer"
-                  }
-                >
-                  {report.isActive ? "Missing Pet " : "Pet has been found"}
-                </div>
-                <p className="mb-[10px]">
-                  {"foundArea" in report
-                    ? "Found Pet Report"
-                    : "Missing Pet Report"}
-                </p>
-
-                <p className="mb-[10px]">{report.petName}</p>
-                <p className="mb-[10px]">{report.animalType}</p>
-                <p className="mb-[10px]"> {report.animalBreed} </p>
+                {report.isActive ? "Missing Pet " : "Pet has been found"}
               </div>
-            ))}
+              <p className="mb-[10px]">
+                {"foundArea" in report
+                  ? "Found Pet Report"
+                  : "Missing Pet Report"}
+              </p>
+
+              <p className="mb-[10px]">{report.petName}</p>
+              <p className="mb-[10px]">{report.animalType}</p>
+              <p className="mb-[10px]"> {report.animalBreed} </p>
+            </div>
+          ))
+        )}
       </div>
     </TabsContent>
   )

@@ -5,12 +5,13 @@ export async function PUT(request: Request) {
   try {
     const data = await request.json()
     const reportId = data.reportId
+    console.log(reportId)
     const updatedReport = await prisma.lostPetReport.update({
       where: {
-        id: reportId,
+        id: reportId
       },
       data: {
-        isActive: false,
+        isActive: true
       },
     })
 

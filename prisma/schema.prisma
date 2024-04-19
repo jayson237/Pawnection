@@ -132,6 +132,7 @@ model LostPetReport {
   lastSeenDate      DateTime
   contactDetails    String
   imageUrl          String
+  createdAt         DateTime @default(now())
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
@@ -150,8 +151,10 @@ model FoundPetReport {
   foundDate         DateTime
   contactDetails    String
   imageUrl          String
-  userId            String   @db.ObjectId
-  user              User     @relation(fields: [userId], references: [id])
+  createdAt         DateTime @default(now())
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 enum AdoptablePetStatus {

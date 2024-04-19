@@ -9,9 +9,8 @@ export async function GET(request: Request) {
     const user = await prisma.user.findUnique({
       where: { id: creatorId },
       select: {
-        name: true,
+        username: true,
         image: true,
-        email: true,
       },
     })
 

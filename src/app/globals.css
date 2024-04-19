@@ -81,12 +81,22 @@ body,
   }
 }
 
+.blur {
+  filter: blur(5px);
+  transition: filter 0.3s ease-in;
+}
+
+.remove-blur {
+  filter: blur(0px);
+  transition: filter 0.3s ease-in;
+}
+
 * {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: #FFF8F5;
+  background-color: #fff8f5;
 }
 
 ::-webkit-scrollbar {
@@ -135,4 +145,15 @@ body {
       scrollbar-width: none; /* Firefox */
     }
   }
+}
+
+.custom-divider {
+  height: 4px;
+  background-color: #ffa992;
+  border: none;
+}
+
+.header-container:hover .header-title:not(:hover) {
+  transform: scale(0.9);
+  opacity: 0.2;
 }

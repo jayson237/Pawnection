@@ -36,10 +36,10 @@ const LostPetReportPage = ({
   const [creatorUsername, setCreatorUsername] = useState("")
 
   useEffect(() => {
-    const fetchCreatorInfo = async (userId: string) => {
+    const fetchCreatorInfo = async () => {
       try {
         const response = await fetch(
-          "/api/lostAndFound/getReportCreatorInfo?id=" + userId,
+          "/api/lostAndFound/getReportCreatorInfo?id=" + lostPetReport?.userId,
           { method: "GET", cache: "no-cache" },
         )
 
@@ -55,7 +55,7 @@ const LostPetReportPage = ({
       }
     }
 
-    fetchCreatorInfo(lostPetReport?.userId || "")
+    fetchCreatorInfo()
   }, [])
 
   const transformImage = (url: string) => {

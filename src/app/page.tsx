@@ -7,6 +7,35 @@ import Testimonials from "@/components/home/testimonials/Testimonials"
 import WelcomeSection from "@/components/home/welcome/WelcomeSection"
 import PetFriendlyHangouts from "@/components/recommendation/PetFriendlyHangouts"
 
+export const metadata = {
+  title: "Pawnection - Connect with Fellow Pet Lovers",
+  description:
+    "Join Pawnection and be part of a community that celebrates the joy pets bring to our lives. Share stories, advice, and find your pawfect match",
+  openGraph: {
+    title: "Pawnection - Your Pet-Friendly Community",
+    description:
+      "Connect with pet lovers, exchange care tips, and celebrate the love for your furry friends at Pawnection",
+    url: "https://pawnection.vercel.app",
+    siteName: "Pawnection",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en-US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pawnection - Connect with Fellow Pet Lovers",
+    description:
+      "Be part of Pawnection - a place where pet lovers unite, share, and find companionship in fellow pet enthusiasts",
+    image: "/og.ppg",
+  },
+}
+
 const hangouts = [
   {
     id: "woodlands-waterfront-park",

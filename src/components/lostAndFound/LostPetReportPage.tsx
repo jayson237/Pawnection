@@ -40,7 +40,7 @@ const LostPetReportPage = ({
       try {
         const response = await fetch(
           "/api/lostAndFound/getReportCreatorInfo?id=" + userId,
-          { method: "GET" },
+          { method: "GET", cache: "no-cache" },
         )
 
         if (!response.ok) {

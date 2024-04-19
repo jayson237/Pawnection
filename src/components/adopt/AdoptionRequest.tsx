@@ -85,7 +85,7 @@ function AdoptPetForm({
 
   return (
     <Form {...form}>
-      <form className="space-y-6 pt-6" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="full_name"

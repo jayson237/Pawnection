@@ -20,7 +20,7 @@ interface ProfileAdoptablePetsTabInterface {
 function ProfileAdoptablePetsTab({
   user,
   isProfileOwner,
-  currentUser
+  currentUser,
 }: ProfileAdoptablePetsTabInterface) {
   const { data: adoptablePets, isLoading } = useSWR<{ data: AdoptablePet[] }>(
     `/api/adoptionCenter/by/${user.id}`,
@@ -48,7 +48,11 @@ function ProfileAdoptablePetsTab({
               <div key={pet.id} className="bg-white rounded-lg shadow-md">
                 {isProfileOwner || currentUser.type === "PetLover" ? (
                   <Link
-                    href={"/adoptionCenter/manage/" + pet.id}
+                    href={
+                      isProfileOwner
+                        ? "/adoptionCenter/manage/" + pet.id
+                        : "/adopt/requests/" + pet.id
+                    }
                     key={pet.id}
                     className="bg-white rounded-lg shadow-md"
                   >

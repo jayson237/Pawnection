@@ -19,7 +19,7 @@ export const metadata = {
     siteName: "Pawnection",
     images: [
       {
-        url: "/og.png",
+        url: "/og.jpg",
         width: 1200,
         height: 630,
       },
@@ -32,7 +32,7 @@ export const metadata = {
     title: "Pawnection - Connect with Fellow Pet Lovers",
     description:
       "Be part of Pawnection - a place where pet lovers unite, share, and find companionship in fellow pet enthusiasts",
-    image: "/og.ppg",
+    image: "/og.jpg",
   },
 }
 

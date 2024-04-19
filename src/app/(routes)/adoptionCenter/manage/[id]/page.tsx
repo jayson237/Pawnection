@@ -9,13 +9,12 @@ export default async function AdoptionCenterManagePage({
   params: { id: string }
 }) {
   const currentUser = await getCurrentUser()
-  if (!currentUser || currentUser.type === "PetLover") {
+  if (!currentUser) {
     return notFound()
   }
 
   const getAllOwnAdoptablePet = await prisma.adoptablePet.findFirst({
     where: {
-      adoptionCentreId: currentUser.id,
       id: params.id,
     },
     include: {

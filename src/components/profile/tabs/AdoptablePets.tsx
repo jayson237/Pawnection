@@ -14,11 +14,13 @@ import { TabsContent } from "../../ui/Tabs"
 interface ProfileAdoptablePetsTabInterface {
   user: SafeUser
   isProfileOwner: boolean
+  currentUser: SafeUser
 }
 
 function ProfileAdoptablePetsTab({
   user,
   isProfileOwner,
+  currentUser
 }: ProfileAdoptablePetsTabInterface) {
   const { data: adoptablePets, isLoading } = useSWR<{ data: AdoptablePet[] }>(
     `/api/adoptionCenter/by/${user.id}`,
@@ -44,7 +46,7 @@ function ProfileAdoptablePetsTab({
           {pets.length > 0 ? (
             pets.map((pet) => (
               <div key={pet.id} className="bg-white rounded-lg shadow-md">
-                {isProfileOwner ? (
+                {isProfileOwner || currentUser.type === "PetLover" ? (
                   <Link
                     href={"/adoptionCenter/manage/" + pet.id}
                     key={pet.id}

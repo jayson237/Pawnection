@@ -34,6 +34,7 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
 
   return (
     <TabsContent value="reports" className="w-full h-full pt-16">
+
       {reports ? (
         reports.length > 0 ? (
           <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">

@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const currentUser = await getCurrentUser()
-    if (!currentUser || currentUser.type === "PetLover") {
+    if (!currentUser) {
       return NextResponse.json(
         {
           message: "Unauthorized",

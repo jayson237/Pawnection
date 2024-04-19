@@ -1,13 +1,14 @@
-import getCurrentUser from "@/actions/getCurrentUser"
 import TypeForm from "@/components/auth/TypeForm"
+import { getCurrentUser } from "@/lib/actions/user"
 import { redirect } from "next/navigation"
 
 export default async function AuthType() {
   const currentUser = await getCurrentUser()
-  if (currentUser?.type) redirect("/auth")
+  if (!currentUser) redirect("/auth")
+  if (currentUser.type) redirect("/auth/type/username")
 
   return (
-    <div className="h-full w-full flex flex-col place-content-center place-items-center bg-gray-100">
+    <div className="h-screen w-full flex flex-col items-center justify-center pb-24 ">
       <TypeForm />
     </div>
   )

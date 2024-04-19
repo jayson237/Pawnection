@@ -1,17 +1,20 @@
 "use client"
 
 import { useToast } from "@/hooks/useToast"
-import axios from "axios"
+import axios, { type AxiosError } from "axios"
 import { signIn, useSession } from "next-auth/react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form"
 
+import HeaderTitle from "../HeaderTitle"
 import { Icons } from "../Icons"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
-import LoadingDots from "../ui/LoadingDots"
+import { Spinner } from "../ui/Spinner"
 
 type Variant = "LOGIN" | "REGISTER"
 
@@ -19,6 +22,7 @@ const AuthForm = () => {
   const { toast } = useToast()
   const session = useSession()
   const router = useRouter()
+  const params = useSearchParams()
   const [variant, setVariant] = useState<Variant>("LOGIN")
   const [isLoading, setIsLoading] = useState(false)
 
@@ -27,6 +31,15 @@ const AuthForm = () => {
       router.push("/")
     }
   }, [session?.status, router])
+
+  useEffect(() => {
+    if (params?.get("error") === "OAuthAccountNotLinked") {
+      toast({
+        variant: "destructive",
+        title: "Your email has been registered with a different signin method",
+      })
+    }
+  }, [params])
 
   const toggleVariant = useCallback(() => {
     if (variant === "LOGIN") {
@@ -39,12 +52,13 @@ const AuthForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FieldValues>({
     defaultValues: {
-      name: "",
+      username: "",
       email: "",
       password: "",
+      password2: "",
     },
   })
 
@@ -52,12 +66,19 @@ const AuthForm = () => {
     setIsLoading(true)
 
     if (variant === "REGISTER") {
+      if (data.password !== data.password2) {
+        toast({
+          variant: "destructive",
+          title: "Passwords do not match",
+          description: "Please ensure your passwords match",
+        })
+        return setIsLoading(false)
+      }
       axios
         .post("/api/user/register", data)
         .then(() =>
           signIn("credentials", {
             ...data,
-            redirect: false,
             callbackUrl: "/auth/type",
           }),
         )
@@ -74,13 +95,13 @@ const AuthForm = () => {
             router.push("/auth/type")
           }
         })
-        .catch(() =>
+        .catch((err: AxiosError<{ msg: string }>) => {
           toast({
             variant: "destructive",
             title: "An error occured",
-            description: "Please try again",
-          }),
-        )
+            description: err.response?.data?.msg || "Please try again",
+          })
+        })
         .finally(() => setIsLoading(false))
     }
 
@@ -127,39 +148,50 @@ const AuthForm = () => {
   }
 
   return (
-    <div className="px-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div
-        className="
-        bg-white
-          py-3
-          shadow
-          rounded-lg
-          px-6
-        "
-      >
-        <p
-          className="mb-3 text-center text-lg font-bold tracking-tight text-gray-900
-          "
+    <div className="grid sm:grid-cols-2 grid-cols-1">
+      <div className="order-last sm:order-first">
+        <Image
+          src="/static/images/dog_left.webp"
+          alt="hura"
+          width={604}
+          height={400}
+          layout="responsive"
+        />
+      </div>
+
+      <div className="flex flex-col justify-between overflow-y-auto py-3 md:py-2 rounded-lg px-6 md:px-4 w-full md:w-3/4">
+        {variant === "REGISTER" ? (
+          <HeaderTitle className="max-w-full max-lg:text-2xl">
+            Sign Up
+          </HeaderTitle>
+        ) : (
+          <HeaderTitle className="max-w-full max-lg:text-2xl">
+            Sign in
+          </HeaderTitle>
+        )}
+
+        <form
+          className="space-y-6 pt-6 max-lg:space-y-4 max-lg:pt-4"
+          onSubmit={handleSubmit(onSubmit)}
         >
-          {variant !== "REGISTER"
-            ? "Sign in to your account"
-            : "Create an account  "}
-        </p>
-        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           {variant === "REGISTER" && (
-            <div className="space-y-1">
-              <Label htmlFor="text">Name</Label>
-              <Input
-                id="name"
-                type="text"
-                disabled={isLoading}
-                {...register("name", { required: true })}
-                errors={errors}
-                required
-              />
-            </div>
+            <>
+              <div className="space-y-1 max-lg:space-y-0">
+                <Label htmlFor="text">Username</Label>
+                <Input
+                  id="username"
+                  type="text"
+                  disabled={isLoading}
+                  {...register("username", {
+                    required: variant === "REGISTER",
+                  })}
+                  errors={errors}
+                  placeholder="Enter your username"
+                />
+              </div>
+            </>
           )}
-          <div className="space-y-1">
+          <div className="space-y-1 max-lg:space-y-0">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
@@ -167,9 +199,10 @@ const AuthForm = () => {
               disabled={isLoading}
               {...register("email", { required: true })}
               errors={errors}
+              placeholder="Enter your email"
             />
           </div>
-          <div className="space-y-1">
+          <div className="space-y-1 max-lg:space-y-0">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
@@ -177,20 +210,55 @@ const AuthForm = () => {
               disabled={isLoading}
               {...register("password", { required: true })}
               errors={errors}
+              placeholder="Enter your password"
             />
           </div>
-
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <LoadingDots color="#FAFAFA" />
-              </>
-            ) : variant === "LOGIN" ? (
-              "Sign in"
-            ) : (
-              "Register"
-            )}
-          </Button>
+          {variant === "REGISTER" && (
+            <div className="space-y-1 max-lg:space-y-0">
+              <Label htmlFor="password2">Confirm Password</Label>
+              <Input
+                id="password2"
+                type="password"
+                disabled={isLoading}
+                {...register("password2", { required: variant === "REGISTER" })}
+                errors={errors}
+                placeholder="Re-enter your password"
+              />
+            </div>
+          )}
+          {variant === "REGISTER" ? (
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={
+                isLoading ||
+                !isValid ||
+                Object.values(errors).filter((e) => e !== undefined).length > 0
+              }
+            >
+              {isLoading ? (
+                <>
+                  <Spinner />
+                </>
+              ) : (
+                "Register"
+              )}
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading || !isValid}
+            >
+              {isLoading ? (
+                <>
+                  <Spinner />
+                </>
+              ) : (
+                "Sign in"
+              )}
+            </Button>
+          )}
         </form>
 
         <div className="mt-4">
@@ -206,7 +274,7 @@ const AuthForm = () => {
               <div className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-gray-500">
+              <span className="bg-main px-2 text-gray-500">
                 Or continue with
               </span>
             </div>
@@ -241,8 +309,7 @@ const AuthForm = () => {
             text-sm
             mt-4
             px-2
-            text-gray-500
-          "
+            text-gray-500"
         >
           <div>
             {variant === "LOGIN"

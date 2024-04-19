@@ -8,18 +8,28 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(auto()) @map("_id") @db.ObjectId
-  name           String?
-  email          String          @unique
-  emailVerified  DateTime?
-  image          String?
-  hashedPassword String?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  type           UserType?
-  accounts       Account[]
-  adoptablePets  AdoptablePet[]
-  lostPetReports LostPetReport[]
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  email            String            @unique
+  username         String?
+  emailVerified    DateTime?
+  image            String?
+  phone            String?
+  bio              String?
+  hashedPassword   String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  type             UserType?
+  accounts         Account[]
+  posts            Post[]
+  likes            Like[]
+  comments         Comment[]
+  adoptablePets    AdoptablePet[]
+  adoptionRequests AdoptionRequest[]
+  lostPetReports   LostPetReport[]
+  foundPetReports  FoundPetReport[]
+  followerUsers    UserRelation[]    @relation("FollowerRelation")
+  followingUsers   UserRelation[]    @relation("FollowingRelation")
 }
 
 enum UserType {
@@ -27,12 +37,22 @@ enum UserType {
   PetAdoptionCentre
 }
 
+model UserRelation {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  followerId  String @db.ObjectId
+  follower    User   @relation(name: "FollowerRelation", fields: [followerId], references: [id])
+  followingId String @db.ObjectId
+  following   User   @relation(name: "FollowingRelation", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+}
+
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
   type              String
   provider          String
-  providerAccountId String
+  providerAccountId String  @map("provider_account_id")
   refresh_token     String? @db.String
   access_token      String? @db.String
   expires_at        Int?
@@ -46,33 +66,141 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+type HighlightComment {
+  username1 String?
+  comment1  String?
+  username2 String?
+  comment2  String?
+}
+
+model Post {
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  description        String?
+  imageUrl           String
+  createdAt          DateTime          @default(now())
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String            @db.ObjectId
+  type               PostType
+  likes_count        Int               @default(0)
+  comments_count     Int               @default(0)
+  likes              Like[]
+  comments           Comment[]
+  hightlight_comment HighlightComment?
+}
+
+enum PostType {
+  Post
+  PetSitting
+}
+
+model Like {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @db.ObjectId
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String   @db.ObjectId
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @db.ObjectId
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String   @db.ObjectId
+
+  parentId         String?            @db.ObjectId
+  parent           Comment?           @relation("ChildComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children         Comment[]          @relation("ChildComment")
+  HighlightComment HighlightComment[]
+}
+
 model LostPetReport {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  petName           String?
-  petSex            String?
-  reportMessage     String?
-  reportDescription String?
-  lastSeenArea      String?
-  lastSeenDate      String?
-  contactDetails    String?
-  image             String?
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  isActive          Boolean
+  animalType        String
+  animalBreed       String
+  petName           String
+  petSex            String
+  reportMessage     String
+  reportDescription String
+  lastSeenArea      String
+  lastSeenDate      DateTime
+  contactDetails    String
+  imageUrl          String
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
 }
 
+model FoundPetReport {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  isActive          Boolean
+  animalType        String
+  animalBreed       String
+  petName           String
+  petSex            String
+  reportMessage     String
+  reportDescription String
+  foundArea         String
+  foundDate         DateTime
+  contactDetails    String
+  imageUrl          String
+  userId            String   @db.ObjectId
+  user              User     @relation(fields: [userId], references: [id])
+}
+
+enum AdoptablePetStatus {
+  Available
+  Adopted
+  Adopting
+}
+
 model AdoptablePet {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  type        String
-  breed       String
-  age         Int
-  gender      String
-  description String
-  imageUrl    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  type             String
+  breed            String
+  age              Int
+  gender           String
+  status           AdoptablePetStatus
+  description      String
+  imageUrl         String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  adoptionRequests AdoptionRequest[]
 
   adoptionCentre   User   @relation(fields: [adoptionCentreId], references: [id])
   adoptionCentreId String @db.ObjectId
+}
+
+enum AdoptRequestStatus {
+  Pending
+  Approved
+  Rejected
+}
+
+model AdoptionRequest {
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  message           String?
+  request_status    AdoptRequestStatus
+  full_name         String?
+  age               Int?
+  phone_number      String?
+  address           String?
+  type_desired      String?
+  breed_desired     String?
+  work_details      String?
+  lifestyle_details String?
+  pet_experience    String?
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  adoptablePetId String       @db.ObjectId
+  adoptablePet   AdoptablePet @relation(fields: [adoptablePetId], references: [id])
 }

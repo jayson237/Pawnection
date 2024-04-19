@@ -1,5 +1,6 @@
 "use client"
 
+import Loading from "@/components/Loading"
 import { FoundPetReport, LostPetReport } from "@prisma/client"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -23,35 +24,31 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
 
   const router = useRouter()
 
-  const handleLostPetReportClick = (reportId: string) => {
-    router.push(`/lostAndFound/losses/${reportId}`)
-  }
-
-  const handleFoundPetReportClick = (reportId: string) => {
-    router.push(`/lostAndFound/founds/${reportId}`)
+  const handleReportClick = (reportId: string, type: string) => {
+    const basePath =
+      type === "FoundPetReport"
+        ? "/lostAndFound/founds/"
+        : "/lostAndFound/losses/"
+    router.push(`${basePath}${reportId}`)
   }
 
   return (
     <TabsContent value="reports" className="w-full h-full pt-16">
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-        {reports == null || reports.length === 0
-          ? "No Reports Available"
-          : reports.map((report, index) => (
+      {reports ? (
+        reports.length > 0 ? (
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+            {reports.map((report, index) => (
               <div
                 key={index}
                 className={`cursor-pointer ${!report.isActive ? "opacity-50" : ""}`}
-                onClick={() => {
-                  if (report.type === "FoundPetReport")
-                    handleFoundPetReportClick(report.id)
-                  else handleLostPetReportClick(report.id)
-                }}
+                onClick={() => handleReportClick(report.id, report.type)}
               >
                 <div className="w-full h-48 relative">
                   <Image
                     src={transformImage(report.imageUrl)}
                     layout="fill"
                     objectFit="cover"
-                    alt="Lost Pet"
+                    alt={`${report.type === "LostPetReport" ? "Lost" : "Found"} Pet`}
                     className="rounded-t-xl"
                   />
                 </div>
@@ -67,19 +64,29 @@ function ProfileReportsTab({ reports }: ProfileReportsTabInterface) {
                   </p>
                   <div className="mt-auto">
                     <div className="border rounded-xl px-1.5 py-1 flex items-center text-sm w-fit">
-                      {report.type === "LostPetReport" ? (
-                        <p className="text-red-500 font-semibold">Lost Pet</p>
-                      ) : (
-                        <p className="text-green-500 font-semibold">
-                          Found Pet
-                        </p>
-                      )}
+                      <p
+                        className={`font-semibold ${report.isActive ? "text-green-500" : "text-mainAccent"}`}
+                      >
+                        {report.type === "LostPetReport"
+                          ? "Lost Pet"
+                          : "Found Pet"}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
-      </div>
+          </div>
+        ) : (
+          <div className="col-span-full flex justify-center items-center text-center">
+            <p>No result found</p>
+          </div>
+        )
+      ) : (
+        <div className="flex justify-center items-center">
+          <Loading />
+        </div>
+      )}
     </TabsContent>
   )
 }

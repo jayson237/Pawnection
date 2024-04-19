@@ -4,7 +4,7 @@ import Adop from "@/components/adopt/AdoptionRequest"
 import { getOneAdoptablePets } from "@/lib/actions/adopt"
 import { getCurrentUser } from "@/lib/actions/user"
 import Image from "next/image"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import React from "react"
 
 export default async function AdoptProcessPage({
@@ -28,6 +28,8 @@ export default async function AdoptProcessPage({
   ) {
     return notFound()
   }
+
+  if (currentUser && !currentUser.username) redirect("/settings")
 
   const adoptionRequestInfo = adoptablePet.adoptionRequests[0]
 

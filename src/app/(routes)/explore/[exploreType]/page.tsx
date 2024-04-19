@@ -15,6 +15,7 @@ async function ExploreTypePage({
 }) {
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
+  if (currUser && !currUser.username) redirect("/settings")
   const exploreType = params.exploreType
 
   if (

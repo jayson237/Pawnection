@@ -309,34 +309,34 @@ const LostPetReportPage = ({
               <h1 className="text-left font-bold text-3xl mb-4">Pet Info</h1>
               <hr className="mb-4 custom-divider" />
               <div className="grid grid-cols-2 gap-12">
-                <div className="text-lg">
+                <div>
                   <span className="font-bold">Pet Name</span>
-                  <p>{fetchedReport?.petName}</p>
+                  <p className="text-md">{fetchedReport?.petName}</p>
                 </div>
-                <div className="text-lg">
+                <div>
                   <span className="font-bold">Gender</span>
-                  <p>{fetchedReport?.petSex}</p>
+                  <p className="text-md">{fetchedReport?.petSex}</p>
                 </div>
-                <div className="text-lg">
+                <div>
                   <span className="font-bold">Species</span>
-                  <p>{fetchedReport?.animalBreed}</p>
+                  <p className="text-md">{fetchedReport?.animalBreed}</p>
                 </div>
-                <div className="text-lg">
+                <div>
                   <span className="font-bold">Status</span>
-                  <p>
+                  <p className="text-md">
                     {fetchedReport?.isActive ? "Missing" : "Pet has been found"}
                   </p>
                 </div>
-                <div className="text-lg">
+                <div>
                   <span className="font-bold">Area Last Seen</span>
-                  <p>{fetchedReport?.lastSeenArea}</p>
+                  <p className="text-md">{fetchedReport?.lastSeenArea}</p>
                 </div>
-                <div className="text-lg">
+                <div>
                   <span className="font-bold">Last Seen Date</span>
-                  <p>{formattedLastSeenDate}</p>
+                  <p className="text-md">{formattedLastSeenDate}</p>
                 </div>
               </div>
-              <div className="text-lg mt-12">
+              <div className="text-md mt-12">
                 <span className="font-bold">Description</span>
                 <p>{fetchedReport?.reportDescription}</p>
               </div>
@@ -349,13 +349,13 @@ const LostPetReportPage = ({
               </h1>
               <hr className="mb-4 custom-divider" />
               <div className="grid grid-cols-1 gap-12">
-                <div className="text-lg">
+                <div>
                   <span className="font-bold">Message from Owner</span>
-                  <p>{fetchedReport?.reportMessage}</p>
+                  <p className="text-md">{fetchedReport?.reportMessage}</p>
                 </div>
-                <div className="text-lg">
+                <div>
                   <span className="font-bold">Contact Details</span>
-                  <p>{fetchedReport?.contactDetails}</p>
+                  <p className="text-md">{fetchedReport?.contactDetails}</p>
                 </div>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 export default async function allFoundetReports() {
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
+  if (currUser && !currUser.username) redirect("/settings")
 
   return <AllFoundPetReports />
 }

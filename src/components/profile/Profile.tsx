@@ -80,7 +80,7 @@ const Profile = ({
           <div className="flex flex-col items-center space-y-4">
             <Image
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-              src={user?.image ? user.image : "/../icon.png"}
+              src={user?.image ? user.image : "/icon.png"}
               width={160}
               height={160}
               alt="Bordered avatar"
@@ -174,7 +174,7 @@ const Profile = ({
                           <Image
                             className="object-cover w-10 h-10 rounded-full"
                             src={
-                              following.image ? following.image : "/../icon.png"
+                              following.image ? following.image : "/icon.png"
                             }
                             width={40}
                             height={40}
@@ -271,9 +271,7 @@ const Profile = ({
                         <div className="flex items-center gap-4">
                           <Image
                             className="object-cover w-10 h-10 rounded-full"
-                            src={
-                              follower.image ? follower.image : "/../icon.png"
-                            }
+                            src={follower.image ? follower.image : "/icon.png"}
                             width={40}
                             height={40}
                             alt="Bordered avatar"

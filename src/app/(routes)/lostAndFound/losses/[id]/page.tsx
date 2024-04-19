@@ -12,6 +12,7 @@ export default async function lostPetReportPage({
 }) {
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
+  if (currUser && !currUser.username) redirect("/settings")
   const lostPetReport = await getSpecificLostPetReport(params.id)
 
   return (

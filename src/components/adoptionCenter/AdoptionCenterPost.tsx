@@ -141,7 +141,10 @@ function AdoptionCenterPost() {
                 </p>
                 <Link
                   href={`/adoptionCenter/manage/${item.id}`}
-                  className="mt-4 w-full"
+                  className={cn(
+                    buttonVariants({ variant: "default" }),
+                    "mt-4 w-full",
+                  )}
                 >
                   Manage
                 </Link>

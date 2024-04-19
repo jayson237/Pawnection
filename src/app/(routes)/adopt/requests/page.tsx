@@ -1,8 +1,6 @@
+import BackButton from "@/components/BackButton"
 import HeaderTitle from "@/components/HeaderTitle"
-import { buttonVariants } from "@/components/ui/Button"
 import { getAllOwnAdpotRequests } from "@/lib/actions/adopt"
-import { cn } from "@/lib/utils"
-import { ArrowLeft } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -18,15 +16,7 @@ export default async function AdoptPetRequests() {
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-8">
       <div className="py-[60px] w-full">
         <div className="flex">
-          <Link
-            className={cn(
-              buttonVariants({ variant: "outline" }),
-              "border-none",
-            )}
-            href="/adopt"
-          >
-            <ArrowLeft />
-          </Link>
+          <BackButton />
 
           <div className="mx-auto flex flex-col items-center">
             <HeaderTitle className="max-w-full max-md:text-3xl">
@@ -45,8 +35,8 @@ export default async function AdoptPetRequests() {
               className="bg-white rounded-lg shadow-md"
             >
               <Image
-                width={200}
-                height={200}
+                width={400}
+                height={400}
                 src={request.adoptablePet.imageUrl}
                 alt={request.adoptablePet.name}
                 className="w-full h-[200px] object-cover rounded-t-lg"

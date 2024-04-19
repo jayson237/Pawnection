@@ -1,13 +1,24 @@
 import BackButton from "@/components/BackButton"
 import HeaderTitle from "@/components/HeaderTitle"
 import { getAllOwnAdoptRequests } from "@/lib/actions/adopt"
+import { getCurrentUser } from "@/lib/actions/user"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { redirect } from "next/navigation"
 import React from "react"
 
 export default async function AdoptPetRequests() {
+  const currentUser = await getCurrentUser()
+  if (!currentUser) redirect("/auth")
   const ownrequests = await getAllOwnAdoptRequests()
+  if (
+    !ownrequests ||
+    !currentUser ||
+    currentUser.type === "PetAdoptionCentre"
+  ) {
+    return notFound()
+  }
 
   if (!ownrequests) {
     return notFound()

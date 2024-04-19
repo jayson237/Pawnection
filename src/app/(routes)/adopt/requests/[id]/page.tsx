@@ -1,6 +1,6 @@
 import BackButton from "@/components/BackButton"
 import HeaderTitle from "@/components/HeaderTitle"
-import AdoptPetForm from "@/components/adopt/AdoptionRequest"
+import AdoptionRequest from "@/components/adopt/AdoptionRequest"
 import { getOneAdoptablePets } from "@/lib/actions/adopt"
 import { getCurrentUser } from "@/lib/actions/user"
 import Image from "next/image"
@@ -140,7 +140,7 @@ export default async function AdoptProcessPage({
                 </div>
               </>
             ) : (
-              <AdoptPetForm
+              <AdoptionRequest
                 currentUser={currentUser}
                 adoptablePet={adoptablePet}
                 isCurrentAdopt={isCurrentAdopt as boolean}

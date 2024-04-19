@@ -27,24 +27,30 @@ Create a `.env` file in the root directory (same location as the `package.json` 
 
 ```shell
 # Mongo Atlas
-DATABASE_URL=mongodb+srv://pawnection:jY2tnTi80cw7M0tL@cluster01.nakrytt.mongodb.net/paw
+DATABASE_URL=
 
 # NextAuth
-NEXTAUTH_URL=http://localhost:3000/
-NEXTAUTH_SECRET="NEXTAUTH_SECRET"
+NEXTAUTH_URL=
+NEXTAUTH_SECRET=
 
 # Github Authentication
-GITHUB_ID=1da411400413bae3d5f7
-GITHUB_SECRET=0d724f9306f675f451187a4a79ba78f34f497fff
+GITHUB_ID=
+GITHUB_SECRET=
 
 # Google Authentication
-GOOGLE_CLIENT_ID=573346259632-md9qdrfc8rb8u62nai5gcbai9qt2cmnf.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=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
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 
 # Cloudinary
 CLOUD_NAME = duyqfuucs
 CDN_API_SECRET = Ymi8GESMrZ6lLlfxNPhZqawDikU
 CDN_API_KEY = 395728497944316
+```
+
+before we run the environment please run
+
+```shell
+npx prisma generate
 ```
 
 then, run the development server:

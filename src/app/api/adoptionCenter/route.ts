@@ -79,7 +79,6 @@ export async function GET() {
       where: {
         adoptionCentreId: currentUser.id,
       },
-      take: 20,
     })
     return NextResponse.json({ data: getAllOwnAdoptablePet }, { status: 200 })
   } catch (error) {

@@ -43,7 +43,8 @@ const UsernameForm = () => {
           "Please try again and make sure there are no special characters for the username",
       })
     } else {
-      router.push("/")
+      window.location.reload()
+      router.push("/explore")
       return toast({
         title: `${msg.message}`,
       })

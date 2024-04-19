@@ -23,6 +23,7 @@ export default async function AdoptPetRequests() {
   if (!ownrequests) {
     return notFound()
   }
+  if (currentUser && !currentUser.username) redirect("/settings")
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-8">
       <div className="py-[60px] w-full">

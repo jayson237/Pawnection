@@ -8,6 +8,7 @@ export default async function AdoptionCenterPage() {
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
   if (!currUser?.type) redirect("/auth/type")
+  if (currUser && !currUser.username) redirect("/settings")
   if (currUser.type !== UserType.PetAdoptionCentre) redirect("/adopt")
   return <AdoptionCenter currUser={currUser} />
 }

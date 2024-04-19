@@ -9,7 +9,6 @@ export const getAllAdoptablePets = async () => {
       return null
     }
     const adoptablePets = await prisma.adoptablePet.findMany({
-      take: 20,
       include: {
         adoptionCentre: {
           select: {

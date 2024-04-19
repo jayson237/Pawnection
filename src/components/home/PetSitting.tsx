@@ -25,7 +25,7 @@ const PetSitting = () => {
           Browse through the list of pets looking for a sitter, there may be
           Golden Retriever, British Shorthair, or Parrot waiting for you!
         </p>
-        <Button className="w-40" onClick={() => router.push("/adopt")}>
+        <Button className="w-40" onClick={() => router.push("/explore")}>
           View More
         </Button>
       </div>

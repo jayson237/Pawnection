@@ -3,6 +3,7 @@
 import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
 import { AdoptablePet, AdoptionRequest } from "@prisma/client"
+import { Trash } from "lucide-react"
 import Image from "next/legacy/image"
 import { useRouter } from "next/navigation"
 
@@ -20,6 +21,13 @@ import {
   AlertDialogTrigger,
 } from "../ui/AlertDialog"
 import { Button } from "../ui/Button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTrigger,
+} from "../ui/Dialog"
 import AdoptionCenterManagerForm from "./AdoptionCenterManagerForm"
 
 export default function AdoptionCenterManager({
@@ -80,15 +88,15 @@ export default function AdoptionCenterManager({
   return (
     <>
       <div className="flex justify-between">
-        <div className="flex gap-12">
-          <BackButton />
-          <HeaderTitle>Edit Pet Details</HeaderTitle>
-        </div>
+        <BackButton />
+        <HeaderTitle>Edit Pet Details</HeaderTitle>
 
         <div>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">Delete</Button>
+              <Button className="w-fit" variant="destructive">
+                <Trash className="w-4 h-4" />
+              </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
@@ -154,7 +162,7 @@ export default function AdoptionCenterManager({
 
           <div className="mt-6">
             {data.adoptionRequests.length === 0 ? (
-              <p className="">No requests yet</p>
+              <p>No requests yet</p>
             ) : (
               <div className="grid grid-cols-1 gap-4">
                 {data.adoptionRequests.map((request) => (
@@ -165,10 +173,54 @@ export default function AdoptionCenterManager({
                       "flex justify-between items-center",
                     )}
                   >
-                    <div>
-                      <p className="text-lg font-bold">{request.full_name}</p>
-                      <p>{request.id}</p>
-                    </div>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <div className="cursor-pointer">
+                          <p className="text-lg font-bold">
+                            {request.full_name}
+                          </p>
+                          <p>{request.phone_number}</p>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[600px] max-h-[70vh] overflow-y-auto">
+                        <DialogHeader>Adoption Request Details</DialogHeader>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-0.5">
+                            <p className="font-bold">Full Name</p>
+                            <p>{request?.full_name || "-"}</p>
+                          </div>
+                          <div className="space-y-0.5">
+                            <p className="font-bold">Age</p>
+                            <p>{request?.age || "-"}</p>
+                          </div>
+                          <div className="space-y-0.5">
+                            <p className="font-bold">Phone Number</p>
+                            <p>{request?.phone_number || "-"}</p>
+                          </div>
+                          <div className="space-y-0.5">
+                            <p className="font-bold">Address</p>
+                            <p>{request?.address || "-"}</p>
+                          </div>
+                          <div className="space-y-0.5">
+                            <p className="font-bold">Type Desired</p>
+                            <p>{request?.type_desired || "-"}</p>
+                          </div>
+                          <div className="space-y-0.5">
+                            <p className="font-bold">Breed Desired</p>
+                            <p>{request?.breed_desired || "-"}</p>
+                          </div>
+                          <div className="space-y-0.5">
+                            <p className="font-bold">Work Details</p>
+                            <p>{request?.work_details || "-"}</p>
+                          </div>
+                          <div className="space-y-0.5">
+                            <p className="font-bold">Lifestyle Details</p>
+                            <p>{request?.lifestyle_details || "-"}</p>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
 
                     {request.request_status === "Pending" && (
                       <div className="space-x-2">

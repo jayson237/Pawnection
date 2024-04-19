@@ -27,7 +27,6 @@ export async function GET(
         adoptionCentreId: currentUser.id,
         id: params.id,
       },
-      take: 20,
     })
     return NextResponse.json({ data: getAllOwnAdoptablePet }, { status: 200 })
   } catch (error) {

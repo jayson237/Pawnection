@@ -25,11 +25,20 @@ function AdoptionCenterPost() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filter, setFilter] = useState("")
 
+  const [isLoading, setIsLoading] = useState(false)
+
   useEffect(() => {
+    setIsLoading(true)
     fetch("/api/adoptionCenter")
       .then((response) => response.json())
-      .then((data) => setData(data.data))
-      .catch((error) => console.error(error))
+      .then((data) => {
+        setData(data.data)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.error(error)
+        setIsLoading(false)
+      })
   }, [])
 
   const searchedData = data
@@ -104,49 +113,47 @@ function AdoptionCenterPost() {
         </Link>
       </div>
 
-      {filteredData ? (
-        filteredData.length > 0 ? (
-          <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4 sm:gap-6 lg:gap-7 w-full">
-            {filteredData.map((item) => (
-              <div
-                key={item.id}
-                className="rounded-xl bg-white flex flex-col shadow-lg"
-              >
-                <div className="w-full relative" style={{ paddingTop: "70%" }}>
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.name}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-xl"
-                  />
-                </div>
-                <div className="px-3.5 py-4">
-                  <h4 className="font-bold text-lg">{item.name}</h4>
-                  <p>
-                    {item.type.charAt(0).toUpperCase() + item.type.slice(1)} |{" "}
-                    {item.gender} | {item.age} y.o.
-                  </p>
-                  <Link
-                    href={`/adoptionCenter/manage/${item.id}`}
-                    className={cn(
-                      buttonVariants({ variant: "default" }),
-                      "mt-4 w-full",
-                    )}
-                  >
-                    Manage
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>No results found</p>
-        )
-      ) : (
+      {isLoading ? (
         <div className="flex justify-center items-center">
           <Loading />
         </div>
+      ) : filteredData.length > 0 ? (
+        <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4 sm:gap-6 lg:gap-7 w-full">
+          {filteredData.map((item) => (
+            <div
+              key={item.id}
+              className="rounded-xl bg-white flex flex-col shadow-lg"
+            >
+              <div className="w-full relative" style={{ paddingTop: "70%" }}>
+                <Image
+                  src={item.imageUrl}
+                  alt={item.name}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-xl"
+                />
+              </div>
+              <div className="px-3.5 py-4">
+                <h4 className="font-bold text-lg">{item.name}</h4>
+                <p>
+                  {item.type.charAt(0).toUpperCase() + item.type.slice(1)} |{" "}
+                  {item.gender} | {item.age} y.o.
+                </p>
+                <Link
+                  href={`/adoptionCenter/manage/${item.id}`}
+                  className={cn(
+                    buttonVariants({ variant: "default" }),
+                    "mt-4 w-full",
+                  )}
+                >
+                  Manage
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="col-span-full text-center mt-4">No results found</div>
       )}
     </>
   )

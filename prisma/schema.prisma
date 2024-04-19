@@ -182,7 +182,6 @@ enum AdoptRequestStatus {
   Pending
   Approved
   Rejected
-  Completed
 }
 
 model AdoptionRequest {

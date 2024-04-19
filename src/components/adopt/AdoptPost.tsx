@@ -10,8 +10,10 @@ import { AdoptablePet } from "@prisma/client"
 import { Search, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect } from "react"
 import React, { useState } from "react"
 
+import Loading from "../Loading"
 import {
   Select,
   SelectContent,
@@ -20,13 +22,28 @@ import {
   SelectValue,
 } from "../ui/Select"
 
-const AdoptPost = ({
-  adoptablePets,
-}: {
-  adoptablePets: AdoptablePet[] | null
-}) => {
+const AdoptPost = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [filter, setFilter] = useState("")
+  const [adoptablePets, setAdoptablePets] = useState<AdoptablePet[] | null>(
+    null,
+  )
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+    fetch("/api/adopt")
+      .then((response) => response.json())
+      .then((data) => {
+        setAdoptablePets(data.data)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.error(error)
+        setIsLoading(false)
+      })
+  }, [])
 
   const searchedPets = adoptablePets
     ? adoptablePets.filter((pet) =>
@@ -102,14 +119,18 @@ const AdoptPost = ({
             )}
             href="/adopt/requests"
           >
-            View all requests
+            View my requests
           </Link>
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 w-full">
-        {filteredPets !== null && filteredPets.length > 0 ? (
-          filteredPets.map((pet) => (
+      {isLoading ? (
+        <div className="flex justify-center items-center">
+          <Loading />
+        </div>
+      ) : filteredPets !== null && filteredPets.length > 0 ? (
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8">
+          {filteredPets.map((pet) => (
             <Link
               href={
                 pet.status === "Adopted" ? "#" : `/adopt/requests/${pet.id}`
@@ -140,11 +161,11 @@ const AdoptPost = ({
                 </div>
               </div>
             </Link>
-          ))
-        ) : (
-          <div className="col-span-full text-center">No pets found</div>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="col-span-full text-center">No results found</div>
+      )}
     </div>
   )
 }

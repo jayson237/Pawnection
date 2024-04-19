@@ -21,7 +21,6 @@ export default async function AdoptionCenterManagePage({
     include: {
       adoptionRequests: true,
     },
-    take: 20,
   })
 
   if (getAllOwnAdoptablePet) {

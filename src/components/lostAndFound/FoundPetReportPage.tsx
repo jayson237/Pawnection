@@ -56,7 +56,7 @@ const FoundPetReportPage = ({
 
         const data = await response.json()
         setCreatorImage(data.image)
-        setCreatorUsername(data.name)
+        setCreatorUsername(data.username)
       } catch (error) {
         console.error("Failed to fetch user profile picture: ", error)
       }

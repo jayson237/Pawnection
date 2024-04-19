@@ -119,7 +119,7 @@ const AdoptPost = () => {
             )}
             href="/adopt/requests"
           >
-            View all requests
+            View my requests
           </Link>
         </div>
       </div>

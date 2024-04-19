@@ -121,6 +121,7 @@ const AuthForm = () => {
           }
 
           if (callback?.ok) {
+            window.location.reload()
             router.push("/")
           }
         })

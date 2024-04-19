@@ -8,6 +8,6 @@ export default async function AdoptViewAllPetsPage() {
   const currentUser = await getCurrentUser()
   if (!currentUser) redirect("/auth")
   if (currentUser && !currentUser.username) redirect("/settings")
-  if (currentUser.type !== UserType.PetLover) redirect("/adopt")
+  if (currentUser.type !== UserType.PetLover) redirect("/adoptionCenter")
   return <AdoptPost />
 }

@@ -314,34 +314,34 @@ const FoundPetReportPage = ({
               <h1 className="text-left font-bold text-3xl mb-4">Pet Info</h1>
               <hr className="mb-4 custom-divider" />
               <div className="grid grid-cols-2 gap-12">
-                <div className="text-lg">
+                <div className="text-md">
                   <span className="font-bold">Pet Name</span>
                   <p>{fetchedReport?.petName}</p>
                 </div>
-                <div className="text-lg">
+                <div className="text-md">
                   <span className="font-bold">Gender</span>
                   <p>{fetchedReport?.petSex}</p>
                 </div>
-                <div className="text-lg">
+                <div className="text-md">
                   <span className="font-bold">Species</span>
                   <p>{fetchedReport?.animalBreed}</p>
                 </div>
-                <div className="text-lg">
+                <div className="text-md">
                   <span className="font-bold">Status</span>
                   <p>
                     {fetchedReport?.isActive ? "Found" : "Returned to owner"}
                   </p>
                 </div>
-                <div className="text-lg">
+                <div className="text-md">
                   <span className="font-bold">Area Last Seen</span>
                   <p>{fetchedReport?.foundArea}</p>
                 </div>
-                <div className="text-lg">
+                <div className="text-md">
                   <span className="font-bold">Found Date</span>
                   <p>{formattedFoundDate}</p>
                 </div>
               </div>
-              <div className="text-lg mt-12">
+              <div className="text-md mt-12">
                 <span className="font-bold">Description</span>
                 <p>{fetchedReport?.reportDescription}</p>
               </div>
@@ -354,11 +354,11 @@ const FoundPetReportPage = ({
               </h1>
               <hr className="mb-4 custom-divider" />
               <div className="grid grid-cols-1 gap-12">
-                <div className="text-lg">
+                <div className="text-md">
                   <span className="font-bold">Message from Owner</span>
                   <p>{fetchedReport?.reportMessage}</p>
                 </div>
-                <div className="text-lg">
+                <div className="text-md">
                   <span className="font-bold">Contact Details</span>
                   <p>{fetchedReport?.contactDetails}</p>
                 </div>

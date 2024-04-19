@@ -62,7 +62,7 @@ function LikeDialog({
                 <div className="flex items-center gap-4">
                   <Image
                     className="object-cover w-10 h-10 rounded-full"
-                    src={like.user.image ? like.user.image : "/../icon.png"}
+                    src={like.user.image ? like.user.image : "/icon.png"}
                     width={40}
                     height={40}
                     alt="Bordered avatar"

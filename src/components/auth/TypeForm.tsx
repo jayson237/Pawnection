@@ -1,6 +1,7 @@
 "use client"
 
 import { useToast } from "@/hooks/useToast"
+import { revalPath } from "@/lib/revalidate"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -36,29 +37,19 @@ const TypeForm = () => {
       })
     } else {
       window.location.reload()
-      router.push("/auth/type/username")
-      return toast({
-        title: `${msg.message}`,
-      })
+      setTimeout(() => {
+        router.push("/auth/type/username")
+        toast({
+          title: `${msg.message}`,
+        })
+      }, 1000)
     }
   }
 
   return (
     <div className="sm:mx-auto sm:w-full sm:max-w-md">
-      <div
-        className="
-    bg-white
-      py-6
-      shadow
-      rounded-lg
-      px-8
-      space-y-4
-    "
-      >
-        <p
-          className="mb-6 text-center text-lg font-bold tracking-tight text-gray-900
-          "
-        >
+      <div className="bg-white py-6 shadow rounded-lg px-8 space-y-4">
+        <p className="mb-6 text-center text-lg font-bold tracking-tight text-gray-900">
           I am a...
         </p>
         <div className="flex flex-row space-x-2 my-8">

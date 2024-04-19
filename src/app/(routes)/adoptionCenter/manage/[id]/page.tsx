@@ -2,7 +2,6 @@ import AdoptionCenterManager from "@/components/adoptionCenter/AdoptionCenterMan
 import { getCurrentUser } from "@/lib/actions/user"
 import prisma from "@/lib/prismadb"
 import { UserType } from "@prisma/client"
-import { notFound } from "next/navigation"
 import { redirect } from "next/navigation"
 
 export default async function AdoptionCenterManagePage({
@@ -12,6 +11,7 @@ export default async function AdoptionCenterManagePage({
 }) {
   const currentUser = await getCurrentUser()
   if (!currentUser) redirect("/auth")
+  if (currentUser && !currentUser.username) redirect("/settings")
   if (currentUser.type !== UserType.PetAdoptionCentre) redirect("/adopt")
 
   const getAllOwnAdoptablePet = await prisma.adoptablePet.findFirst({

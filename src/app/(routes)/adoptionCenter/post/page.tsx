@@ -6,6 +6,7 @@ import { redirect } from "next/navigation"
 export default async function adoptionCenterPost() {
   const currUser = await getCurrentUser()
   if (!currUser) redirect("/auth")
+  if (currUser && !currUser.username) redirect("/settings")
   if (currUser.type !== UserType.PetAdoptionCentre) redirect("/adopt")
   return <CreateAdoptionForm />
 }

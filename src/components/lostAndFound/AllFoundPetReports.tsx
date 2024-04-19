@@ -43,23 +43,29 @@ const AllFoundPetReports = () => {
     router.push(`/lostAndFound/founds/${reportId}`)
   }
 
-  const fetchReports = async (animalType: string) => {
-    const url = `/api/lostAndFound/getFoundPetReports?type=${animalType}`
-    const response = await fetch(url)
-    if (!response.ok) {
-      throw new Error("Failed to fetch reports")
-    }
-
-    const data = await response.json()
-    setFoundPetReports(data)
-  }
-
   const navToLostPetReports = () => {
     router.push("/lostAndFound/losses")
   }
 
+  const fetchReports = async (animalType = "All") => {
+    const url = `/api/lostAndFound/getFoundPetReports?type=${animalType}`
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error("Failed to fetch reports")
+      }
+
+      const data = await response.json()
+
+      setFoundPetReports(data.length ? data : [])
+    } catch (error) {
+      console.error(error)
+      setFoundPetReports([])
+    }
+  }
+
   useEffect(() => {
-    fetchReports("All")
+    fetchReports()
   }, [])
 
   useEffect(() => {

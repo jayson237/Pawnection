@@ -3,6 +3,7 @@
 import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
 import { AdoptablePet, AdoptionRequest } from "@prisma/client"
+import { Trash } from "lucide-react"
 import Image from "next/legacy/image"
 import { useRouter } from "next/navigation"
 
@@ -80,15 +81,15 @@ export default function AdoptionCenterManager({
   return (
     <>
       <div className="flex justify-between">
-        <div className="flex gap-12">
-          <BackButton />
-          <HeaderTitle>Edit Pet Details</HeaderTitle>
-        </div>
+        <BackButton />
+        <HeaderTitle>Edit Pet Details</HeaderTitle>
 
         <div>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">Delete</Button>
+              <Button className="w-fit" variant="destructive">
+                <Trash className="w-4 h-4" />
+              </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>

@@ -294,60 +294,65 @@ const FoundPetReportPage = ({
               </AlertDialogContent>
             </AlertDialog>
           )}
-          {thisFoundPetReport!.userId === currUser?.id &&
-          thisFoundPetReport!.isActive ? (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button className="w-full bg-mainAccent hover:bg-mainAccent/90">
-                  Pet has been returned
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Are you sure you want to dismiss this report?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    You are going to dismiss this report once you click
-                    &quot;Yes&quot;
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    className="bg-primary"
-                    onClick={updateStatus}
-                  >
-                    Yes
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          ) : (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button className="w-full bg-mainAccent hover:bg-mainAccent/90">
-                  Revert report
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Are you sure you want to revert this report?
-                  </AlertDialogTitle>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    className="bg-primary"
-                    onClick={revertStatus}
-                  >
-                    Yes
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
+          {thisFoundPetReport!.userId === currUser?.id ? (
+            thisFoundPetReport!.isActive ? (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button className="w-full bg-mainAccent hover:bg-mainAccent/90">
+                    Pet has been returned
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you sure you want to dismiss this report?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      You are going to dismiss this report once you click
+                      &quot;Yes&quot;
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      className="bg-primary"
+                      onClick={updateStatus}
+                    >
+                      Yes
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            ) : (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button className="w-full bg-mainAccent hover:bg-mainAccent/90">
+                    Revert report
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you sure you want to revert this report?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      You are going to revert this report once you click
+                      &quot;Yes&quot;
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      className="bg-primary hover:bg-primary/90"
+                      onClick={revertStatus}
+                    >
+                      Yes
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )
+          ) : null}
         </div>
       </div>
     </div>

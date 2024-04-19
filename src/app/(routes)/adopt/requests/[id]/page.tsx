@@ -1,12 +1,9 @@
+import BackButton from "@/components/BackButton"
 import HeaderTitle from "@/components/HeaderTitle"
 import AdoptPetForm from "@/components/adopt/AdoptionRequest"
-import { buttonVariants } from "@/components/ui/Button"
 import { getOneAdoptablePets } from "@/lib/actions/adopt"
 import { getCurrentUser } from "@/lib/actions/user"
-import { cn } from "@/lib/utils"
-import { ArrowLeft } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
 
@@ -37,17 +34,14 @@ export default async function AdoptProcessPage({
   return (
     <div className="w-full max-w-[1240px] mx-auto px-4">
       <div className="py-[60px] w-full">
-        <div className="flex">
-          <Link
-            className={cn(buttonVariants({ variant: "outline" }), "ml-5")}
-            href="/adopt"
-          >
-            <ArrowLeft />
-          </Link>
+        <div className="flex ml-4">
+          <BackButton />
 
           <div className="mx-auto flex flex-col items-center">
             <HeaderTitle className="max-w-full max-md:text-3xl">
-              Adoptable Pets
+              {isCurrentAdopt
+                ? "Adoption Request Information"
+                : "Adoption Request Form"}
             </HeaderTitle>
           </div>
         </div>
@@ -64,7 +58,7 @@ export default async function AdoptProcessPage({
               className="rounded-t-xl h-full bg-cover bg-center w-full object-cover max-h-[440px]"
             />
           </div>
-          <div className="px-8 py-6 space-y-4">
+          <div className="px-8 py-6 gap-4 grid grid-cols-2">
             <div>
               <h4 className="font-bold">Name</h4>
               <p>{adoptablePet.name}</p>
@@ -87,65 +81,64 @@ export default async function AdoptProcessPage({
               <h4 className="font-bold">Breed</h4>
               <p>{adoptablePet.breed}</p>
             </div>
-            <div>
-              <h4 className="font-bold">Description</h4>
-              <p>{adoptablePet.description}</p>
-            </div>
+          </div>
+          <div className="px-8 pb-6">
+            <h4 className="font-bold">Description</h4>
+            <p>{adoptablePet.description}</p>
           </div>
         </div>
         <div className="h-full md:col-span-2 px-4">
-          <HeaderTitle className="max-w-full mt-4 max-md:text-3xl">
-            {isCurrentAdopt
-              ? "Adoption Request Information"
-              : "Adoption Request Form"}
-          </HeaderTitle>
-
-          <div className="mt-6">
+          <div className="ml-16">
             {isCurrentAdopt ? (
-              <div className="space-y-4">
-                <div className="space-y-0.5">
-                  <p className="font-bold">Full Name</p>
-                  <p>{adoptionRequestInfo?.full_name || "-"}</p>
+              <>
+                <div className="mb-12 rounded-xl px-4 py-1 flex items-cente w-fit border shadow-md">
+                  {adoptionRequestInfo?.request_status === "Pending" ? (
+                    <span className="text-yellow-500 font-semibold">
+                      Pending
+                    </span>
+                  ) : adoptionRequestInfo?.request_status === "Approved" ? (
+                    <span className="text-green-500 font-semibold">
+                      Approved
+                    </span>
+                  ) : (
+                    <span className="text-red-500 font-semibold">Rejected</span>
+                  )}
                 </div>
-                <div className="space-y-0.5">
-                  <p className="font-bold">Age</p>
-                  <p>{adoptionRequestInfo?.age || "-"}</p>
+                <div className="grid grid-cols-2 gap-12">
+                  <div className="space-y-0.5">
+                    <p className="font-bold">Full Name</p>
+                    <p>{adoptionRequestInfo?.full_name || "-"}</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="font-bold">Age</p>
+                    <p>{adoptionRequestInfo?.age || "-"}</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="font-bold">Phone Number</p>
+                    <p>{adoptionRequestInfo?.phone_number || "-"}</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="font-bold">Address</p>
+                    <p>{adoptionRequestInfo?.address || "-"}</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="font-bold">Type Desired</p>
+                    <p>{adoptionRequestInfo?.type_desired || "-"}</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="font-bold">Breed Desired</p>
+                    <p>{adoptionRequestInfo?.breed_desired || "-"}</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="font-bold">Work Details</p>
+                    <p>{adoptionRequestInfo?.work_details || "-"}</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="font-bold">Lifestyle Details</p>
+                    <p>{adoptionRequestInfo?.lifestyle_details || "-"}</p>
+                  </div>
                 </div>
-                <div className="space-y-0.5">
-                  <p className="font-bold">Phone Number</p>
-                  <p>{adoptionRequestInfo?.phone_number || "-"}</p>
-                </div>
-                <div className="space-y-0.5">
-                  <p className="font-bold">Address</p>
-                  <p>{adoptionRequestInfo?.address || "-"}</p>
-                </div>
-                <div className="space-y-0.5">
-                  <p className="font-bold">Type Desired</p>
-                  <p>{adoptionRequestInfo?.type_desired || "-"}</p>
-                </div>
-                <div className="space-y-0.5">
-                  <p className="font-bold">Breed Desired</p>
-                  <p>{adoptionRequestInfo?.breed_desired || "-"}</p>
-                </div>
-                <div className="space-y-0.5">
-                  <p className="font-bold">Work Details</p>
-                  <p>{adoptionRequestInfo?.work_details || "-"}</p>
-                </div>
-                <div className="space-y-0.5">
-                  <p className="font-bold">Lifestyle Details</p>
-                  <p>{adoptionRequestInfo?.lifestyle_details || "-"}</p>
-                </div>
-                <div className="space-y-0.5">
-                  <p className="font-bold">Status</p>
-                  <p>
-                    {adoptionRequestInfo?.request_status === "Pending" ? (
-                      <span className="text-yellow-500">Pending</span>
-                    ) : (
-                      <span className="text-green-500">Approved</span>
-                    )}
-                  </p>
-                </div>
-              </div>
+              </>
             ) : (
               <AdoptPetForm
                 currentUser={currentUser}

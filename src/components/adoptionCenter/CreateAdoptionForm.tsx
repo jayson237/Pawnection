@@ -10,6 +10,7 @@ import { FileRejection, useDropzone } from "react-dropzone"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
 import { cn } from "../../lib/utils"
+import BackButton from "../BackButton"
 import HeaderTitle from "../HeaderTitle"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
@@ -154,6 +155,7 @@ function CreateAdoptionForm() {
   return (
     <div className="w-full max-w-[1240px] mx-auto xl:px-0 px-7 items-center">
       <div className="py-[60px]">
+        <BackButton />
         <div className="md:grid grid-cols-1 md:grid-cols-3">
           <div className="flex flex-col justify-end py-3 col-span-1 pr-3">
             <div className="">

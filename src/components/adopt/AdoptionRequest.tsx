@@ -9,10 +9,12 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AdoptablePet } from "@prisma/client"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import React from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 
 import { revalPath } from "../../lib/revalidate"
+import LoadingDots from "../LoadingDots"
 import { Button } from "../ui/Button"
 import {
   Form,
@@ -35,6 +37,7 @@ function AdoptPetForm({
   isCurrentAdopt: boolean
 }) {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
   const form = useForm<CreateAdoptRequestPayloadType>({
     resolver: zodResolver(CreateAdoptRequestSchema),
     defaultValues: {
@@ -55,6 +58,7 @@ function AdoptPetForm({
   const onSubmit: SubmitHandler<CreateAdoptRequestPayloadType> = async (
     formData,
   ) => {
+    setIsLoading(true)
     const set = await fetch("/api/adopt/" + adoptablePet.id, {
       method: "POST",
       headers: {
@@ -68,6 +72,7 @@ function AdoptPetForm({
     })
     const msg = await set.json()
     if (!set.ok) {
+      setIsLoading(false)
       toast({
         variant: "destructive",
         title: "Failed to sent adopt request",
@@ -78,6 +83,7 @@ function AdoptPetForm({
         title: "Adopt request sent!",
         description: "Adoption center will contact you soon!",
       })
+      setIsLoading(false)
       await revalPath("/adopt/requests")
       router.push("/adopt/requests")
     }
@@ -189,7 +195,13 @@ function AdoptPetForm({
               .length > 0
           }
         >
-          {isCurrentAdopt ? "You have send request" : "Send request"}
+          {isCurrentAdopt ? (
+            "You have send request"
+          ) : isLoading ? (
+            <LoadingDots color="#FAFAFA" />
+          ) : (
+            "Send request"
+          )}
         </Button>
       </form>
     </Form>

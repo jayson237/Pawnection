@@ -70,12 +70,12 @@ const UsernameForm = () => {
             placeholder="Enter your username (4-20 lowercase characters)"
             required
           />
-          {errors.username && (
-            <p className="text-red-500 text-sm mt-1">
-              Username should be lowercase with a minimum of 4 characters and a
-              maximum of 20 characters
-            </p>
-          )}
+
+          <p className="text-red-500 text-sm mt-1">
+            Username should be lowercase with a minimum of 4 characters and a
+            maximum of 20 characters
+          </p>
+
           <Button
             type="submit"
             className="w-full mt-8"

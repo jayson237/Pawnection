@@ -22,15 +22,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
   const [name, setName] = useState(currentUser?.name || "")
   const [username, setUsername] = useState(currentUser?.username || "")
   const [phone, setPhone] = useState(currentUser?.phone || "")
-  const [image, setImage] = useState(
-    currentUser?.image ||
-      `${
-        currentUser?.image?.split("/image/upload/")[0]
-      }/image/upload/c_fill,h_160,w_160/${
-        currentUser?.image?.split("/image/upload/")[1]
-      }` ||
-      "/icon.png",
-  )
+  const [image, setImage] = useState(currentUser?.image || "/icon.png")
   const [bio, setBio] = useState(currentUser?.bio || "")
   const [isUsernameValid, setIsUsernameValid] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
@@ -133,18 +125,6 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
     input.click()
   }
 
-  const imageLoader = ({
-    src,
-    width,
-    quality,
-  }: {
-    src: string
-    width: number
-    quality?: number
-  }) => {
-    return `${src}?w=${width}&q=${quality || 75}`
-  }
-
   useEffect(() => {
     const isValid = username !== "" && /^[a-zA-Z0-9]{4,}$/.test(username)
     setIsUsernameValid(isValid)
@@ -188,7 +168,6 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
           <div className="flex flex-col items-center space-y-5 mx-auto">
             <Image
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-              loader={imageLoader || "/icon.png"}
               src={image}
               width={160}
               height={160}

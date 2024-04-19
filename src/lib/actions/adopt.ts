@@ -91,7 +91,7 @@ export const getOneOwnAdoptRequestForUser = async (requestId: string) => {
   }
 }
 
-export const getAllOwnAdpotRequests = async () => {
+export const getAllOwnAdoptRequests = async () => {
   try {
     const currentUser = await getCurrentUser()
     if (!currentUser || currentUser.type === "PetAdoptionCentre") {

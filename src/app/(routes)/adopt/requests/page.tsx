@@ -1,13 +1,13 @@
 import BackButton from "@/components/BackButton"
 import HeaderTitle from "@/components/HeaderTitle"
-import { getAllOwnAdpotRequests } from "@/lib/actions/adopt"
+import { getAllOwnAdoptRequests } from "@/lib/actions/adopt"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
 
 export default async function AdoptPetRequests() {
-  const ownrequests = await getAllOwnAdpotRequests()
+  const ownrequests = await getAllOwnAdoptRequests()
 
   if (!ownrequests) {
     return notFound()
@@ -47,6 +47,19 @@ export default async function AdoptPetRequests() {
                 </h2>
                 <p className="text-gray-500">{request.adoptablePet.breed}</p>
                 <p className="text-gray-500">{request.age} years old</p>
+                <div className="mt-4 border rounded-xl px-1.5 py-1 flex items-center text-sm w-fit">
+                  {request?.request_status === "Pending" ? (
+                    <span className="text-yellow-500 font-semibold">
+                      Pending
+                    </span>
+                  ) : request?.request_status === "Approved" ? (
+                    <span className="text-green-500 font-semibold">
+                      Approved
+                    </span>
+                  ) : (
+                    <span className="text-red-500 font-semibold">Rejected</span>
+                  )}
+                </div>
               </div>
             </Link>
           ))

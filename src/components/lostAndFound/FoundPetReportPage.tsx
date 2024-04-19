@@ -32,14 +32,21 @@ const FoundPetReportPage = ({
 }) => {
   const { toast } = useToast()
   const router = useRouter()
+  const time = foundPetReport?.createdAt
+    ? new Date(foundPetReport.createdAt).toISOString()
+    : ""
+  const [fetchedReport, setFetchedReport] = useState<FoundPetReport | null>(
+    foundPetReport,
+  )
+  const [formattedFoundDate, setFormattedFoundDate] = useState("")
   const [creatorImage, setCreatorImage] = useState("")
   const [creatorUsername, setCreatorUsername] = useState("")
 
   useEffect(() => {
-    const fetchCreatorInfo = async (userId: string) => {
+    const fetchCreatorInfo = async () => {
       try {
         const response = await fetch(
-          "/api/lostAndFound/getReportCreatorInfo?id=" + userId,
+          "/api/lostAndFound/getReportCreatorInfo?id=" + foundPetReport!.userId,
           { method: "GET", cache: "no-cache" },
         )
 
@@ -55,7 +62,7 @@ const FoundPetReportPage = ({
       }
     }
 
-    fetchCreatorInfo(foundPetReport!.userId)
+    fetchCreatorInfo()
   }, [])
 
   const transformImage = (url: string) => {
@@ -64,21 +71,24 @@ const FoundPetReportPage = ({
     return `${parts[0]}/upload/${transformationString}${parts[1]}`
   }
 
-  const transformDate = (reportDate: Date) => {
-    const formattedDate = reportDate.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    })
-    return formattedDate
-  }
+  useEffect(() => {
+    if (fetchedReport?.foundDate) {
+      const date = new Date(fetchedReport.foundDate)
+      const formattedDate = date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      setFormattedFoundDate(formattedDate)
+    }
+  }, [fetchedReport?.foundDate])
 
   const deleteReport = async () => {
-    if (foundPetReport) {
+    if (fetchedReport) {
       const response = await fetch("/api/lostAndFound/deleteFoundPetReport", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reportId: foundPetReport.id }),
+        body: JSON.stringify({ reportId: fetchedReport.id }),
       })
       const data = await response.json()
 
@@ -95,13 +105,13 @@ const FoundPetReportPage = ({
   }
 
   const updateStatus = async () => {
-    if (foundPetReport) {
+    if (fetchedReport) {
       const response = await fetch(
         "/api/lostAndFound/updateFoundPetReportStatus",
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reportId: foundPetReport.id }),
+          body: JSON.stringify({ reportId: fetchedReport.id }),
         },
       )
       const data = await response.json()
@@ -118,13 +128,13 @@ const FoundPetReportPage = ({
   }
 
   const revertStatus = async () => {
-    if (foundPetReport) {
+    if (fetchedReport) {
       const response = await fetch(
         "/api/lostAndFound/unupdateFoundPetReportStatus",
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reportId: foundPetReport.id }),
+          body: JSON.stringify({ reportId: fetchedReport.id }),
         },
       )
 
@@ -158,6 +168,7 @@ const FoundPetReportPage = ({
         throw new Error("Failed to fetch report data")
       }
       const data = await response.json()
+      setFetchedReport(data)
     } catch (error) {
       console.error("Failed to fetch report:", error)
     }
@@ -171,13 +182,13 @@ const FoundPetReportPage = ({
     <div className="flex flex-row space-x-12">
       <div className="flex-shrink-0 w-[512px] h-[512px]">
         <Image
-          src={transformImage(foundPetReport!.imageUrl)}
+          src={transformImage(fetchedReport!.imageUrl)}
           layout="responsive"
           width={512}
           height={512}
           priority
           objectFit="cover"
-          alt={`Found pet named ${foundPetReport!.petName}`}
+          alt={`Found pet named ${fetchedReport!.petName}`}
           className="rounded-lg sticky top-28"
         />
       </div>
@@ -197,21 +208,19 @@ const FoundPetReportPage = ({
             />
             <div className="flex flex-col">
               <p className="text-lg font-semibold">{creatorUsername}</p>
-              <TimeStamp
-                datetimeISO={foundPetReport?.createdAt.toISOString() || ""}
-              />
+              <TimeStamp datetimeISO={time} />
             </div>
           </Link>
 
           <div>
             <div className="flex flexc-row items-center space-x-2">
-              {foundPetReport?.userId === currUser?.id &&
-                foundPetReport?.isActive && (
+              {fetchedReport?.userId === currUser?.id &&
+                fetchedReport?.isActive && (
                   <Button className="w-fit" onClick={updateReport}>
                     <Edit className="w-4 h-4" />
                   </Button>
                 )}
-              {foundPetReport?.userId === currUser?.id && (
+              {fetchedReport?.userId === currUser?.id && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button className="w-fit" variant="destructive">
@@ -237,8 +246,8 @@ const FoundPetReportPage = ({
                   </AlertDialogContent>
                 </AlertDialog>
               )}
-              {foundPetReport?.userId === currUser?.id ? (
-                foundPetReport?.isActive ? (
+              {fetchedReport?.userId === currUser?.id ? (
+                fetchedReport?.isActive ? (
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button className="w-fit bg-mainAccent hover:bg-mainAccent/90">
@@ -307,36 +316,34 @@ const FoundPetReportPage = ({
               <div className="grid grid-cols-2 gap-12">
                 <div className="text-lg">
                   <span className="font-bold">Pet Name</span>
-                  <p>{foundPetReport?.petName}</p>
+                  <p>{fetchedReport?.petName}</p>
                 </div>
                 <div className="text-lg">
                   <span className="font-bold">Gender</span>
-                  <p>{foundPetReport?.petSex}</p>
+                  <p>{fetchedReport?.petSex}</p>
                 </div>
                 <div className="text-lg">
                   <span className="font-bold">Species</span>
-                  <p>{foundPetReport?.animalBreed}</p>
+                  <p>{fetchedReport?.animalBreed}</p>
                 </div>
                 <div className="text-lg">
                   <span className="font-bold">Status</span>
                   <p>
-                    {foundPetReport?.isActive ? "Found" : "Returned to owner"}
+                    {fetchedReport?.isActive ? "Found" : "Returned to owner"}
                   </p>
                 </div>
                 <div className="text-lg">
                   <span className="font-bold">Area Last Seen</span>
-                  <p>{foundPetReport?.foundArea}</p>
+                  <p>{fetchedReport?.foundArea}</p>
                 </div>
                 <div className="text-lg">
                   <span className="font-bold">Found Date</span>
-                  <p>
-                    {transformDate(foundPetReport?.foundDate || new Date())}
-                  </p>
+                  <p>{formattedFoundDate}</p>
                 </div>
               </div>
               <div className="text-lg mt-12">
                 <span className="font-bold">Description</span>
-                <p>{foundPetReport?.reportDescription}</p>
+                <p>{fetchedReport?.reportDescription}</p>
               </div>
             </div>
           </div>
@@ -349,11 +356,11 @@ const FoundPetReportPage = ({
               <div className="grid grid-cols-1 gap-12">
                 <div className="text-lg">
                   <span className="font-bold">Message from Owner</span>
-                  <p>{foundPetReport?.reportMessage}</p>
+                  <p>{fetchedReport?.reportMessage}</p>
                 </div>
                 <div className="text-lg">
                   <span className="font-bold">Contact Details</span>
-                  <p>{foundPetReport?.contactDetails}</p>
+                  <p>{fetchedReport?.contactDetails}</p>
                 </div>
               </div>
             </div>

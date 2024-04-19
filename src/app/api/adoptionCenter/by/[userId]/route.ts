@@ -21,7 +21,6 @@ export async function GET(
       where: {
         adoptionCentreId: params.userId,
       },
-      take: 20,
     })
     return NextResponse.json({ data: getAllOwnAdoptablePet }, { status: 200 })
   } catch (error) {

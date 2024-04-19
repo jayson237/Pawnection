@@ -3,10 +3,13 @@
 import { useToast } from "@/hooks/useToast"
 import { SafeUser } from "@/types"
 import { LostPetReport } from "@prisma/client"
+import { Edit, Trash } from "lucide-react"
 import Image from "next/legacy/image"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
+import TimeStamp from "../TimeStamp"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,19 +31,24 @@ const LostPetReportPage = ({
   currUser: SafeUser | null
 }) => {
   const { toast } = useToast()
-  const [thisLostPetReport, setThisLostPetReport] = useState(lostPetReport)
-  const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("")
   const router = useRouter()
+  const time = lostPetReport?.createdAt
+    ? new Date(lostPetReport.createdAt).toISOString()
+    : ""
+
+  const [fetchedReport, setFetchedReport] = useState<LostPetReport | null>(
+    lostPetReport,
+  )
+  const [formattedLastSeenDate, setFormattedLastSeenDate] = useState("")
   const [creatorImage, setCreatorImage] = useState("")
-  const [creatorName, setCreatorName] = useState("")
-  const [creatorContactDetails, setCreatorContactDetails] = useState("")
+  const [creatorUsername, setCreatorUsername] = useState("")
 
   useEffect(() => {
-    const fetchCreatorInfo = async (userId: string) => {
+    const fetchCreatorInfo = async () => {
       try {
         const response = await fetch(
-          "/api/lostAndFound/getReportCreatorInfo?id=" + userId,
-          { method: "GET" },
+          "/api/lostAndFound/getReportCreatorInfo?id=" + lostPetReport?.userId,
+          { method: "GET", cache: "no-cache" },
         )
 
         if (!response.ok) {
@@ -48,20 +56,14 @@ const LostPetReportPage = ({
         }
 
         const data = await response.json()
-        const image = data.image
-        setCreatorImage(image)
-
-        const name = data.name
-        setCreatorName(name)
-
-        const contactDetails = data.email
-        setCreatorContactDetails(contactDetails)
+        setCreatorImage(data.image)
+        setCreatorUsername(data.username)
       } catch (error) {
         console.error("Failed to fetch user profile picture: ", error)
       }
     }
 
-    fetchCreatorInfo(thisLostPetReport!.userId)
+    fetchCreatorInfo()
   }, [])
 
   const transformImage = (url: string) => {
@@ -71,8 +73,8 @@ const LostPetReportPage = ({
   }
 
   useEffect(() => {
-    if (thisLostPetReport?.lastSeenDate) {
-      const date = new Date(thisLostPetReport.lastSeenDate)
+    if (fetchedReport?.lastSeenDate) {
+      const date = new Date(fetchedReport.lastSeenDate)
       const formattedDate = date.toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "2-digit",
@@ -80,14 +82,14 @@ const LostPetReportPage = ({
       })
       setFormattedLastSeenDate(formattedDate)
     }
-  }, [thisLostPetReport?.lastSeenDate])
+  }, [fetchedReport?.lastSeenDate])
 
   const deleteReport = async () => {
-    if (thisLostPetReport) {
+    if (fetchedReport) {
       const response = await fetch("/api/lostAndFound/deleteLostPetReport", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reportId: thisLostPetReport.id }),
+        body: JSON.stringify({ reportId: fetchedReport?.id }),
       })
       const data = await response.json()
       if (!response.ok) {
@@ -103,13 +105,13 @@ const LostPetReportPage = ({
   }
 
   const updateStatus = async () => {
-    if (thisLostPetReport) {
+    if (fetchedReport) {
       const response = await fetch(
         "/api/lostAndFound/updateLostPetReportStatus",
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reportId: thisLostPetReport.id }),
+          body: JSON.stringify({ reportId: fetchedReport?.id }),
         },
       )
       const data = await response.json()
@@ -126,13 +128,13 @@ const LostPetReportPage = ({
   }
 
   const revertStatus = async () => {
-    if (thisLostPetReport) {
+    if (fetchedReport) {
       const response = await fetch(
         "/api/lostAndFound/unupdateLostPetReportStatus",
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reportId: thisLostPetReport.id }),
+          body: JSON.stringify({ reportId: fetchedReport?.id }),
         },
       )
       const data = await response.json()
@@ -164,7 +166,7 @@ const LostPetReportPage = ({
       throw new Error("Failed to fetch report data")
     }
     const data = await response.json()
-    setThisLostPetReport(data)
+    setFetchedReport(data)
   }
 
   useEffect(() => {
@@ -172,174 +174,192 @@ const LostPetReportPage = ({
   }, [lostPetReport?.id])
 
   return (
-    <div className="container mx-auto w-full h-full px-4 py-5">
-      <div className="flex flex-row gap-x-8 mb-8">
-        <div className="flex-shrink-0 w-[512px] h-[512px]">
-          <Image
-            src={transformImage(thisLostPetReport!.imageUrl)}
-            layout="responsive"
-            width={512}
-            height={512}
-            objectFit="cover"
-            alt={`Lost pet named ${thisLostPetReport!.petName}`}
-          />
-        </div>
-        <div className="w-[410px] h-[512px]">
-          <div className="p-4 h-full overflow-auto">
-            <h1 className="text-left font-bold text-3xl mb-4">Basic Info</h1>
-            <hr className="mb-4 custom-divider" />
-            <div className="space-y-6">
-              <p className="text-lg">
-                <span className="font-bold">Pet Name:</span>{" "}
-                {thisLostPetReport!.petName}
-              </p>
-              <p className="text-lg">
-                <span className="font-bold">Sex:</span>{" "}
-                {thisLostPetReport!.petSex}
-              </p>
-              <p className="text-lg">
-                <span className="font-bold">Species:</span>{" "}
-                {thisLostPetReport!.animalBreed}
-              </p>
-              <p className="text-lg">
-                <span className="font-bold">Description:</span>{" "}
-                {thisLostPetReport!.reportDescription}
-              </p>
-              <p className="text-lg">
-                <span className="font-bold">Area Last Seen:</span>{" "}
-                {thisLostPetReport!.lastSeenArea}
-              </p>
-              <p className="text-lg">
-                <span className="font-bold">Last Seen Date:</span>{" "}
-                {formattedLastSeenDate}
-              </p>
-              <p className="text-lg">
-                <span className="font-bold">Status:</span>{" "}
-                {thisLostPetReport!.isActive ? "Missing" : "Pet has been found"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="w-[410px] h-[512px]">
-          <div className="p-4 h-full overflow-auto">
-            <h1 className="text-left font-bold text-3xl mb-4">
-              Contact Details
-            </h1>
-            <hr className="mb-4 custom-divider" />
-            <div className="space-y-6">
-              <p className="text-lg">
-                <span className="font-bold">Message from Owner:</span>{" "}
-                {thisLostPetReport!.reportMessage}
-              </p>
-              <p className="text-lg">
-                <span className="font-bold">Contact Detail:</span>{" "}
-                {thisLostPetReport!.contactDetails}
-              </p>
-            </div>
-          </div>
-        </div>
+    <div className="flex flex-row space-x-12">
+      <div className="flex-shrink-0 w-[512px] h-[512px]">
+        <Image
+          src={transformImage(fetchedReport?.imageUrl || "")}
+          layout="responsive"
+          width={512}
+          height={512}
+          priority
+          objectFit="cover"
+          alt={`Lost pet named ${fetchedReport?.petName}`}
+          className="rounded-lg sticky top-28"
+        />
       </div>
-      <div className="bg-submain h-[250px] rounded-3xl px-28 py-6 flex justify-between">
-        <div className="flex items-center space-x-10">
-          <div className="w-32 h-32 relative overflow-hidden rounded-lg">
+
+      <div className="flex flex-col gap-y-8">
+        <div className="flex flex-row items-center justify-between">
+          <Link
+            href={`/profile/${creatorUsername}`}
+            className="cursor-pointer flex flex-row space-x-4 items-center"
+          >
             <Image
               src={creatorImage || "/icon.png"}
-              layout="fill"
-              objectFit="cover"
-              alt={`Profile picture of ${creatorName || "user"}`}
+              width={64}
+              height={64}
               className="rounded-full"
+              alt=""
             />
-          </div>
-          <div className="space-y-2">
-            <p className="font-bold text-xl">{creatorName}</p>
-            <p>{creatorContactDetails}</p>
+            <div className="flex flex-col">
+              <p className="text-lg font-semibold">{creatorUsername}</p>
+              <TimeStamp datetimeISO={time} />
+            </div>
+          </Link>
+
+          <div>
+            <div className="flex flexc-row items-center space-x-2">
+              {fetchedReport?.userId === currUser?.id &&
+                fetchedReport?.isActive && (
+                  <Button className="w-fit" onClick={updateReport}>
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                )}
+              {fetchedReport?.userId === currUser?.id && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button className="w-fit" variant="destructive">
+                      <Trash className="w-4 h-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete this report
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={deleteReport}>
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+              {fetchedReport?.userId === currUser?.id ? (
+                fetchedReport?.isActive ? (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button className="w-fit bg-mainAccent hover:bg-mainAccent/90">
+                        Pet has been found
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you sure you want to dismiss this report?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          You are going to dismiss this report once you click
+                          &quot;Yes&quot;
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          className="bg-primary hover:bg-primary/90"
+                          onClick={updateStatus}
+                        >
+                          Yes
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                ) : (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button className="w-full bg-mainAccent hover:bg-mainAccent/90">
+                        Revert report
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you sure you want to revert this report?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          You are going to revert this report once you click
+                          &quot;Yes&quot;
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          className="bg-primary hover:bg-primary/90"
+                          onClick={revertStatus}
+                        >
+                          Yes
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )
+              ) : null}
+            </div>
           </div>
         </div>
-        <div className="flex flex-col items-center space-y-2 self-center">
-          {thisLostPetReport!.userId === currUser?.id &&
-            thisLostPetReport!.isActive && (
-              <Button className="w-full" onClick={updateReport}>
-                Edit Report
-              </Button>
-            )}
-          {thisLostPetReport!.userId === currUser?.id && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button className="w-full" variant="destructive">
-                  Delete Report
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    this report
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={deleteReport}>
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
-          {thisLostPetReport!.userId === currUser?.id &&
-          thisLostPetReport!.isActive ? (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button className="w-full bg-mainAccent hover:bg-mainAccent/90">
-                  Pet has been found
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Are you sure you want to dismiss this report?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    You are going to dismiss this report once you click
-                    &quot;Yes&quot;
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    className="bg-primary"
-                    onClick={updateStatus}
-                  >
-                    Yes
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          ) : (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button className="w-full bg-mainAccent hover:bg-mainAccent/90">
-                  Revert report
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Are you sure you want to revert this report?
-                  </AlertDialogTitle>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    className="bg-primary"
-                    onClick={revertStatus}
-                  >
-                    Yes
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
+        <div className="flex flex-row space-x-16">
+          <div>
+            <div className="h-full w-[320px]">
+              <h1 className="text-left font-bold text-3xl mb-4">Pet Info</h1>
+              <hr className="mb-4 custom-divider" />
+              <div className="grid grid-cols-2 gap-12">
+                <div>
+                  <span className="font-bold">Pet Name</span>
+                  <p className="text-md">{fetchedReport?.petName}</p>
+                </div>
+                <div>
+                  <span className="font-bold">Gender</span>
+                  <p className="text-md">{fetchedReport?.petSex}</p>
+                </div>
+                <div>
+                  <span className="font-bold">Species</span>
+                  <p className="text-md">{fetchedReport?.animalBreed}</p>
+                </div>
+                <div>
+                  <span className="font-bold">Status</span>
+                  <p className="text-md">
+                    {fetchedReport?.isActive ? "Missing" : "Pet has been found"}
+                  </p>
+                </div>
+                <div>
+                  <span className="font-bold">Area Last Seen</span>
+                  <p className="text-md">{fetchedReport?.lastSeenArea}</p>
+                </div>
+                <div>
+                  <span className="font-bold">Last Seen Date</span>
+                  <p className="text-md">{formattedLastSeenDate}</p>
+                </div>
+              </div>
+              <div className="text-md mt-12">
+                <span className="font-bold">Description</span>
+                <p>{fetchedReport?.reportDescription}</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="h-full">
+              <h1 className="text-left font-bold text-3xl mb-4">
+                Contact Details
+              </h1>
+              <hr className="mb-4 custom-divider" />
+              <div className="grid grid-cols-1 gap-12">
+                <div>
+                  <span className="font-bold">Message from Owner</span>
+                  <p className="text-md">{fetchedReport?.reportMessage}</p>
+                </div>
+                <div>
+                  <span className="font-bold">Contact Details</span>
+                  <p className="text-md">{fetchedReport?.contactDetails}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

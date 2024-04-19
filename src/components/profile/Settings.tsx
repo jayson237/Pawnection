@@ -51,7 +51,6 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
     })
 
     const data = await updateResponse.json()
-    console.log(data)
 
     if (!updateResponse.ok) {
       setIsLoading(false)
@@ -189,7 +188,7 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
           <div className="flex flex-col items-center space-y-5 mx-auto">
             <Image
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-primary"
-              loader={imageLoader}
+              loader={imageLoader || "/icon.png"}
               src={image}
               width={160}
               height={160}

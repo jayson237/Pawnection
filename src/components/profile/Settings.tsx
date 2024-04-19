@@ -51,7 +51,6 @@ const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
     })
 
     const data = await updateResponse.json()
-    console.log(data)
 
     if (!updateResponse.ok) {
       setIsLoading(false)

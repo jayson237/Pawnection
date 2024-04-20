@@ -42,9 +42,9 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 
 # Cloudinary
-CLOUD_NAME =
-CDN_API_SECRET =
-CDN_API_KEY =
+CLOUD_NAME=
+CDN_API_SECRET=
+CDN_API_KEY=
 ```
 
 before we run the environment please run

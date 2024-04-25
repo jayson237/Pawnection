@@ -342,7 +342,7 @@ const Profile = ({
               </DialogContent>
             </Dialog>
 
-            <p className="ml-4 text-sm py-2">{currentUser?.bio}</p>
+            <p className="ml-4 text-sm py-2">{user?.bio}</p>
           </div>
         </div>
       </div>

@@ -12,7 +12,9 @@ function ExplorePetSitting({ currentUser }: { currentUser: SafeUser }) {
   const [query, _setQuery] = useQueryState("q", {
     defaultValue: "",
   })
-  const [following, _setFollowing] = useQueryState("")
+  const [following, _setFollowing] = useQueryState("following", {
+    defaultValue: "",
+  })
 
   const [content, setContent] = useState<ExtendedPost[]>([])
   const [loading, setLoading] = useState(false)

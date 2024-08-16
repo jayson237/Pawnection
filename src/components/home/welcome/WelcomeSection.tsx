@@ -18,7 +18,7 @@ const WelcomeSection: React.FC = () => {
           </p>
           <div className={styles["hero-actions"]}>
             <Button>
-              <Link href="/auth">
+              <Link href="/explore">
                 <div className="space-x-2 items-center flex flex-row">
                   <p>Get Started</p>
                   <MoveRight className="w-4" />
